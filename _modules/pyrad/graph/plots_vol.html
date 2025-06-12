@@ -423,13 +423,37 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">cartopy.io.img_tiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">Stamen</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">cartopy.io.img_tiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">GoogleTiles</span>
+
+    <span class="c1"># Define ESRI terrain tiles</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">ShadedReliefESRI</span><span class="p">(</span><span class="n">GoogleTiles</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desired_tile_form</span> <span class="o">=</span> <span class="s2">&quot;RGB&quot;</span>
+
+        <span class="c1"># shaded relief</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_image_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">tile</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;World_Hillshade/MapServer/tile/</span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">OTM</span><span class="p">(</span><span class="n">GoogleTiles</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">desired_tile_form</span> <span class="o">=</span> <span class="s2">&quot;RGB&quot;</span>
+
+        <span class="c1"># OpenTopoMap</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_image_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">tile</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://a.tile.opentopomap.org/</span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">.png&quot;</span>
 
     <span class="n">_CARTOPY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -537,7 +561,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -660,7 +684,7 @@
 
         <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">fname_list</span>
@@ -759,8 +783,10 @@
     <span class="n">max_lon</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lonmax&quot;</span><span class="p">,</span> <span class="mf">12.5</span><span class="p">)</span>
     <span class="n">min_lat</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latmin&quot;</span><span class="p">,</span> <span class="mf">43.5</span><span class="p">)</span>
     <span class="n">max_lat</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latmax&quot;</span><span class="p">,</span> <span class="mf">49.5</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">exact_limits</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exact_limits&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="n">resolution</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mapres&quot;</span><span class="p">,</span> <span class="s2">&quot;110m&quot;</span><span class="p">)</span>
+    <span class="n">maps_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;maps&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="k">if</span> <span class="n">resolution</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;110m&quot;</span><span class="p">,</span> <span class="s2">&quot;50m&quot;</span><span class="p">,</span> <span class="s2">&quot;10m&quot;</span><span class="p">):</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown map resolution: &quot;</span> <span class="o">+</span> <span class="n">resolution</span><span class="p">)</span>
         <span class="n">resolution</span> <span class="o">=</span> <span class="s2">&quot;110m&quot;</span>
@@ -777,6 +803,13 @@
 
     <span class="n">projection</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
     <span class="n">display_map</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+
+    <span class="c1"># Use different transparency and zorder if plotting over OTM or hillshade</span>
+    <span class="n">zorder</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="s2">&quot;maps&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">or</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="n">zorder</span> <span class="o">=</span> <span class="mi">2</span>
+
     <span class="k">if</span> <span class="n">_PYARTMCH_AVAILABLE</span><span class="p">:</span>
         <span class="n">display_map</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
             <span class="n">field_name</span><span class="p">,</span>
@@ -797,7 +830,8 @@
             <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
             <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">display_map</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
@@ -818,26 +852,35 @@
             <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
             <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">display_map</span><span class="o">.</span><span class="n">ax</span>
-    <span class="k">if</span> <span class="s2">&quot;maps&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;maps&quot;</span><span class="p">]:</span>
-            <span class="n">tiler</span> <span class="o">=</span> <span class="n">Stamen</span><span class="p">(</span><span class="s2">&quot;terrain-background&quot;</span><span class="p">)</span>
-            <span class="n">projection</span> <span class="o">=</span> <span class="n">tiler</span><span class="o">.</span><span class="n">crs</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The projection of the image is set to that of the &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;background map, i.e. &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">projection</span><span class="p">),</span>
-                <span class="ne">UserWarning</span><span class="p">,</span>
-            <span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">cartomap</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;maps&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;relief&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;maps&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">and</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Plotting both &#39;relief&#39; and &#39;OTM&#39; is not supported, choosing only relief&quot;</span><span class="p">,</span>
+                <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">maps_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;OTM&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">or</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="c1"># Check cache dir</span>
+            <span class="k">if</span> <span class="s2">&quot;PYRAD_CACHE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+                <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYRAD_CACHE&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;pyrad_cache&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="n">tiler</span> <span class="o">=</span> <span class="n">ShadedReliefESRI</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="n">tiler</span> <span class="o">=</span> <span class="n">OTM</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cartomap</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">or</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;OTM&quot;</span><span class="p">:</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">tiler</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;countries&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;countries&quot;</span><span class="p">:</span>
                 <span class="c1"># add countries</span>
                 <span class="n">countries</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
                     <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
@@ -911,7 +954,6 @@
                     <span class="o">+</span> <span class="n">resolution</span>
                     <span class="o">+</span> <span class="s2">&quot; not available&quot;</span>
                 <span class="p">)</span>
-
     <span class="k">if</span> <span class="s2">&quot;rngRing&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;rngRing&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">rng_rings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
@@ -924,7 +966,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -1036,7 +1078,7 @@
 
         <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">fname_list</span>
@@ -1227,7 +1269,7 @@
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname_list</span></div>
@@ -2004,7 +2046,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -2121,7 +2163,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -2265,7 +2307,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -2382,7 +2424,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -2495,7 +2537,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -2576,16 +2618,24 @@
         <span class="n">lat_lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">min_lat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">max_lat</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">latstep</span><span class="p">)</span>
         <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">]</span>
 
+        <span class="c1"># Check cache dir</span>
+        <span class="k">if</span> <span class="s2">&quot;PYRAD_CACHE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYRAD_CACHE&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;pyrad_cache&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+
         <span class="c1"># get background map instance</span>
-        <span class="n">stamen_terrain</span> <span class="o">=</span> <span class="n">Stamen</span><span class="p">(</span><span class="s2">&quot;terrain-background&quot;</span><span class="p">)</span>
+        <span class="n">terrain</span> <span class="o">=</span> <span class="n">ShadedReliefESRI</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
         <span class="n">projection</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
 
         <span class="c1"># draw background</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">stamen_terrain</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">terrain</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">(</span><span class="n">limits</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">stamen_terrain</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">terrain</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">)</span>
 
         <span class="c1"># add countries</span>
         <span class="n">countries</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
@@ -2642,7 +2692,7 @@
 
     <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
@@ -2730,7 +2780,7 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname_list</span></div>
@@ -2826,7 +2876,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname_list</span></div>
@@ -2907,7 +2957,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname_list</span></div>

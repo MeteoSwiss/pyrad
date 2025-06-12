@@ -77,25 +77,93 @@ it is not necessarily defined in this file. The fields are described in the tabl
      - Maximum elevation [°] to consider.
    * - ppiImageConfig
      - STRUCT
-     - Structure defining the PPI image generating (PPI_IMAGE or PSEUDOPPI_IMAGE products).
+     - Structure defining the PPI image generating (PPI_IMAGE or PSEUDOPPI_IMAGE products). It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - ymin: FLOAT: minimum displayed y-coordinate (northwards, in radar centric coordinates)
+       - ymax: FLOAT: minimum displayed y-coordinate (northwards, in radar centric coordinates)
+       - xmin: FLOAT: minimum displayed x-coordinate (eastwards, in radar centric coordinates)
+       - xmax: FLOAT: minimum displayed x-coordinate (northwards, in radar centric coordinates)
+       - rngRing: INT: if defined will plot range rings every x kilometers from the radar (x is the specified value)
    * - rhiImageConfig
      - STRUCT
-     - Structure defining the RHI image generating (RHI_IMAGE or PSEUDORHI_IMAGE products).
+     - Structure defining the RHI image generating (RHI_IMAGE or PSEUDORHI_IMAGE products). It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - ymin: FLOAT: minimum displayed y-coordinate (altitude)
+       - ymax: FLOAT: minimum displayed y-coordinate (altitude)
+       - xmin: FLOAT: minimum displayed x-coordinate (distance at ground along RHI)
+       - xmax: FLOAT: minimum displayed x-coordinate (distance at ground along RHI)
    * - ppiMapImageConfig
      - STRUCT
-     - Structure defining the PPI image overlaid on a map (PPI_MAP product).
+     - Structure defining the PPI image overlaid on a map (PPI_MAP product). It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - min_lon: FLOAT: minimum displayed longitude
+       - max_lon: FLOAT: maximum displayed longitude
+       - min_lat: FLOAT: minimum displayed latitude
+       - max_lat: FLOAT: maximum displayed latitude
+       - resolution: INT: resolution of additional cartopy geodata, only "10m", "50m" or "110m" is supported
+       - alpha: FLOAT: transparency value (between 0 and 1) of the displayed radar data, alpha smaller than 1 is required when plotting over a relief or OTM map
+       - background_zoom: INT: Zoom level of the additional cartopy raster geodata, the higher the value, the higher the resolution (typically between 8 and 12). Default is 8.
+       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe.
+       - rngRing: INT: if defined will plot range rings every x kilometers from the radar (x is the specified value)
    * - gridMapImageConfig
      - STRUCT
-     - Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product).
+     - Structure defining the display of gridded data overlaid on a map (SURFACE_IMAGE product). It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - min_lon: FLOAT: minimum displayed longitude
+       - max_lon: FLOAT: maximum displayed longitude
+       - min_lat: FLOAT: minimum displayed latitude
+       - max_lat: FLOAT: maximum displayed latitude
+       - resolution: INT: resolution of additional cartopy geodata, only "10m", "50m" or "110m" is supported
+       - alpha: FLOAT: transparency value (between 0 and 1) of the displayed radar data, alpha smaller than 1 is required when plotting over a relief or OTM map
+       - background_zoom: INT: Zoom level of the additional cartopy raster geodata, the higher the value, the higher the resolution (typically between 8 and 12). Default is 8.
+       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe.
    * - xsecImageConfig
      - STRUCT
-     - Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products).
+     - Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products). It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - ymin: FLOAT: minimum displayed y-coordinate (altitude)
+       - ymax: FLOAT: minimum displayed y-coordinate (altitude)
+       - xmin: FLOAT: minimum displayed x-coordinate (distance at ground along cross-section)
+       - xmax: FLOAT: minimum displayed x-coordinate (distance at ground along cross-section)
    * - spectraImageConfig
      - STRUCT
-     - Structure defining the Doppler spectral plots.
+     - Structure defining the Doppler spectral plots (radar observable as a function of altitude and velocity).  It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - ymin: FLOAT: minimum displayed y-coordinate (altitude)
+       - ymax: FLOAT: minimum displayed y-coordinate (altitude)
+       - velmin: FLOAT: minimum displayed velocity
+       - velmax: FLOAT: minimum displayed velocity
    * - sunhitsImageConfig
      - STRUCT
-     - Structure defining the sun hits image.
+     - Structure defining the sun hits image. It shows the sun observables as a function of azimuth and elevation.  It can contain the following keys:
+
+       - dpi: INT: dpi of the output image
+       - xsize: FLOAT: width of the image in inches
+       - ysize: FLOAT: height of the image in inches
+       - azmin: FLOAT: minimum displayed azimuth angle
+       - azmax: FLOAT: minimum displayed azimuth angle
+       - elmin: FLOAT: minimum displayed elevation angle
+       - elmax: FLOAT: minimum displayed elevation angle
+       - azres: FLOAT: azimuth step to use in the plot
+       - elres: FLOAT: elevation step to use in the plot
    * - azPatternFile
      - STRING
      - Name of the azimuth pattern file of the antenna. This file and path must be ``<configpath>/antenna/<azPatternFile>``.

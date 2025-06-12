@@ -1376,6 +1376,15 @@
 </div>
 </div>
 </dd>
+<dt>min_radar_elevation<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">Minimum scanning elevation supported by the radar system. If provided</div>
+<div class="line-block">
+<div class="line">it will add the field min_rad_vis_height_above_ground_field to the output.</div>
+<div class="line">It contains the minimum visible height above ground  given the constraint</div>
+<div class="line">on minimum scanning elevation.</div>
+</div>
+</div>
+</dd>
 <dt>sigma0_method<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">Which estimation method to use, either ‘Gabella’ or ‘Delrieu’</div>
 </div>
@@ -1383,7 +1392,7 @@
 <dt>clip<span class="classifier">int. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">If set to true, the provided DEM will be clipped to the extent</div>
 <div class="line-block">
-<div class="line">of the polar radar domain. Increases computation speed a lot but</div>
+<div class="line">of the polar radar domain. Decreases computation speed a lot but</div>
 <div class="line">Cartesian output fields will be available only over radar domain</div>
 </div>
 </div>
@@ -6173,6 +6182,15 @@
 </div>
 </div>
 </dd>
+<dt>min_radar_elevation<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">Minimum scanning elevation supported by the radar system. If provided</div>
+<div class="line-block">
+<div class="line">it will add the field min_rad_vis_height_above_ground_field to the output.</div>
+<div class="line">It contains the minimum visible height above ground  given the constraint</div>
+<div class="line">on minimum scanning elevation.</div>
+</div>
+</div>
+</dd>
 <dt>sigma0_method<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">Which estimation method to use, either ‘Gabella’ or ‘Delrieu’</div>
 </div>
@@ -6180,7 +6198,7 @@
 <dt>clip<span class="classifier">int. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">If set to true, the provided DEM will be clipped to the extent</div>
 <div class="line-block">
-<div class="line">of the polar radar domain. Increases computation speed a lot but</div>
+<div class="line">of the polar radar domain. Decreases computation speed a lot but</div>
 <div class="line">Cartesian output fields will be available only over radar domain</div>
 </div>
 </div>

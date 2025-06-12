@@ -535,8 +535,8 @@
         <span class="n">dem</span> <span class="o">=</span> <span class="n">read_idrisi_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;WARNING: unable to read file </span><span class="si">%s</span><span class="s2">, extension must be .tif .tiff .gtif, &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;.asc .dem .txt .rst&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">()</span>
+            <span class="sa">f</span><span class="s2">&quot;WARNING: unable to read file </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">, extension must be .tif .tiff .gtif, &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;.asc .dem .txt .rst&quot;</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
@@ -675,7 +675,10 @@
         <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;max. Y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;min. Y&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;resolution&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
         <span class="p">)</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;flag value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">():</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;flag value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;flag value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">fill_value</span><span class="p">:</span>
             <span class="n">fill_value</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;flag value&quot;</span><span class="p">]</span>

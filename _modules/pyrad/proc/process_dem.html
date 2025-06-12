@@ -622,11 +622,16 @@
 <span class="sd">            1: Oversampling is done. The factor N is automatically calculated</span>
 <span class="sd">            such that 2*dx/N &lt; pulse length</span>
 <span class="sd">            2 or larger: Oversampling is done with this value as N</span>
+<span class="sd">        min_radar_elevation : float. Dataset keyword</span>
+<span class="sd">            Minimum scanning elevation supported by the radar system. If provided</span>
+<span class="sd">            it will add the field min_rad_vis_height_above_ground_field to the output.</span>
+<span class="sd">            It contains the minimum visible height above ground  given the constraint</span>
+<span class="sd">            on minimum scanning elevation.</span>
 <span class="sd">        sigma0_method : string. Dataset keyword</span>
 <span class="sd">            Which estimation method to use, either &#39;Gabella&#39; or &#39;Delrieu&#39;</span>
 <span class="sd">        clip : int. Dataset keyword</span>
 <span class="sd">            If set to true, the provided DEM will be clipped to the extent</span>
-<span class="sd">            of the polar radar domain. Increases computation speed a lot but</span>
+<span class="sd">            of the polar radar domain. Decreases computation speed a lot but</span>
 <span class="sd">            Cartesian output fields will be available only over radar domain</span>
 
 <span class="sd">    radar_list : list of Radar objects</span>
@@ -690,7 +695,10 @@
             <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elevations</span><span class="p">]</span>
         <span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
         <span class="c1"># change radar name</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">]:</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">radar</span> <span class="o">=</span> <span class="n">radar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;antenna_elevations&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
@@ -727,11 +735,11 @@
     <span class="n">mosotti_kw</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mosotti_factor&quot;</span><span class="p">,</span> <span class="mf">0.9644</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">sigma0_method</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sigma0_method&quot;</span><span class="p">,</span> <span class="s2">&quot;Gabella&quot;</span><span class="p">)</span>
     <span class="n">raster_oversampling</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;raster_oversampling&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">min_radar_elevation</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_radar_elevation&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">clip</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;clip&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">daz</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;az_discretization&quot;</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
     <span class="n">dr</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_discretization&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-
     <span class="n">gecsx_grid</span><span class="p">,</span> <span class="n">gecsx_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">gecsx</span><span class="p">(</span>
         <span class="n">radar</span><span class="p">,</span>
         <span class="n">radar_specs</span><span class="p">,</span>
@@ -744,6 +752,7 @@
         <span class="n">atm_att</span><span class="o">=</span><span class="n">atm_att</span><span class="p">,</span>
         <span class="n">mosotti_kw</span><span class="o">=</span><span class="n">mosotti_kw</span><span class="p">,</span>
         <span class="n">raster_oversampling</span><span class="o">=</span><span class="n">raster_oversampling</span><span class="p">,</span>
+        <span class="n">min_radar_elevation</span><span class="o">=</span><span class="n">min_radar_elevation</span><span class="p">,</span>
         <span class="n">sigma0_method</span><span class="o">=</span><span class="n">sigma0_method</span><span class="p">,</span>
         <span class="n">clip</span><span class="o">=</span><span class="n">clip</span><span class="p">,</span>
         <span class="n">return_pyart_objects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
