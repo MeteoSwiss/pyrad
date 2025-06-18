@@ -31,6 +31,7 @@ from ..io.write_data import write_intercomp_scores_ts
 
 from ..graph.plots import plot_scatter
 from ..graph.plots_timeseries import plot_intercomp_scores_ts
+from ..graph import plot_colocated_gates
 
 from ..util.radar_utils import compute_2d_stats
 from ..util.stat_utils import parse_math_expression
@@ -469,8 +470,16 @@ def generate_intercomp_products(dataset, prdcfg):
 def generate_colocated_gates_products(dataset, prdcfg):
     """
     Generates colocated gates products. Accepted product types:
-        WRITE_COLOCATED_GATES: Writes the position of the co-located gates
+        'WRITE_COLOCATED_GATES': Writes the position of the co-located gates
             in a csv file
+        'PLOT_COLOCATED_GATES': Plots the colocated gates over a geo-referenced map,
+            as well as the coordinates of both radars. The plot performs a gridding and
+            plots the number of cologates gates within every grid-cell as well as their
+            average height. All other plotting parameters are obtained from the
+            gridMapImageConfig structure of the loc file.
+            User defined parameters:
+                grid_size: float
+                    Size of the grid in degrees (lat/lon). Default is 0.02 degrees.
         All the products of the 'VOL' dataset group
 
 
@@ -513,6 +522,37 @@ def generate_colocated_gates_products(dataset, prdcfg):
         print("saved colocated gates file: " + fname)
 
         return fname
+
+    if prdcfg["type"] == "PLOT_COLOCATED_GATES":
+        dssavedir = prdcfg["dsname"]
+        if "dssavename" in prdcfg:
+            dssavedir = prdcfg["dssavename"]
+        prdsavedir = prdcfg["prdname"]
+
+        grid_size = prdcfg.get("grid_size", None)
+
+        savedir = get_save_dir(
+            prdcfg["basepath"],
+            prdcfg["procname"],
+            dssavedir,
+            prdsavedir,
+            timeinfo=prdcfg["timeinfo"],
+        )
+        fname_list = make_filename(
+            "map",
+            prdcfg["dstype"],
+            "counts",
+            prdcfg["imgformat"],
+        )
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir + fname
+
+        plot_colocated_gates(dataset, prdcfg, fname_list, grid_size=grid_size)
+
+        print("----- save to " + " ".join(fname_list))
+
+        return fname_list
 
     if prdcfg["radar"] not in dataset:
         return None
