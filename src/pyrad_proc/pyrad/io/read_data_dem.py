@@ -291,7 +291,10 @@ def read_geotiff_data(fname, fill_value=None):
         metadata["max. Y"] = (
             metadata["min. Y"] + metadata["resolution"] * metadata["rows"]
         )
-        metadata["flag value"] = raster.GetRasterBand(1).GetNoDataValue()
+        if raster.GetRasterBand(1).GetNoDataValue():
+            metadata["flag value"] = raster.GetRasterBand(1).GetNoDataValue()
+        else:
+            metadata["flag value"] = np.nan
 
         if not fill_value:
             fill_value = metadata["flag value"]

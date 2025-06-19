@@ -306,7 +306,10 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
             [len(azimuths) * [e] for e in elevations]
         ).ravel()
         # change radar name
-        radar.metadata["instrument_name"] = dscfg["RadarName"]
+        if dscfg["RadarName"]:
+            radar.metadata["instrument_name"] = dscfg["RadarName"]
+        else:
+            radar.metadata["instrument_name"] = ""
     else:
         radar = radar_list[0]
         if "antenna_elevations" in dscfg:

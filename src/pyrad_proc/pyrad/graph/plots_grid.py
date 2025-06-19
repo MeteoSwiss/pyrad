@@ -15,12 +15,14 @@ Functions to plot data in a Cartesian grid format
     plot_cross_section
     plot_dda_map
     plot_dda_slice
+    plot_colocated_gates
 """
 
 from ..util import warn
 from copy import deepcopy
 
 import numpy as np
+from scipy.stats import binned_statistic_2d
 import os
 import matplotlib.pyplot as plt
 
@@ -124,7 +126,7 @@ def plot_surface(
     Returns
     -------
     fname_list : list of str or
-    fig, ax, display : tupple
+    fig, ax, display : tuple
         list of names of the saved plots or handle of the figure an axes
 
     """
@@ -440,7 +442,7 @@ def plot_surface_raw(
     Returns
     -------
     fname_list : list of str or
-    fig, ax, display : tupple
+    fig, ax, display : tuple
         list of names of the saved plots or handle of the figure an axes
 
     """
@@ -553,7 +555,7 @@ def plot_surface_contour(
     Returns
     -------
     fname_list : list of str or
-    fig, ax : tupple
+    fig, ax : tuple
         list of names of the saved plots or handle of the figure an axes
 
     """
@@ -846,9 +848,9 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
         object containing the gridded data to plot
     field_name : str
         name of the radar field to plot
-    coord1 : tupple of floats
+    coord1 : tuple of floats
         lat, lon of the first point
-    coord2 : tupple of floats
+    coord2 : tuple of floats
         lat, lon of the second point
     fname_list : list of str
         list of names of the files where to store the plot
@@ -952,7 +954,7 @@ def plot_dda_map(
     Returns
     -------
     fname_list : list of str or
-    fig, ax, display : tupple
+    fig, ax, display : tuple
         list of names of the saved plots or handle of the figure an axes
 
     """
@@ -1250,7 +1252,7 @@ def plot_dda_slice(
     Returns
     -------
     fname_list : list of str or
-    fig, ax, display : tupple
+    fig, ax, display : tuple
         list of names of the saved plots or handle of the figure an axes
 
     """
@@ -1459,3 +1461,234 @@ def plot_dda_slice(
         return fname_list
 
     return (fig, ax, display)
+
+
+def plot_colocated_gates(dataset, prdcfg, fname_list, save_fig=True, grid_size=None):
+    """
+    This procedure plots the number of colocated gates over a specific grid.
+
+    Parameters
+    ----------
+    dataset : dict
+        python dict containing the following keys:
+        "RADAR001", "RADAR002" and "coloc_dic" as returned
+        by the COLOCATED_GATES dataset
+    prdcfg : dict
+        dictionary containing the product configuration
+    fname_list : list of str
+        list of names of the files where to store the plot
+    save_fig : bool
+        if true save the figure. If false it does not close the plot and
+        returns the handle to the figure
+    grid_size : float
+        Size of the grid in degrees (lat/lon). For every grid cell the number of
+        colocated gates that fall within the grid cell will be computed and plotted.
+        If not provided, the grid size defined in gridMapImageConfig with
+        lat_min, lon_min, lat_max, lon_max and lonstep, latstep
+        will be used.
+
+    Returns
+    -------
+    fname_list : list of str or
+    fig, ax, display : tuple
+        list of names of the saved plots or handle of the figure an axes
+
+    """
+
+    dpi = prdcfg["gridMapImageConfig"].get("dpi", 72)
+    xsize = prdcfg["gridMapImageConfig"]["xsize"]
+    ysize = prdcfg["gridMapImageConfig"]["ysize"]
+    lonstep = prdcfg["gridMapImageConfig"].get("lonstep", 0.5)
+    latstep = prdcfg["gridMapImageConfig"].get("latstep", 0.5)
+    min_lon = prdcfg["gridMapImageConfig"].get("lonmin", 2.5)
+    max_lon = prdcfg["gridMapImageConfig"].get("lonmax", 12.5)
+    min_lat = prdcfg["gridMapImageConfig"].get("latmin", 43.5)
+    max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
+    alpha = prdcfg["gridMapImageConfig"].get("alpha", 1)
+    resolution = prdcfg["gridMapImageConfig"].get("mapres", "110m")
+    background_zoom = prdcfg["gridMapImageConfig"].get("background_zoom", 8)
+    maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
+
+    if not grid_size:
+        grid_size = lonstep
+
+    lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
+    lat_lines = np.arange(min_lat, max_lat + latstep, latstep)
+
+    res = prdcfg.get("grid_size", 0.02)
+    radar1 = dataset["RADAR001"]["radar_out"]
+    radar2 = dataset["RADAR002"]["radar_out"]
+    coloc_gates = dataset["RADAR001"]["coloc_dict"]
+
+    x, y, z = pyart.core.antenna_to_cartesian(
+        np.array(coloc_gates["rad1_rng"]) / 1000.0,
+        np.array(coloc_gates["rad1_azi"]),
+        np.array(coloc_gates["rad1_ele"]),
+    )
+
+    lon, lat = pyart.core.cartesian_to_geographic(
+        x,
+        y,
+        projparams={
+            "proj": "pyart_aeqd",
+            "lon_0": radar1.longitude["data"][0],
+            "lat_0": radar1.latitude["data"][0],
+        },
+    )
+
+    x_bins = np.arange(np.min(lon), np.max(lon) + grid_size, res)
+    y_bins = np.arange(np.min(lat), np.max(lat) + grid_size, res)
+    count, _, _, _ = binned_statistic_2d(
+        lon, lat, z, statistic="count", bins=[x_bins, y_bins]
+    )
+
+    x_bins_center = 0.5 * (x_bins[0:-1] + x_bins[1:])
+    y_bins_center = 0.5 * (y_bins[0:-1] + y_bins[1:])
+    Y, X = np.meshgrid(y_bins_center, x_bins_center)
+
+    count[count < 1] = np.nan
+
+    # Create figure
+    proj = cartopy.crs.PlateCarree()
+    fig, ax = plt.subplots(figsize=(xsize, ysize), subplot_kw={"projection": proj})
+    cmap = plt.cm.Reds
+    # Plot counts
+    cm = ax.pcolormesh(X, Y, count, vmin=1, cmap=cmap, alpha=alpha)
+    plt.colorbar(cm, label="Nb of colocated gates")
+    # Plot radar locations
+    ax.scatter(radar1.longitude["data"], radar1.latitude["data"], c="r")
+    ax.scatter(radar2.longitude["data"], radar2.latitude["data"], c="r")
+
+    # Create gridlines
+    ax.gridlines(
+        draw_labels=False,
+        linewidth=2,
+        color="gray",
+        alpha=0.5,
+        linestyle="--",
+        xlocs=lon_lines,
+        ylocs=lat_lines,
+    )
+    # Define extent
+    ax.set_extent(
+        [
+            lon_lines.min(),
+            lon_lines.max(),
+            lat_lines.min(),
+            lat_lines.max(),
+        ],
+        crs=proj,
+    )
+    # Define ticks
+    ax.set_xticks(lon_lines, crs=proj)
+    ax.set_yticks(lat_lines, crs=proj)
+
+    # title
+    radar_names = "-".join(prdcfg["RadarName"])
+    title = f"colocated gates {radar_names}, total={int(np.nansum(count))} gates"
+    ax.set_title(title)
+
+    if "relief" in maps_list and "OTM" in maps_list:
+        warn(
+            "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
+            use_debug=False,
+        )
+        maps_list.remove("OTM")
+
+    if "relief" in maps_list or "OTM" in maps_list:
+        # Check cache dir
+        if "PYRAD_CACHE" in os.environ:
+            cache_dir = os.environ["PYRAD_CACHE"]
+        else:
+            cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir)
+    if "relief" in maps_list:
+        tiler = ShadedReliefESRI(cache=cache_dir)
+    if "OTM" in maps_list:
+        tiler = OTM(cache=cache_dir)
+
+    for cartomap in maps_list:
+        if cartomap == "relief" or cartomap == "OTM":
+            ax.add_image(tiler, background_zoom)
+        elif cartomap == "countries":
+            # add countries
+            countries = cartopy.feature.NaturalEarthFeature(
+                category="cultural",
+                name="admin_0_countries",
+                scale=resolution,
+                facecolor="none",
+            )
+            ax.add_feature(countries, edgecolor="black")
+        elif cartomap == "provinces":
+            # Create a feature for States/Admin 1 regions at
+            # 1:resolution from Natural Earth
+            states_provinces = cartopy.feature.NaturalEarthFeature(
+                category="cultural",
+                name="admin_1_states_provinces_lines",
+                scale=resolution,
+                facecolor="none",
+            )
+            ax.add_feature(states_provinces, edgecolor="gray")
+        elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
+            urban_areas = cartopy.feature.NaturalEarthFeature(
+                category="cultural", name="urban_areas", scale=resolution
+            )
+            ax.add_feature(
+                urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
+            )
+        elif cartomap == "roads" and resolution == "10m":
+            roads = cartopy.feature.NaturalEarthFeature(
+                category="cultural", name="roads", scale=resolution
+            )
+            ax.add_feature(roads, edgecolor="red", facecolor="none")
+        elif cartomap == "railroads" and resolution == "10m":
+            railroads = cartopy.feature.NaturalEarthFeature(
+                category="cultural", name="railroads", scale=resolution
+            )
+            ax.add_feature(
+                railroads, edgecolor="green", facecolor="none", linestyle=":"
+            )
+        elif cartomap == "coastlines":
+            ax.coastlines(resolution=resolution)
+        elif cartomap == "lakes":
+            # add lakes
+            lakes = cartopy.feature.NaturalEarthFeature(
+                category="physical", name="lakes", scale=resolution
+            )
+            ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
+        elif resolution == "10m" and cartomap == "lakes_europe":
+            lakes_europe = cartopy.feature.NaturalEarthFeature(
+                category="physical", name="lakes_europe", scale=resolution
+            )
+            ax.add_feature(lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25)
+        elif cartomap == "rivers":
+            # add rivers
+            rivers = cartopy.feature.NaturalEarthFeature(
+                category="physical",
+                name="rivers_lake_centerlines",
+                scale=resolution,
+            )
+            ax.add_feature(rivers, edgecolor="blue", facecolor="none")
+        elif resolution == "10m" and cartomap == "rivers_europe":
+            rivers_europe = cartopy.feature.NaturalEarthFeature(
+                category="physical", name="rivers_europe", scale=resolution
+            )
+            ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
+        else:
+            warn(
+                "cartomap "
+                + cartomap
+                + " for resolution "
+                + resolution
+                + " not available"
+            )
+
+    if save_fig:
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+        plt.close(fig)
+
+        return fname_list
+
+    return (fig, ax)
