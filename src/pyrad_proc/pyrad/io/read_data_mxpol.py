@@ -234,7 +234,6 @@ class pyrad_MXPOL(pyart.core.Radar):
 
 class pyrad_IDL(pyart.core.Radar):
     def __init__(self, filename, field_names=None, max_range=np.inf, min_range=10000):
-
         # find information based on filename
         all_files = [filename]
         fname_basename = os.path.basename(filename)
@@ -401,7 +400,6 @@ class pyrad_IDL(pyart.core.Radar):
 
 class pyrad_MCH(pyart.core.Radar):
     def __init__(self, filename, field_names=None, max_range=np.inf):
-
         # find information based on filename
         all_files = [filename]
         N_sweeps = len(all_files)
@@ -533,9 +531,9 @@ class pyrad_MCH(pyart.core.Radar):
         sweep_mode = {"data": np.asarray(["ppi"] * N_sweeps)}
         instrument_parameters = {"nyquist_velocity": {"data": np.array(nyquist)}}
 
-        metadata["Source"] = (
-            "Operational radar data processed at MeteoSwiss Locarno-Monti"
-        )
+        metadata[
+            "Source"
+        ] = "Operational radar data processed at MeteoSwiss Locarno-Monti"
         metadata["Institution"] = "MeteoSwiss, MDR, Locarno-Monti, Switzerland"
         metadata["History"] = [
             "created: %s, " % time.ctime(os.path.getctime(filename))
@@ -1059,9 +1057,14 @@ def generate_polvar_metadata(polvar, filename=None):
     polvar = convert_polvar_name("LTE", polvar)
 
     if polvar in _DEFAULT_POLARNAMES:
-        (standard_name, long_name, units, valid_min, valid_max, plot_interval) = (
-            _DEFAULT_POLARNAMES[polvar]
-        )
+        (
+            standard_name,
+            long_name,
+            units,
+            valid_min,
+            valid_max,
+            plot_interval,
+        ) = _DEFAULT_POLARNAMES[polvar]
     else:
         (standard_name, long_name, units, valid_min, valid_max, plot_interval) = (
             None,

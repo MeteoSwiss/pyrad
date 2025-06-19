@@ -523,11 +523,11 @@ def _retrieve_prod_daily(
 
     if hdf5:
         folder_radar = FOLDER_RADAR_HDF5
-        if (product_name == 'CPCH') or (product_name == 'CPC'):
-            product_suffix = 'hdf5'
+        if (product_name == "CPCH") or (product_name == "CPC"):
+            product_suffix = "hdf5"
     else:
         folder_radar = FOLDER_RADARH if product_name[:2] == "MH" else FOLDER_RADAR
-        product_suffix = ''
+        product_suffix = ""
 
     suffix = str(start_time.year)[-2:] + str(start_time.timetuple().tm_yday).zfill(3)
     folder_in = os.path.join(folder_radar, str(start_time.year), suffix)
