@@ -396,12 +396,14 @@
 <span class="sd">    plot_cross_section</span>
 <span class="sd">    plot_dda_map</span>
 <span class="sd">    plot_dda_slice</span>
+<span class="sd">    plot_colocated_gates</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">binned_statistic_2d</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
@@ -507,7 +509,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str or</span>
-<span class="sd">    fig, ax, display : tupple</span>
+<span class="sd">    fig, ax, display : tuple</span>
 <span class="sd">        list of names of the saved plots or handle of the figure an axes</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -826,7 +828,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str or</span>
-<span class="sd">    fig, ax, display : tupple</span>
+<span class="sd">    fig, ax, display : tuple</span>
 <span class="sd">        list of names of the saved plots or handle of the figure an axes</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -940,7 +942,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str or</span>
-<span class="sd">    fig, ax : tupple</span>
+<span class="sd">    fig, ax : tuple</span>
 <span class="sd">        list of names of the saved plots or handle of the figure an axes</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1241,9 +1243,9 @@
 <span class="sd">        object containing the gridded data to plot</span>
 <span class="sd">    field_name : str</span>
 <span class="sd">        name of the radar field to plot</span>
-<span class="sd">    coord1 : tupple of floats</span>
+<span class="sd">    coord1 : tuple of floats</span>
 <span class="sd">        lat, lon of the first point</span>
-<span class="sd">    coord2 : tupple of floats</span>
+<span class="sd">    coord2 : tuple of floats</span>
 <span class="sd">        lat, lon of the second point</span>
 <span class="sd">    fname_list : list of str</span>
 <span class="sd">        list of names of the files where to store the plot</span>
@@ -1350,7 +1352,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str or</span>
-<span class="sd">    fig, ax, display : tupple</span>
+<span class="sd">    fig, ax, display : tuple</span>
 <span class="sd">        list of names of the saved plots or handle of the figure an axes</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1651,7 +1653,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str or</span>
-<span class="sd">    fig, ax, display : tupple</span>
+<span class="sd">    fig, ax, display : tuple</span>
 <span class="sd">        list of names of the saved plots or handle of the figure an axes</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1860,6 +1862,240 @@
         <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="plot_colocated_gates">
+<a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_colocated_gates.html#pyrad.graph.plot_colocated_gates">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_colocated_gates</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">save_fig</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">grid_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This procedure plots the number of colocated gates over a specific grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : dict</span>
+<span class="sd">        python dict containing the following keys:</span>
+<span class="sd">        &quot;RADAR001&quot;, &quot;RADAR002&quot; and &quot;coloc_dic&quot; as returned</span>
+<span class="sd">        by the COLOCATED_GATES dataset</span>
+<span class="sd">    prdcfg : dict</span>
+<span class="sd">        dictionary containing the product configuration</span>
+<span class="sd">    fname_list : list of str</span>
+<span class="sd">        list of names of the files where to store the plot</span>
+<span class="sd">    save_fig : bool</span>
+<span class="sd">        if true save the figure. If false it does not close the plot and</span>
+<span class="sd">        returns the handle to the figure</span>
+<span class="sd">    grid_size : float</span>
+<span class="sd">        Size of the grid in degrees (lat/lon). For every grid cell the number of</span>
+<span class="sd">        colocated gates that fall within the grid cell will be computed and plotted.</span>
+<span class="sd">        If not provided, the grid size defined in gridMapImageConfig with</span>
+<span class="sd">        lat_min, lon_min, lat_max, lon_max and lonstep, latstep</span>
+<span class="sd">        will be used.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fname_list : list of str or</span>
+<span class="sd">    fig, ax, display : tuple</span>
+<span class="sd">        list of names of the saved plots or handle of the figure an axes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dpi</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dpi&quot;</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+    <span class="n">xsize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;xsize&quot;</span><span class="p">]</span>
+    <span class="n">ysize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;ysize&quot;</span><span class="p">]</span>
+    <span class="n">lonstep</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lonstep&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">latstep</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latstep&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">min_lon</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lonmin&quot;</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">max_lon</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lonmax&quot;</span><span class="p">,</span> <span class="mf">12.5</span><span class="p">)</span>
+    <span class="n">min_lat</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latmin&quot;</span><span class="p">,</span> <span class="mf">43.5</span><span class="p">)</span>
+    <span class="n">max_lat</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latmax&quot;</span><span class="p">,</span> <span class="mf">49.5</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">resolution</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mapres&quot;</span><span class="p">,</span> <span class="s2">&quot;110m&quot;</span><span class="p">)</span>
+    <span class="n">background_zoom</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;background_zoom&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="n">maps_list</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;maps&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">grid_size</span><span class="p">:</span>
+        <span class="n">grid_size</span> <span class="o">=</span> <span class="n">lonstep</span>
+
+    <span class="n">lon_lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span> <span class="o">+</span> <span class="n">lonstep</span><span class="p">,</span> <span class="n">lonstep</span><span class="p">)</span>
+    <span class="n">lat_lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span> <span class="o">+</span> <span class="n">latstep</span><span class="p">,</span> <span class="n">latstep</span><span class="p">)</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;grid_size&quot;</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">radar1</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;RADAR001&quot;</span><span class="p">][</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span>
+    <span class="n">radar2</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;RADAR002&quot;</span><span class="p">][</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span>
+    <span class="n">coloc_gates</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;RADAR001&quot;</span><span class="p">][</span><span class="s2">&quot;coloc_dict&quot;</span><span class="p">]</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">antenna_to_cartesian</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coloc_gates</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coloc_gates</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">]),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coloc_gates</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">]),</span>
+    <span class="p">)</span>
+
+    <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_geographic</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">,</span>
+        <span class="n">projparams</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;proj&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;lon_0&quot;</span><span class="p">:</span> <span class="n">radar1</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;lat_0&quot;</span><span class="p">:</span> <span class="n">radar1</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">x_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lon</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span> <span class="o">+</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">y_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span> <span class="o">+</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+    <span class="n">count</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">binned_statistic_2d</span><span class="p">(</span>
+        <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">statistic</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">x_bins</span><span class="p">,</span> <span class="n">y_bins</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">x_bins_center</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">y_bins_center</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_bins</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">Y</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">y_bins_center</span><span class="p">,</span> <span class="n">x_bins_center</span><span class="p">)</span>
+
+    <span class="n">count</span><span class="p">[</span><span class="n">count</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># Create figure</span>
+    <span class="n">proj</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="n">proj</span><span class="p">})</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Reds</span>
+    <span class="c1"># Plot counts</span>
+    <span class="n">cm</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Nb of colocated gates&quot;</span><span class="p">)</span>
+    <span class="c1"># Plot radar locations</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">radar1</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar1</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">radar2</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar2</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Create gridlines</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span>
+        <span class="n">draw_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+        <span class="n">xlocs</span><span class="o">=</span><span class="n">lon_lines</span><span class="p">,</span>
+        <span class="n">ylocs</span><span class="o">=</span><span class="n">lat_lines</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Define extent</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">lon_lines</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="n">lon_lines</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="n">lat_lines</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="n">lat_lines</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+        <span class="p">],</span>
+        <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Define ticks</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">lon_lines</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">lat_lines</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">proj</span><span class="p">)</span>
+
+    <span class="c1"># title</span>
+    <span class="n">radar_names</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">])</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;colocated gates </span><span class="si">{</span><span class="n">radar_names</span><span class="si">}</span><span class="s2">, total=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">count</span><span class="p">))</span><span class="si">}</span><span class="s2"> gates&quot;</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">and</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Plotting both &#39;relief&#39; and &#39;OTM&#39; is not supported, choosing only relief&quot;</span><span class="p">,</span>
+            <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">maps_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;OTM&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">or</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+        <span class="c1"># Check cache dir</span>
+        <span class="k">if</span> <span class="s2">&quot;PYRAD_CACHE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYRAD_CACHE&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;pyrad_cache&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+        <span class="n">tiler</span> <span class="o">=</span> <span class="n">ShadedReliefESRI</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+        <span class="n">tiler</span> <span class="o">=</span> <span class="n">OTM</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">cartomap</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">or</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;OTM&quot;</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">tiler</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;countries&quot;</span><span class="p">:</span>
+            <span class="c1"># add countries</span>
+            <span class="n">countries</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;admin_0_countries&quot;</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">countries</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;provinces&quot;</span><span class="p">:</span>
+            <span class="c1"># Create a feature for States/Admin 1 regions at</span>
+            <span class="c1"># 1:resolution from Natural Earth</span>
+            <span class="n">states_provinces</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;admin_1_states_provinces_lines&quot;</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">states_provinces</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;urban_areas&quot;</span> <span class="ow">and</span> <span class="n">resolution</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span> <span class="s2">&quot;50m&quot;</span><span class="p">):</span>
+            <span class="n">urban_areas</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;urban_areas&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
+                <span class="n">urban_areas</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;roads&quot;</span> <span class="ow">and</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span><span class="p">:</span>
+            <span class="n">roads</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;roads&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">roads</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;railroads&quot;</span> <span class="ow">and</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span><span class="p">:</span>
+            <span class="n">railroads</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;railroads&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
+                <span class="n">railroads</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;coastlines&quot;</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;lakes&quot;</span><span class="p">:</span>
+            <span class="c1"># add lakes</span>
+            <span class="n">lakes</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lakes&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">lakes</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span> <span class="ow">and</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;lakes_europe&quot;</span><span class="p">:</span>
+            <span class="n">lakes_europe</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lakes_europe&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">lakes_europe</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;rivers&quot;</span><span class="p">:</span>
+            <span class="c1"># add rivers</span>
+            <span class="n">rivers</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rivers_lake_centerlines&quot;</span><span class="p">,</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">rivers</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span> <span class="ow">and</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;rivers_europe&quot;</span><span class="p">:</span>
+            <span class="n">rivers_europe</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rivers_europe&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+            <span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">rivers_europe</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;cartomap &quot;</span>
+                <span class="o">+</span> <span class="n">cartomap</span>
+                <span class="o">+</span> <span class="s2">&quot; for resolution &quot;</span>
+                <span class="o">+</span> <span class="n">resolution</span>
+                <span class="o">+</span> <span class="s2">&quot; not available&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">save_fig</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fname_list</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
 </pre></div>
 <div class="section ablog__blog_comments">

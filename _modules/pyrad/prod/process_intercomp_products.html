@@ -412,6 +412,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_scatter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots_timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_intercomp_scores_ts</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_colocated_gates</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_2d_stats</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.stat_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_math_expression</span>
@@ -855,8 +856,16 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_colocated_gates_products</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates colocated gates products. Accepted product types:</span>
-<span class="sd">        WRITE_COLOCATED_GATES: Writes the position of the co-located gates</span>
+<span class="sd">        &#39;WRITE_COLOCATED_GATES&#39;: Writes the position of the co-located gates</span>
 <span class="sd">            in a csv file</span>
+<span class="sd">        &#39;PLOT_COLOCATED_GATES&#39;: Plots the colocated gates over a geo-referenced map,</span>
+<span class="sd">            as well as the coordinates of both radars. The plot performs a gridding and</span>
+<span class="sd">            plots the number of cologates gates within every grid-cell as well as their</span>
+<span class="sd">            average height. All other plotting parameters are obtained from the</span>
+<span class="sd">            gridMapImageConfig structure of the loc file.</span>
+<span class="sd">            User defined parameters:</span>
+<span class="sd">                grid_size: float</span>
+<span class="sd">                    Size of the grid in degrees (lat/lon). Default is 0.02 degrees.</span>
 <span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
 
 
@@ -899,6 +908,37 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved colocated gates file: &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname</span>
+
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PLOT_COLOCATED_GATES&quot;</span><span class="p">:</span>
+        <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;dssavename&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="n">dssavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dssavename&quot;</span><span class="p">]</span>
+        <span class="n">prdsavedir</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">]</span>
+
+        <span class="n">grid_size</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;grid_size&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdsavedir</span><span class="p">,</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+            <span class="s2">&quot;map&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
+            <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
+
+        <span class="n">plot_colocated_gates</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">prdcfg</span><span class="p">,</span> <span class="n">fname_list</span><span class="p">,</span> <span class="n">grid_size</span><span class="o">=</span><span class="n">grid_size</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>

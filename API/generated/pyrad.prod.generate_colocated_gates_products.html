@@ -415,6 +415,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_bscope.html">pyrad.graph.plot_bscope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_cappi.html">pyrad.graph.plot_cappi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_centroids.html">pyrad.graph.plot_centroids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_colocated_gates.html">pyrad.graph.plot_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_Doppler.html">pyrad.graph.plot_complex_Doppler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_angle_Doppler.html">pyrad.graph.plot_complex_angle_Doppler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_complex_range_Doppler.html">pyrad.graph.plot_complex_range_Doppler</a></li>
@@ -1299,8 +1300,20 @@
 <dt class="sig sig-object py" id="pyrad.prod.generate_colocated_gates_products">
 <span class="sig-prename descclassname"><span class="pre">pyrad.prod.</span></span><span class="sig-name descname"><span class="pre">generate_colocated_gates_products</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prdcfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/prod/process_intercomp_products.html#generate_colocated_gates_products"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.prod.generate_colocated_gates_products" title="Link to this definition">#</a></dt>
 <dd><dl>
-<dt>Generates colocated gates products. Accepted product types:</dt><dd><dl class="simple">
-<dt>WRITE_COLOCATED_GATES: Writes the position of the co-located gates</dt><dd><p>in a csv file</p>
+<dt>Generates colocated gates products. Accepted product types:</dt><dd><dl>
+<dt>‘WRITE_COLOCATED_GATES’: Writes the position of the co-located gates</dt><dd><p>in a csv file</p>
+</dd>
+<dt>‘PLOT_COLOCATED_GATES’: Plots the colocated gates over a geo-referenced map,</dt><dd><p>as well as the coordinates of both radars. The plot performs a gridding and
+plots the number of cologates gates within every grid-cell as well as their
+average height. All other plotting parameters are obtained from the
+gridMapImageConfig structure of the loc file.
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>grid_size: float</dt><dd><p>Size of the grid in degrees (lat/lon). Default is 0.02 degrees.</p>
+</dd>
+</dl>
+</div></blockquote>
 </dd>
 </dl>
 <p>All the products of the ‘VOL’ dataset group</p>

@@ -41,6 +41,8 @@
     
     plot_centroids
     
+    plot_colocated_gates
+    
     plot_complex_Doppler
     
     plot_complex_angle_Doppler

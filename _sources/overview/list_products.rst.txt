@@ -934,6 +934,28 @@ COLOCATED_GATES
 .. note::
    Supports all products of type 'VOL'
 
+WRITE_COLOCATED_GATES
+""""""""""""""""""""""""""""""
+description
+ | Writes the position of the co-located gates
+ | in a csv file 
+ |
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L500>`_
+
+PLOT_COLOCATED_GATES
+""""""""""""""""""""""""""""""
+description
+ | Plots the colocated gates over a geo-referenced map,
+ | as well as the coordinates of both radars. The plot performs a gridding and 
+ | plots the number of cologates gates within every grid-cell as well as their 
+ | average height. All other plotting parameters are obtained from the 
+ | gridMapImageConfig structure of the loc file. 
+ |
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L526>`_
+parameters
+   grid_size: : *float*
+       Size of the grid in degrees (lat/lon). Default is 0.02 degrees. All the products of the 'VOL' dataset group    
+
 ICON_COORD
 -----------------------------
 SAVEVOL
@@ -1642,7 +1664,7 @@ description
  | intercomparison in a file and plots the time series of the 
  | statistics. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L301>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L302>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1667,7 +1689,7 @@ description
  | Plots a density plot with the points of
  | radar 1 versus the points of radar 2 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L180>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L181>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1686,7 +1708,7 @@ description
  | Writes the instantaneously intercompared data
  | (gate positions, values, etc.) in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L301>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L302>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset  
@@ -1697,7 +1719,7 @@ description
  | Writes the time-averaged intercompared
  | data (gate positions, values, etc.) in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L154>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L155>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset   

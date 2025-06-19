@@ -1653,11 +1653,43 @@
 <p class="admonition-title">Note</p>
 <p>Supports all products of type ‘VOL’</p>
 </div>
+<section id="write-colocated-gates">
+<h3>WRITE_COLOCATED_GATES<a class="headerlink" href="#write-colocated-gates" title="Link to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><div class="line-block">
+<div class="line">Writes the position of the co-located gates</div>
+<div class="line">in a csv file</div>
+<div class="line"><br /></div>
+</div>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L500">[Source]</a></p>
+</dd>
+</dl>
+</section>
+<section id="plot-colocated-gates">
+<h3>PLOT_COLOCATED_GATES<a class="headerlink" href="#plot-colocated-gates" title="Link to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><div class="line-block">
+<div class="line">Plots the colocated gates over a geo-referenced map,</div>
+<div class="line">as well as the coordinates of both radars. The plot performs a gridding and</div>
+<div class="line">plots the number of cologates gates within every grid-cell as well as their</div>
+<div class="line">average height. All other plotting parameters are obtained from the</div>
+<div class="line">gridMapImageConfig structure of the loc file.</div>
+<div class="line"><br /></div>
+</div>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L526">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl>
+<dt>grid_size:<span class="classifier"><em>float</em></span></dt><dd><p>Size of the grid in degrees (lat/lon). Default is 0.02 degrees. All the products of the ‘VOL’ dataset group</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
 </section>
 <section id="icon-coord">
 <h2>ICON_COORD<a class="headerlink" href="#icon-coord" title="Link to this heading">#</a></h2>
-<section id="id54">
-<h3>SAVEVOL<a class="headerlink" href="#id54" title="Link to this heading">#</a></h3>
+<section id="id56">
+<h3>SAVEVOL<a class="headerlink" href="#id56" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Save an object containing the index of the icon model grid</div>
@@ -1686,8 +1718,8 @@
 <p class="admonition-title">Note</p>
 <p>Supports all products of type ‘VOL’</p>
 </div>
-<section id="id56">
-<h3>SAVEVOL<a class="headerlink" href="#id56" title="Link to this heading">#</a></h3>
+<section id="id58">
+<h3>SAVEVOL<a class="headerlink" href="#id58" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Save an object containing the icon data in radar</div>
@@ -1712,8 +1744,8 @@
 </section>
 <section id="grid">
 <h2>GRID<a class="headerlink" href="#grid" title="Link to this heading">#</a></h2>
-<section id="id58">
-<h3>CROSS_SECTION<a class="headerlink" href="#id58" title="Link to this heading">#</a></h3>
+<section id="id60">
+<h3>CROSS_SECTION<a class="headerlink" href="#id60" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Plots a cross-section of gridded data</div>
@@ -1730,8 +1762,8 @@
 </dd>
 </dl>
 </section>
-<section id="id60">
-<h3>HISTOGRAM<a class="headerlink" href="#id60" title="Link to this heading">#</a></h3>
+<section id="id62">
+<h3>HISTOGRAM<a class="headerlink" href="#id62" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Computes a histogram of the radar volum data</div>
@@ -1792,8 +1824,8 @@
 </dd>
 </dl>
 </section>
-<section id="id64">
-<h3>SAVEALL<a class="headerlink" href="#id64" title="Link to this heading">#</a></h3>
+<section id="id66">
+<h3>SAVEALL<a class="headerlink" href="#id66" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Saves a gridded data object including all or a list of</div>
@@ -1821,8 +1853,8 @@
 </dd>
 </dl>
 </section>
-<section id="id67">
-<h3>SAVEVOL<a class="headerlink" href="#id67" title="Link to this heading">#</a></h3>
+<section id="id69">
+<h3>SAVEVOL<a class="headerlink" href="#id69" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Saves on field of a gridded data object in a netcdf file.</div>
@@ -2479,8 +2511,8 @@
 </dd>
 </dl>
 </section>
-<section id="id90">
-<h3>SAVEALL<a class="headerlink" href="#id90" title="Link to this heading">#</a></h3>
+<section id="id92">
+<h3>SAVEALL<a class="headerlink" href="#id92" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Saves radar spectra or IQ volume data including all or a</div>
@@ -2498,8 +2530,8 @@
 </dd>
 </dl>
 </section>
-<section id="id92">
-<h3>SAVEVOL<a class="headerlink" href="#id92" title="Link to this heading">#</a></h3>
+<section id="id94">
+<h3>SAVEVOL<a class="headerlink" href="#id94" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Saves one field of a radar spectra or IQ volume data in a</div>
@@ -2565,7 +2597,7 @@
 <div class="line">statistics.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L301">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L302">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2596,7 +2628,7 @@
 <div class="line">radar 1 versus the points of radar 2</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L180">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L181">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2621,7 +2653,7 @@
 <div class="line">(gate positions, values, etc.) in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L301">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L302">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2638,7 +2670,7 @@
 <div class="line">data (gate positions, values, etc.) in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L154">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L155">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2780,8 +2812,8 @@
 </dd>
 </dl>
 </section>
-<section id="id104">
-<h3>SAVEVOL<a class="headerlink" href="#id104" title="Link to this heading">#</a></h3>
+<section id="id106">
+<h3>SAVEVOL<a class="headerlink" href="#id106" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Saves the monitoring data in a C/F radar file. The data</div>
@@ -2812,8 +2844,8 @@
 </dd>
 </dl>
 </section>
-<section id="id107">
-<h3>VOL_TS<a class="headerlink" href="#id107" title="Link to this heading">#</a></h3>
+<section id="id109">
+<h3>VOL_TS<a class="headerlink" href="#id109" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Computes statistics of the gathered data and writes them in</div>
@@ -2894,8 +2926,8 @@
 </section>
 <section id="sparse-grid">
 <h2>SPARSE_GRID<a class="headerlink" href="#sparse-grid" title="Link to this heading">#</a></h2>
-<section id="id110">
-<h3>SURFACE_IMAGE<a class="headerlink" href="#id110" title="Link to this heading">#</a></h3>
+<section id="id112">
+<h3>SURFACE_IMAGE<a class="headerlink" href="#id112" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Generates a surface image</div>
@@ -3471,23 +3503,27 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-data">SAVE_DATA</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colocated-gates">COLOCATED_GATES</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-coord">ICON_COORD</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id54">SAVEVOL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colocated-gates">COLOCATED_GATES</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-colocated-gates">WRITE_COLOCATED_GATES</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-colocated-gates">PLOT_COLOCATED_GATES</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon2radar">ICON2RADAR</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon-coord">ICON_COORD</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id56">SAVEVOL</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#icon2radar">ICON2RADAR</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id58">SAVEVOL</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#grid">GRID</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id58">CROSS_SECTION</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id60">HISTOGRAM</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id60">CROSS_SECTION</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id62">HISTOGRAM</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#latitude-slice">LATITUDE_SLICE</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitude-slice">LONGITUDE_SLICE</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id64">SAVEALL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id66">SAVEALL</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#saveall-grid">SAVEALL_GRID</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id67">SAVEVOL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id69">SAVEVOL</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#savevol-grid">SAVEVOL_GRID</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stats">STATS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-raw">SURFACE_RAW</a></li>
@@ -3512,8 +3548,8 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-time-doppler">COMPLEX_TIME_DOPPLER</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#doppler">DOPPLER</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#range-doppler">RANGE_DOPPLER</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id90">SAVEALL</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id92">SAVEVOL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id92">SAVEALL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id94">SAVEVOL</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#time-doppler">TIME_DOPPLER</a></li>
 </ul>
 </li>
@@ -3534,9 +3570,9 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#angular-density">ANGULAR_DENSITY</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cumul-vol-ts">CUMUL_VOL_TS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-histogram">PPI_HISTOGRAM</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id104">SAVEVOL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id106">SAVEVOL</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vol-histogram">VOL_HISTOGRAM</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id107">VOL_TS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id109">VOL_TS</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#occurrence">OCCURRENCE</a><ul class="nav section-nav flex-column">
@@ -3545,7 +3581,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qvp">QVP</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-grid">SPARSE_GRID</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id110">SURFACE_IMAGE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id112">SURFACE_IMAGE</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sun-hits">SUN_HITS</a><ul class="nav section-nav flex-column">

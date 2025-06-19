@@ -1,0 +1,6 @@
+pyrad.graph.plot\_colocated\_gates
+==================================
+
+.. currentmodule:: pyrad.graph
+
+.. autofunction:: plot_colocated_gates
