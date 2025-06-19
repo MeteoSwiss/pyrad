@@ -1,0 +1,948 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Plotting of radar data &#8212; Pyrad 2.0.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=664ffad9"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/plot_radar_data';</script>
+    <script src="../_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.3" />   
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyrad 2.0.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview/index.html">
+    Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview/index.html">
+    Pyrad configuration files
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Plotting of radar data</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="plotting-of-radar-data">
+<h1>Plotting of radar data<a class="headerlink" href="#plotting-of-radar-data" title="Link to this heading">#</a></h1>
+<p>This notebook summarizes the main plots that can be generated by pyrad, and gives some info on how to configure the display of these plots</p>
+<section id="ppi-image">
+<h2><a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#ppi-image">PPI_IMAGE</a><a class="headerlink" href="#ppi-image" title="Link to this heading">#</a></h2>
+<p>This product plots a classical PPI image of radar data in radar-centered AEQD coordinates.</p>
+<p>Besides the parameters listed in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#ppi-image">product description</a>, this type of plot uses the ppiImageConfig structure in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/loc.html">loc file</a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dpi</p></td>
+<td><p>INT</p></td>
+<td><p>dpi of the output image</p></td>
+</tr>
+<tr class="row-odd"><td><p>xsize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>width of the image in inches</p></td>
+</tr>
+<tr class="row-even"><td><p>ysize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>height of the image in inches</p></td>
+</tr>
+<tr class="row-odd"><td><p>ymin</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed y-coordinate (northwards, in radar centric coordinates)</p></td>
+</tr>
+<tr class="row-even"><td><p>ymax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed y-coordinate (northwards, in radar centric coordinates)</p></td>
+</tr>
+<tr class="row-odd"><td><p>xmin</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed x-coordinate (eastwards, in radar centric coordinates)</p></td>
+</tr>
+<tr class="row-even"><td><p>xmax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed x-coordinate (northwards, in radar centric coordinates)</p></td>
+</tr>
+<tr class="row-odd"><td><p>rngRing</p></td>
+<td><p>INT</p></td>
+<td><p>if defined will plot range rings every x kilometers from the radar (x value)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p><img alt="20240524111753_ppi_RAW_dBZ_el1.0.png" src="notebooks/attachment:20240524111753_ppi_RAW_dBZ_el1.0.png" /></p>
+<p>Generated with</p>
+<p><em>Product definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PPI_IMAGE_EL1 STRUCT 5
+    type  STRING PPI_IMAGE
+    anglenr INT 0
+    vmin FLOAT -20
+    vmax FLOAT 60
+    voltype STRING dBZ
+</pre></div>
+</div>
+<p><em>ppiImageConfig definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ppiImageConfig STRUCT 7
+    xsize      FLOAT  10.  
+    ysize      FLOAT   8.   
+    xmin       FLOAT -70.0  
+    xmax       FLOAT  70.0  
+    ymin       FLOAT -70.0  
+    ymax       FLOAT  70.0 
+    rngRing    INT    15
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>NOTE</strong></p>
+<p>The product <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#pseudoppi-image">PSEUDOPPI_IMAGE</a> and <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#cappi-image">CAPPI_IMAGE</a> also use the ppiImageConfig structure.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="ppi-map">
+<h2><a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#ppi-map">PPI_MAP</a><a class="headerlink" href="#ppi-map" title="Link to this heading">#</a></h2>
+<p>This product plots a PPI over a geo-referenced cartopy map in lat/lon coordinates.</p>
+<p>Besides the parameters listed in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#ppi-map">product description</a>, this type of plot uses the ppiImageConfig structure in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/loc.html">loc file</a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dpi</p></td>
+<td><p>INT</p></td>
+<td><p>dpi of the output image</p></td>
+</tr>
+<tr class="row-odd"><td><p>xsize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>width of the image in inches</p></td>
+</tr>
+<tr class="row-even"><td><p>ysize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>height of the image in inches</p></td>
+</tr>
+<tr class="row-odd"><td><p>min_lon</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed longitude</p></td>
+</tr>
+<tr class="row-even"><td><p>max_lon</p></td>
+<td><p>FLOAT</p></td>
+<td><p>maximum displayed longitude</p></td>
+</tr>
+<tr class="row-odd"><td><p>min_lat</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed latitude</p></td>
+</tr>
+<tr class="row-even"><td><p>max_lat</p></td>
+<td><p>FLOAT</p></td>
+<td><p>maximum displayed latitude</p></td>
+</tr>
+<tr class="row-odd"><td><p>resolution</p></td>
+<td><p>INT</p></td>
+<td><p>resolution of additional cartopy geodata, only “10m”, “50m” or “110m” is supported</p></td>
+</tr>
+<tr class="row-even"><td><p>alpha</p></td>
+<td><p>FLOAT</p></td>
+<td><p>transparency value (between 0 and 1) of the displayed radar data, alpha &lt; 1 is required when plotting over a relief or OTM map</p></td>
+</tr>
+<tr class="row-odd"><td><p>background_zoom</p></td>
+<td><p>INT</p></td>
+<td><p>Zoom level of the additional cartopy raster geodata, higher values mean higher resolution (typically between 8 and 12). Default is 8.</p></td>
+</tr>
+<tr class="row-even"><td><p>maps</p></td>
+<td><p>list of STRING</p></td>
+<td><p>list of additional geodata to plot. Supported: relief, OTM, provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe</p></td>
+</tr>
+<tr class="row-odd"><td><p>rngRing</p></td>
+<td><p>INT</p></td>
+<td><p>if defined will plot range rings every x kilometers from the radar (x is the specified value)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p><img alt="20240524111753_ppi_map_RAW_dBZ_el1.0.png" src="notebooks/attachment:20240524111753_ppi_map_RAW_dBZ_el1.0.png" /></p>
+<p>Generated with</p>
+<p><em>Product definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PPI_MAP_EL1 STRUCT 5
+    type  STRING PPI_MAP
+    anglenr INT 0
+    vmin FLOAT -20
+    vmax FLOAT 60
+    voltype STRING dBZ
+</pre></div>
+</div>
+<p><em>ppiMapImageConfig definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ppiMapImageConfig STRUCT 12
+    mapres STRING 10m
+    alpha FLOAT 0.4
+    latmin FLOAT 46.5
+    latmax FLOAT 47.1
+    lonmin FLOAT 6.5
+    lonmax FLOAT 7.5
+    lonstep FLOAT 0.1
+    latstep FLOAT 0.1
+    xsize FLOAT 18.
+    ysize FLOAT  10.
+    background_zoom INT 10
+    maps STRARR 7        # maps to overplot (cartopy)
+        lakes
+        countries
+        lakes_europe
+        coastlines
+        rivers
+        rivers_europe
+        relief
+</pre></div>
+</div>
+<p>Using instead</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>maps STRARR 1        # maps to overplot (cartopy)
+    OTM
+</pre></div>
+</div>
+<p>gives the following map</p>
+<p><img alt="20240524111753_ppi_map_RAW_dBZ_el1.0-2.png" src="notebooks/attachment:20240524111753_ppi_map_RAW_dBZ_el1.0-2.png" /></p>
+</section>
+</section>
+<section id="rhi-image">
+<h2><a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#ppi-image">RHI_IMAGE</a><a class="headerlink" href="#rhi-image" title="Link to this heading">#</a></h2>
+<p>This product plots a classical RHI image of radar data along a vertical profile.</p>
+<p>Besides the parameters listed in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#rhi-image">product description</a>, this type of plot uses the rhiImageConfig structure in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/loc.html">loc file</a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dpi</p></td>
+<td><p>INT</p></td>
+<td><p>dpi of the output image</p></td>
+</tr>
+<tr class="row-odd"><td><p>xsize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>width of the image in inches</p></td>
+</tr>
+<tr class="row-even"><td><p>ysize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>height of the image in inches</p></td>
+</tr>
+<tr class="row-odd"><td><p>ymin</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed y-coordinate (altitude)</p></td>
+</tr>
+<tr class="row-even"><td><p>ymax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed y-coordinate (altitude)</p></td>
+</tr>
+<tr class="row-odd"><td><p>xmin</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed x-coordinate (distance at ground along RHI)</p></td>
+</tr>
+<tr class="row-even"><td><p>xmax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed x-coordinate (distance at ground along RHI)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="id2">
+<h3>Example<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p><img alt="20240524150157_rhi_RAW_dBZ_az285.0.png" src="notebooks/attachment:20240524150157_rhi_RAW_dBZ_az285.0.png" /></p>
+<p>Generated with</p>
+<p><em>Product definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>RHI_IMAGE_AZ285 STRUCT 5
+    type  STRING RHI_IMAGE
+    anglenr INT 0
+    vmin FLOAT -20
+    vmax FLOAT 60
+    voltype STRING dBZ
+</pre></div>
+</div>
+<p><em>rhiImageConfig definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>rhiImageConfig STRUCT 6
+    xsize      FLOAT  10. 
+    ysize      FLOAT   6. 
+    xmin       FLOAT 0   
+    xmax       FLOAT 50.0 
+    ymin       FLOAT   0.0 
+    ymax       FLOAT  10.0 
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>NOTE</strong></p>
+<p>The product <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#pseudorhi-image">PSEUDORHI_IMAGE</a> works exactly in the same way.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="surface-image">
+<h2><a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#surface-image">SURFACE_IMAGE</a><a class="headerlink" href="#surface-image" title="Link to this heading">#</a></h2>
+<p>This product plots gridded (Cartesian) data over a geo-referenced cartopy map in lat/lon coordinates.</p>
+<p>Besides the parameters listed in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#surface-image">product description</a>, this type of plot uses the gridMapImageConfig structure in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/loc.html">loc file</a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dpi</p></td>
+<td><p>INT</p></td>
+<td><p>dpi of the output image</p></td>
+</tr>
+<tr class="row-odd"><td><p>xsize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>width of the image in inches</p></td>
+</tr>
+<tr class="row-even"><td><p>ysize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>height of the image in inches</p></td>
+</tr>
+<tr class="row-odd"><td><p>min_lon</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed longitude</p></td>
+</tr>
+<tr class="row-even"><td><p>max_lon</p></td>
+<td><p>FLOAT</p></td>
+<td><p>maximum displayed longitude</p></td>
+</tr>
+<tr class="row-odd"><td><p>min_lat</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed latitude</p></td>
+</tr>
+<tr class="row-even"><td><p>max_lat</p></td>
+<td><p>FLOAT</p></td>
+<td><p>maximum displayed latitude</p></td>
+</tr>
+<tr class="row-odd"><td><p>resolution</p></td>
+<td><p>INT</p></td>
+<td><p>resolution of additional cartopy geodata, only “10m”, “50m” or “110m” is supported</p></td>
+</tr>
+<tr class="row-even"><td><p>alpha</p></td>
+<td><p>FLOAT</p></td>
+<td><p>transparency value (between 0 and 1) of the displayed radar data; alpha &lt; 1 is required when plotting over a relief or OTM map</p></td>
+</tr>
+<tr class="row-odd"><td><p>background_zoom</p></td>
+<td><p>INT</p></td>
+<td><p>Zoom level of the additional cartopy raster geodata; higher values mean higher resolution (typically between 8 and 12). Default is 8.</p></td>
+</tr>
+<tr class="row-even"><td><p>maps</p></td>
+<td><p>list of STRING</p></td>
+<td><p>list of additional geodata to plot. Supported: relief, OTM, provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="id3">
+<h3>Example<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p><img alt="20240524111753_surface_GRID_STATS_dBZ_l0.png" src="notebooks/attachment:20240524111753_surface_GRID_STATS_dBZ_l0.png" /></p>
+<p>Generated with</p>
+<p><em>Dataset and Product definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>maxecho STRUCT 7
+    type     STRING GRID_STATS
+    datatype STRING dBZ
+    wfunc STRING GRID
+    statistic STRING max
+    weighted INT 0
+    gridConfig STRUCT 10
+        xmin FLOAT -30.
+        xmax FLOAT 30.
+        ymin FLOAT -30.
+        ymax FLOAT 30.
+        zmin FLOAT 0.
+        zmax FLOAT 15000.
+        hres FLOAT 1000.
+        altorig FLOAT 429.
+        latorig FLOAT 46.83
+        lonorig FLOAT 6.79
+    products STRUCT 1
+        SURFACE STRUCT 3
+            type  STRING SURFACE_IMAGE
+            voltype STRING dBZ
+            level INT 0
+</pre></div>
+</div>
+<p><em>gridMapImageConfig definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>gridMapImageConfig STRUCT 12
+    mapres STRING 10m
+    alpha FLOAT 0.8
+    latmin FLOAT 46.5
+    latmax FLOAT 47.1
+    lonmin FLOAT 6.3
+    lonmax FLOAT 7.1
+    lonstep FLOAT 0.1
+    latstep FLOAT 0.1
+    xsize FLOAT 18.
+    ysize FLOAT  10.
+    background_zoom INT 10
+    maps STRARR 1 
+        OTM
+</pre></div>
+</div>
+</section>
+</section>
+<section id="cross-section">
+<h2><a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#id60">CROSS_SECTION</a><a class="headerlink" href="#cross-section" title="Link to this heading">#</a></h2>
+<p>This product plots a cross-section but on gridded Cartesian data. It can be seen as the equivalent of RHI_IMAGE but for gridded data.</p>
+<p>Besides the parameters listed in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#id60">product description</a>, this type of plot uses the xsecImageConfig structure in the <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/loc.html">loc file</a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>dpi</p></td>
+<td><p>INT</p></td>
+<td><p>dpi of the output image</p></td>
+</tr>
+<tr class="row-odd"><td><p>xsize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>width of the image in inches</p></td>
+</tr>
+<tr class="row-even"><td><p>ysize</p></td>
+<td><p>FLOAT</p></td>
+<td><p>height of the image in inches</p></td>
+</tr>
+<tr class="row-odd"><td><p>ymin</p></td>
+<td><p>FLOAT</p></td>
+<td><p>minimum displayed y-coordinate (altitude)</p></td>
+</tr>
+<tr class="row-even"><td><p>ymax</p></td>
+<td><p>FLOAT</p></td>
+<td><p>maximum displayed y-coordinate (altitude)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Note</strong>: a <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#cross-section">similar</a> product exists for volumetric data but it uses instead the rhiImageConfig structure in the log file</p>
+<section id="id4">
+<h3>Example<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p><img alt="20240524111753_lonlat_GRID_dBZ_lon-lat1_6.38-46.72_lon-lat2_7.19-47.10-2.png" src="notebooks/attachment:20240524111753_lonlat_GRID_dBZ_lon-lat1_6.38-46.72_lon-lat2_7.19-47.10-2.png" /></p>
+<p>Generated with</p>
+<p><em>Product definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>profile STRUCT 5
+    type     STRING GRID
+    datatype STRING dBZ
+    wfunc STRING NEAREST
+    gridConfig STRUCT 11
+        xmin FLOAT -30.
+        xmax FLOAT 30.
+        ymin FLOAT -30.
+        ymax FLOAT 30.
+        zmin FLOAT 0.
+        zmax FLOAT 15000.
+        hres FLOAT 1000.
+        vres FLOAT 200.
+        altorig FLOAT 429.
+        latorig FLOAT 46.83
+        lonorig FLOAT 6.79
+    products STRUCT 1
+        CROSS_SECTION STRUCT 5
+            type  STRING CROSS_SECTION
+            voltype STRING dBZ
+            vmin FLOAT 0
+            vmax FLOAT 50
+            coord1 STRUCT 2
+                lat FLOAT 46.723
+                lon FLOAT 6.384
+            coord2 STRUCT 2
+                lat FLOAT 47.166
+                lon FLOAT 7.115
+</pre></div>
+</div>
+<p><em>xsecImageConfig definition</em></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>xsecImageConfig STRUCT 4
+    xsize      FLOAT  10. 
+    ysize      FLOAT   6. 
+    ymin       FLOAT   0.0 
+    ymax       FLOAT  10.0  
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>NOTE</strong></p>
+<p>The product <a class="reference external" href="https://meteoswiss.github.io/pyrad/overview/list_products.html#pseudorhi-image">PSEUDORHI_IMAGE</a> works exactly in the same way.</p>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-image">PPI_IMAGE</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ppi-map">PPI_MAP</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rhi-image">RHI_IMAGE</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-image">SURFACE_IMAGE</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-section">CROSS_SECTION</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Example</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/notebooks/plot_radar_data.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -916,11 +916,11 @@
 
     <span class="k">if</span> <span class="n">hdf5</span><span class="p">:</span>
         <span class="n">folder_radar</span> <span class="o">=</span> <span class="n">FOLDER_RADAR_HDF5</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">product_name</span> <span class="o">==</span> <span class="s1">&#39;CPCH&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">product_name</span> <span class="o">==</span> <span class="s1">&#39;CPC&#39;</span><span class="p">):</span>
-            <span class="n">product_suffix</span> <span class="o">=</span> <span class="s1">&#39;hdf5&#39;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">product_name</span> <span class="o">==</span> <span class="s2">&quot;CPCH&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">product_name</span> <span class="o">==</span> <span class="s2">&quot;CPC&quot;</span><span class="p">):</span>
+            <span class="n">product_suffix</span> <span class="o">=</span> <span class="s2">&quot;hdf5&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">folder_radar</span> <span class="o">=</span> <span class="n">FOLDER_RADARH</span> <span class="k">if</span> <span class="n">product_name</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MH&quot;</span> <span class="k">else</span> <span class="n">FOLDER_RADAR</span>
-        <span class="n">product_suffix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">product_suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="n">suffix</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_time</span><span class="o">.</span><span class="n">year</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_time</span><span class="o">.</span><span class="n">timetuple</span><span class="p">()</span><span class="o">.</span><span class="n">tm_yday</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">folder_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_radar</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_time</span><span class="o">.</span><span class="n">year</span><span class="p">),</span> <span class="n">suffix</span><span class="p">)</span>
