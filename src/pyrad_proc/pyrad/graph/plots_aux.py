@@ -34,6 +34,38 @@ mpl.use("Agg")
 mpl.rcParams.update({"font.size": 16})
 mpl.rcParams.update({"font.family": "sans-serif"})
 
+_CARTOPY_AVAILABLE = False
+try:
+    from cartopy.io.img_tiles import GoogleTiles
+
+    # Define ESRI terrain tiles
+    class ShadedReliefESRI(GoogleTiles):
+        def __init__(self, cache):
+            super().__init__(self, cache=cache)
+            self.desired_tile_form = "RGB"
+
+        # shaded relief
+        def _image_url(self, tile):
+            x, y, z = tile
+            return (
+                f"https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/"
+                f"World_Hillshade/MapServer/tile/{z}/{y}/{x}"
+            )
+
+    class OTM(GoogleTiles):
+        def __init__(self, cache):
+            super().__init__(self, cache=cache)
+            self.desired_tile_form = "RGB"
+
+        # OpenTopoMap
+        def _image_url(self, tile):
+            x, y, z = tile
+            return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
+
+    _CARTOPY_AVAILABLE = True
+except ImportError:
+    pass
+
 
 def generate_complex_range_Doppler_title(radar, field, ray, datetime_format=None):
     """

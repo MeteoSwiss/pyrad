@@ -1079,7 +1079,6 @@ def _create_cfg_dict(cfgfile):
     try:
         print("- Main config file : {}".format(cfgfile))
         cfg = read_config(cfg["configFile"], cfg=cfg, defaults=DEFAULT_CONFIG["main"])
-
         # Convert loc and prod config files to absolute paths if needed
         filenames = [
             "locationConfigFile",
@@ -1088,7 +1087,6 @@ def _create_cfg_dict(cfgfile):
         for fname in filenames:
             if not os.path.isabs(cfg[fname]):
                 cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
-
         print("- Location config file : {}".format(cfg["locationConfigFile"]))
         cfg = read_config(
             cfg["locationConfigFile"], cfg=cfg, defaults=DEFAULT_CONFIG["loc"]
