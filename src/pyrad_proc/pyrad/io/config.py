@@ -156,7 +156,8 @@ def _read_config_pyrad(cfgfile):
                         raise ValueError(
                             f"Expected {arr_count} array items for '{key}'"
                         )
-                    arr.append(lines[index])
+                    parser = SCALAR_TYPES[ARRAY_TYPE_NAMES[type_str]]
+                    arr.append(parser(lines[index]))
                     index += 1
                 result[key] = arr
                 count += 1
