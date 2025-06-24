@@ -56,7 +56,8 @@ except ImportError:
     _MPROFILE_AVAILABLE = False
 
 from pyrad import proc
-from ..io.config import read_config, DEFAULT_CONFIG
+from ..io.config import read_config
+from ..io.default_config import DEFAULT_CONFIG
 from ..io.read_data_radar import get_data
 from ..io.write_data import write_to_s3
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
