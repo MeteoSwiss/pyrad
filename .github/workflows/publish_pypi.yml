@@ -8,7 +8,9 @@ jobs:
   build:
     name: Build wheels for all supported Python versions
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ${{github.workspace}}/src/pyrad_proc/
     steps:
       - uses: actions/checkout@v3
 
