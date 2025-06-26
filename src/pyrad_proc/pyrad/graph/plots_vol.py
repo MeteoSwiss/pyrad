@@ -27,6 +27,12 @@ Functions to plot radar volume data
     plot_field_coverage
 
 """
+from copy import deepcopy
+import numpy as np
+import os
+from netCDF4 import num2date
+import pyart
+import matplotlib.pyplot as plt
 
 from ..io.write_data import write_histogram
 from ..util.radar_utils import compute_histogram_sweep
@@ -36,47 +42,12 @@ from .plots import plot_quantiles, plot_histogram, _plot_time_range
 from .plots_aux import generate_complex_range_Doppler_title
 from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
-import pyart
-import matplotlib.pyplot as plt
 from ..util import warn
-from copy import deepcopy
+from .plots_aux import _CARTOPY_AVAILABLE
 
-import numpy as np
-import os
-
-from netCDF4 import num2date
-
-try:
+if _CARTOPY_AVAILABLE:
     import cartopy
-    from cartopy.io.img_tiles import GoogleTiles
-
-    # Define ESRI terrain tiles
-    class ShadedReliefESRI(GoogleTiles):
-        def __init__(self):
-            super().__init__(self, cache=True)
-            self.desired_tile_form = "RGB"
-
-        # shaded relief
-        def _image_url(self, tile):
-            x, y, z = tile
-            return (
-                f"https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/"
-                f"World_Hillshade/MapServer/tile/{z}/{y}/{x}"
-            )
-
-    class OTM(GoogleTiles):
-        def __init__(self):
-            super().__init__(self, cache=True)
-            self.desired_tile_form = "RGB"
-
-        # OpenTopoMap
-        def _image_url(self, tile):
-            x, y, z = tile
-            return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
-
-    _CARTOPY_AVAILABLE = True
-except ImportError:
-    _CARTOPY_AVAILABLE = False
+    from .plots_aux import ShadedReliefESRI, OTM
 
 try:
     import shapely

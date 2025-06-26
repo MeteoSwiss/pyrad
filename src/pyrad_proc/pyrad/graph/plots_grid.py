@@ -29,39 +29,11 @@ import matplotlib.pyplot as plt
 import pyart
 
 from .plots_aux import get_norm
+from .plots_aux import _CARTOPY_AVAILABLE
 
-try:
+if _CARTOPY_AVAILABLE:
     import cartopy
-    from cartopy.io.img_tiles import GoogleTiles
-
-    # Define ESRI terrain tiles
-    class ShadedReliefESRI(GoogleTiles):
-        def __init__(self, cache):
-            super().__init__(self, cache=cache)
-            self.desired_tile_form = "RGB"
-
-        # shaded relief
-        def _image_url(self, tile):
-            x, y, z = tile
-            return (
-                f"https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/"
-                f"World_Hillshade/MapServer/tile/{z}/{y}/{x}"
-            )
-
-    class OTM(GoogleTiles):
-        def __init__(self, cache):
-            super().__init__(self, cache=cache)
-            self.desired_tile_form = "RGB"
-
-        # OpenTopoMap
-        def _image_url(self, tile):
-            x, y, z = tile
-            return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
-
-    _CARTOPY_AVAILABLE = True
-except ImportError:
-    _CARTOPY_AVAILABLE = False
-
+    from .plots_aux import ShadedReliefESRI, OTM
 
 try:
     import pydda

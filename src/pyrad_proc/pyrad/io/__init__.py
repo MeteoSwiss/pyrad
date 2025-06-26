@@ -213,7 +213,7 @@ TimeSeries
 """
 
 from .config import read_config  # noqa
-
+from .default_config import DEFAULT_CONFIG  # noqa
 from .read_data_radar import get_data, add_field, interpol_field  # noqa
 
 from .read_data_icon import read_icon_data, read_icon_coord  # noqa

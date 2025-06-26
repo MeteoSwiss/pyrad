@@ -56,7 +56,8 @@ except ImportError:
     _MPROFILE_AVAILABLE = False
 
 from pyrad import proc
-from ..io.config import read_config, DEFAULT_CONFIG
+from ..io.config import read_config
+from ..io.default_config import DEFAULT_CONFIG
 from ..io.read_data_radar import get_data
 from ..io.write_data import write_to_s3
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
@@ -1079,7 +1080,6 @@ def _create_cfg_dict(cfgfile):
     try:
         print("- Main config file : {}".format(cfgfile))
         cfg = read_config(cfg["configFile"], cfg=cfg, defaults=DEFAULT_CONFIG["main"])
-
         # Convert loc and prod config files to absolute paths if needed
         filenames = [
             "locationConfigFile",
@@ -1088,7 +1088,6 @@ def _create_cfg_dict(cfgfile):
         for fname in filenames:
             if not os.path.isabs(cfg[fname]):
                 cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
-
         print("- Location config file : {}".format(cfg["locationConfigFile"]))
         cfg = read_config(
             cfg["locationConfigFile"], cfg=cfg, defaults=DEFAULT_CONFIG["loc"]
