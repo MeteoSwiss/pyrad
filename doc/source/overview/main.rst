@@ -23,13 +23,13 @@ Table 2: Configuration parameters of the main configuration file
        ``<datapath>/<scanname>/<YYYY-MM-DD>/<YYYYMMDDHHMMSS00datatype>.<ext>``
    * - configpath
      - STRING
-     - Absolute base directory of the configuration files. This directory contains clutter maps, filter coefficients, antenna pattern, and the data processing configuration files. If any path within a pyrad config file is provided as a relative path, it will be converted to an absolute path, by prepending it with the path specified with "configpath".
+     - Absolute base directory of the configuration files. This directory contains clutter maps, filter coefficients, antenna pattern, and the data processing configuration files. If any path within a pyrad config file is provided as a relative path, it will be converted to an absolute path, by prepending it with the path specified with "configpath". If not provided, the directory of the main config file will be used.
    * - locationConfigFile
      - STRING
-     - File name (with full path) of the location configuration file. Described in Section 3.2.
+     - File nameof the location configuration file. If only the filename (and not directory) is provided it will be prepended with configpath. Described in Section 3.2.
    * - productConfigFile
      - STRING
-     - File name (with full path) of the product configuration file. Described in Section 4.
+     - File name of the product configuration file.  If only the filename (and not directory) is provided it will be prepended with configpath. Described in Section 4.
    * - lastStateFile
      - STRING
      - File name (with full path) of the file containing the time of the last processed scan. Used in particular for real-time processing.

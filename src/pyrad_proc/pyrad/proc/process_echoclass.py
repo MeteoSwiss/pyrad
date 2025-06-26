@@ -1474,6 +1474,10 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         weights : array of floats. Dataset keyword
             Used with HYDRO_METHOD SEMISUPERVISED. The list of weights given
             to each variable
+        frequency : float. Dataset keyword
+            the radar frequency [Hz]. If None that of the key
+            frequency in attribute instrument_parameters of the radar
+            object will be used.
         hydropath : string. Dataset keyword
             Used with HYDRO_METHOD UKMO. Directory of the UK MetOffice
             hydrometeor classification code
@@ -1576,8 +1580,10 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             if "fzl" in dscfg:
                 freezing_level = dscfg["fzl"]
             elif "sounding" in dscfg:
-                warn("No iso0 or temperature fields were provided")
-                warn("Getting freezing level height from sounding")
+                warn(
+                    "No iso0 or temperature fields were provided, getting freezing level height from sounding",
+                    use_debug=False,
+                )
                 sounding_code = dscfg["sounding"]
                 t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
                 freezing_level = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
@@ -1634,6 +1640,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         output_distances = dscfg.get("output_distances", False)
         vectorize = dscfg.get("vectorize", False)
         weights = dscfg.get("weights", np.array((1.0, 1.0, 1.0, 0.75, 0.5)))
+        freq = dscfg.get("frequency", None)
 
         # load centroids
         if centroids_file is not None:
@@ -1668,6 +1675,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             hydro_field=None,
             entropy_field=None,
             temp_ref=temp_ref,
+            radar_freq=freq,
             compute_entropy=compute_entropy,
             output_distances=output_distances,
             vectorize=vectorize,
