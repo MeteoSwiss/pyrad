@@ -397,93 +397,47 @@
 <span class="sd">    init_array</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
-<span class="n">_defaults_loc</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;ppiImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-        <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">},</span>
-    <span class="s2">&quot;rhiImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-        <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-        <span class="s2">&quot;xmin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;xmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">},</span>
-    <span class="s2">&quot;sunhitsImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-        <span class="s2">&quot;azmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
-        <span class="s2">&quot;azmax&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
-        <span class="s2">&quot;elmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span>
-        <span class="s2">&quot;elmax&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
-        <span class="s2">&quot;azres&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-        <span class="s2">&quot;elres&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;spectraImageConfig&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;xsize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;ysize&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-        <span class="s2">&quot;dpi&quot;</span><span class="p">:</span> <span class="mi">72</span><span class="p">,</span>
-        <span class="s2">&quot;ymin&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;ymax&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;velmin&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="s2">&quot;velmax&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;ScanPeriod&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s2">&quot;IconRunFreq&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-    <span class="s2">&quot;IconForecasted&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="s2">&quot;RadarName&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;RadarRes&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;NumRadars&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;TimeTol&quot;</span><span class="p">:</span> <span class="mf">3600.0</span><span class="p">,</span>
-    <span class="s2">&quot;ScanList&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="c1"># Allows parsing of environment variables in YAML safe loader</span>
+<span class="n">env_var_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\$\{([^}^{]+)\}&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">env_var_constructor</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">construct_scalar</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="o">.</span><span class="n">add_implicit_resolver</span><span class="p">(</span><span class="s2">&quot;!env_var&quot;</span><span class="p">,</span> <span class="n">env_var_pattern</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="o">.</span><span class="n">add_constructor</span><span class="p">(</span><span class="s2">&quot;!env_var&quot;</span><span class="p">,</span> <span class="n">env_var_constructor</span><span class="p">)</span>
+
+<span class="c1"># Define type mappings</span>
+<span class="n">SCALAR_TYPES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;BYTE&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="s2">&quot;BOOL&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;INT&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="s2">&quot;LONG&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="s2">&quot;HEX&quot;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0x&quot;</span><span class="p">)</span>
+    <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span>
+    <span class="s2">&quot;EXP&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="s2">&quot;DOUBLE&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="s2">&quot;STRING&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">_defaults_main</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;lastStateFile&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;datapath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;satpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;iconpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;psrpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;iqpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;colocgatespath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;excessgatespath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;dempath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;smnpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;disdropath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;solarfluxpath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;selfconsistencypath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;loadbasepath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;loadname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;gecsxbasepath&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;gecsxname&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="s2">&quot;metranet_read_lib&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
+<span class="n">ARRAY_TYPE_NAMES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;BYTARR&quot;</span><span class="p">:</span> <span class="s2">&quot;BYTE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;INTARR&quot;</span><span class="p">:</span> <span class="s2">&quot;INT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LONARR&quot;</span><span class="p">:</span> <span class="s2">&quot;LONG&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HEXARR&quot;</span><span class="p">:</span> <span class="s2">&quot;HEX&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EXPARR&quot;</span><span class="p">:</span> <span class="s2">&quot;EXP&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FLTARR&quot;</span><span class="p">:</span> <span class="s2">&quot;FLOAT&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DBLARR&quot;</span><span class="p">:</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;STRARR&quot;</span><span class="p">:</span> <span class="s2">&quot;STRING&quot;</span><span class="p">,</span>
 <span class="p">}</span>
-
-<span class="n">DEFAULT_CONFIG</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="n">_defaults_loc</span><span class="p">,</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span> <span class="n">_defaults_main</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="read_config">
@@ -491,6 +445,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">read_config</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a pyrad config file.</span>
+<span class="sd">    It can use either the classical pyrad config syntax or yaml files</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -512,375 +467,167 @@
 <span class="sd">        dictionary of dictionaries containing the configuration parameters</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># check if the file can be read</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">cfgfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open config file &#39;&quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
-
     <span class="c1"># if config dictionary does not exist yet create it</span>
     <span class="k">if</span> <span class="n">cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="c1"># check if the file can be read</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cfgfile</span><span class="p">:</span>
+            <span class="c1"># Figure out if it is yaml or not</span>
+            <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.yml&quot;</span><span class="p">):</span>
+                <span class="n">cfg_new</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cfg_new</span> <span class="o">=</span> <span class="n">_read_config_pyrad</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">raise</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Could not find|open config file &#39;&quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Merge with existing dict</span>
+    <span class="n">cfg</span> <span class="o">=</span> <span class="n">merge_dicts</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">cfg_new</span><span class="p">)</span>
 
     <span class="c1"># if default does not exist, create it</span>
     <span class="k">if</span> <span class="n">defaults</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    <span class="c1"># read file contents</span>
-    <span class="n">fileend</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="n">fileend</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># remove leading and trailing whitespace</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">cfgfile</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
-        <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-            <span class="c1"># ignore white lines</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
-                <span class="k">continue</span>
-
-            <span class="c1"># ignore comments</span>
-            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
-                <span class="k">continue</span>
-
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">vals</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-                <span class="n">fieldname</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">nvals</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">nvals</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                        <span class="s2">&quot;FILE FORMAT ERROR: file: &quot;</span>
-                        <span class="o">+</span> <span class="n">fname</span>
-                        <span class="o">+</span> <span class="s2">&quot;, variable: &quot;</span>
-                        <span class="o">+</span> <span class="n">fieldname</span>
-                        <span class="o">+</span> <span class="s2">&quot;: Wrong number of elements!&quot;</span>
-                    <span class="p">)</span>
-
-                <span class="n">valtype</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">valuestr</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="n">nvals</span><span class="p">]</span>
-                <span class="n">nel</span><span class="p">,</span> <span class="n">isstruct</span> <span class="o">=</span> <span class="n">get_num_elements</span><span class="p">(</span><span class="n">valtype</span><span class="p">,</span> <span class="n">valuestr</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">nel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">isstruct</span><span class="p">:</span>
-                        <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                        <span class="n">fieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_struct</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-                        <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                        <span class="n">fieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_array</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">valtype</span><span class="p">)</span>
-                        <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">fieldvalue</span> <span class="o">=</span> <span class="n">string_to_datatype</span><span class="p">(</span><span class="n">valtype</span><span class="p">,</span> <span class="n">valuestr</span><span class="p">)</span>
-
-                <span class="n">cfg</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">fieldname</span><span class="p">:</span> <span class="n">fieldvalue</span><span class="p">})</span>
-            <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Parsing failed after line </span><span class="si">{:s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
-                <span class="k">raise</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fileend</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="n">cfgfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="c1"># Verify that all keys in default are in newly created config</span>
     <span class="n">cfg</span> <span class="o">=</span> <span class="n">merge_dicts</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">defaults</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cfg</span></div>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_num_elements</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">nelstr</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Checks if data type is an array or a structure.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_config_pyrad</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">):</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+    <span class="p">]</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dtype : str</span>
-<span class="sd">        data type specifier</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_block</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">expected_count</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">maxsplit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="sd">    nelstr : str</span>
-<span class="sd">        number of elements</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid line at </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    nel : int</span>
-<span class="sd">        number of elements if type is *ARR or STRUCT. 0 otherwise</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">type_str</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-<span class="sd">    isstruct : bool</span>
-<span class="sd">        true if the type is STRUCT</span>
+            <span class="k">if</span> <span class="n">type_str</span> <span class="o">==</span> <span class="s2">&quot;STRUCT&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Missing struct count at line </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">struct_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">struct_data</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">parse_block</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">struct_count</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">struct_data</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+            <span class="k">elif</span> <span class="n">type_str</span> <span class="ow">in</span> <span class="n">ARRAY_TYPE_NAMES</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Missing array count at line </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">arr_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr_count</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="n">arr_count</span><span class="si">}</span><span class="s2"> array items for &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                        <span class="p">)</span>
+                    <span class="n">parser</span> <span class="o">=</span> <span class="n">SCALAR_TYPES</span><span class="p">[</span><span class="n">ARRAY_TYPE_NAMES</span><span class="p">[</span><span class="n">type_str</span><span class="p">]]</span>
+                    <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parser</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+                    <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-    <span class="n">isstruct</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">nel</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">narr</span> <span class="o">=</span> <span class="n">uptype</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;ARR&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRUCT&quot;</span><span class="p">:</span>
-        <span class="n">isstruct</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">narr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">isstruct</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
-        <span class="n">nel</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nelstr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">type_str</span> <span class="ow">in</span> <span class="n">SCALAR_TYPES</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Expected value for key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; at line </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">raw_val</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">parser</span> <span class="o">=</span> <span class="n">SCALAR_TYPES</span><span class="p">[</span><span class="n">type_str</span><span class="p">]</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">parser</span><span class="p">(</span><span class="n">raw_val</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="k">return</span> <span class="n">nel</span><span class="p">,</span> <span class="n">isstruct</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">string_to_datatype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">strval</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts a string containing a value into its Python value</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dtype : str</span>
-<span class="sd">        data type specifier</span>
-
-<span class="sd">    strval : str</span>
-<span class="sd">        string value</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    val : scalar</span>
-<span class="sd">        value contained in the string</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BYTE&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BOOL&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;INT&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;LONG&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;HEX&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;EXP&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
-        <span class="c1"># Replace all environement variables</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">strval</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Unexpected data type &quot;</span> <span class="o">+</span> <span class="n">uptype</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_array</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">valtype</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    reads an array in a config file</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    cfgfile : file object</span>
-<span class="sd">        config file</span>
-
-<span class="sd">    pos : int</span>
-<span class="sd">        position in file object</span>
-
-<span class="sd">    nel : int</span>
-<span class="sd">        number of elements of the ray</span>
-
-<span class="sd">    valtype : str</span>
-<span class="sd">        type of array</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    arr : array</span>
-<span class="sd">        array values</span>
-
-<span class="sd">    newpos : int</span>
-<span class="sd">        new position in file object</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">arr_type</span> <span class="o">=</span> <span class="n">get_array_type</span><span class="p">(</span><span class="n">valtype</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">arr_type</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">arr</span> <span class="o">=</span> <span class="n">init_array</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">arr_type</span><span class="p">)</span>
-
-    <span class="n">newpos</span> <span class="o">=</span> <span class="n">pos</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nel</span><span class="p">):</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-
-        <span class="c1"># remove leading and trailing whitespace</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-        <span class="n">vals</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-        <span class="n">value</span> <span class="o">=</span> <span class="n">string_to_datatype</span><span class="p">(</span><span class="n">arr_type</span><span class="p">,</span> <span class="n">vals</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">arr_type</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
-            <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="n">newpos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">arr</span><span class="p">,</span> <span class="n">newpos</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">get_struct</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nels</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    reads an struct in a config file</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    cfgfile : file object</span>
-<span class="sd">        config file</span>
-<span class="sd">    pos : int</span>
-<span class="sd">        position in file object</span>
-<span class="sd">    nel : int</span>
-<span class="sd">        number of elements of the ray</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        config file name</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    struct : dict</span>
-<span class="sd">        dictionary of struct values</span>
-
-<span class="sd">    newpos : int</span>
-<span class="sd">        new position in file object</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">struct</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">newpos</span> <span class="o">=</span> <span class="n">pos</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nels</span><span class="p">):</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">cfgfile</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
-
-        <span class="c1"># remove leading and trailing whitespace</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Remove comments</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">vals</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-
-            <span class="n">sfieldname</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">nvals</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">nvals</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                    <span class="s2">&quot;FILE FORMAT ERROR: file: &quot;</span>
-                    <span class="o">+</span> <span class="n">fname</span>
-                    <span class="o">+</span> <span class="s2">&quot;, struct variable: &quot;</span>
-                    <span class="o">+</span> <span class="n">sfieldname</span>
-                    <span class="o">+</span> <span class="s2">&quot;: Wrong number of elements!&quot;</span>
-                <span class="p">)</span>
-
-            <span class="n">svaltype</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">svaluestr</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="n">nvals</span><span class="p">]</span>
-            <span class="n">nel</span><span class="p">,</span> <span class="n">isstruct</span> <span class="o">=</span> <span class="n">get_num_elements</span><span class="p">(</span><span class="n">svaltype</span><span class="p">,</span> <span class="n">svaluestr</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">nel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">isstruct</span><span class="p">:</span>
-                    <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                    <span class="n">sfieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_struct</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
-                    <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">pos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                    <span class="n">sfieldvalue</span><span class="p">,</span> <span class="n">newpos</span> <span class="o">=</span> <span class="n">get_array</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">nel</span><span class="p">,</span> <span class="n">svaltype</span><span class="p">)</span>
-                    <span class="n">cfgfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">newpos</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">newpos</span> <span class="o">=</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-                <span class="n">sfieldvalue</span> <span class="o">=</span> <span class="n">string_to_datatype</span><span class="p">(</span><span class="n">svaltype</span><span class="p">,</span> <span class="n">svaluestr</span><span class="p">)</span>
+                <span class="k">break</span>  <span class="c1"># End of current block</span>
 
-            <span class="n">struct</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">sfieldname</span><span class="p">:</span> <span class="n">sfieldvalue</span><span class="p">})</span>
-        <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Parsing failed after line </span><span class="si">{:s}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
-            <span class="k">raise</span>
+            <span class="k">if</span> <span class="n">expected_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">==</span> <span class="n">expected_count</span><span class="p">:</span>
+                <span class="k">break</span>
 
-    <span class="k">return</span> <span class="n">struct</span><span class="p">,</span> <span class="n">newpos</span>
+        <span class="k">if</span> <span class="n">expected_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">!=</span> <span class="n">expected_count</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;At line </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">, expected </span><span class="si">{</span><span class="n">expected_count</span><span class="si">}</span><span class="s2"> elements, but parsed </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">index</span>
 
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">maxsplit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid top-level declaration at line </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">type_str</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">get_array_type</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Determines Python array type from the config file array type</span>
+        <span class="k">if</span> <span class="n">type_str</span> <span class="o">==</span> <span class="s2">&quot;STRUCT&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing struct count at line </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">struct_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">struct_data</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">parse_block</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">struct_count</span><span class="p">)</span>
+            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">struct_data</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dtype : str</span>
-<span class="sd">        config file data type</span>
+        <span class="k">elif</span> <span class="n">type_str</span> <span class="ow">in</span> <span class="n">ARRAY_TYPE_NAMES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing array count at line </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="n">arr_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">arr_count</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected </span><span class="si">{</span><span class="n">arr_count</span><span class="si">}</span><span class="s2"> array items for &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="ow">or</span> <span class="s2">&quot;STRUCT&quot;</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Parsed illegal line while reading array for </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    pytype : str</span>
-<span class="sd">        Python array type</span>
+        <span class="k">elif</span> <span class="n">type_str</span> <span class="ow">in</span> <span class="n">SCALAR_TYPES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected value for key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; at line </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">raw_val</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">parser</span> <span class="o">=</span> <span class="n">SCALAR_TYPES</span><span class="p">[</span><span class="n">type_str</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">parser</span><span class="p">(</span><span class="n">raw_val</span><span class="p">)</span>
+            <span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown type &#39;</span><span class="si">{</span><span class="n">type_str</span><span class="si">}</span><span class="s2">&#39; at line </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BYTARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;BYTE&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;INTARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;INT&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;LONARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;LON&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;HEXARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;HEX&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;EXPARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;EXP&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;FLTARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;FLOAT&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;DBLARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;DOUBLE&quot;</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRARR&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;STRING&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Unexpected data type &quot;</span> <span class="o">+</span> <span class="n">uptype</span><span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">init_array</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Initializes a Python array</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    nel : int</span>
-<span class="sd">        number of elements in the array</span>
-<span class="sd">    dtype : str</span>
-<span class="sd">        config file data type</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    pyarr : array</span>
-<span class="sd">        Python array</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">uptype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;BYTE&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;byte&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;INT&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;LONG&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;HEX&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;H&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;EXP&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;FLOAT&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;DOUBLE&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nel</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">uptype</span> <span class="o">==</span> <span class="s2">&quot;STRING&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">[]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;ERROR: Unexpected array data type &quot;</span> <span class="o">+</span> <span class="n">uptype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;dataSetList&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataSetList&quot;</span><span class="p">]):</span>
+            <span class="c1"># Check if all elements are in config</span>
+            <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataSetList&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">:</span>
+                    <span class="n">dset</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">dset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Dataset </span><span class="si">{</span><span class="n">dset</span><span class="si">}</span><span class="s2"> specificied in dataSetList was not found in config file&quot;</span>
+                    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">merge_dicts</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">defaults</span><span class="p">):</span>

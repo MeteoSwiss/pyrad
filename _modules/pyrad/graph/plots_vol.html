@@ -408,6 +408,12 @@
 <span class="sd">    plot_field_coverage</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_histogram</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_histogram_sweep</span>
@@ -417,47 +423,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_complex_range_Doppler_title</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_fixed_rng_span_title</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_colobar_label</span><span class="p">,</span> <span class="n">get_norm</span><span class="p">,</span> <span class="n">generate_fixed_rng_title</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">_CARTOPY_AVAILABLE</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
-
-<span class="k">try</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">cartopy.io.img_tiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">GoogleTiles</span>
-
-    <span class="c1"># Define ESRI terrain tiles</span>
-    <span class="k">class</span><span class="w"> </span><span class="nc">ShadedReliefESRI</span><span class="p">(</span><span class="n">GoogleTiles</span><span class="p">):</span>
-        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">desired_tile_form</span> <span class="o">=</span> <span class="s2">&quot;RGB&quot;</span>
-
-        <span class="c1"># shaded relief</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">_image_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">tile</span>
-            <span class="k">return</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;World_Hillshade/MapServer/tile/</span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-    <span class="k">class</span><span class="w"> </span><span class="nc">OTM</span><span class="p">(</span><span class="n">GoogleTiles</span><span class="p">):</span>
-        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">desired_tile_form</span> <span class="o">=</span> <span class="s2">&quot;RGB&quot;</span>
-
-        <span class="c1"># OpenTopoMap</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">_image_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">tile</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;https://a.tile.opentopomap.org/</span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">.png&quot;</span>
-
-    <span class="n">_CARTOPY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">_CARTOPY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShadedReliefESRI</span><span class="p">,</span> <span class="n">OTM</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">shapely</span>
