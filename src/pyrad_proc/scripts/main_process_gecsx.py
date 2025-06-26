@@ -161,7 +161,7 @@ def main():
     proc_endtime = None
     if args.endtime is not None:
         proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S")
-    cfgfile_proc = args.cfgpath + args.proc_cfgfile
+    cfgfile_proc = os.path.join(args.cfgpath, args.proc_cfgfile)
     gatherplots = args.gatherplots
     if args.infostr == "None":
         infostr = ""

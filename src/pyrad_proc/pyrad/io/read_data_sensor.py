@@ -2639,7 +2639,9 @@ def read_radiosounding_igra(station, dtime):
         return
 
     # get igra code
-    code = stations_ref["CODE"][stations_ref["CODE"].str.contains(station)].iloc[0]
+    code = stations_ref["CODE"][
+        stations_ref["CODE"].str.contains(station, na=False)
+    ].iloc[0]
 
     # Check if specified time is after 2021
     if dtime > datetime.datetime(2021, 1, 1):

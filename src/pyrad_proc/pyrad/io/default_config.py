@@ -84,6 +84,7 @@ _defaults_main = {
     "iconpath": None,
     "psrpath": None,
     "iqpath": None,
+    "configpath": None,
     "colocgatespath": None,
     "excessgatespath": None,
     "dempath": None,

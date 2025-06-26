@@ -122,7 +122,7 @@ def main():
     cfgfile_list = []
     for ind, cfgfile in enumerate(args.cfgfiles):
         print("config file " + str(ind) + ": " + cfgfile)
-        cfgfile_list.append(args.cfgpath + cfgfile)
+        cfgfile_list.append(os.path.join(args.cfgpath, cfgfile))
     if args.starttime is not None:
         print("start time: " + args.starttime)
     else:
