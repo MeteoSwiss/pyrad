@@ -93,7 +93,7 @@ def main():
 
     proc_starttime = datetime.datetime.strptime(args.starttime, "%Y%m%d%H%M%S")
     proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S")
-    cfgfile_proc = args.cfgpath + args.proc_cfgfile
+    cfgfile_proc = os.path.join(args.cfgpath, args.proc_cfgfile)
 
     pyrad_main(cfgfile_proc, starttime=proc_starttime, endtime=proc_endtime)
 

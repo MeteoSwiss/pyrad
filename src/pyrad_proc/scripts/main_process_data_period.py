@@ -159,7 +159,7 @@ def main():
         seconds=float(args.endtime[4:6]),
     )
 
-    cfgfile_proc = args.cfgpath + args.proc_cfgfile
+    cfgfile_proc = os.path.join(args.cfgpath, args.proc_cfgfile)
     if args.postproc_cfgfile is not None:
         cfgfile_postproc = args.cfgpath + args.postproc_cfgfile
 

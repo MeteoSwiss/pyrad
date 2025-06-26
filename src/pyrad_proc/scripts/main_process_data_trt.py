@@ -141,7 +141,7 @@ def main():
     print("trt path: " + args.trtbase)
     print("radar data path: " + args.radarbase)
 
-    cfgfile_proc = args.cfgpath + args.proc_cfgfile
+    cfgfile_proc = os.path.join(args.cfgpath, args.proc_cfgfile)
     trajtype = "trt"
 
     if args.days is not None:
