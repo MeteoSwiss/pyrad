@@ -42,7 +42,8 @@ def generate_intercomp_products(dataset, prdcfg):
     Generates radar intercomparison products. Accepted product types:
         'PLOT_AND_WRITE_INTERCOMP_TS': Writes statistics of radar
             intercomparison in a file and plots the time series of the
-            statistics.
+            statistics. Note that in order to use this product you need
+            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
@@ -71,14 +72,21 @@ def generate_intercomp_products(dataset, prdcfg):
                     The minimum correlation to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0.
-        'PLOT_SCATTER_INTERCOMP': Plots a density plot with the points of
-            radar 1 versus the points of radar 2
+        'PLOT_SCATTER_INTERCOMP': Plots a density plot (2D histogram) with the points of
+            radar 1 versus the points of radar 2. Note that in order to use this product you need
+            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
                 step: float
                     The quantization step of the data. If none it will be
                     computed using the Py-ART config file. Default None
+                vmin: float
+                    Minimum value of the density plot. If vmin or vmax are not define the range limits
+                    of the field as defined in the Py-ART config file are going to be used.
+                vmax: float
+                    Maximum value of the density plot. If vmin or vmax are not define the range limits
+                    of the field as defined in the Py-ART config file are going to be used.
                 scatter_type: str
                     Type of scatter plot. Can be a plot for each radar volume
                     (instant) or at the end of the processing period
@@ -200,6 +208,8 @@ def generate_intercomp_products(dataset, prdcfg):
         transform = parse_math_expression(transform_str)
         range_bins = prdcfg.get("range_bins", [0, np.inf])
         step = prdcfg.get("step", None)
+        vmin = prdcfg.get("vmin", None)
+        vmax = prdcfg.get("vmax", None)
 
         fname_list = []
         for i in range(len(range_bins) - 1):  # loop on range bins
@@ -244,6 +254,8 @@ def generate_intercomp_products(dataset, prdcfg):
                 step1=step,
                 step2=step,
                 transform=transform,
+                vmin=vmin,
+                vmax=vmax,
             )
             if hist_2d is None:
                 return None
@@ -274,7 +286,6 @@ def generate_intercomp_products(dataset, prdcfg):
                 + "{:.2f}".format(float(stats["intercep"]))
                 + "\n"
             )
-
             if transform_str != "x":
                 field_name = f"{transform_str} of {field_name}"
             plot_scatter(
@@ -479,7 +490,10 @@ def generate_colocated_gates_products(dataset, prdcfg):
             gridMapImageConfig structure of the loc file.
             User defined parameters:
                 grid_size: float
-                    Size of the grid in degrees (lat/lon). Default is 0.02 degrees.
+                    Size of the grid in degrees (lat/lon). If not provided,
+                    the grid size defined in gridMapImageConfig with
+                    lat_min, lon_min, lat_max, lon_max and lonstep, latstep
+                    will be used.
         All the products of the 'VOL' dataset group
 
 
