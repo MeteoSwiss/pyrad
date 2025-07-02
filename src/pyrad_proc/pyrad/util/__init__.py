@@ -98,5 +98,7 @@ from .data_retrieval_utils import retrieve_mch_prod_RT  # noqa
 from .data_retrieval_utils import retrieve_CPCCV  # noqa
 from .data_retrieval_utils import retrieve_AQC_XLS  # noqa
 
+from .math_utils import bit_pack  # noqa
+from .math_utils import bit_unpack  # noqa
 
 __all__ = [s for s in dir() if not s.startswith("_")]

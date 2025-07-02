@@ -1053,7 +1053,13 @@ def process_weighted_time_avg(procstatus, dscfg, radar_list=None):
 def process_time_avg_flag(procstatus, dscfg, radar_list=None):
     """
     computes a flag field describing the conditions of the data used while
-    averaging
+    averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as
+    of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter,
+    and non-rain precipitation. It is a packed representation of 4 numbers into one large integer.
+    Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter,
+    and +1E9 for non-rain.
+    Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor
+    classification or temperature field to identify precipitation phase.
 
     Parameters
     ----------
@@ -1126,25 +1132,27 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
         time_avg_flag = pyart.config.get_metadata("time_avg_flag")
         time_avg_flag["data"] = np.ma.zeros((radar.nrays, radar.ngates), dtype=int)
 
+        time_avg_flag["data"] += 1  # number of samples
+
         if phidp_name not in radar.fields:
             warn("Missing PhiDP data")
-            time_avg_flag["data"] += 1
+            time_avg_flag["data"] += int(1e3)
         else:
             phidp_field = radar.fields[phidp_name]
-            time_avg_flag["data"][phidp_field["data"] > phidpmax] += 1
+            time_avg_flag["data"][phidp_field["data"] > phidpmax] += int(1e3)
 
         if echo_name is not None:
             if echo_name not in radar.fields:
                 warn("Missing echo ID data")
-                time_avg_flag["data"] += 100
+                time_avg_flag["data"] += int(1e6)
             else:
                 echo_field = radar.fields[echo_name]
-                time_avg_flag["data"][echo_field["data"] == 2] += 100
+                time_avg_flag["data"][echo_field["data"] == 2] += int(1e6)
 
         if hydro_name is not None and echo_name is not None:
             if (hydro_name not in radar.fields) or (echo_name not in radar.fields):
                 warn("Missing hydrometeor classification data")
-                time_avg_flag["data"] += 10000
+                time_avg_flag["data"] += int(1e9)
             else:
                 hydro_field = radar.fields[hydro_name]
                 # check where is no rain
@@ -1153,11 +1161,11 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
                 )
                 # where is no rain should be precip
                 is_not_rain = np.logical_and(is_not_rain, echo_field["data"] == 3)
-                time_avg_flag["data"][is_not_rain] += 10000
+                time_avg_flag["data"][is_not_rain] += int(1e9)
         elif temp_name is not None:
             if temp_name not in radar.fields:
                 warn("Missing temperature data")
-                time_avg_flag["data"] += 10000
+                time_avg_flag["data"] += int(1e9)
             else:
                 beamwidth = dscfg.get("beamwidth", None)
                 if beamwidth is None:
@@ -1185,11 +1193,11 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
                     iso0_field=iso0_name,
                     temp_ref="temperature",
                 )
-                time_avg_flag["data"][mask_fzl] += 10000
+                time_avg_flag["data"][mask_fzl] += int(1e6)
         elif iso0_name is not None:
             if iso0_name not in radar.fields:
                 warn("Missing height relative to iso0 data")
-                time_avg_flag["data"] += 10000
+                time_avg_flag["data"] += int(1e6)
             else:
                 beamwidth = dscfg.get("beamwidth", None)
                 if beamwidth is None:
@@ -1217,7 +1225,7 @@ def process_time_avg_flag(procstatus, dscfg, radar_list=None):
                     iso0_field=iso0_name,
                     temp_ref="height_over_iso0",
                 )
-                time_avg_flag["data"][mask_fzl] += 10000
+                time_avg_flag["data"][mask_fzl] += int(1e9)
 
         radar_aux = deepcopy(radar)
         radar_aux.fields = dict()
@@ -1882,7 +1890,6 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
 
         fname = savedir + fname[0]
         coloc_data = read_colocated_data(fname)
-
         intercomp_dict = {
             "rad1_name": dscfg["global_data"]["rad1_name"],
             "rad1_time": coloc_data[0],
@@ -1947,13 +1954,13 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         rng_tol : float. Dataset keyword
             range tolerance between the two radars. Default 50 m
         clt_max : int. Dataset keyword
-            maximum number of samples that can be clutter contaminated.
-            Default 100 i.e. all
+            maximum percentage of samples that can be clutter contaminated.
+            Default 100%& i.e. all
         phi_excess_max : int. Dataset keyword
-            maximum number of samples that can have excess instantaneous
-            PhiDP. Default 100 i.e. all
+            maximum percentage of samples that can have excess instantaneous
+            PhiDP. Default 100% i.e. all
         non_rain_max : int. Dataset keyword
-            maximum number of samples that can be no rain. Default 100 i.e. all
+            maximum percentage of samples that can be no rain. Default 100% i.e. all
         phi_avg_max : float. Dataset keyword
             maximum average PhiDP allowed. Default 600 deg i.e. any
 
@@ -2212,16 +2219,15 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
                 rad1_flag = flag1[rad1_ray_ind[i], ind_rng]
 
-                rad1_excess_phi = rad1_flag % 100
-                rad1_clt = ((rad1_flag - rad1_excess_phi) % 10000) / 100
-                rad1_prec = (
-                    (rad1_flag - rad1_clt * 100 - rad1_excess_phi) % 1000000
-                ) / 10000
-
-                flag1_vec[i] = int(
-                    10000 * np.max(rad1_prec)
-                    + 100 * np.max(rad1_clt)
-                    + np.max(rad1_excess_phi)
+                rad1_nsamples = rad1_flag % int(1e3)
+                rad1_excess_phi = (rad1_flag // int(1e3)) % int(1e3)
+                rad1_clt = (rad1_flag // int(1e6)) % int(1e3)
+                rad1_prec = (rad1_flag // int(1e9)) % int(1e3)
+                flag1_vec[i] = (
+                    int(1e9) * np.max(rad1_prec)
+                    + int(1e6) * np.max(rad1_clt)
+                    + int(1e3) * np.max(rad1_excess_phi)
+                    + np.max(rad1_nsamples)
                 )
                 is_valid_avg[i] = True
 
@@ -2270,16 +2276,16 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
                 rad2_flag = flag2[rad2_ray_ind[i], ind_rng]
 
-                rad2_excess_phi = rad2_flag % 100
-                rad2_clt = ((rad2_flag - rad2_excess_phi) % 10000) / 100
-                rad2_prec = (
-                    (rad2_flag - rad2_clt * 100 - rad2_excess_phi) % 1000000
-                ) / 10000
+                rad2_nsamples = rad1_flag % int(1e3)
+                rad2_excess_phi = (rad1_flag // int(1e3)) % int(1e3)
+                rad2_clt = (rad1_flag // int(1e6)) % int(1e3)
+                rad2_prec = (rad1_flag // int(1e9)) % int(1e3)
 
                 flag2_vec[i] = int(
-                    10000 * np.max(rad2_prec)
-                    + 100 * np.max(rad2_clt)
-                    + np.max(rad2_excess_phi)
+                    int(1e9) * np.max(rad2_prec)
+                    + int(1e6) * np.max(rad2_clt)
+                    + int(1e3) * np.max(rad2_excess_phi)
+                    + rad2_nsamples
                 )
                 is_valid_avg[i] = True
 
@@ -2396,17 +2402,15 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         if rad1_time is None:
             return None, None
 
-        rad1_excess_phi = (rad1_flag % 100).astype(int)
-        rad2_excess_phi = (rad2_flag % 100).astype(int)
-        rad1_clt = (((rad1_flag - rad1_excess_phi) % 10000) / 100).astype(int)
-        rad2_clt = (((rad2_flag - rad2_excess_phi) % 10000) / 100).astype(int)
+        rad1_nsamples = rad1_flag % int(1e3)
+        rad1_excess_phi = (rad1_flag // int(1e3)) % int(1e3)
+        rad1_clt = (rad1_flag // int(1e6)) % int(1e3)
+        rad1_non_rain = (rad1_flag // int(1e9)) % int(1e3)
 
-        rad1_non_rain = (
-            ((rad1_flag - rad1_clt * 100 - rad1_excess_phi) % 1000000) / 10000
-        ).astype(int)
-        rad2_non_rain = (
-            ((rad2_flag - rad2_clt * 100 - rad2_excess_phi) % 1000000) / 10000
-        ).astype(int)
+        rad2_nsamples = rad2_flag % int(1e3)
+        rad2_excess_phi = (rad2_flag // int(1e3)) % int(1e3)
+        rad2_clt = (rad2_flag // int(1e6)) % int(1e3)
+        rad2_non_rain = (rad2_flag // int(1e9)) % int(1e3)
 
         clt_max = dscfg.get("clt_max", 100)
         phi_excess_max = dscfg.get("phi_excess_max", 100)
@@ -2417,14 +2421,14 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         ind_val = np.where(
             np.logical_and.reduce(
                 (
-                    rad1_clt <= clt_max,
-                    rad2_clt <= clt_max,
-                    rad1_excess_phi <= phi_excess_max,
-                    rad2_excess_phi <= phi_excess_max,
-                    rad1_non_rain <= non_rain_max,
-                    rad2_non_rain <= non_rain_max,
-                    rad1_phi <= phi_avg_max,
-                    rad2_phi <= phi_avg_max,
+                    rad1_clt / rad2_nsamples <= clt_max,
+                    rad2_clt / rad2_nsamples <= clt_max,
+                    rad1_excess_phi / rad2_nsamples <= phi_excess_max,
+                    rad2_excess_phi / rad2_nsamples <= phi_excess_max,
+                    rad1_non_rain / rad1_nsamples <= non_rain_max,
+                    rad2_non_rain / rad1_nsamples <= non_rain_max,
+                    rad1_phi / rad1_nsamples <= phi_avg_max,
+                    rad2_phi / rad1_nsamples <= phi_avg_max,
                 )
             )
         )[0]

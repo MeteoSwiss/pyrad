@@ -153,7 +153,6 @@ def generate_intercomp_products(dataset, prdcfg):
         )
 
         fname = savedir + fname[0]
-
         write_colocated_data(dataset["intercomp_dict"], fname)
 
         print("saved colocated data file: " + fname)
@@ -194,6 +193,11 @@ def generate_intercomp_products(dataset, prdcfg):
         timeformat = "%Y%m%d"
         if scatter_type == "instant":
             timeformat = "%Y%m%d%H%M%S"
+            colname = "dBZavg"
+        else:
+            colname = "val"
+        if f"rad1_{colname}" not in dataset["intercomp_dict"]:
+            return
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         savedir = get_save_dir(
@@ -247,8 +251,8 @@ def generate_intercomp_products(dataset, prdcfg):
                 continue
 
             hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
-                np.ma.asarray(dataset["intercomp_dict"]["rad1_val"][selection]),
-                np.ma.asarray(dataset["intercomp_dict"]["rad2_val"][selection]),
+                np.ma.asarray(dataset["intercomp_dict"][f"rad1_{colname}"][selection]),
+                np.ma.asarray(dataset["intercomp_dict"][f"rad2_{colname}"][selection]),
                 field_name,
                 field_name,
                 step1=step,
