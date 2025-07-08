@@ -87,6 +87,10 @@ def generate_intercomp_products(dataset, prdcfg):
                 vmax: float
                     Maximum value of the density plot. If vmin or vmax are not define the range limits
                     of the field as defined in the Py-ART config file are going to be used.
+                cap_limits: bool
+                    If set to 1, all values larger than vmax or smaller than vmin will be discarded from the
+                    scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin
+                    of the histogram. Default is 0.
                 scatter_type: str
                     Type of scatter plot. Can be a plot for each radar volume
                     (instant) or at the end of the processing period
@@ -214,6 +218,7 @@ def generate_intercomp_products(dataset, prdcfg):
         step = prdcfg.get("step", None)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
+        cap_limits = prdcfg.get("cap_limits", 0)
 
         fname_list = []
         for i in range(len(range_bins) - 1):  # loop on range bins
@@ -260,6 +265,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 transform=transform,
                 vmin=vmin,
                 vmax=vmax,
+                cap_limits=cap_limits,
             )
             if hist_2d is None:
                 return None
@@ -306,6 +312,8 @@ def generate_intercomp_products(dataset, prdcfg):
                 lin_regr_slope1=stats["intercep_slope_1"],
                 rad1_name=dataset["intercomp_dict"]["rad1_name"],
                 rad2_name=dataset["intercomp_dict"]["rad2_name"],
+                vmin=vmin,
+                vmax=vmax,
             )
 
             fname_list.extend(f_list)
