@@ -229,7 +229,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 )
             else:
                 rangebin_info = None  # only one range bin, leave empty
-                rangebin_info_title = rangebin_info
+                rangebin_info_title = ""
 
             f_list = make_filename(
                 "scatter",
@@ -244,9 +244,12 @@ def generate_intercomp_products(dataset, prdcfg):
             for j, fname in enumerate(f_list):
                 f_list[j] = savedir + fname
 
-            titl = f"colocated radar gates \n {rangebin_info_title} " + dataset[
-                "timeinfo"
-            ].strftime(timeformat)
+            rad1 = dataset["intercomp_dict"]["rad1_name"]
+            rad2 = dataset["intercomp_dict"]["rad2_name"]
+            titl = (
+                f"colocated radar gates {rad1}-{rad2} \n {rangebin_info_title} "
+                + dataset["timeinfo"].strftime(timeformat)
+            )
 
             selection = np.logical_and(
                 dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
