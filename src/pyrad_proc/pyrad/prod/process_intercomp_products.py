@@ -228,7 +228,7 @@ def generate_intercomp_products(dataset, prdcfg):
                     f"range_bin {range_bins[i]:.0f}-{range_bins[i+1]:.0f}m"
                 )
             else:
-                rangebin_info = ""  # only one range bin, leave empty
+                rangebin_info = None  # only one range bin, leave empty
                 rangebin_info_title = rangebin_info
 
             f_list = make_filename(
