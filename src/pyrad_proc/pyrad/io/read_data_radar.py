@@ -1442,6 +1442,12 @@ def get_data(voltime, datatypesdescr, cfg):
             radar.radar_calibration["dBADU_to_dBm_vv"]["data"][0] = cfg["dBADUtodBmv"][
                 ind_rad
             ]
+
+    # If radar name is empty substitude the one from the config file
+    if not radar.metadata["instrument_name"]:
+        if "RadarName" in cfg:
+            radar.metadata["instrument_name"] = cfg["RadarName"][ind_rad]
+
     return radar
 
 
@@ -1993,7 +1999,6 @@ def merge_scans_odim(
         azmin = cfg["azmin"][ind_rad]
     if cfg["azmax"] is not None:
         azmax = cfg["azmax"][ind_rad]
-
     return pyart.util.subset_radar(
         radar,
         radar.fields.keys(),
