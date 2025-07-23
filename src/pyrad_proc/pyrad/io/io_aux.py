@@ -2015,7 +2015,7 @@ def get_scan_files_to_merge(
             filename = []
             time_ref = datetime.datetime.strptime(
                 voltime.strftime("%Y%m%d000000"), "%Y%m%d%H%M%S"
-            )
+            ).replace(tzinfo=datetime.timezone.utc)
             for filename_aux in filenames:
                 fdatetime = find_date_in_file_name(filename_aux, date_format=fdate_strf)
                 if fdatetime >= time_ref:
@@ -2245,7 +2245,7 @@ def get_scan_files_to_merge_s3(
                 pattern = f"{basepath}{daydir}/*{scan}*"
             time_ref = datetime.datetime.strptime(
                 voltime.strftime("%Y%m%d000000"), "%Y%m%d%H%M%S"
-            )
+            ).replace(tzinfo=datetime.timezone.utc)
 
             found = False
             fname_list_aux = []
@@ -3128,7 +3128,9 @@ def get_trtfile_list(basepath, starttime, endtime):
     for filename in t_filelist:
         bfile = os.path.basename(filename)
         datetimestr = bfile[3:12]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%y%j%H%M")
+        fdatetime = datetime.datetime.strptime(datetimestr, "%y%j%H%M").replace(
+            tzinfo=datetime.timezone.utc
+        )
         if starttime <= fdatetime <= endtime:
             filelist.append(filename)
         # filelist.append(filename)
@@ -3843,15 +3845,19 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         "CSV",
     ):
         datetimestr = bfile[0:14]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d%H%M%S")
+        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d%H%M%S").replace(
+            tzinfo=datetime.timezone.utc
+        )
     elif datagroup in ("RAD4ALP", "RAD4ALPGRID", "RAD4ALPGIF", "RAD4ALPBIN"):
         datestr = bfile[3:8]
         timestr = bfile[8:12]
         if timestr != "2400":
-            fdatetime = datetime.datetime.strptime(datestr + timestr, "%y%j%H%M")
-        else:
             fdatetime = datetime.datetime.strptime(
-                datestr, "%y%j"
+                datestr + timestr, "%y%j%H%M"
+            ).replace(tzinfo=datetime.timezone.utc)
+        else:
+            fdatetime = datetime.datetime.strptime(datestr, "%y%j").replace(
+                tzinfo=datetime.timezone.utc
             ) + datetime.timedelta(days=1)
     elif datagroup in (
         "ODIM",
@@ -3880,20 +3886,27 @@ def _get_datetime(fname, datagroup, ftime_format=None):
             )
     elif datagroup == "MXPOL":
         datetimestr = re.findall(r"([0-9]{8}-[0-9]{6})", bfile)[0]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d-%H%M%S")
+        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d-%H%M%S").replace(
+            tzinfo=datetime.timezone.utc
+        )
     elif datagroup == "ICONRAW":
         datetimestr = bfile[-13:-3]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d%H")
+        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d%H").replace(
+            tzinfo=datetime.timezone.utc
+        )
     elif datagroup == "SATGRID":
         datetimestr = bfile[10:22]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d%H%M")
+        fdatetime = datetime.datetime.strptime(datetimestr, "%Y%m%d%H%M").replace(
+            tzinfo=datetime.timezone.utc
+        )
     elif datagroup == "SKYECHO":
         datetimestr = bfile.split("::")[1]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%Y-%m-%dT%H:%M:%S.%f")
+        fdatetime = datetime.datetime.strptime(
+            datetimestr, "%Y-%m-%dT%H:%M:%S.%f"
+        ).replace(tzinfo=datetime.timezone.utc)
     else:
         warn("unknown data group")
         return None
-
     return fdatetime
 
 
@@ -3923,7 +3936,7 @@ def find_date_in_file_name(filename, date_format="%Y%m%d%H%M%S"):
         try:
             fdatetime = datetime.datetime.strptime(
                 bfile[count : count + len_datestr], date_format
-            )
+            ).replace(tzinfo=datetime.timezone.utc)
         except ValueError:
             count += 1
             if count + len_datestr > len(bfile):

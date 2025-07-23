@@ -168,10 +168,14 @@ def main():
 
     proc_starttime = None
     if args.starttime is not None:
-        proc_starttime = datetime.datetime.strptime(args.starttime, "%Y%m%d%H%M%S")
+        proc_starttime = datetime.datetime.strptime(
+            args.starttime, "%Y%m%d%H%M%S"
+        ).replace(tzinfo=datetime.timezone.utc)
     proc_endtime = None
     if args.endtime is not None:
-        proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S")
+        proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S").replace(
+            tzinfo=datetime.timezone.utc
+        )
     cfgfile_proc = os.path.join(args.cfgpath, args.proc_cfgfile)
 
     if args.infostr == "None":

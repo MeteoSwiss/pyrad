@@ -210,7 +210,9 @@ def read_hzt_data(fname, chy0=255.0, chx0=-160.0, read_lib="C"):
         "data": ret.data,
         "long_name": "height_over_iso0",
     }
-    run_time = datetime.datetime.strptime(ret.header["time"], "%y%j%H%M0")
+    run_time = datetime.datetime.strptime(ret.header["time"], "%y%j%H%M0").replace(
+        tzinfo=datetime.timezone.utc
+    )
     time_data = {
         "standard_name": "time",
         "long_name": "time",
