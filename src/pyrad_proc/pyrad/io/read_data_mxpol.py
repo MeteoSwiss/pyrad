@@ -72,7 +72,9 @@ class pyrad_MXPOL(pyart.core.Radar):
             scan_type = "rhi"
 
         strdate = re.findall(r"([0-9]{8}-[0-9]{6})", fname_basename)[0]
-        date = datetime.datetime.strptime(strdate, "%Y%m%d-%H%M%S")
+        date = datetime.datetime.strptime(strdate, "%Y%m%d-%H%M%S").replace(
+            tzinfo=datetime.timezone.utc
+        )
 
         # if field name is None, take all available fields
 
@@ -245,7 +247,9 @@ class pyrad_IDL(pyart.core.Radar):
         elif "RHI" in fname_basename:
             scan_type = "rhi"
         strdate = re.findall(r"([0-9]{8}-[0-9]{6})", fname_basename)[0]
-        date = datetime.datetime.strptime(strdate, "%Y%m%d-%H%M%S")
+        date = datetime.datetime.strptime(strdate, "%Y%m%d-%H%M%S").replace(
+            tzinfo=datetime.timezone.utc
+        )
 
         # if field name is None, take all available fields
 
@@ -420,7 +424,9 @@ class pyrad_MCH(pyart.core.Radar):
 
         scan_type = "ppi"
 
-        scandate = datetime.datetime.strptime(fname_basename[3:12], "%y%j%H%M")
+        scandate = datetime.datetime.strptime(fname_basename[3:12], "%y%j%H%M").replace(
+            tzinfo=datetime.timezone.utc
+        )
         self.scan_date = scandate.timetuple()
 
         # if field name is None, take all available fields

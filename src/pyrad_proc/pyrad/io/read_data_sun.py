@@ -237,7 +237,9 @@ def read_sun_hits(fname):
             date = list()
             for i, row in enumerate(reader):
                 date.append(
-                    datetime.datetime.strptime(row["time"], "%Y-%m-%d %H:%M:%S.%f")
+                    datetime.datetime.strptime(
+                        row["time"], "%Y-%m-%d %H:%M:%S.%f"
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
                 ray[i] = int(row["ray"])
                 nrng[i] = int(row["NPrng"])
@@ -375,10 +377,14 @@ def read_sun_retrieval(fname):
             ref_time = list()
             for i, row in enumerate(reader):
                 first_hit_time.append(
-                    datetime.datetime.strptime(row["first_hit_time"], "%Y%m%d%H%M%S")
+                    datetime.datetime.strptime(
+                        row["first_hit_time"], "%Y%m%d%H%M%S"
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
                 last_hit_time.append(
-                    datetime.datetime.strptime(row["last_hit_time"], "%Y%m%d%H%M%S")
+                    datetime.datetime.strptime(
+                        row["last_hit_time"], "%Y%m%d%H%M%S"
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
 
                 nhits_h[i] = int(row["nhits_h"])
@@ -408,7 +414,9 @@ def read_sun_retrieval(fname):
                     ref_time.append(None)
                 else:
                     ref_time.append(
-                        datetime.datetime.strptime(row["ref_time"], "%Y%m%d%H%M%S")
+                        datetime.datetime.strptime(
+                            row["ref_time"], "%Y%m%d%H%M%S"
+                        ).replace(tzinfo=datetime.timezone.utc)
                     )
 
             el_width_h = np.ma.masked_values(el_width_h, get_fillvalue())
@@ -559,7 +567,7 @@ def read_solar_flux(fname):
                 flux_datetime.append(
                     datetime.datetime.strptime(
                         row["fluxdate"] + row["fluxtime"], "%Y%m%d%H%M%S"
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
                 flux_value[i] = float(row["fluxobsflux"])
 

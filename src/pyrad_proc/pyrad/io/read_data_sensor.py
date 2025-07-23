@@ -233,16 +233,16 @@ def read_windmills_data(fname):
                     dt_remote[i] = datetime.datetime.strptime(
                         row["Datum(Remote)"] + " " + row["Uhrzeit(Remote)"],
                         "%d.%m.%Y %H:%M:%S",
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
                     dt_server[i] = datetime.datetime.strptime(
                         row["Datum(Server)"] + " " + row["Uhrzeit(Server)"],
                         "%d.%m.%Y %H:%M:%S",
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
                 else:
                     dt_remote[i] = datetime.datetime.strptime(
                         row["Datum (Anlage)"] + " " + row["Zeit (Anlage)"],
                         "%d.%m.%Y %H:%M:%S",
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
                 rotor_speed_avg[i] = float(row["Rotordrehzahl"].replace(",", "."))
                 rotor_speed_min[i] = float(row["Rotordrehzahl Max"].replace(",", "."))
                 rotor_speed_max[i] = float(row["Rotordrehzahl Min"].replace(",", "."))
@@ -321,8 +321,10 @@ def read_thundertracking_info(fname):
                 nscans_Xband[i] = int(row["nscans_Xband"])
                 time_start[i] = datetime.datetime.strptime(
                     row["time_start"], "%Y%m%d%H%M"
-                )
-                time_end[i] = datetime.datetime.strptime(row["time_end"], "%Y%m%d%H%M")
+                ).replace(tzinfo=datetime.timezone.utc)
+                time_end[i] = datetime.datetime.strptime(
+                    row["time_end"], "%Y%m%d%H%M"
+                ).replace(tzinfo=datetime.timezone.utc)
 
             csvfile.close()
 
@@ -566,7 +568,7 @@ def read_trt_info(fname):
                         trt_time,
                         datetime.datetime.strptime(
                             fields[7].split("=")[1], "%Y%m%d%H%M"
-                        ),
+                        ).replace(tzinfo=datetime.timezone.utc),
                     )
                     vel_x = np.append(vel_x, float(fields[8].split("=")[1]))
                     vel_y = np.append(vel_y, float(fields[9].split("=")[1]))
@@ -670,7 +672,7 @@ def read_trt_info2(fname):
                     rank_aux = int(fields[6].split("=")[1])
                     trt_time_aux = datetime.datetime.strptime(
                         fields[7].split("=")[1], "%Y%m%d%H%M"
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
                     vel_x_aux = float(fields[8].split("=")[1])
                     vel_y_aux = float(fields[9].split("=")[1])
                     ell_l_aux = float(fields[10].split("=")[1])
@@ -686,7 +688,7 @@ def read_trt_info2(fname):
                 elif fields[2] == ":START":
                     scan_time_aux = datetime.datetime.strptime(
                         fields[0] + " " + fields[1], "%Y-%m-%d %H:%M:%S.%f"
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
 
                     cell_id = np.ma.append(cell_id, cell_id_aux)
                     azi = np.ma.append(azi, azi_aux)
@@ -811,14 +813,14 @@ def read_trt_scores(fname):
                 traj_ID[i] = int(row["traj ID"])
                 time_flash_density_max[i] = datetime.datetime.strptime(
                     row["max flash density time"], "%Y-%m-%d %H:%M:%S"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 flash_density_max_rank[i] = float(row["max flash density rank"])
                 flash_density_max_nflashes[i] = int(row["max flash density flashes"])
                 flash_density_max_area[i] = float(row["max flash density area"])
                 flash_density_max[i] = float(row["max flash density"])
                 time_rank_max[i] = datetime.datetime.strptime(
                     row["max rank time"], "%Y-%m-%d %H:%M:%S"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 rank_max[i] = row["max rank"]
 
             csvfile.close()
@@ -893,7 +895,7 @@ def read_trt_cell_lightning(fname):
                 traj_ID[i] = int(row["traj_ID"])
                 time_cell[i] = datetime.datetime.strptime(
                     row["yyyymmddHHMM"], "%Y%m%d%H%M"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 lon_cell[i] = float(row["lon"])
                 lat_cell[i] = float(row["lat"])
                 area_cell[i] = float(row["area"])
@@ -1122,7 +1124,7 @@ def read_trt_traj_data(fname):
                 traj_ID[i] = int(row["traj_ID"])
                 yyyymmddHHMM[i] = datetime.datetime.strptime(
                     row["yyyymmddHHMM"].strip(), "%Y%m%d%H%M"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 lon[i] = float(row["lon"].strip())
                 lat[i] = float(row["lat"].strip())
                 ell_L[i] = float(row["ell_L"].strip())
@@ -1366,16 +1368,16 @@ def read_trt_thundertracking_traj_data(fname):
                 traj_ID[i] = int(row["traj_ID"])
                 scan_ordered_time[i] = datetime.datetime.strptime(
                     row["scan_ordered_time"].strip(), "%Y%m%d%H%M%S.%f"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 if float(row["scan_time"].strip()) != get_fillvalue():
                     scan_time[i] = datetime.datetime.strptime(
                         row["scan_time"].strip(), "%Y%m%d%H%M%S"
-                    )
+                    ).replace(tzinfo=datetime.timezone.utc)
                 azi[i] = float(row["azi"].strip())
                 rng[i] = float(row["rng"].strip())
-                yyyymmddHHMM[i] = datetime.datetime.strptime(
+                yyyymmddHHMM[i] = datetime.strptime(
                     row["yyyymmddHHMM"].strip(), "%Y%m%d%H%M"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 lon[i] = float(row["lon"].strip())
                 lat[i] = float(row["lat"].strip())
                 ell_L[i] = float(row["ell_L"].strip())
@@ -1542,7 +1544,9 @@ def read_lightning(fname, filter_data=True):
         # get date from file name
         bfile = os.path.basename(fname)
         datetimestr = bfile[0:6]
-        fdatetime = datetime.datetime.strptime(datetimestr, "%y%m%d")
+        fdatetime = datetime.datetime.strptime(datetimestr, "%y%m%d").replace(
+            tzinfo=datetime.timezone.utc
+        )
 
         with open(fname, "r", newline="") as csvfile:
             # first count the lines
@@ -1715,7 +1719,7 @@ def read_meteorage(fname):
             for i, row in enumerate(reader):
                 stroke_time[i] = datetime.datetime.strptime(
                     row["date"], "%d.%m.%Y %H:%M:%S.%f UTC"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 lon[i] = float(row["lon"])
                 lat[i] = float(row["lat"])
                 intens[i] = float(row["intens"])
@@ -1824,7 +1828,9 @@ def read_lightning_traj(fname):
             )
 
             for i, row in enumerate(reader):
-                date_flash_aux = datetime.datetime.strptime(row["Date"], "%d-%b-%Y")
+                date_flash_aux = datetime.datetime.strptime(
+                    row["Date"], "%d-%b-%Y"
+                ).replace(tzinfo=datetime.timezone.utc)
                 time_flash_aux = float(row["UTC"])
                 time_flash[i] = date_flash_aux + datetime.timedelta(
                     seconds=time_flash_aux
@@ -1924,7 +1930,7 @@ def read_lightning_all(
                 flashnr[i] = int(row["flashnr"])
                 time_data[i] = datetime.datetime.strptime(
                     row["time_data"], "%Y-%m-%d %H:%M:%S.%f"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 time_in_flash[i] = float(row["time_in_flash"])
                 lat[i] = float(row["lat"])
                 lon[i] = float(row["lon"])
@@ -2374,7 +2380,9 @@ def read_disdro_scattering(fname):
             date = []
             for i, row in enumerate(reader):
                 date.append(
-                    datetime.datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S")
+                    datetime.datetime.strptime(
+                        row["date"], "%Y-%m-%d %H:%M:%S"
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
                 preciptype[i] = float(row["preciptype"])
                 lwc[i] = float(row["lwc"])
@@ -2470,7 +2478,9 @@ def read_disdro(fname):
             preciptype = []
             for row in reader:
                 date.append(
-                    datetime.datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S")
+                    datetime.datetime.strptime(
+                        row["date"], "%Y-%m-%d %H:%M:%S"
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
                 preciptype.append(row["Precip Code"])
                 variable[i] = float(row[var])

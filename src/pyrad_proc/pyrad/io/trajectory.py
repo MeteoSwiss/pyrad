@@ -349,7 +349,9 @@ class Trajectory:
 
                 # Get time stamp
                 try:
-                    sday = datetime.datetime.strptime(mm.group(1), "%d-%b-%Y")
+                    sday = datetime.datetime.strptime(mm.group(1), "%d-%b-%Y").replace(
+                        tzinfo=datetime.timezone.utc
+                    )
                 except Exception as ee:
                     print(
                         datetime.datetime.now(datetime.timezone.utc).strftime(
@@ -421,7 +423,9 @@ class Trajectory:
             data = pd.read_csv(self.filename, skiprows=28, delim_whitespace=True)
             data = data.drop(0)
             times = [
-                datetime.datetime.strptime(d + "_" + h + "0000", "%Y-%m-%d_%H:%M:%S.%f")
+                datetime.datetime.strptime(
+                    d + "_" + h + "0000", "%Y-%m-%d_%H:%M:%S.%f"
+                ).replace(tzinfo=datetime.timezone.utc)
                 for d, h in zip(data["UTCDate"], data["UTCTime"])
             ]
 

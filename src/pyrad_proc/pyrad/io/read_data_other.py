@@ -165,10 +165,10 @@ def read_proc_periods(fname):
             for i, row in enumerate(reader):
                 startimes[i] = datetime.datetime.strptime(
                     row["start_time"], "%Y%m%d%H%M%S"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 endtimes[i] = datetime.datetime.strptime(
                     row["end_time"], "%Y%m%d%H%M%S"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
 
             return startimes, endtimes
     except EnvironmentError as ee:
@@ -455,7 +455,9 @@ def read_last_state(fname):
                 warn("File " + fname + " is empty.")
                 return None
             try:
-                last_state = datetime.datetime.strptime(line, "%Y%m%d%H%M%S")
+                last_state = datetime.datetime.strptime(line, "%Y%m%d%H%M%S").replace(
+                    tzinfo=datetime.timezone.utc
+                )
                 return last_state
             except ValueError:
                 warn("File " + fname + " does not contain a valid date.")
@@ -1110,7 +1112,9 @@ def read_ts_cum(fname):
             date = list()
             for i, row in enumerate(reader):
                 date.append(
-                    datetime.datetime.strptime(row["date"], "%Y-%m-%d %H:%M:%S")
+                    datetime.datetime.strptime(
+                        row["date"], "%Y-%m-%d %H:%M:%S"
+                    ).replace(tzinfo=datetime.timezone.utc)
                 )
                 np_radar[i] = int(row["np_radar"])
                 radar_value[i] = float(row["radar_value"])
@@ -1166,7 +1170,7 @@ def read_ml_ts(fname):
             for i, row in enumerate(reader):
                 dt_ml[i] = datetime.datetime.strptime(
                     row["date-time [UTC]"], "%Y-%m-%d %H:%M:%S"
-                )
+                ).replace(tzinfo=datetime.timezone.utc)
                 ml_top_avg[i] = float(row["mean ml top height [m MSL]"])
                 ml_top_std[i] = float(row["std ml top height [m MSL]"])
                 thick_avg[i] = float(row["mean ml thickness [m]"])
@@ -1225,7 +1229,9 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
                 csvfile,
                 comment="#",
                 parse_dates=["date"],
-                date_parser=lambda x: datetime.datetime.strptime(x, "%Y%m%d%H%M%S"),
+                date_parser=lambda x: datetime.datetime.strptime(
+                    x, "%Y%m%d%H%M%S"
+                ).replace(tzinfo=datetime.timezone.utc),
             )
 
             if sort_by_date:
@@ -1308,7 +1314,11 @@ def read_monitoring_ts_old(fname):
 
             date = list()
             for i, row in enumerate(reader):
-                date.append(datetime.datetime.strptime(row["Date [YYJJJ]"], "%y%j"))
+                date.append(
+                    datetime.datetime.strptime(row["Date [YYJJJ]"], "%y%j").replace(
+                        tzinfo=datetime.timezone.utc
+                    )
+                )
                 np_t[i] = int(row["Npoints"])
                 central_quantile[i] = float(row["Value"])
 
@@ -1400,7 +1410,9 @@ def read_intercomp_scores_ts(fname, sort_by_date=False):
             csvfile.seek(0)
             reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
             for i, row in enumerate(reader):
-                date_vec[i] = datetime.datetime.strptime(row["date"], "%Y%m%d%H%M%S")
+                date_vec[i] = datetime.datetime.strptime(
+                    row["date"], "%Y%m%d%H%M%S"
+                ).replace(tzinfo=datetime.timezone.utc)
                 np_vec[i] = int(row["NP"])
                 meanbias_vec[i] = float(row["mean_bias"])
                 medianbias_vec[i] = float(row["median_bias"])
@@ -1527,7 +1539,11 @@ def read_intercomp_scores_ts_old(fname):
             )
             date_vec = list()
             for i, row in enumerate(reader):
-                date_vec.append(datetime.datetime.strptime(row["date"], "%y%j"))
+                date_vec.append(
+                    datetime.datetime.strptime(row["date"], "%y%j").replace(
+                        tzinfo=datetime.timezone.utc
+                    )
+                )
                 np_vec[i] = int(row["NP"])
                 meanbias_vec[i] = float(row["mean_bias"])
                 medianbias_vec[i] = float(row["median_bias"])
@@ -1604,7 +1620,11 @@ def read_intercomp_scores_ts_old_v0(fname, corr_min=0.6, np_min=9):
             )
             date_aux_vec = list()
             for i, row in enumerate(reader):
-                date_aux_vec.append(datetime.datetime.strptime(row["date"], "%y%j"))
+                date_aux_vec.append(
+                    datetime.datetime.strptime(row["date"], "%y%j").replace(
+                        tzinfo=datetime.timezone.utc
+                    )
+                )
                 np_aux_vec[i] = int(row["NP"])
                 meanbias_aux_vec[i] = float(row["mean_bias"])
                 corr_aux_vec[i] = float(row["corr"])

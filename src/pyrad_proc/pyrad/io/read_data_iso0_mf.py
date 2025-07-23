@@ -314,7 +314,7 @@ def read_iso0_mf_data(fname):
                     if vals[0] == "NIVEAU":
                         run_time_aux = datetime.datetime.strptime(
                             vals[6], "%Y%m%d%H%M%S"
-                        )
+                        ).replace(tzinfo=datetime.timezone.utc)
                         npoinst_iso0_aux = int(vals[8])
                         run_time.append(run_time_aux)
                         fcst_time.append(

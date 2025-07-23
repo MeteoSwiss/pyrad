@@ -347,7 +347,6 @@ def _get_times_and_traj(
                 endtimes[0].strftime("%Y-%m-%d %H:%M:%S"),
             )
         )
-
     return starttimes, endtimes, traj
 
 

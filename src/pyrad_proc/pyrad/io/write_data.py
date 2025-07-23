@@ -59,7 +59,7 @@ from ..util import warn
 import smtplib
 from email.message import EmailMessage
 
-from datetime import datetime as dt
+import datetime
 
 import numpy as np
 import pandas as pd
@@ -182,7 +182,7 @@ def write_to_s3(
         ExtraArgs = {"ACL": s3accesspolicy}
     else:
         ExtraArgs = None
-    s3copypath = f"https://{s3bucket}.{endpoint_raw}{s3path}{s3fname}"
+    s3copypath = f"https://{s3bucket}.{endpoint_raw}/{s3fname}"
     s3_client.upload_file(fname, s3bucket, s3fname, ExtraArgs=ExtraArgs)
     print(f"----- copying {fname} to {s3copypath}")
 
@@ -806,7 +806,9 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
             if timeformat is None:
                 label_str = "# Date [YYYY-MM-DD hh:mm:ss]"
                 tformat = "%Y-%m-%d %H:%M:%S"
-                time_str_old = dt.strptime(datatime, tformat)
+                time_str_old = datetime.datetime.strptime(datatime, tformat).replace(
+                    tzinfo=datetime.timezone.utc
+                )
                 time_str = time_str_old.strftime(tformat)
             else:
                 label_str = "# Date [" + timeformat + "]"
@@ -824,7 +826,9 @@ def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=
     else:
         if timeformat is None:
             tformat = "%Y-%m-%d %H:%M:%S"
-            time_str_old = dt.strptime(datatime, tformat)
+            time_str_old = datetime.datetime.strptime(datatime, tformat).replace(
+                tzinfo=datetime.timezone.utc
+            )
             time_str = time_str_old.strftime(tformat)
         else:
             tformat = timeformat
@@ -2325,7 +2329,7 @@ def write_ts_stats(dt, value, fname, stat="mean"):
                 + str(get_fillvalue())
                 + "\n"
                 + "# Start: "
-                + dt.strftime("%Y-%m-%d %H:%M:%S UTC")
+                + datetime.datetime.strftime("%Y-%m-%d %H:%M:%S UTC")
                 + "\n"
                 + "#\n"
             )
@@ -2335,7 +2339,7 @@ def write_ts_stats(dt, value, fname, stat="mean"):
             writer.writeheader()
             writer.writerow(
                 {
-                    "date-time [UTC]": dt.strftime("%Y-%m-%d %H:%M:%S"),
+                    "date-time [UTC]": datetime.datetime.strftime("%Y-%m-%d %H:%M:%S"),
                     "value": value.filled(fill_value=get_fillvalue())[0],
                 }
             )
@@ -2346,7 +2350,7 @@ def write_ts_stats(dt, value, fname, stat="mean"):
             writer = csv.DictWriter(csvfile, fieldnames)
             writer.writerow(
                 {
-                    "date-time [UTC]": dt.strftime("%Y-%m-%d %H:%M:%S"),
+                    "date-time [UTC]": datetime.datetime.strftime("%Y-%m-%d %H:%M:%S"),
                     "value": value.filled(fill_value=get_fillvalue())[0],
                 }
             )

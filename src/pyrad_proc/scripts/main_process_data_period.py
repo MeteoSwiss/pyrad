@@ -146,8 +146,12 @@ def main():
     if args.PROFILE_MULTIPROCESSING:
         print("Parallel processing performance will be profiled")
 
-    proc_startdate = datetime.datetime.strptime(args.startdate, "%Y%m%d")
-    proc_enddate = datetime.datetime.strptime(args.enddate, "%Y%m%d")
+    proc_startdate = datetime.datetime.strptime(args.startdate, "%Y%m%d").replace(
+        tzinfo=datetime.timezone.utc
+    )
+    proc_enddate = datetime.datetime.strptime(args.enddate, "%Y%m%d").replace(
+        tzinfo=datetime.timezone.utc
+    )
     proc_starttime = datetime.timedelta(
         hours=float(args.starttime[0:2]),
         minutes=float(args.starttime[2:4]),

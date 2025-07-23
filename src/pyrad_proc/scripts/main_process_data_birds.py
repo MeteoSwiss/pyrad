@@ -91,8 +91,12 @@ def main():
     print("start time: " + args.starttime)
     print("end time: " + args.endtime)
 
-    proc_starttime = datetime.datetime.strptime(args.starttime, "%Y%m%d%H%M%S")
-    proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S")
+    proc_starttime = datetime.datetime.strptime(args.starttime, "%Y%m%d%H%M%S").replace(
+        tzinfo=datetime.timezone.utc
+    )
+    proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S").replace(
+        tzinfo=datetime.timezone.utc
+    )
     cfgfile_proc = os.path.join(args.cfgpath, args.proc_cfgfile)
 
     pyrad_main(cfgfile_proc, starttime=proc_starttime, endtime=proc_endtime)
