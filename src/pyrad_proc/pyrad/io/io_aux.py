@@ -3879,7 +3879,9 @@ def _get_datetime(fname, datagroup, ftime_format=None):
         if ftime_format is None:
             # we assume is rad4alp format
             datetimestr = bfile[3:12]
-            fdatetime = datetime.datetime.strptime(datetimestr, "%y%j%H%M")
+            fdatetime = datetime.datetime.strptime(datetimestr, "%y%j%H%M").replace(
+                tzinfo=datetime.timezone.utc
+            )
         else:
             return find_date_in_file_name(
                 bfile, date_format=ftime_format[ftime_format.find("F") + 2 : -1]

@@ -1444,9 +1444,12 @@ def get_data(voltime, datatypesdescr, cfg):
             ]
 
     # If radar name is empty substitude the one from the config file
-    if not radar.metadata["instrument_name"]:
+    if not radar.metadata.get("instrument_name"):
         if "RadarName" in cfg:
-            radar.metadata["instrument_name"] = cfg["RadarName"][ind_rad]
+            try:
+                radar.metadata["instrument_name"] = cfg["RadarName"][ind_rad]
+            except (IndexError, TypeError):
+                pass
 
     return radar
 
