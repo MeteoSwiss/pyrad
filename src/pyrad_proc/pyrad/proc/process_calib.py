@@ -2063,7 +2063,6 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
     ref_time = None
     if "wavelen" in dscfg["global_data"]:
         flx_dt, flx_val = read_solar_flux(dscfg["solarfluxpath"] + "fluxtable.txt")
-
         if flx_dt is not None:
             flx_dt_closest, flx_val_closest = get_closest_solar_flux(
                 sun_hits["time"], flx_dt, flx_val
@@ -2246,7 +2245,6 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
                 flx_dt, flx_val = read_solar_flux(
                     dscfg["solarfluxpath"] + "fluxtable.txt"
                 )
-
                 if flx_dt is not None:
                     flx_dt_closest, flx_val_closest = get_closest_solar_flux(
                         sun_hits["time"], flx_dt, flx_val
