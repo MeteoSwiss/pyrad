@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
@@ -2273,6 +2273,7 @@
     <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cap_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram and statistics of the data</span>
@@ -2283,11 +2284,21 @@
 <span class="sd">        the two fields</span>
 <span class="sd">    field_name1, field_nam2: str</span>
 <span class="sd">        the name of the fields</span>
-<span class="sd">    step1, step2 : float</span>
-<span class="sd">        size of bin</span>
-<span class="sd">    vmin</span>
+<span class="sd">    step1: float</span>
+<span class="sd">        size of the bins along dimension 1</span>
+<span class="sd">    step2 : float</span>
+<span class="sd">        size of the bins along dimension 2</span>
+<span class="sd">    vmin: float</span>
+<span class="sd">        Minimum value of the 2D histogram. If vmin or vmax are not define the range limits</span>
+<span class="sd">        of the field as defined in the Py-ART config file are going to be used.</span>
+<span class="sd">    vmax: float</span>
+<span class="sd">        Maximum value of the 2D histogram. If vmin or vmax are not define the range limits</span>
+<span class="sd">        of the field as defined in the Py-ART config file are going to be used.</span>
 <span class="sd">    transform : func</span>
 <span class="sd">        A function to use to transform the data prior to computing the stats</span>
+<span class="sd">    cap_limits: bool</span>
+<span class="sd">        If true, all values larger than vmax or smaller than vmin will be discarded from the</span>
+<span class="sd">        scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2327,6 +2338,9 @@
         <span class="n">step1</span><span class="o">=</span><span class="n">step1</span><span class="p">,</span>
         <span class="n">step2</span><span class="o">=</span><span class="n">step2</span><span class="p">,</span>
         <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">cap_limits</span><span class="o">=</span><span class="n">cap_limits</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">step_aux1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">bin_centers1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step_aux1</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -2412,7 +2426,16 @@
 <div class="viewcode-block" id="compute_2d_hist">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.compute_2d_hist.html#pyrad.util.compute_2d_hist">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_2d_hist</span><span class="p">(</span>
-    <span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">,</span> <span class="n">field_name1</span><span class="p">,</span> <span class="n">field_name2</span><span class="p">,</span> <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">field1</span><span class="p">,</span>
+    <span class="n">field2</span><span class="p">,</span>
+    <span class="n">field_name1</span><span class="p">,</span>
+    <span class="n">field_name2</span><span class="p">,</span>
+    <span class="n">step1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">step2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cap_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram of the data</span>
@@ -2423,10 +2446,21 @@
 <span class="sd">        the radar fields</span>
 <span class="sd">    field_name1, field_name2 : str</span>
 <span class="sd">        field names</span>
-<span class="sd">    step1, step2 : float</span>
-<span class="sd">        size of the bins</span>
+<span class="sd">    step1: float</span>
+<span class="sd">        size of the bins along dimension 1</span>
+<span class="sd">    step2 : float</span>
+<span class="sd">        size of the bins along dimension 2</span>
+<span class="sd">    vmin: float</span>
+<span class="sd">        Minimum value of the 2D histogram. If vmin or vmax are not define the range limits</span>
+<span class="sd">        of the field as defined in the Py-ART config file are going to be used.</span>
+<span class="sd">    vmax: float</span>
+<span class="sd">        Maximum value of the 2D histogram. If vmin or vmax are not define the range limits</span>
+<span class="sd">        of the field as defined in the Py-ART config file are going to be used.</span>
 <span class="sd">    transform: func</span>
 <span class="sd">        A function to use to transform the histogram bins</span>
+<span class="sd">    cap_limits: bool</span>
+<span class="sd">        If true, all values larger than vmax or smaller than vmin will be discarded from the</span>
+<span class="sd">        scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2436,24 +2470,33 @@
 <span class="sd">        the bin edges along each dimension</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">bin_edges1</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span><span class="n">field_name1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+    <span class="n">bin_edges1</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span>
+        <span class="n">field_name1</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step1</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span>
+    <span class="p">)</span>
     <span class="n">step_aux1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_edges1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">bin_centers1</span> <span class="o">=</span> <span class="n">bin_edges1</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step_aux1</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">bin_edges2</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span><span class="n">field_name2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step2</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+    <span class="n">bin_edges2</span> <span class="o">=</span> <span class="n">get_histogram_bins</span><span class="p">(</span>
+        <span class="n">field_name2</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step2</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span>
+    <span class="p">)</span>
     <span class="n">step_aux2</span> <span class="o">=</span> <span class="n">bin_edges2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">bin_edges2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">bin_centers2</span> <span class="o">=</span> <span class="n">bin_edges2</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">step_aux2</span> <span class="o">/</span> <span class="mf">2.0</span>
 
-    <span class="n">field1</span><span class="p">[</span><span class="n">field1</span> <span class="o">&lt;</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">field1</span><span class="p">[</span><span class="n">field1</span> <span class="o">&gt;</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cap_limits</span><span class="p">:</span>
+        <span class="n">field1</span><span class="p">[</span><span class="n">field1</span> <span class="o">&lt;</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">field1</span><span class="p">[</span><span class="n">field1</span> <span class="o">&gt;</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="n">field2</span><span class="p">[</span><span class="n">field2</span> <span class="o">&lt;</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">field2</span><span class="p">[</span><span class="n">field2</span> <span class="o">&gt;</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">field2</span><span class="p">[</span><span class="n">field2</span> <span class="o">&lt;</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">field2</span><span class="p">[</span><span class="n">field2</span> <span class="o">&gt;</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">bin_centers2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">hist_range</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hist_range</span> <span class="o">=</span> <span class="p">[[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">],</span> <span class="p">[</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">]]</span>
 
     <span class="n">fill_value</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_fillvalue</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span>
         <span class="n">field1</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">),</span>
         <span class="n">field2</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">),</span>
         <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span><span class="p">],</span>
+        <span class="nb">range</span><span class="o">=</span><span class="n">hist_range</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 

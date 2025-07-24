@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
@@ -1302,7 +1302,8 @@
 <dd><dl>
 <dt>Generates radar intercomparison products. Accepted product types:</dt><dd><dl>
 <dt>‘PLOT_AND_WRITE_INTERCOMP_TS’: Writes statistics of radar</dt><dd><p>intercomparison in a file and plots the time series of the
-statistics.
+statistics. Note that in order to use this product you need
+to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
@@ -1336,7 +1337,8 @@ Default 0.</p>
 </dl>
 </div></blockquote>
 </dd>
-<dt>‘PLOT_SCATTER_INTERCOMP’: Plots a density plot with the points of</dt><dd><p>radar 1 versus the points of radar 2
+<dt>‘PLOT_SCATTER_INTERCOMP’: Plots a density plot (2D histogram) with the points of</dt><dd><p>radar 1 versus the points of radar 2. Note that in order to use this product you need
+to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
@@ -1344,6 +1346,16 @@ User defined parameters:</p>
 </dd>
 <dt>step: float</dt><dd><p>The quantization step of the data. If none it will be
 computed using the Py-ART config file. Default None</p>
+</dd>
+<dt>vmin: float</dt><dd><p>Minimum value of the density plot. If vmin or vmax are not define the range limits
+of the field as defined in the Py-ART config file are going to be used.</p>
+</dd>
+<dt>vmax: float</dt><dd><p>Maximum value of the density plot. If vmin or vmax are not define the range limits
+of the field as defined in the Py-ART config file are going to be used.</p>
+</dd>
+<dt>cap_limits: bool</dt><dd><p>If set to 1, all values larger than vmax or smaller than vmin will be discarded from the
+scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin
+of the histogram. Default is 0.</p>
 </dd>
 <dt>scatter_type: str</dt><dd><p>Type of scatter plot. Can be a plot for each radar volume
 (instant) or at the end of the processing period

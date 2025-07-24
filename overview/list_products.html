@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
@@ -1661,7 +1661,7 @@
 <div class="line">in a csv file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L500">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L529">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -1676,10 +1676,10 @@
 <div class="line">gridMapImageConfig structure of the loc file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L526">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L555">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
-<dt>grid_size:<span class="classifier"><em>float</em></span></dt><dd><p>Size of the grid in degrees (lat/lon). Default is 0.02 degrees. All the products of the ‘VOL’ dataset group</p>
+<dt>grid_size:<span class="classifier"><em>float</em></span></dt><dd><p>Size of the grid in degrees (lat/lon). If not provided, the grid size defined in gridMapImageConfig with lat_min, lon_min, lat_max, lon_max and lonstep, latstep will be used. All the products of the ‘VOL’ dataset group</p>
 </dd>
 </dl>
 </dd>
@@ -2594,10 +2594,11 @@
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Writes statistics of radar</div>
 <div class="line">intercomparison in a file and plots the time series of the</div>
-<div class="line">statistics.</div>
+<div class="line">statistics. Note that in order to use this product you need</div>
+<div class="line">to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L302">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L328">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2624,16 +2625,23 @@
 <h3>PLOT_SCATTER_INTERCOMP<a class="headerlink" href="#plot-scatter-intercomp" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
-<div class="line">Plots a density plot with the points of</div>
-<div class="line">radar 1 versus the points of radar 2</div>
+<div class="line">Plots a density plot (2D histogram) with the points of</div>
+<div class="line">radar 1 versus the points of radar 2. Note that in order to use this product you need</div>
+<div class="line">to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L181">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L192">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
 </dd>
 <dt>step:<span class="classifier"><em>float</em></span></dt><dd><p>The quantization step of the data. If none it will be computed using the Py-ART config file. Default None</p>
+</dd>
+<dt>vmin:<span class="classifier"><em>float</em></span></dt><dd><p>Minimum value of the density plot. If vmin or vmax are not define the range limits of the field as defined in the Py-ART config file are going to be used.</p>
+</dd>
+<dt>vmax:<span class="classifier"><em>float</em></span></dt><dd><p>Maximum value of the density plot. If vmin or vmax are not define the range limits of the field as defined in the Py-ART config file are going to be used.</p>
+</dd>
+<dt>cap_limits:<span class="classifier"><em>bool</em></span></dt><dd><p>If set to 1, all values larger than vmax or smaller than vmin will be discarded from the scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin of the histogram. Default is 0.</p>
 </dd>
 <dt>scatter_type:<span class="classifier"><em>str</em></span></dt><dd><p>Type of scatter plot. Can be a plot for each radar volume (instant) or at the end of the processing period (cumulative). Default is cumulative</p>
 </dd>
@@ -2653,7 +2661,7 @@
 <div class="line">(gate positions, values, etc.) in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L302">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L328">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2670,7 +2678,7 @@
 <div class="line">data (gate positions, values, etc.) in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L155">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L166">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>

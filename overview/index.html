@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
@@ -407,6 +407,48 @@
 <p>The configuration of the data processing in pyrad is divided into three files. The main configuration file, the location configuration file describing the location of the
 weather radar and the used scans. Finally, the product configuration file describes the datasets and
 products.</p>
+<p>Two formats are accepted for configuration files. The classical pyrad format which uses the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ppiMapImageConfig</span> <span class="n">STRUCT</span> <span class="mi">12</span>
+   <span class="n">mapres</span> <span class="n">STRING</span> <span class="mi">10</span><span class="n">m</span>
+   <span class="n">alpha</span> <span class="n">FLOAT</span> <span class="mf">0.4</span>
+   <span class="n">latmin</span> <span class="n">FLOAT</span> <span class="mf">46.5</span>
+   <span class="n">latmax</span> <span class="n">FLOAT</span> <span class="mf">47.1</span>
+   <span class="n">lonmin</span> <span class="n">FLOAT</span> <span class="mf">6.5</span>
+   <span class="n">lonmax</span> <span class="n">FLOAT</span> <span class="mf">7.5</span>
+   <span class="n">lonstep</span> <span class="n">FLOAT</span> <span class="mf">0.1</span>
+   <span class="n">latstep</span> <span class="n">FLOAT</span> <span class="mf">0.1</span>
+   <span class="n">xsize</span> <span class="n">FLOAT</span> <span class="mf">18.</span>
+   <span class="n">ysize</span> <span class="n">FLOAT</span>  <span class="mf">10.</span>
+   <span class="n">background_zoom</span> <span class="n">INT</span> <span class="mi">10</span>
+   <span class="n">maps</span> <span class="n">STRARR</span> <span class="mi">2</span>        <span class="c1"># maps to overplot (cartopy)</span>
+      <span class="n">OTM</span>
+      <span class="n">rivers</span>
+</pre></div>
+</div>
+<p><strong>Supported Data Types</strong></p>
+<p>Scalar types:</p>
+<ul class="simple">
+<li><p>BYTE, INT, LONG, HEX: interpreted as integers (HEX supports 0x notation).</p></li>
+<li><p>FLOAT, DOUBLE, EXP: interpreted as floating-point numbers.</p></li>
+<li><p>BOOL: accepts true/1 (case-insensitive) → True, others → False.</p></li>
+<li><p>STRING: interpreted as a string.</p></li>
+</ul>
+<p>Array types:</p>
+<ul class="simple">
+<li><p>BYTARR, INTARR, LONARR, HEXARR: interpreted as a list of integers</p></li>
+<li><p>FLTARR, DBLAR: EXPARR: interpreted as a list of floating-point numbers.</p></li>
+<li><p>STRARR: interpreted as a list of strings.</p></li>
+</ul>
+<p>Every entry has three elements:</p>
+<ul class="simple">
+<li><p><em>fieldname</em>: indentifier for the field</p></li>
+<li><p><em>TYPE</em>: one of the supported scalar or array types</p></li>
+<li><p><em>value</em> (for scalar types) or <em>number of elements</em> (for STRUCT or arrays)</p></li>
+</ul>
+<p><strong>The number of elements must be correct or the processing will fail</strong></p>
+<p><span class="red">Since v2.1.0 of pyrad, you can also write your config files in the YAML format.</span>
+A <a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/scripts/config_to_yaml.py">converter script</a>
+is also available to convert your pyrad-style config files to YAML.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main configuration file</a></li>

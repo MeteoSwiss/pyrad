@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
@@ -1300,7 +1300,13 @@
 <dt class="sig sig-object py" id="pyrad.proc.process_time_avg_flag">
 <span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_time_avg_flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_time_avg_flag" title="Link to this definition">#</a></dt>
 <dd><p>computes a flag field describing the conditions of the data used while
-averaging</p>
+averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as
+of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter,
+and non-rain precipitation. It is a packed representation of 4 numbers into one large integer.
+Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter,
+and +1E9 for non-rain.
+Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor
+classification or temperature field to identify precipitation phase.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul>

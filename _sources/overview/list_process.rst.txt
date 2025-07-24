@@ -579,6 +579,10 @@ parameters
    weights : array of floats. Dataset keyword
      | Used with HYDRO_METHOD SEMISUPERVISED. The list of weights given
      |     to each variable
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used.
    hydropath : string. Dataset keyword
      | Used with HYDRO_METHOD UKMO. Directory of the UK MetOffice
      |     hydrometeor classification code
@@ -3430,13 +3434,13 @@ parameters
    rng_tol : float. Dataset keyword
      | range tolerance between the two radars. Default 50 m
    clt_max : int. Dataset keyword
-     | maximum number of samples that can be clutter contaminated.
-     |     Default 100 i.e. all
+     | maximum percentage of samples that can be clutter contaminated.
+     |     Default 100%& i.e. all
    phi_excess_max : int. Dataset keyword
-     | maximum number of samples that can have excess instantaneous
-     |     PhiDP. Default 100 i.e. all
+     | maximum percentage of samples that can have excess instantaneous
+     |     PhiDP. Default 100% i.e. all
    non_rain_max : int. Dataset keyword
-     | maximum number of samples that can be no rain. Default 100 i.e. all
+     | maximum percentage of samples that can be no rain. Default 100% i.e. all
    phi_avg_max : float. Dataset keyword
      | maximum average PhiDP allowed. Default 600 deg i.e. any
 
@@ -4146,7 +4150,7 @@ TIMEAVG
 FLAG_TIME_AVG
 """"""""""""""""""""""""""""""
 description
-   computes a flag field describing the conditions of the data used while averaging
+   computes a flag field describing the conditions of the data used while averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter, and non-rain precipitation. It is a packed representation of 4 numbers into one large integer. Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter, and +1E9 for non-rain. Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor classification or temperature field to identify precipitation phase.
  `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag>`_
 parameters
    datatype : list of string. Dataset keyword

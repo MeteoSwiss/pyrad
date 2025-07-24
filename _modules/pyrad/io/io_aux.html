@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
@@ -2428,7 +2428,7 @@
             <span class="n">filename</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">time_ref</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
                 <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">000000&quot;</span><span class="p">),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-            <span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">filename_aux</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
                 <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">find_date_in_file_name</span><span class="p">(</span><span class="n">filename_aux</span><span class="p">,</span> <span class="n">date_format</span><span class="o">=</span><span class="n">fdate_strf</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">fdatetime</span> <span class="o">&gt;=</span> <span class="n">time_ref</span><span class="p">:</span>
@@ -2661,7 +2661,7 @@
                 <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">basepath</span><span class="si">}{</span><span class="n">daydir</span><span class="si">}</span><span class="s2">/*</span><span class="si">{</span><span class="n">scan</span><span class="si">}</span><span class="s2">*&quot;</span>
             <span class="n">time_ref</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
                 <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">000000&quot;</span><span class="p">),</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-            <span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
 
             <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">fname_list_aux</span> <span class="o">=</span> <span class="p">[]</span>
@@ -3559,7 +3559,9 @@
     <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">t_filelist</span><span class="p">:</span>
         <span class="n">bfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
-        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%y%j%H%M&quot;</span><span class="p">)</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%y%j%H%M&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="n">starttime</span> <span class="o">&lt;=</span> <span class="n">fdatetime</span> <span class="o">&lt;=</span> <span class="n">endtime</span><span class="p">:</span>
             <span class="n">filelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="c1"># filelist.append(filename)</span>
@@ -4301,15 +4303,19 @@
         <span class="s2">&quot;CSV&quot;</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span>
-        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;RAD4ALP&quot;</span><span class="p">,</span> <span class="s2">&quot;RAD4ALPGRID&quot;</span><span class="p">,</span> <span class="s2">&quot;RAD4ALPGIF&quot;</span><span class="p">,</span> <span class="s2">&quot;RAD4ALPBIN&quot;</span><span class="p">):</span>
         <span class="n">datestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
         <span class="n">timestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">timestr</span> <span class="o">!=</span> <span class="s2">&quot;2400&quot;</span><span class="p">:</span>
-            <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datestr</span> <span class="o">+</span> <span class="n">timestr</span><span class="p">,</span> <span class="s2">&quot;%y%j%H%M&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
             <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                <span class="n">datestr</span><span class="p">,</span> <span class="s2">&quot;%y%j&quot;</span>
+                <span class="n">datestr</span> <span class="o">+</span> <span class="n">timestr</span><span class="p">,</span> <span class="s2">&quot;%y%j%H%M&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datestr</span><span class="p">,</span> <span class="s2">&quot;%y%j&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
             <span class="p">)</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="ow">in</span> <span class="p">(</span>
         <span class="s2">&quot;ODIM&quot;</span><span class="p">,</span>
@@ -4331,27 +4337,36 @@
         <span class="k">if</span> <span class="n">ftime_format</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># we assume is rad4alp format</span>
             <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span>
-            <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%y%j%H%M&quot;</span><span class="p">)</span>
+            <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%y%j%H%M&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">find_date_in_file_name</span><span class="p">(</span>
                 <span class="n">bfile</span><span class="p">,</span> <span class="n">date_format</span><span class="o">=</span><span class="n">ftime_format</span><span class="p">[</span><span class="n">ftime_format</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;F&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s2">&quot;MXPOL&quot;</span><span class="p">:</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;([0-9]</span><span class="si">{8}</span><span class="s2">-[0-9]</span><span class="si">{6}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">bfile</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">)</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s2">&quot;ICONRAW&quot;</span><span class="p">:</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="o">-</span><span class="mi">13</span><span class="p">:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
-        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H&quot;</span><span class="p">)</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s2">&quot;SATGRID&quot;</span><span class="p">:</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">22</span><span class="p">]</span>
-        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">)</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
+        <span class="p">)</span>
     <span class="k">elif</span> <span class="n">datagroup</span> <span class="o">==</span> <span class="s2">&quot;SKYECHO&quot;</span><span class="p">:</span>
         <span class="n">datetimestr</span> <span class="o">=</span> <span class="n">bfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;::&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="n">datetimestr</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;unknown data group&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
-
     <span class="k">return</span> <span class="n">fdatetime</span></div>
 
 
@@ -4384,7 +4399,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">fdatetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
                 <span class="n">bfile</span><span class="p">[</span><span class="n">count</span> <span class="p">:</span> <span class="n">count</span> <span class="o">+</span> <span class="n">len_datestr</span><span class="p">],</span> <span class="n">date_format</span>
-            <span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">count</span> <span class="o">+</span> <span class="n">len_datestr</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">bfile</span><span class="p">):</span>

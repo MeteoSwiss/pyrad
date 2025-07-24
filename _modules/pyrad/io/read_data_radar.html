@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
@@ -1825,6 +1825,15 @@
             <span class="n">radar</span><span class="o">.</span><span class="n">radar_calibration</span><span class="p">[</span><span class="s2">&quot;dBADU_to_dBm_vv&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;dBADUtodBmv&quot;</span><span class="p">][</span>
                 <span class="n">ind_rad</span>
             <span class="p">]</span>
+
+    <span class="c1"># If radar name is empty substitude the one from the config file</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;RadarName&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;RadarName&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">pass</span>
+
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
@@ -2377,7 +2386,6 @@
         <span class="n">azmin</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;azmin&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;azmax&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">azmax</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;azmax&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span>
-
     <span class="k">return</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">subset_radar</span><span class="p">(</span>
         <span class="n">radar</span><span class="p">,</span>
         <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>

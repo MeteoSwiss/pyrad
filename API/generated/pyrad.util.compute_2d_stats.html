@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
@@ -1298,16 +1298,22 @@
 <h1>pyrad.util.compute_2d_stats<a class="headerlink" href="#pyrad-util-compute-2d-stats" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.util.compute_2d_stats">
-<span class="sig-prename descclassname"><span class="pre">pyrad.util.</span></span><span class="sig-name descname"><span class="pre">compute_2d_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/util/radar_utils.html#compute_2d_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.util.compute_2d_stats" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyrad.util.</span></span><span class="sig-name descname"><span class="pre">compute_2d_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cap_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/util/radar_utils.html#compute_2d_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.util.compute_2d_stats" title="Link to this definition">#</a></dt>
 <dd><p>computes a 2D histogram and statistics of the data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>field1, field2</strong> (<em>ndarray 2D</em>) – the two fields</p></li>
 <li><p><strong>field_name1, field_nam2</strong> (<em>str</em>) – the name of the fields</p></li>
-<li><p><strong>step1, step2</strong> (<em>float</em>) – size of bin</p></li>
-<li><p><strong>vmin</strong></p></li>
+<li><p><strong>step1</strong> (<em>float</em>) – size of the bins along dimension 1</p></li>
+<li><p><strong>step2</strong> (<em>float</em>) – size of the bins along dimension 2</p></li>
+<li><p><strong>vmin</strong> (<em>float</em>) – Minimum value of the 2D histogram. If vmin or vmax are not define the range limits
+of the field as defined in the Py-ART config file are going to be used.</p></li>
+<li><p><strong>vmax</strong> (<em>float</em>) – Maximum value of the 2D histogram. If vmin or vmax are not define the range limits
+of the field as defined in the Py-ART config file are going to be used.</p></li>
 <li><p><strong>transform</strong> (<em>func</em>) – A function to use to transform the data prior to computing the stats</p></li>
+<li><p><strong>cap_limits</strong> (<em>bool</em>) – If true, all values larger than vmax or smaller than vmin will be discarded from the
+scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

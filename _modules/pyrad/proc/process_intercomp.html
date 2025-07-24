@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
@@ -1448,7 +1448,13 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">process_time_avg_flag</span><span class="p">(</span><span class="n">procstatus</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a flag field describing the conditions of the data used while</span>
-<span class="sd">    averaging</span>
+<span class="sd">    averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as</span>
+<span class="sd">    of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter,</span>
+<span class="sd">    and non-rain precipitation. It is a packed representation of 4 numbers into one large integer.</span>
+<span class="sd">    Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter,</span>
+<span class="sd">    and +1E9 for non-rain.</span>
+<span class="sd">    Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor</span>
+<span class="sd">    classification or temperature field to identify precipitation phase.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1521,25 +1527,27 @@
         <span class="n">time_avg_flag</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;time_avg_flag&quot;</span><span class="p">)</span>
         <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
+        <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># number of samples</span>
+
         <span class="k">if</span> <span class="n">phidp_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Missing PhiDP data&quot;</span><span class="p">)</span>
-            <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">phidp_field</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">phidp_name</span><span class="p">]</span>
-            <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">phidp_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">phidpmax</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">phidp_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">phidpmax</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">echo_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">echo_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Missing echo ID data&quot;</span><span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">100</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">echo_field</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">echo_name</span><span class="p">]</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">echo_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">100</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">echo_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">hydro_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">echo_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">hydro_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">echo_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Missing hydrometeor classification data&quot;</span><span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10000</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">hydro_name</span><span class="p">]</span>
                 <span class="c1"># check where is no rain</span>
@@ -1548,11 +1556,11 @@
                 <span class="p">)</span>
                 <span class="c1"># where is no rain should be precip</span>
                 <span class="n">is_not_rain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">is_not_rain</span><span class="p">,</span> <span class="n">echo_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_not_rain</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10000</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_not_rain</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">temp_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">temp_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Missing temperature data&quot;</span><span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10000</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;beamwidth&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1580,11 +1588,11 @@
                     <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_name</span><span class="p">,</span>
                     <span class="n">temp_ref</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">mask_fzl</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10000</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">mask_fzl</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">iso0_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">iso0_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Missing height relative to iso0 data&quot;</span><span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10000</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">beamwidth</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;beamwidth&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1612,7 +1620,7 @@
                     <span class="n">iso0_field</span><span class="o">=</span><span class="n">iso0_name</span><span class="p">,</span>
                     <span class="n">temp_ref</span><span class="o">=</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
-                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">mask_fzl</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10000</span>
+                <span class="n">time_avg_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">mask_fzl</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)</span>
 
         <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -2283,7 +2291,6 @@
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">coloc_data</span> <span class="o">=</span> <span class="n">read_colocated_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-
         <span class="n">intercomp_dict</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;rad1_name&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_name&quot;</span><span class="p">],</span>
             <span class="s2">&quot;rad1_time&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -2351,13 +2358,13 @@
 <span class="sd">        rng_tol : float. Dataset keyword</span>
 <span class="sd">            range tolerance between the two radars. Default 50 m</span>
 <span class="sd">        clt_max : int. Dataset keyword</span>
-<span class="sd">            maximum number of samples that can be clutter contaminated.</span>
-<span class="sd">            Default 100 i.e. all</span>
+<span class="sd">            maximum percentage of samples that can be clutter contaminated.</span>
+<span class="sd">            Default 100%&amp; i.e. all</span>
 <span class="sd">        phi_excess_max : int. Dataset keyword</span>
-<span class="sd">            maximum number of samples that can have excess instantaneous</span>
-<span class="sd">            PhiDP. Default 100 i.e. all</span>
+<span class="sd">            maximum percentage of samples that can have excess instantaneous</span>
+<span class="sd">            PhiDP. Default 100% i.e. all</span>
 <span class="sd">        non_rain_max : int. Dataset keyword</span>
-<span class="sd">            maximum number of samples that can be no rain. Default 100 i.e. all</span>
+<span class="sd">            maximum percentage of samples that can be no rain. Default 100% i.e. all</span>
 <span class="sd">        phi_avg_max : float. Dataset keyword</span>
 <span class="sd">            maximum average PhiDP allowed. Default 600 deg i.e. any</span>
 
@@ -2616,16 +2623,15 @@
 
                 <span class="n">rad1_flag</span> <span class="o">=</span> <span class="n">flag1</span><span class="p">[</span><span class="n">rad1_ray_ind</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ind_rng</span><span class="p">]</span>
 
-                <span class="n">rad1_excess_phi</span> <span class="o">=</span> <span class="n">rad1_flag</span> <span class="o">%</span> <span class="mi">100</span>
-                <span class="n">rad1_clt</span> <span class="o">=</span> <span class="p">((</span><span class="n">rad1_flag</span> <span class="o">-</span> <span class="n">rad1_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
-                <span class="n">rad1_prec</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">-</span> <span class="n">rad1_clt</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">rad1_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1000000</span>
-                <span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span>
-
-                <span class="n">flag1_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-                    <span class="mi">10000</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_prec</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_clt</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_excess_phi</span><span class="p">)</span>
+                <span class="n">rad1_nsamples</span> <span class="o">=</span> <span class="n">rad1_flag</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">rad1_excess_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">rad1_clt</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">rad1_prec</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">flag1_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_prec</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_clt</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_excess_phi</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad1_nsamples</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">is_valid_avg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -2674,16 +2680,16 @@
 
                 <span class="n">rad2_flag</span> <span class="o">=</span> <span class="n">flag2</span><span class="p">[</span><span class="n">rad2_ray_ind</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ind_rng</span><span class="p">]</span>
 
-                <span class="n">rad2_excess_phi</span> <span class="o">=</span> <span class="n">rad2_flag</span> <span class="o">%</span> <span class="mi">100</span>
-                <span class="n">rad2_clt</span> <span class="o">=</span> <span class="p">((</span><span class="n">rad2_flag</span> <span class="o">-</span> <span class="n">rad2_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
-                <span class="n">rad2_prec</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="p">(</span><span class="n">rad2_flag</span> <span class="o">-</span> <span class="n">rad2_clt</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">rad2_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1000000</span>
-                <span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span>
+                <span class="n">rad2_nsamples</span> <span class="o">=</span> <span class="n">rad1_flag</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">rad2_excess_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">rad2_clt</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+                <span class="n">rad2_prec</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
 
                 <span class="n">flag2_vec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-                    <span class="mi">10000</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad2_prec</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad2_clt</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad2_excess_phi</span><span class="p">)</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad2_prec</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad2_clt</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rad2_excess_phi</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="n">rad2_nsamples</span>
                 <span class="p">)</span>
                 <span class="n">is_valid_avg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -2800,17 +2806,15 @@
         <span class="k">if</span> <span class="n">rad1_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">rad1_excess_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">%</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">rad2_excess_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2_flag</span> <span class="o">%</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">rad1_clt</span> <span class="o">=</span> <span class="p">(((</span><span class="n">rad1_flag</span> <span class="o">-</span> <span class="n">rad1_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">rad2_clt</span> <span class="o">=</span> <span class="p">(((</span><span class="n">rad2_flag</span> <span class="o">-</span> <span class="n">rad2_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">rad1_nsamples</span> <span class="o">=</span> <span class="n">rad1_flag</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">rad1_excess_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">rad1_clt</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">rad1_non_rain</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad1_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
 
-        <span class="n">rad1_non_rain</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">((</span><span class="n">rad1_flag</span> <span class="o">-</span> <span class="n">rad1_clt</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">rad1_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">rad2_non_rain</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">((</span><span class="n">rad2_flag</span> <span class="o">-</span> <span class="n">rad2_clt</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">rad2_excess_phi</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10000</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">rad2_nsamples</span> <span class="o">=</span> <span class="n">rad2_flag</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">rad2_excess_phi</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">rad2_clt</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
+        <span class="n">rad2_non_rain</span> <span class="o">=</span> <span class="p">(</span><span class="n">rad2_flag</span> <span class="o">//</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e9</span><span class="p">))</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">)</span>
 
         <span class="n">clt_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;clt_max&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
         <span class="n">phi_excess_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;phi_excess_max&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -2821,14 +2825,14 @@
         <span class="n">ind_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
                 <span class="p">(</span>
-                    <span class="n">rad1_clt</span> <span class="o">&lt;=</span> <span class="n">clt_max</span><span class="p">,</span>
-                    <span class="n">rad2_clt</span> <span class="o">&lt;=</span> <span class="n">clt_max</span><span class="p">,</span>
-                    <span class="n">rad1_excess_phi</span> <span class="o">&lt;=</span> <span class="n">phi_excess_max</span><span class="p">,</span>
-                    <span class="n">rad2_excess_phi</span> <span class="o">&lt;=</span> <span class="n">phi_excess_max</span><span class="p">,</span>
-                    <span class="n">rad1_non_rain</span> <span class="o">&lt;=</span> <span class="n">non_rain_max</span><span class="p">,</span>
-                    <span class="n">rad2_non_rain</span> <span class="o">&lt;=</span> <span class="n">non_rain_max</span><span class="p">,</span>
-                    <span class="n">rad1_phi</span> <span class="o">&lt;=</span> <span class="n">phi_avg_max</span><span class="p">,</span>
-                    <span class="n">rad2_phi</span> <span class="o">&lt;=</span> <span class="n">phi_avg_max</span><span class="p">,</span>
+                    <span class="n">rad1_clt</span> <span class="o">/</span> <span class="n">rad2_nsamples</span> <span class="o">&lt;=</span> <span class="n">clt_max</span><span class="p">,</span>
+                    <span class="n">rad2_clt</span> <span class="o">/</span> <span class="n">rad2_nsamples</span> <span class="o">&lt;=</span> <span class="n">clt_max</span><span class="p">,</span>
+                    <span class="n">rad1_excess_phi</span> <span class="o">/</span> <span class="n">rad2_nsamples</span> <span class="o">&lt;=</span> <span class="n">phi_excess_max</span><span class="p">,</span>
+                    <span class="n">rad2_excess_phi</span> <span class="o">/</span> <span class="n">rad2_nsamples</span> <span class="o">&lt;=</span> <span class="n">phi_excess_max</span><span class="p">,</span>
+                    <span class="n">rad1_non_rain</span> <span class="o">/</span> <span class="n">rad1_nsamples</span> <span class="o">&lt;=</span> <span class="n">non_rain_max</span><span class="p">,</span>
+                    <span class="n">rad2_non_rain</span> <span class="o">/</span> <span class="n">rad1_nsamples</span> <span class="o">&lt;=</span> <span class="n">non_rain_max</span><span class="p">,</span>
+                    <span class="n">rad1_phi</span> <span class="o">/</span> <span class="n">rad1_nsamples</span> <span class="o">&lt;=</span> <span class="n">phi_avg_max</span><span class="p">,</span>
+                    <span class="n">rad2_phi</span> <span class="o">/</span> <span class="n">rad1_nsamples</span> <span class="o">&lt;=</span> <span class="n">phi_avg_max</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>

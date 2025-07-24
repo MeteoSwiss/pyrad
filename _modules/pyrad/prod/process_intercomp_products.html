@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
@@ -425,7 +425,8 @@
 <span class="sd">    Generates radar intercomparison products. Accepted product types:</span>
 <span class="sd">        &#39;PLOT_AND_WRITE_INTERCOMP_TS&#39;: Writes statistics of radar</span>
 <span class="sd">            intercomparison in a file and plots the time series of the</span>
-<span class="sd">            statistics.</span>
+<span class="sd">            statistics. Note that in order to use this product you need</span>
+<span class="sd">            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
@@ -454,14 +455,25 @@
 <span class="sd">                    The minimum correlation to consider the statistics</span>
 <span class="sd">                    valid and therefore use the data point in the plotting.</span>
 <span class="sd">                    Default 0.</span>
-<span class="sd">        &#39;PLOT_SCATTER_INTERCOMP&#39;: Plots a density plot with the points of</span>
-<span class="sd">            radar 1 versus the points of radar 2</span>
+<span class="sd">        &#39;PLOT_SCATTER_INTERCOMP&#39;: Plots a density plot (2D histogram) with the points of</span>
+<span class="sd">            radar 1 versus the points of radar 2. Note that in order to use this product you need</span>
+<span class="sd">            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
 <span class="sd">                step: float</span>
 <span class="sd">                    The quantization step of the data. If none it will be</span>
 <span class="sd">                    computed using the Py-ART config file. Default None</span>
+<span class="sd">                vmin: float</span>
+<span class="sd">                    Minimum value of the density plot. If vmin or vmax are not define the range limits</span>
+<span class="sd">                    of the field as defined in the Py-ART config file are going to be used.</span>
+<span class="sd">                vmax: float</span>
+<span class="sd">                    Maximum value of the density plot. If vmin or vmax are not define the range limits</span>
+<span class="sd">                    of the field as defined in the Py-ART config file are going to be used.</span>
+<span class="sd">                cap_limits: bool</span>
+<span class="sd">                    If set to 1, all values larger than vmax or smaller than vmin will be discarded from the</span>
+<span class="sd">                    scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin</span>
+<span class="sd">                    of the histogram. Default is 0.</span>
 <span class="sd">                scatter_type: str</span>
 <span class="sd">                    Type of scatter plot. Can be a plot for each radar volume</span>
 <span class="sd">                    (instant) or at the end of the processing period</span>
@@ -528,7 +540,6 @@
         <span class="p">)</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
         <span class="n">write_colocated_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved colocated data file: &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
@@ -569,6 +580,11 @@
         <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="n">scatter_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
             <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
+            <span class="n">colname</span> <span class="o">=</span> <span class="s2">&quot;dBZavg&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">colname</span> <span class="o">=</span> <span class="s2">&quot;val&quot;</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">]:</span>
+            <span class="k">return</span>
 
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
@@ -583,6 +599,9 @@
         <span class="n">transform</span> <span class="o">=</span> <span class="n">parse_math_expression</span><span class="p">(</span><span class="n">transform_str</span><span class="p">)</span>
         <span class="n">range_bins</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_bins&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
         <span class="n">step</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">cap_limits</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cap_limits&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">range_bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># loop on range bins</span>
@@ -592,8 +611,8 @@
                     <span class="sa">f</span><span class="s2">&quot;range_bin </span><span class="si">{</span><span class="n">range_bins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">range_bins</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">m&quot;</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">rangebin_info</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># only one range bin, leave empty</span>
-                <span class="n">rangebin_info_title</span> <span class="o">=</span> <span class="n">rangebin_info</span>
+                <span class="n">rangebin_info</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># only one range bin, leave empty</span>
+                <span class="n">rangebin_info_title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
             <span class="n">f_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
                 <span class="s2">&quot;scatter&quot;</span><span class="p">,</span>
@@ -608,9 +627,12 @@
             <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f_list</span><span class="p">):</span>
                 <span class="n">f_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
-            <span class="n">titl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;colocated radar gates </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">rangebin_info_title</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span>
-                <span class="s2">&quot;timeinfo&quot;</span>
-            <span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeformat</span><span class="p">)</span>
+            <span class="n">rad1</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_name&quot;</span><span class="p">]</span>
+            <span class="n">rad2</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad2_name&quot;</span><span class="p">]</span>
+            <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;colocated radar gates </span><span class="si">{</span><span class="n">rad1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rad2</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">rangebin_info_title</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeformat</span><span class="p">)</span>
+            <span class="p">)</span>
 
             <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
@@ -620,13 +642,16 @@
                 <span class="k">continue</span>
 
             <span class="n">hist_2d</span><span class="p">,</span> <span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">compute_2d_stats</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">][</span><span class="n">selection</span><span class="p">]),</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">][</span><span class="n">selection</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="n">selection</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;rad2_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="n">selection</span><span class="p">]),</span>
                 <span class="n">field_name</span><span class="p">,</span>
                 <span class="n">field_name</span><span class="p">,</span>
                 <span class="n">step1</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
                 <span class="n">step2</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
                 <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+                <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+                <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                <span class="n">cap_limits</span><span class="o">=</span><span class="n">cap_limits</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">hist_2d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
@@ -657,7 +682,6 @@
                 <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;intercep&quot;</span><span class="p">]))</span>
                 <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-
             <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
                 <span class="n">field_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">transform_str</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">plot_scatter</span><span class="p">(</span>
@@ -674,6 +698,8 @@
                 <span class="n">lin_regr_slope1</span><span class="o">=</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;intercep_slope_1&quot;</span><span class="p">],</span>
                 <span class="n">rad1_name</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_name&quot;</span><span class="p">],</span>
                 <span class="n">rad2_name</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad2_name&quot;</span><span class="p">],</span>
+                <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+                <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="n">fname_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">f_list</span><span class="p">)</span>
@@ -865,7 +891,10 @@
 <span class="sd">            gridMapImageConfig structure of the loc file.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                grid_size: float</span>
-<span class="sd">                    Size of the grid in degrees (lat/lon). Default is 0.02 degrees.</span>
+<span class="sd">                    Size of the grid in degrees (lat/lon). If not provided,</span>
+<span class="sd">                    the grid size defined in gridMapImageConfig with</span>
+<span class="sd">                    lat_min, lon_min, lat_max, lon_max and lonstep, latstep</span>
+<span class="sd">                    will be used.</span>
 <span class="sd">        All the products of the &#39;VOL&#39; dataset group</span>
 
 
