@@ -1812,6 +1812,7 @@ def compute_2d_stats(
     vmin=None,
     vmax=None,
     transform=None,
+    cap_limits=False,
 ):
     """
     computes a 2D histogram and statistics of the data
@@ -1822,11 +1823,21 @@ def compute_2d_stats(
         the two fields
     field_name1, field_nam2: str
         the name of the fields
-    step1, step2 : float
-        size of bin
-    vmin
+    step1: float
+        size of the bins along dimension 1
+    step2 : float
+        size of the bins along dimension 2
+    vmin: float
+        Minimum value of the 2D histogram. If vmin or vmax are not define the range limits
+        of the field as defined in the Py-ART config file are going to be used.
+    vmax: float
+        Maximum value of the 2D histogram. If vmin or vmax are not define the range limits
+        of the field as defined in the Py-ART config file are going to be used.
     transform : func
         A function to use to transform the data prior to computing the stats
+    cap_limits: bool
+        If true, all values larger than vmax or smaller than vmin will be discarded from the
+        scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin
 
     Returns
     -------
@@ -1866,6 +1877,9 @@ def compute_2d_stats(
         step1=step1,
         step2=step2,
         transform=transform,
+        vmin=vmin,
+        vmax=vmax,
+        cap_limits=cap_limits,
     )
     step_aux1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.0
@@ -1945,7 +1959,16 @@ def compute_1d_stats(field1, field2):
 
 
 def compute_2d_hist(
-    field1, field2, field_name1, field_name2, step1=None, step2=None, transform=None
+    field1,
+    field2,
+    field_name1,
+    field_name2,
+    step1=None,
+    step2=None,
+    vmin=None,
+    vmax=None,
+    transform=None,
+    cap_limits=False,
 ):
     """
     computes a 2D histogram of the data
@@ -1956,10 +1979,21 @@ def compute_2d_hist(
         the radar fields
     field_name1, field_name2 : str
         field names
-    step1, step2 : float
-        size of the bins
+    step1: float
+        size of the bins along dimension 1
+    step2 : float
+        size of the bins along dimension 2
+    vmin: float
+        Minimum value of the 2D histogram. If vmin or vmax are not define the range limits
+        of the field as defined in the Py-ART config file are going to be used.
+    vmax: float
+        Maximum value of the 2D histogram. If vmin or vmax are not define the range limits
+        of the field as defined in the Py-ART config file are going to be used.
     transform: func
         A function to use to transform the histogram bins
+    cap_limits: bool
+        If true, all values larger than vmax or smaller than vmin will be discarded from the
+        scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin
 
     Returns
     -------
@@ -1969,24 +2003,33 @@ def compute_2d_hist(
         the bin edges along each dimension
 
     """
-    bin_edges1 = get_histogram_bins(field_name1, step=step1, transform=transform)
+    bin_edges1 = get_histogram_bins(
+        field_name1, step=step1, transform=transform, vmin=vmin, vmax=vmax
+    )
     step_aux1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[:-1] + step_aux1 / 2.0
-    bin_edges2 = get_histogram_bins(field_name2, step=step2, transform=transform)
+    bin_edges2 = get_histogram_bins(
+        field_name2, step=step2, transform=transform, vmin=vmin, vmax=vmax
+    )
     step_aux2 = bin_edges2[1] - bin_edges2[0]
     bin_centers2 = bin_edges2[:-1] + step_aux2 / 2.0
 
-    field1[field1 < bin_centers1[0]] = bin_centers1[0]
-    field1[field1 > bin_centers1[-1]] = bin_centers1[-1]
+    if not cap_limits:
+        field1[field1 < bin_centers1[0]] = bin_centers1[0]
+        field1[field1 > bin_centers1[-1]] = bin_centers1[-1]
 
-    field2[field2 < bin_centers2[0]] = bin_centers2[0]
-    field2[field2 > bin_centers2[-1]] = bin_centers2[-1]
+        field2[field2 < bin_centers2[0]] = bin_centers2[0]
+        field2[field2 > bin_centers2[-1]] = bin_centers2[-1]
+        hist_range = None
+    else:
+        hist_range = [[vmin, vmax], [vmin, vmax]]
 
     fill_value = pyart.config.get_fillvalue()
     return np.histogram2d(
         field1.filled(fill_value=fill_value),
         field2.filled(fill_value=fill_value),
         bins=[bin_edges1, bin_edges2],
+        range=hist_range,
     )
 
 

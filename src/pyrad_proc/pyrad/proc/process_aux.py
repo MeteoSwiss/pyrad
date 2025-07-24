@@ -826,13 +826,13 @@ def process_vol_to_grid(procstatus, dscfg, radar_list=None):
             "data"
         ][0]
     else:
-        warn("beamwidth not defined. Assumed 1 deg")
+        warn("beamwidth not defined. Assumed 1 deg", use_debug=False)
         beamwidth = 1.0
 
     if radar_list_aux[0].ray_angle_res is not None:
         beam_spacing = radar_list_aux[0].ray_angle_res["data"][0]
     else:
-        warn("beam spacing not defined. Assumed 1 deg")
+        warn("beam spacing not defined. Assumed 1 deg", use_debug=False)
         beam_spacing = 1.0
 
     # cartesian mapping
@@ -1193,7 +1193,10 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
         res_cercle = dscfg.get("res_cercle", 16)
 
         if lon_centre is None or lat_centre is None:
-            warn("cercle position undefined. " "The radar position will be used")
+            warn(
+                "cercle position undefined. " "The radar position will be used",
+                use_debug=False,
+            )
             lon_centre = radar.longitude["data"][0]
             lat_centre = radar.latitude["data"][0]
 
@@ -1223,7 +1226,10 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
         sn_length = dscfg.get("sn_length", 1000.0)  # m
 
         if lon_point is None or lat_point is None:
-            warn("box position undefined. " "The radar position will be used")
+            warn(
+                "box position undefined. " "The radar position will be used",
+                use_debug=False,
+            )
             lon_point = radar.longitude["data"][0]
             lat_point = radar.latitude["data"][0]
 
@@ -1489,7 +1495,10 @@ def process_roi(procstatus, dscfg, radar_list=None):
         res_cercle = dscfg.get("res_cercle", 16)
 
         if lon_centre is None or lat_centre is None:
-            warn("cercle position undefined. " "The radar position will be used")
+            warn(
+                "cercle position undefined. " "The radar position will be used",
+                use_debug=False,
+            )
             lon_centre = radar.longitude["data"][0]
             lat_centre = radar.latitude["data"][0]
 
@@ -1519,7 +1528,10 @@ def process_roi(procstatus, dscfg, radar_list=None):
         sn_length = dscfg.get("sn_length", 1000.0)  # m
 
         if lon_point is None or lat_point is None:
-            warn("box position undefined. " "The radar position will be used")
+            warn(
+                "box position undefined. " "The radar position will be used",
+                use_debug=False,
+            )
             lon_point = radar.longitude["data"][0]
             lat_point = radar.latitude["data"][0]
 
@@ -1768,7 +1780,10 @@ def process_roi2(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name in field_names_aux:
         if field_name not in radar.fields:
-            warn("Field name " + field_name + " not available in radar object")
+            warn(
+                "Field name " + field_name + " not available in radar object",
+                use_debug=False,
+            )
             continue
         field_names.append(field_name)
         nfields_available += 1
@@ -1835,7 +1850,10 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         res_cercle = dscfg.get("res_cercle", 16)
 
         if lon_centre is None or lat_centre is None:
-            warn("cercle position undefined. " "The radar position will be used")
+            warn(
+                "cercle position undefined. " "The radar position will be used",
+                use_debug=False,
+            )
             lon_centre = radar.longitude["data"][0]
             lat_centre = radar.latitude["data"][0]
 
@@ -1865,7 +1883,10 @@ def process_roi2(procstatus, dscfg, radar_list=None):
         sn_length = dscfg.get("sn_length", 1000.0)  # m
 
         if lon_point is None or lat_point is None:
-            warn("box position undefined. " "The radar position will be used")
+            warn(
+                "box position undefined. " "The radar position will be used",
+                use_debug=False,
+            )
             lon_point = radar.longitude["data"][0]
             lat_point = radar.latitude["data"][0]
 
@@ -2105,7 +2126,10 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
     nfields_available = 0
     for field_name, datatype in zip(field_names_aux, datatypes_aux):
         if field_name not in radar.fields:
-            warn("Field name " + field_name + " not available in radar object")
+            warn(
+                "Field name " + field_name + " not available in radar object",
+                use_debug=False,
+            )
             continue
         field_names.append(field_name)
         datatypes.append(datatype)
@@ -2118,7 +2142,10 @@ def process_azimuthal_average(procstatus, dscfg, radar_list=None):
             if datatype in dscfg["lin_trans"]:
                 lin_trans[field_name] = dscfg["lin_trans"] != 0
             else:
-                warn("Averaging in linear units for {} not specified".format(datatype))
+                warn(
+                    "Averaging in linear units for {} not specified".format(datatype),
+                    use_debug=False,
+                )
 
     if nfields_available == 0:
         warn("Fields not available in radar data")
@@ -2412,7 +2439,8 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
             radar_antenna_atsameplace = True
             warn(
                 "No target radar position specified. "
-                + "The radars are assumed co-located"
+                + "The radars are assumed co-located",
+                use_debug=False,
             )
         else:
             radar_antenna_atsameplace = False
@@ -2569,7 +2597,8 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
                     warn(
                         "Units type for data type "
                         + datatype
-                        + " not specified. Assumed linear"
+                        + " not specified. Assumed linear",
+                        use_debug=False,
                     )
 
             use_nans.update({field_name: False})
@@ -2580,7 +2609,8 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
                     warn(
                         "Use of nans not specified for data type "
                         + datatype
-                        + " not specified. Assumed not used"
+                        + " not specified. Assumed not used",
+                        use_debug=False,
                     )
 
             nan_value.update({field_name: 0.0})
@@ -2591,7 +2621,8 @@ def process_radar_resampling(procstatus, dscfg, radar_list=None):
                     warn(
                         "NaN value not specified for data type "
                         + datatype
-                        + " not specified. Assumed 0"
+                        + " not specified. Assumed 0",
+                        use_debug=False,
                     )
 
         # Persistent data structure

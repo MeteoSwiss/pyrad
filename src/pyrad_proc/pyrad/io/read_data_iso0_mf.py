@@ -385,8 +385,8 @@ def read_iso0_grib_data(fname):
     for grb in grbs:
         lats, lons = grb.latlons()
         values.append(grb.values)
-        date_analysis = grb.analDate
-        date_fcst.append(grb.analDate + datetime.timedelta(hours=grb["startStep"]))
+        date_analysis = grb.analDate.replace(tzinfo=datetime.timezone.utc)
+        date_fcst.append(date_analysis + datetime.timedelta(hours=grb["startStep"]))
 
     grbs.close()
 

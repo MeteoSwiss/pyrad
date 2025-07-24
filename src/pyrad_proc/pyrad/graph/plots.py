@@ -534,6 +534,8 @@ def plot_scatter(
     rad2_name="RADAR002",
     titl="colocated radar gates",
     cmap=None,
+    vmin=None,
+    vmax=None,
 ):
     """
     2D histogram
@@ -563,6 +565,10 @@ def plot_scatter(
     cmap : str or None
         name of the colormap. If None it will be choosen the default for the
         field_name
+    vmin: float
+        Minimum value of the 2D histogram.
+    vmax: float
+        Maximum value of the 2D histogram.
 
     Returns
     -------
@@ -615,6 +621,10 @@ def plot_scatter(
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
+
+    if vmin and vmax:
+        ax.set_xlim([vmin, vmax])
+        ax.set_ylim([vmin, vmax])
 
     cb = fig.colorbar(cax)
     cb.set_label(label)

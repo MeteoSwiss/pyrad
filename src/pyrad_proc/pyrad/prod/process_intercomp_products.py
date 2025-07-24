@@ -42,7 +42,8 @@ def generate_intercomp_products(dataset, prdcfg):
     Generates radar intercomparison products. Accepted product types:
         'PLOT_AND_WRITE_INTERCOMP_TS': Writes statistics of radar
             intercomparison in a file and plots the time series of the
-            statistics.
+            statistics. Note that in order to use this product you need
+            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
@@ -71,14 +72,25 @@ def generate_intercomp_products(dataset, prdcfg):
                     The minimum correlation to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0.
-        'PLOT_SCATTER_INTERCOMP': Plots a density plot with the points of
-            radar 1 versus the points of radar 2
+        'PLOT_SCATTER_INTERCOMP': Plots a density plot (2D histogram) with the points of
+            radar 1 versus the points of radar 2. Note that in order to use this product you need
+            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
                 step: float
                     The quantization step of the data. If none it will be
                     computed using the Py-ART config file. Default None
+                vmin: float
+                    Minimum value of the density plot. If vmin or vmax are not define the range limits
+                    of the field as defined in the Py-ART config file are going to be used.
+                vmax: float
+                    Maximum value of the density plot. If vmin or vmax are not define the range limits
+                    of the field as defined in the Py-ART config file are going to be used.
+                cap_limits: bool
+                    If set to 1, all values larger than vmax or smaller than vmin will be discarded from the
+                    scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin
+                    of the histogram. Default is 0.
                 scatter_type: str
                     Type of scatter plot. Can be a plot for each radar volume
                     (instant) or at the end of the processing period
@@ -145,7 +157,6 @@ def generate_intercomp_products(dataset, prdcfg):
         )
 
         fname = savedir + fname[0]
-
         write_colocated_data(dataset["intercomp_dict"], fname)
 
         print("saved colocated data file: " + fname)
@@ -186,6 +197,11 @@ def generate_intercomp_products(dataset, prdcfg):
         timeformat = "%Y%m%d"
         if scatter_type == "instant":
             timeformat = "%Y%m%d%H%M%S"
+            colname = "dBZavg"
+        else:
+            colname = "val"
+        if f"rad1_{colname}" not in dataset["intercomp_dict"]:
+            return
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         savedir = get_save_dir(
@@ -200,6 +216,9 @@ def generate_intercomp_products(dataset, prdcfg):
         transform = parse_math_expression(transform_str)
         range_bins = prdcfg.get("range_bins", [0, np.inf])
         step = prdcfg.get("step", None)
+        vmin = prdcfg.get("vmin", None)
+        vmax = prdcfg.get("vmax", None)
+        cap_limits = prdcfg.get("cap_limits", 0)
 
         fname_list = []
         for i in range(len(range_bins) - 1):  # loop on range bins
@@ -209,8 +228,8 @@ def generate_intercomp_products(dataset, prdcfg):
                     f"range_bin {range_bins[i]:.0f}-{range_bins[i+1]:.0f}m"
                 )
             else:
-                rangebin_info = ""  # only one range bin, leave empty
-                rangebin_info_title = rangebin_info
+                rangebin_info = None  # only one range bin, leave empty
+                rangebin_info_title = ""
 
             f_list = make_filename(
                 "scatter",
@@ -225,9 +244,12 @@ def generate_intercomp_products(dataset, prdcfg):
             for j, fname in enumerate(f_list):
                 f_list[j] = savedir + fname
 
-            titl = f"colocated radar gates \n {rangebin_info_title} " + dataset[
-                "timeinfo"
-            ].strftime(timeformat)
+            rad1 = dataset["intercomp_dict"]["rad1_name"]
+            rad2 = dataset["intercomp_dict"]["rad2_name"]
+            titl = (
+                f"colocated radar gates {rad1}-{rad2} \n {rangebin_info_title} "
+                + dataset["timeinfo"].strftime(timeformat)
+            )
 
             selection = np.logical_and(
                 dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
@@ -237,13 +259,16 @@ def generate_intercomp_products(dataset, prdcfg):
                 continue
 
             hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
-                np.ma.asarray(dataset["intercomp_dict"]["rad1_val"][selection]),
-                np.ma.asarray(dataset["intercomp_dict"]["rad2_val"][selection]),
+                np.ma.asarray(dataset["intercomp_dict"][f"rad1_{colname}"][selection]),
+                np.ma.asarray(dataset["intercomp_dict"][f"rad2_{colname}"][selection]),
                 field_name,
                 field_name,
                 step1=step,
                 step2=step,
                 transform=transform,
+                vmin=vmin,
+                vmax=vmax,
+                cap_limits=cap_limits,
             )
             if hist_2d is None:
                 return None
@@ -274,7 +299,6 @@ def generate_intercomp_products(dataset, prdcfg):
                 + "{:.2f}".format(float(stats["intercep"]))
                 + "\n"
             )
-
             if transform_str != "x":
                 field_name = f"{transform_str} of {field_name}"
             plot_scatter(
@@ -291,6 +315,8 @@ def generate_intercomp_products(dataset, prdcfg):
                 lin_regr_slope1=stats["intercep_slope_1"],
                 rad1_name=dataset["intercomp_dict"]["rad1_name"],
                 rad2_name=dataset["intercomp_dict"]["rad2_name"],
+                vmin=vmin,
+                vmax=vmax,
             )
 
             fname_list.extend(f_list)
@@ -479,7 +505,10 @@ def generate_colocated_gates_products(dataset, prdcfg):
             gridMapImageConfig structure of the loc file.
             User defined parameters:
                 grid_size: float
-                    Size of the grid in degrees (lat/lon). Default is 0.02 degrees.
+                    Size of the grid in degrees (lat/lon). If not provided,
+                    the grid size defined in gridMapImageConfig with
+                    lat_min, lon_min, lat_max, lon_max and lonstep, latstep
+                    will be used.
         All the products of the 'VOL' dataset group
 
 

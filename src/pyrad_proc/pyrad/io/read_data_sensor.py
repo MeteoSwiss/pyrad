@@ -2593,7 +2593,7 @@ def read_radiosounding_igra(station, dtime):
     Please see this link for a description of the columns
     https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/doc/igra2-data-format.txt
     """
-    warn("Downloading sounding from IGRA database...")
+    print("Downloading sounding from IGRA database...")
 
     COLUMNS_SOUNDING = [
         "LVLTYPE1",
@@ -2649,7 +2649,9 @@ def read_radiosounding_igra(station, dtime):
         return
 
     # get igra code
-    code = stations_ref["CODE"][stations_ref["CODE"].str.contains(station)].iloc[0]
+    code = stations_ref["CODE"][
+        stations_ref["CODE"].str.contains(station, na=False)
+    ].iloc[0]
 
     # Check if specified time is after 2021
     if dtime > datetime.datetime(2021, 1, 1):
@@ -2702,8 +2704,8 @@ def read_radiosounding_igra(station, dtime):
     line_start = line_starts[idx_clo]
 
     if not line_start:
-        warn(
-            "Could not find a sounding in the IGRA database that corresponds to prescribed time"
+        print(
+            "Could not find a sounding in the IGRA database that corresponds to prescribed time",
         )
 
     file_content = file_content[line_start + 1 :]
