@@ -56,6 +56,7 @@ def parse_args():
     parser.add_argument(
         "--resize",
         type=int,
+        default=100,
         help="Resize factor of the final image (in percent), default is 100%",
     )
     parser.add_argument(
