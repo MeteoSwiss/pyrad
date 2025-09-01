@@ -46,7 +46,7 @@ from ..io.io_aux import (
     get_fieldname_pyart,
     convert_pydda_to_pyart_grid,
 )
-from ..io import read_radiosounding_igra
+from ..io import retrieve_radiosounding_igra
 from .process_grid import process_grid
 from ..util import compute_average_vad
 
@@ -1067,7 +1067,7 @@ def process_dda(procstatus, dscfg, radar_list=None):
     sounding = dscfg.get("sounding", None)
     if sounding:
         dtime = pyart.graph.common.generate_radar_time_begin(radar_list[0])
-        sounding_data = read_radiosounding_igra(sounding, dtime)
+        sounding_data = retrieve_radiosounding_igra(sounding, dtime)
     else:
         sounding_data = None
 

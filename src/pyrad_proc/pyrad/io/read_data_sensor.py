@@ -31,8 +31,8 @@ Functions for reading data from other sensors
     read_disdro
     read_disdro_parsivel
     read_radiosounding_wyoming
-    read_radiosounding_igra
-    read_fzl_igra
+    retrieve_radiosounding_igra
+    retrieve_fzl
 """
 
 import os
@@ -57,6 +57,22 @@ from urllib3.exceptions import InsecureRequestWarning
 from pyart.config import get_fillvalue
 
 urllib3.disable_warnings(InsecureRequestWarning)
+
+COLUMNS_SOUNDING = [
+    "LVLTYPE1",
+    "LVLTYPE2",
+    "ETIME",
+    "PRESS",
+    "PFLAG",
+    "GPH",
+    "ZFLAG",
+    "TEMP",
+    "TFLAG",
+    "RH",
+    "DPDP",
+    "WDIR",
+    "WSPD",
+]
 
 
 def read_windmills_data(fname):
@@ -2517,22 +2533,24 @@ def read_disdro_parsivel(fname):
     return df_disdro
 
 
-def read_radiosounding_wyoming(station, dtime):
+def retrieve_radiosounding_wyoming(station, dtime):
     """
-    Download radiosounding data from the University of Wyoming website.
+    Download radiosounding data from the University of Wyoming website and
+    return as DataFrame with IGRA2-standard columns.
 
-    Parameters:
-        station : str
-            Radiosounding station 5 digits WMO code (e.g., "72776").
-        dtime : datetime.datetime
-            Datetime object specifying the desired date and time.
+    Parameters
+    ----------
+    station : str
+        Radiosounding station 5-digit WMO code (e.g., "72776").
+    dtime : datetime.datetime
+        Datetime object specifying the desired date and time.
 
-    Returns:
-        pandas.DataFrame: A DataFrame containing the radiosounding data with
-        columns: ['PRES', 'HGHT', 'TEMP', 'DWPT', 'RELH', 'MIXR', 'DRCT',
-                  'SKNT', 'THTA', 'THTE', 'THTV]
+    Returns
+    -------
+    pandas.DataFrame or None
+        A DataFrame containing the radiosounding data in IGRA2 format,
+        or None if retrieval was not successful.
     """
-
     base_url = "https://weather.uwyo.edu/cgi-bin/sounding"
     query_params = {
         "region": "naconf",
@@ -2545,36 +2563,68 @@ def read_radiosounding_wyoming(station, dtime):
     }
 
     try:
-        # Try a quick HEAD request to test SSL verification
+        # Quick HEAD request to handle SSL verification issues
         requests.head(base_url, timeout=5)
         verify_setting = True
     except requests.exceptions.SSLError:
         verify_setting = False
 
     response = requests.get(base_url, params=query_params, verify=verify_setting)
-
     if response.status_code != 200:
+        warn(f"Failed to retrieve data: HTTP {response.status_code}")
         return None
 
-    # Extract and parse the data using pandas
+    # Extract text block
     start_idx = response.text.find("PRES")
     end_idx = response.text.find("Station information and sounding indices")
-    data_str = response.text[start_idx:end_idx][0:-10]
+    if start_idx == -1 or end_idx == -1:
+        warn("Could not locate sounding data block in response")
+        return None
 
+    data_str = response.text[start_idx:end_idx].strip()
     data_io = StringIO(data_str)
-    data_df = pd.read_csv(
-        data_io,
-        sep=r"\s+",
-        header=0,
-        skiprows=[1, 2],
-        on_bad_lines="warn",
-    )
+
+    # Parse table (skip line with units)
+    try:
+        data_df = pd.read_csv(
+            data_io,
+            sep=r"\s+",
+            header=0,
+            skiprows=[1],
+            on_bad_lines="skip",
+        )
+    except Exception as e:
+        warn(f"Parsing error: {e}")
+        return None
+
+    # Convert to numeric where possible
     for col in data_df.columns:
-        data_df[col] = pd.to_numeric(data_df[col])
-    return data_df
+        data_df[col] = pd.to_numeric(data_df[col], errors="coerce")
+
+    # Map Wyoming columns to IGRA2 columns
+    df = pd.DataFrame(
+        {
+            "LVLTYPE1": "",  # Not available from Wyoming
+            "LVLTYPE2": "",
+            "ETIME": dtime.strftime("%Y%m%d%H"),  # assign launch time to all rows
+            "PRESS": data_df.get("PRES"),
+            "PFLAG": "",
+            "GPH": data_df.get("HGHT"),
+            "ZFLAG": "",
+            "TEMP": data_df.get("TEMP"),
+            "TFLAG": "",
+            "RH": data_df.get("RELH"),
+            "DPDP": data_df.get("DWPT"),
+            "WDIR": data_df.get("DRCT"),
+            "WSPD": data_df.get("SKNT") * 0.514444,  # knots → m/s
+        },
+        columns=COLUMNS_SOUNDING,
+    )
+
+    return df
 
 
-def read_radiosounding_igra(station, dtime):
+def retrieve_radiosounding_igra(station, dtime):
     """
     Download radiosounding data from  from the Integrated Global Radiosonde Archive
     (IGRA).
@@ -2594,22 +2644,6 @@ def read_radiosounding_igra(station, dtime):
     https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/doc/igra2-data-format.txt
     """
     print("Downloading sounding from IGRA database...")
-
-    COLUMNS_SOUNDING = [
-        "LVLTYPE1",
-        "LVLTYPE2",
-        "ETIME",
-        "PRESS",
-        "PFLAG",
-        "GPH",
-        "ZFLAG",
-        "TEMP",
-        "TFLAG",
-        "RH",
-        "DPDP",
-        "WDIR",
-        "WSPD",
-    ]
     COLUMNS_STATION_LIST = [
         "CODE",
         "LATITUDE",
@@ -2752,10 +2786,82 @@ def read_radiosounding_igra(station, dtime):
     return sounding
 
 
-def read_fzl_igra(station, dtime, dscfg=None):
+def retrieve_radiosounding_mch(station, dtime):
     """
-    Get an estimation of the freezing level height from the
-    Integrated Global Radiosonde Archive (IGRA)
+    Retrieve sounding data from MCH DWH service and return as pandas DataFrame.
+    It requires to set the environment variable $JRETRIEVE_PATH that points to a
+    valid jretrieve executable.
+
+    Parameters:
+        station : str
+            Radiosounding station 5 digits WMO code (e.g., "72776").
+        dtime : datetime.datetime
+            Datetime object specifying the desired date and time.
+
+    Returns:
+        pandas.DataFrame: A DataFrame containing the radiosounding data with
+        ['LVLTYPE1', 'LVLTYPE2','ETIME', 'PRESS', 'PFLAG', 'GPH','ZFLAG', 'TEMP',
+        'TFLAG', 'RH','DPDP','WDIR','WSPD']
+
+    """
+    print("Downloading sounding from MCH DWH database...")
+
+    dtime_closest = _closest_sounding_time(dtime)
+    dtime_closest = dtime_closest.strftime("%Y%m%d%H%M%S")
+
+    # Variables to retrieve (DWH IDs mapped to IGRA2 columns)
+    id_variables = "744,742,745,747,748,743"  # p, geopotential, T, Td, ws, wd
+
+    # Build DWH command
+    ret_dwh = (
+        f'{os.path.expandvars("$JRETRIEVE_PATH")} -s profile -w 22 --verbose position '
+        f"-i int_ind,{station} "
+        f"-t {dtime_closest} -p {id_variables}"
+    )
+    try:
+        with os.popen(ret_dwh) as pipefile:
+            lines = pipefile.readlines()
+
+        rows = []
+        for line in lines:
+            if dtime_closest in line:
+                vals = line.split("|")
+                # Extract relevant fields by index (adjust if needed)
+                rows.append(
+                    {
+                        "LVLTYPE1": vals[4].strip(),
+                        "LVLTYPE2": vals[3].strip(),
+                        "ETIME": vals[1].strip(),
+                        "PRESS": float(vals[8].strip()),
+                        "PFLAG": "",  # no flag info available from DWH
+                        "GPH": float(vals[9].strip()),
+                        "ZFLAG": "",
+                        "TEMP": float(vals[10].strip()),
+                        "TFLAG": "",
+                        "RH": "",  # not retrieved
+                        "DPDP": float(vals[11].strip()),
+                        "WDIR": float(vals[13].strip()),
+                        "WSPD": float(vals[12].strip()),
+                    }
+                )
+
+        if not rows:
+            warn(f"No valid data returned by DWH call. Return: {lines}")
+            return None
+
+        df = pd.DataFrame(rows, columns=COLUMNS_SOUNDING)
+        return df
+
+    except EnvironmentError:
+        warn(f"Unable to read DWH data with call {ret_dwh}")
+        return None
+
+
+def retrieve_fzl(station, dtime, dscfg=None, source="IGRA"):
+    """
+    Get an estimation of the freezing level height either the
+    Integrated Global Radiosonde Archive (IGRA), University of Wyoming archive
+    or the MCH digital warehouse (DWH)
 
     Parameters:
         station : str
@@ -2765,10 +2871,11 @@ def read_fzl_igra(station, dtime, dscfg=None):
         dscfg : dictionary of dictionaries, Optional
             If provided will try to read the fzl from the pyrad config
             dictionary instead of fetching it from IGRA
+        source: str
+            either 'IGRA', "WYOMING" or 'MCH'
     Returns:
         fzl : float
-            Interpolated freezing level height (a.s.l) obtained
-            from the nearest in time IGRA sounding
+            Interpolated freezing level height (a.s.l)
     """
     if dscfg is None:
         dscfg = {}
@@ -2780,7 +2887,13 @@ def read_fzl_igra(station, dtime, dscfg=None):
     except (KeyError, TypeError):
         pass
 
-    sounding = read_radiosounding_igra(station, dtime)
+    if source == "IGRA":
+        sounding = retrieve_radiosounding_igra(station, dtime)
+    elif source == "MCH":
+        sounding = retrieve_radiosounding_mch(station, dtime)
+    elif source == "WYOMING":
+        sounding = retrieve_radiosounding_wyoming(station, dtime)
+
     height = sounding["GPH"]
     temp = sounding["TEMP"]
 

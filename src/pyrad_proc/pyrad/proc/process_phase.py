@@ -32,7 +32,7 @@ import numpy as np
 import pyart
 
 from ..io.io_aux import get_datatype_fields
-from ..io.read_data_sensor import read_fzl_igra
+from ..io.read_data_sensor import retrieve_fzl
 
 # Ignore warning in process_phidp_kdp_Maesaka
 warnings.filterwarnings(
@@ -420,6 +420,9 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
             to compute the freezing level, if no temperature field name is
             specified, if the temperature field isin the radar object or if no
             freezing_level is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
         ml_thickness : float. Dataset keyword
             The melting layer thickness in meters. Default 700.
         beamwidth : float. Dataset keyword
@@ -507,8 +510,9 @@ def process_phidp_kdp_Maesaka(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -651,6 +655,9 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             to compute the freezing level, if no temperature field name is
             specified, if the temperature field is not in the radar object or
             if no freezing_level is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
         ml_thickness : float. Dataset keyword
             The melting layer thickness in meters. Default 700.
         beamwidth : float. Dataset keyword
@@ -788,8 +795,9 @@ def process_phidp_kdp_lp(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             fzl = 2000
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
@@ -1389,6 +1397,9 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
             to compute the freezing level, if no temperature field name is
             specified, if the temperature field is in the radar object or if
             no freezing_level is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1463,8 +1474,9 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000

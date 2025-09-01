@@ -43,7 +43,7 @@ import pyart
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_file_list, get_datetime
 from ..io.read_data_other import read_centroids
-from ..io.read_data_sensor import read_fzl_igra
+from ..io.read_data_sensor import retrieve_fzl
 
 if importlib.util.find_spec("sklearn_extra") and importlib.util.find_spec("sklearn"):
     _SKLEARN_AVAILABLE = True
@@ -1500,6 +1500,9 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             compute the freezing level, if no temperature field name is specified,
             if the temperature field is not in the radar object or if no
             fzl is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
         use_dualpol: Bool. Dataset keyword
             Used with HYDRO_METHOD UKMO. If false no radar data is used and
             the classification is performed using temperature information
@@ -1585,8 +1588,11 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                     use_debug=False,
                 )
                 sounding_code = dscfg["sounding"]
+                sounding_source = dscfg.get("sounding_source", "IGRA")
                 t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-                freezing_level = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+                freezing_level = retrieve_fzl(
+                    sounding_code, t0, dscfg=dscfg, source=sounding_source
+                )
             else:
                 warn(
                     "iso0 or temperature fields or sounding needed to create hydrometeor "
@@ -1747,8 +1753,11 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             freezing_level = dscfg["freezing_level"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            freezing_level = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            freezing_level = retrieve_fzl(
+                sounding_code, t0, dscfg=dscfg, source=sounding_source
+            )
 
         use_dualpol = dscfg.get("use_dualpol", True)
         use_temperature = dscfg.get("use_temperature", True)
