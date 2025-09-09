@@ -26,7 +26,7 @@ import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_other import read_selfconsistency
-from ..io.read_data_sensor import read_fzl_igra
+from ..io.read_data_sensor import retrieve_fzl
 from ..io.read_data_radar import interpol_field
 
 from ..util.radar_utils import get_histogram_bins
@@ -80,6 +80,9 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
             compute the freezing level, if no temperature field name is specified,
             if the temperature field isin the radar object or if no freezing_level
             is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
         frequency : float. Dataset keyword
             the radar frequency [Hz]. If None that of the key
             frequency in attribute instrument_parameters of the radar
@@ -172,8 +175,9 @@ def process_selfconsistency_kdp_phidp(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -319,6 +323,9 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
             compute the freezing level, if no temperature field name is specified,
             if the temperature field isin the radar object or if no freezing_level
             is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
         rsmooth : float. Dataset keyword
             length of the smoothing window [m]. Default 2000.
         min_rhohv : float. Dataset keyword
@@ -466,8 +473,9 @@ def process_selfconsistency_bias(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -657,6 +665,9 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
             compute the freezing level, if no temperature field name is specified,
             if the temperature field isin the radar object or if no freezing_level
             is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
         rsmooth : float. Dataset keyword
             length of the smoothing window [m]. Default 2000.
         min_rhohv : float. Dataset keyword
@@ -833,8 +844,9 @@ def process_selfconsistency_bias2(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -1161,6 +1173,9 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
             compute the freezing level, if no temperature field name is specified,
             if the temperature field isin the radar object or if no freezing_level
             is explicitely defined.
+        sounding_source: str. Dataset keyword
+            Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+            "MCH". If not provided, IGRA is used.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -1231,8 +1246,9 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
             fzl = dscfg["fzl"]
         elif "sounding" in dscfg:
             sounding_code = dscfg["sounding"]
+            sounding_source = dscfg.get("sounding_source", "IGRA")
             t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-            fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+            fzl = retrieve_fzl(sounding_code, t0, dscfg=dscfg, source=sounding_source)
         else:
             warn("Freezing level height not defined. Using default " + str(fzl) + " m")
             fzl = 2000
@@ -1427,8 +1443,11 @@ def process_zdr_precip(procstatus, dscfg, radar_list=None):
                 fzl = dscfg["fzl"]
             elif "sounding" in dscfg:
                 sounding_code = dscfg["sounding"]
+                sounding_source = dscfg.get("sounding_source", "IGRA")
                 t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
-                fzl = read_fzl_igra(sounding_code, t0, dscfg=dscfg)
+                fzl = retrieve_fzl(
+                    sounding_code, t0, dscfg=dscfg, source=sounding_source
+                )
             else:
                 warn(
                     "Freezing level height not defined. Using default "
