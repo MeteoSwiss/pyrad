@@ -2467,7 +2467,6 @@
     <span class="n">ref_time</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="s2">&quot;wavelen&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
         <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span> <span class="o">=</span> <span class="n">read_solar_flux</span><span class="p">(</span><span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;solarfluxpath&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;fluxtable.txt&quot;</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">flx_dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">flx_dt_closest</span><span class="p">,</span> <span class="n">flx_val_closest</span> <span class="o">=</span> <span class="n">get_closest_solar_flux</span><span class="p">(</span>
                 <span class="n">sun_hits</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span>
@@ -2650,7 +2649,6 @@
                 <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span> <span class="o">=</span> <span class="n">read_solar_flux</span><span class="p">(</span>
                     <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;solarfluxpath&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;fluxtable.txt&quot;</span>
                 <span class="p">)</span>
-
                 <span class="k">if</span> <span class="n">flx_dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">flx_dt_closest</span><span class="p">,</span> <span class="n">flx_val_closest</span> <span class="o">=</span> <span class="n">get_closest_solar_flux</span><span class="p">(</span>
                         <span class="n">sun_hits</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">flx_dt</span><span class="p">,</span> <span class="n">flx_val</span>
@@ -2972,7 +2970,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.3.0.
     <br/>
   </p>
 </div>

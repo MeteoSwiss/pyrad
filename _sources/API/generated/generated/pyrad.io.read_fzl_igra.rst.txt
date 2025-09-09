@@ -1,6 +1,0 @@
-pyrad.io.read\_fzl\_igra
-========================
-
-.. currentmodule:: pyrad.io
-
-.. autofunction:: read_fzl_igra

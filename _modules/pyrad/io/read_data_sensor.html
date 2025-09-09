@@ -412,8 +412,8 @@
 <span class="sd">    read_disdro</span>
 <span class="sd">    read_disdro_parsivel</span>
 <span class="sd">    read_radiosounding_wyoming</span>
-<span class="sd">    read_radiosounding_igra</span>
-<span class="sd">    read_fzl_igra</span>
+<span class="sd">    retrieve_radiosounding_igra</span>
+<span class="sd">    retrieve_fzl</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -438,6 +438,22 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span>
 
 <span class="n">urllib3</span><span class="o">.</span><span class="n">disable_warnings</span><span class="p">(</span><span class="n">InsecureRequestWarning</span><span class="p">)</span>
+
+<span class="n">COLUMNS_SOUNDING</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;LVLTYPE1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;LVLTYPE2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ETIME&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PRESS&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PFLAG&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GPH&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ZFLAG&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TEMP&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TFLAG&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;RH&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DPDP&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WDIR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;WSPD&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 
 <div class="viewcode-block" id="read_windmills_data">
@@ -2964,24 +2980,26 @@
 
 
 
-<div class="viewcode-block" id="read_radiosounding_wyoming">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding_wyoming.html#pyrad.io.read_radiosounding_wyoming">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_radiosounding_wyoming</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
+<div class="viewcode-block" id="retrieve_radiosounding_wyoming">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.retrieve_radiosounding_wyoming.html#pyrad.io.retrieve_radiosounding_wyoming">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_radiosounding_wyoming</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Download radiosounding data from the University of Wyoming website.</span>
+<span class="sd">    Download radiosounding data from the University of Wyoming website and</span>
+<span class="sd">    return as DataFrame with IGRA2-standard columns.</span>
 
-<span class="sd">    Parameters:</span>
-<span class="sd">        station : str</span>
-<span class="sd">            Radiosounding station 5 digits WMO code (e.g., &quot;72776&quot;).</span>
-<span class="sd">        dtime : datetime.datetime</span>
-<span class="sd">            Datetime object specifying the desired date and time.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    station : str</span>
+<span class="sd">        Radiosounding station 5-digit WMO code (e.g., &quot;72776&quot;).</span>
+<span class="sd">    dtime : datetime.datetime</span>
+<span class="sd">        Datetime object specifying the desired date and time.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        pandas.DataFrame: A DataFrame containing the radiosounding data with</span>
-<span class="sd">        columns: [&#39;PRES&#39;, &#39;HGHT&#39;, &#39;TEMP&#39;, &#39;DWPT&#39;, &#39;RELH&#39;, &#39;MIXR&#39;, &#39;DRCT&#39;,</span>
-<span class="sd">                  &#39;SKNT&#39;, &#39;THTA&#39;, &#39;THTE&#39;, &#39;THTV]</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame or None</span>
+<span class="sd">        A DataFrame containing the radiosounding data in IGRA2 format,</span>
+<span class="sd">        or None if retrieval was not successful.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://weather.uwyo.edu/cgi-bin/sounding&quot;</span>
     <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;naconf&quot;</span><span class="p">,</span>
@@ -2994,39 +3012,71 @@
     <span class="p">}</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Try a quick HEAD request to test SSL verification</span>
+        <span class="c1"># Quick HEAD request to handle SSL verification issues</span>
         <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">verify_setting</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">SSLError</span><span class="p">:</span>
         <span class="n">verify_setting</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="n">verify_setting</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to retrieve data: HTTP </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="c1"># Extract and parse the data using pandas</span>
+    <span class="c1"># Extract text block</span>
     <span class="n">start_idx</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;PRES&quot;</span><span class="p">)</span>
     <span class="n">end_idx</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Station information and sounding indices&quot;</span><span class="p">)</span>
-    <span class="n">data_str</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">10</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">start_idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">end_idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not locate sounding data block in response&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
+    <span class="n">data_str</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">[</span><span class="n">start_idx</span><span class="p">:</span><span class="n">end_idx</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">data_io</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">data_str</span><span class="p">)</span>
-    <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-        <span class="n">data_io</span><span class="p">,</span>
-        <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span>
-        <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-        <span class="n">on_bad_lines</span><span class="o">=</span><span class="s2">&quot;warn&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+
+    <span class="c1"># Parse table (skip line with units)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">data_io</span><span class="p">,</span>
+            <span class="n">sep</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;\s+&quot;</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">skiprows</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">on_bad_lines</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parsing error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Convert to numeric where possible</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="n">data_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data_df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">data_df</span></div>
+        <span class="n">data_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">data_df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Map Wyoming columns to IGRA2 columns</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;LVLTYPE1&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># Not available from Wyoming</span>
+            <span class="s2">&quot;LVLTYPE2&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ETIME&quot;</span><span class="p">:</span> <span class="n">dtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H&quot;</span><span class="p">),</span>  <span class="c1"># assign launch time to all rows</span>
+            <span class="s2">&quot;PRESS&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PRES&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;PFLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;GPH&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HGHT&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;ZFLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TEMP&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;TFLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RH&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RELH&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;DPDP&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DWPT&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;WDIR&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DRCT&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;WSPD&quot;</span><span class="p">:</span> <span class="n">data_df</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SKNT&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.514444</span><span class="p">,</span>  <span class="c1"># knots → m/s</span>
+        <span class="p">},</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">COLUMNS_SOUNDING</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
 
 
 
-<div class="viewcode-block" id="read_radiosounding_igra">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_radiosounding_igra.html#pyrad.io.read_radiosounding_igra">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
+<div class="viewcode-block" id="retrieve_radiosounding_igra">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.retrieve_radiosounding_igra.html#pyrad.io.retrieve_radiosounding_igra">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download radiosounding data from  from the Integrated Global Radiosonde Archive</span>
 <span class="sd">    (IGRA).</span>
@@ -3046,22 +3096,6 @@
 <span class="sd">    https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive/doc/igra2-data-format.txt</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading sounding from IGRA database...&quot;</span><span class="p">)</span>
-
-    <span class="n">COLUMNS_SOUNDING</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;LVLTYPE1&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;LVLTYPE2&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ETIME&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;PRESS&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;PFLAG&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;GPH&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ZFLAG&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;TEMP&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;TFLAG&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;RH&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;DPDP&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;WDIR&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;WSPD&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
     <span class="n">COLUMNS_STATION_LIST</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;CODE&quot;</span><span class="p">,</span>
         <span class="s2">&quot;LATITUDE&quot;</span><span class="p">,</span>
@@ -3205,12 +3239,87 @@
 
 
 
-<div class="viewcode-block" id="read_fzl_igra">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_fzl_igra.html#pyrad.io.read_fzl_igra">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_fzl_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="retrieve_radiosounding_mch">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.retrieve_radiosounding_mch.html#pyrad.io.retrieve_radiosounding_mch">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_radiosounding_mch</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get an estimation of the freezing level height from the</span>
-<span class="sd">    Integrated Global Radiosonde Archive (IGRA)</span>
+<span class="sd">    Retrieve sounding data from MCH DWH service and return as pandas DataFrame.</span>
+<span class="sd">    It requires to set the environment variable $JRETRIEVE_PATH that points to a</span>
+<span class="sd">    valid jretrieve executable.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        station : str</span>
+<span class="sd">            Radiosounding station 5 digits WMO code (e.g., &quot;72776&quot;).</span>
+<span class="sd">        dtime : datetime.datetime</span>
+<span class="sd">            Datetime object specifying the desired date and time.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pandas.DataFrame: A DataFrame containing the radiosounding data with</span>
+<span class="sd">        [&#39;LVLTYPE1&#39;, &#39;LVLTYPE2&#39;,&#39;ETIME&#39;, &#39;PRESS&#39;, &#39;PFLAG&#39;, &#39;GPH&#39;,&#39;ZFLAG&#39;, &#39;TEMP&#39;,</span>
+<span class="sd">        &#39;TFLAG&#39;, &#39;RH&#39;,&#39;DPDP&#39;,&#39;WDIR&#39;,&#39;WSPD&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading sounding from MCH DWH database...&quot;</span><span class="p">)</span>
+
+    <span class="n">dtime_closest</span> <span class="o">=</span> <span class="n">_closest_sounding_time</span><span class="p">(</span><span class="n">dtime</span><span class="p">)</span>
+    <span class="n">dtime_closest</span> <span class="o">=</span> <span class="n">dtime_closest</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Variables to retrieve (DWH IDs mapped to IGRA2 columns)</span>
+    <span class="n">id_variables</span> <span class="o">=</span> <span class="s2">&quot;744,742,745,747,748,743&quot;</span>  <span class="c1"># p, geopotential, T, Td, ws, wd</span>
+
+    <span class="c1"># Build DWH command</span>
+    <span class="n">ret_dwh</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="s2">&quot;$JRETRIEVE_PATH&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1"> -s profile -w 22 --verbose position &#39;</span>
+        <span class="sa">f</span><span class="s2">&quot;-i int_ind,</span><span class="si">{</span><span class="n">station</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;-t </span><span class="si">{</span><span class="n">dtime_closest</span><span class="si">}</span><span class="s2"> -p </span><span class="si">{</span><span class="n">id_variables</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">ret_dwh</span><span class="p">)</span> <span class="k">as</span> <span class="n">pipefile</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">pipefile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dtime_closest</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">vals</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)</span>
+                <span class="c1"># Extract relevant fields by index (adjust if needed)</span>
+                <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;LVLTYPE1&quot;</span><span class="p">:</span> <span class="n">vals</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                        <span class="s2">&quot;LVLTYPE2&quot;</span><span class="p">:</span> <span class="n">vals</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                        <span class="s2">&quot;ETIME&quot;</span><span class="p">:</span> <span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+                        <span class="s2">&quot;PRESS&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                        <span class="s2">&quot;PFLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># no flag info available from DWH</span>
+                        <span class="s2">&quot;GPH&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                        <span class="s2">&quot;ZFLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                        <span class="s2">&quot;TFLAG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;RH&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># not retrieved</span>
+                        <span class="s2">&quot;DPDP&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                        <span class="s2">&quot;WDIR&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                        <span class="s2">&quot;WSPD&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">vals</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No valid data returned by DWH call. Return: </span><span class="si">{</span><span class="n">lines</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">COLUMNS_SOUNDING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="k">except</span> <span class="ne">EnvironmentError</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to read DWH data with call </span><span class="si">{</span><span class="n">ret_dwh</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="retrieve_fzl">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.retrieve_fzl.html#pyrad.io.retrieve_fzl">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_fzl</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">&quot;IGRA&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get an estimation of the freezing level height either the</span>
+<span class="sd">    Integrated Global Radiosonde Archive (IGRA), University of Wyoming archive</span>
+<span class="sd">    or the MCH digital warehouse (DWH)</span>
 
 <span class="sd">    Parameters:</span>
 <span class="sd">        station : str</span>
@@ -3220,10 +3329,11 @@
 <span class="sd">        dscfg : dictionary of dictionaries, Optional</span>
 <span class="sd">            If provided will try to read the fzl from the pyrad config</span>
 <span class="sd">            dictionary instead of fetching it from IGRA</span>
+<span class="sd">        source: str</span>
+<span class="sd">            either &#39;IGRA&#39;, &quot;WYOMING&quot; or &#39;MCH&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        fzl : float</span>
-<span class="sd">            Interpolated freezing level height (a.s.l) obtained</span>
-<span class="sd">            from the nearest in time IGRA sounding</span>
+<span class="sd">            Interpolated freezing level height (a.s.l)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dscfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">dscfg</span> <span class="o">=</span> <span class="p">{}</span>
@@ -3235,7 +3345,13 @@
     <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
         <span class="k">pass</span>
 
-    <span class="n">sounding</span> <span class="o">=</span> <span class="n">read_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;IGRA&quot;</span><span class="p">:</span>
+        <span class="n">sounding</span> <span class="o">=</span> <span class="n">retrieve_radiosounding_igra</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;MCH&quot;</span><span class="p">:</span>
+        <span class="n">sounding</span> <span class="o">=</span> <span class="n">retrieve_radiosounding_mch</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">source</span> <span class="o">==</span> <span class="s2">&quot;WYOMING&quot;</span><span class="p">:</span>
+        <span class="n">sounding</span> <span class="o">=</span> <span class="n">retrieve_radiosounding_wyoming</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">dtime</span><span class="p">)</span>
+
     <span class="n">height</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">[</span><span class="s2">&quot;GPH&quot;</span><span class="p">]</span>
     <span class="n">temp</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">[</span><span class="s2">&quot;TEMP&quot;</span><span class="p">]</span>
 
@@ -3329,7 +3445,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.3.0.
     <br/>
   </p>
 </div>

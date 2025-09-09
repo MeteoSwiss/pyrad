@@ -424,7 +424,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_file_list</span><span class="p">,</span> <span class="n">get_datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_centroids</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_fzl_igra</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_sensor</span><span class="w"> </span><span class="kn">import</span> <span class="n">retrieve_fzl</span>
 
 <span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;sklearn_extra&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;sklearn&quot;</span><span class="p">):</span>
     <span class="n">_SKLEARN_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1928,6 +1928,9 @@
 <span class="sd">            compute the freezing level, if no temperature field name is specified,</span>
 <span class="sd">            if the temperature field is not in the radar object or if no</span>
 <span class="sd">            fzl is explicitely defined.</span>
+<span class="sd">        sounding_source: str. Dataset keyword</span>
+<span class="sd">            Web source from which to get the sounding data, either &quot;IGRA&quot;, &quot;WYOMING&quot;, or</span>
+<span class="sd">            &quot;MCH&quot;. If not provided, IGRA is used.</span>
 <span class="sd">        use_dualpol: Bool. Dataset keyword</span>
 <span class="sd">            Used with HYDRO_METHOD UKMO. If false no radar data is used and</span>
 <span class="sd">            the classification is performed using temperature information</span>
@@ -2013,8 +2016,11 @@
                     <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">sounding_code</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;sounding&quot;</span><span class="p">]</span>
+                <span class="n">sounding_source</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sounding_source&quot;</span><span class="p">,</span> <span class="s2">&quot;IGRA&quot;</span><span class="p">)</span>
                 <span class="n">t0</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">datetime_utils</span><span class="o">.</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-                <span class="n">freezing_level</span> <span class="o">=</span> <span class="n">read_fzl_igra</span><span class="p">(</span><span class="n">sounding_code</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="n">dscfg</span><span class="p">)</span>
+                <span class="n">freezing_level</span> <span class="o">=</span> <span class="n">retrieve_fzl</span><span class="p">(</span>
+                    <span class="n">sounding_code</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="n">dscfg</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">sounding_source</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
                     <span class="s2">&quot;iso0 or temperature fields or sounding needed to create hydrometeor &quot;</span>
@@ -2175,8 +2181,11 @@
             <span class="n">freezing_level</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;freezing_level&quot;</span><span class="p">]</span>
         <span class="k">elif</span> <span class="s2">&quot;sounding&quot;</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">sounding_code</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;sounding&quot;</span><span class="p">]</span>
+            <span class="n">sounding_source</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sounding_source&quot;</span><span class="p">,</span> <span class="s2">&quot;IGRA&quot;</span><span class="p">)</span>
             <span class="n">t0</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">datetime_utils</span><span class="o">.</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-            <span class="n">freezing_level</span> <span class="o">=</span> <span class="n">read_fzl_igra</span><span class="p">(</span><span class="n">sounding_code</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="n">dscfg</span><span class="p">)</span>
+            <span class="n">freezing_level</span> <span class="o">=</span> <span class="n">retrieve_fzl</span><span class="p">(</span>
+                <span class="n">sounding_code</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">dscfg</span><span class="o">=</span><span class="n">dscfg</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">sounding_source</span>
+            <span class="p">)</span>
 
         <span class="n">use_dualpol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_dualpol&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">use_temperature</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;use_temperature&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -3461,7 +3470,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.3.0.
     <br/>
   </p>
 </div>

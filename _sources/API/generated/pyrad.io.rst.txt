@@ -128,8 +128,6 @@
     
     read_excess_gates
     
-    read_fzl_igra
-    
     read_histogram
     
     read_histogram_ts
@@ -182,10 +180,6 @@
     
     read_rad4alp_vis
     
-    read_radiosounding_igra
-    
-    read_radiosounding_wyoming
-    
     read_rhi_profile
     
     read_selfconsistency
@@ -231,6 +225,14 @@
     read_vpr_theo_parameters
     
     read_windmills_data
+    
+    retrieve_fzl
+    
+    retrieve_radiosounding_igra
+    
+    retrieve_radiosounding_mch
+    
+    retrieve_radiosounding_wyoming
     
     send_msg
     

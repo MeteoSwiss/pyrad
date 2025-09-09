@@ -1,0 +1,6 @@
+pyrad.io.retrieve\_radiosounding\_mch
+=====================================
+
+.. currentmodule:: pyrad.io
+
+.. autofunction:: retrieve_radiosounding_mch

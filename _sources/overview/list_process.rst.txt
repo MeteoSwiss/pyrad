@@ -27,6 +27,9 @@ parameters
      |     to compute the freezing level, if no temperature field name is
      |     specified, if the temperature field is in the radar object or if
      |     no freezing_level is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
 
 returns
    new_dataset : dict
@@ -605,6 +608,9 @@ parameters
      |     compute the freezing level, if no temperature field name is specified,
      |     if the temperature field is not in the radar object or if no
      |     fzl is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
    use_dualpol: Bool. Dataset keyword
      | Used with HYDRO_METHOD UKMO. If false no radar data is used and
      |     the classification is performed using temperature information
@@ -1005,6 +1011,9 @@ parameters
      |     to compute the freezing level, if no temperature field name is
      |     specified, if the temperature field is not in the radar object or
      |     if no freezing_level is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
    ml_thickness : float. Dataset keyword
      | The melting layer thickness in meters. Default 700.
    beamwidth : float. Dataset keyword
@@ -1125,6 +1134,9 @@ parameters
      |     to compute the freezing level, if no temperature field name is
      |     specified, if the temperature field isin the radar object or if no
      |     freezing_level is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
    ml_thickness : float. Dataset keyword
      | The melting layer thickness in meters. Default 700.
    beamwidth : float. Dataset keyword
@@ -1600,6 +1612,9 @@ parameters
      |     compute the freezing level, if no temperature field name is specified,
      |     if the temperature field isin the radar object or if no freezing_level
      |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
 
 returns
    new_dataset : dict
@@ -1763,6 +1778,9 @@ parameters
      |     compute the freezing level, if no temperature field name is specified,
      |     if the temperature field isin the radar object or if no freezing_level
      |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
    rsmooth : float. Dataset keyword
      | length of the smoothing window [m]. Default 2000.
    min_rhohv : float. Dataset keyword
@@ -1844,6 +1862,9 @@ parameters
      |     compute the freezing level, if no temperature field name is specified,
      |     if the temperature field isin the radar object or if no freezing_level
      |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
    rsmooth : float. Dataset keyword
      | length of the smoothing window [m]. Default 2000.
    min_rhohv : float. Dataset keyword
@@ -1928,6 +1949,9 @@ parameters
      |     compute the freezing level, if no temperature field name is specified,
      |     if the temperature field isin the radar object or if no freezing_level
      |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
    frequency : float. Dataset keyword
      | the radar frequency [Hz]. If None that of the key
      |     frequency in attribute instrument_parameters of the radar
