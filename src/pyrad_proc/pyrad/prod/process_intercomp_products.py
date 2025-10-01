@@ -565,7 +565,7 @@ def generate_colocated_gates_products(dataset, prdcfg):
             prdcfg["procname"],
             dssavedir,
             prdsavedir,
-            timeinfo=prdcfg["timeinfo"],
+            timeinfo=None,
         )
         fname_list = make_filename(
             "map",

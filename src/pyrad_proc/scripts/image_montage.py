@@ -22,6 +22,12 @@ def parse_args():
         "patterns", nargs="+", help="One or more glob patterns (e.g. 'figs/**/*.png')."
     )
     parser.add_argument(
+        "--split-by-date",
+        default=1,
+        type=int,
+        help="Whether or not to split images by their date, they can then be arranged by row or column",
+    )
+    parser.add_argument(
         "--date-order",
         choices=["row", "column"],
         required=True,
@@ -81,15 +87,19 @@ def extract_date_from_filename(filename):
     return "unknown"
 
 
-def collect_images(patterns):
+def collect_images(patterns, split_by_date):
     image_groups = defaultdict(list)
-    for pattern in patterns:
+    for i, pattern in enumerate(patterns):
         for path in glob.glob(pattern, recursive=True):
             if os.path.isfile(path) and path.lower().endswith(
                 (".png", ".jpg", ".jpeg", ".bmp", ".gif")
             ):
-                date = extract_date_from_filename(os.path.basename(path))
-                image_groups[date].append(path)
+                if split_by_date:
+                    date = extract_date_from_filename(os.path.basename(path))
+                    image_groups[date].append(path)
+                else:
+                    image_groups[i].append(path)
+
     return dict(sorted(image_groups.items()))
 
 
@@ -202,7 +212,11 @@ def create_composite(
 
 def main():
     args = parse_args()
-    image_groups = collect_images(args.patterns)
+    print(args)
+    import pdb
+
+    pdb.set_trace()
+    image_groups = collect_images(args.patterns, split_by_date=args.split_by_date)
 
     if not image_groups:
         print("No images found.")

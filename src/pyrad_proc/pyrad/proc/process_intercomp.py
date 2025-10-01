@@ -1920,7 +1920,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
 
 def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
     """
-    intercomparison between the average reflectivity of two radars
+    intercomparison between the average reflectivity of two radars.
 
     Parameters
     ----------
@@ -1955,14 +1955,18 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             range tolerance between the two radars. Default 50 m
         clt_max : int. Dataset keyword
             maximum percentage of samples that can be clutter contaminated.
-            Default 100%& i.e. all
+            Default 100% i.e. all
         phi_excess_max : int. Dataset keyword
             maximum percentage of samples that can have excess instantaneous
-            PhiDP. Default 100% i.e. all
+            PhiDP. Excess phidp is computed in the FLAG_TIME_AVG dataset, it corresponds to
+            an exceedance of a threshold in PhiDP at the native time resolution of the data
+            (no averaging). Default 100% i.e. all
         non_rain_max : int. Dataset keyword
             maximum percentage of samples that can be no rain. Default 100% i.e. all
         phi_avg_max : float. Dataset keyword
-            maximum average PhiDP allowed. Default 600 deg i.e. any
+            maximum average (hourly) PhiDP in degrees allowed. This conditions differs from
+            phi_excess_max, because it concerns only average values and is defined in degrees
+            and not in percentage of samples. Default is infinite, i.e. any
 
     radar_list : list of Radar objects
         Optional. list of radar objects
@@ -2331,7 +2335,6 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         intercomp_dict["rad2_dBZavg"] = refl2_vec
         intercomp_dict["rad2_PhiDPavg"] = phidp2_vec
         intercomp_dict["rad2_Flagavg"] = flag2_vec
-
         new_dataset = {
             "intercomp_dict": intercomp_dict,
             "timeinfo": dscfg["global_data"]["timeinfo"],
@@ -2415,7 +2418,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         clt_max = dscfg.get("clt_max", 100)
         phi_excess_max = dscfg.get("phi_excess_max", 100)
         non_rain_max = dscfg.get("non_rain_max", 100)
-        phi_avg_max = dscfg.get("phi_avg_max", 600.0)
+        phi_avg_max = dscfg.get("phi_avg_max", np.inf)
 
         # filter out invalid data
         ind_val = np.where(
