@@ -1750,7 +1750,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
 
         # keep only indices of valid gates
         val1_vec = rad1_field[rad1_ray_ind, rad1_rng_ind]
-        val2_vec = rad2_field[rad1_ray_ind, rad1_rng_ind]
+        val2_vec = rad2_field[rad2_ray_ind, rad2_rng_ind]
 
         mask_val1 = np.ma.getmaskarray(val1_vec)
         mask_val2 = np.ma.getmaskarray(val2_vec)
