@@ -2688,7 +2688,7 @@ def retrieve_radiosounding_igra(station, dtime):
     ].iloc[0]
 
     # Check if specified time is after 2021
-    if dtime > datetime.datetime(2021, 1, 1):
+    if dtime > datetime.datetime(2021, 1, 1, tzinfo=datetime.timezone.utc):
         url2 = (
             "https://www.ncei.noaa.gov/data/integrated-global-radiosonde-archive"
             + "/access/data-y2d/"
@@ -2730,7 +2730,7 @@ def retrieve_radiosounding_igra(station, dtime):
     for i, line in enumerate(file_content):
         if "#" in line:
             year, month, day, hour = map(int, line.split()[1:5])
-            dt = datetime.datetime(year, month, day, hour)
+            dt = datetime.datetime(year, month, day, hour, tzinfo=datetime.timezone.utc)
             line_dates.append(dt)
             line_starts.append(i)
     line_dates = np.array(line_dates)
