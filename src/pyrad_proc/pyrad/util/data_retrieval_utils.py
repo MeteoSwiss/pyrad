@@ -34,6 +34,7 @@ elif "balfrin" in socket.gethostname() or "nid" in socket.gethostname():
     FOLDER_DATABASE = "/store_new/mch/msrad/radar/radar_database/"
     FOLDER_RADAR = "/store_new/mch//msrad/radar/swiss/data/"
     FOLDER_RADARH = "/store_new/mch/msrad/radar/polarHR/data/"
+    FOLDER_RADARH_ARCHIVE = "/archive/mch/msrad/radar/polarHR/data/"
     FOLDER_CPCCV = "/store_new/mch/msrad/radar/cpc_validation/daily/"
     FOLDER_ISO0 = "/store_new/mch/msrad/radar/swiss/data/"
     FOLDER_RADAR_HDF5 = "/store_new/mch/msrad/radar/swiss/data/hdf5/"
@@ -495,7 +496,9 @@ def retrieve_mch_prod_RT(
     if sweeps is not None:
         sweeps_zip = np.array([int(c[-3:]) for c in content_zip])
         # Get a list of all files to retrieve
-        conditions_sweep = np.array([s in sweeps for s in sweeps_zip])
+        conditions_sweep = np.array(
+            [s in sweeps or 800 + s in sweeps for s in sweeps_zip]
+        )
         conditions = np.logical_and(conditions, conditions_sweep)
 
     if not np.any(conditions):
@@ -526,7 +529,17 @@ def _retrieve_prod_daily(
         if (product_name == "CPCH") or (product_name == "CPC"):
             product_suffix = "hdf5"
     else:
-        folder_radar = FOLDER_RADARH if product_name[:2] == "MH" else FOLDER_RADAR
+        if product_name[:2] == "MH":
+            # check whether to use archive folder for polarHR data
+            first_date = datetime.datetime.strptime(
+                os.path.basename(sorted(glob.glob(f"{FOLDER_RADARH}/**/2*"))[0]), "%y%j"
+            ).replace(tzinfo=datetime.timezone.utc)
+            if start_time < first_date:
+                folder_radar = FOLDER_RADARH_ARCHIVE
+            else:
+                folder_radar = FOLDER_RADARH
+        else:
+            folder_radar = FOLDER_RADAR
         product_suffix = ""
 
     suffix = str(start_time.year)[-2:] + str(start_time.timetuple().tm_yday).zfill(3)
@@ -572,7 +585,9 @@ def _retrieve_prod_daily(
         # Further filter based on sweeps if provided
         if sweeps is not None:
             sweeps_zip = np.array([int(c[-3:]) for c in content_zip])
-            conditions_sweep = np.array([s in sweeps for s in sweeps_zip])
+            conditions_sweep = np.array(
+                [(s in sweeps) or (s - 800 in sweeps) for s in sweeps_zip]
+            )
             conditions = np.logical_and(conditions, conditions_sweep)
 
         if not np.any(conditions):
