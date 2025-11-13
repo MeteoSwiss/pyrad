@@ -21,7 +21,7 @@ import os
 import yaml
 
 # Allows parsing of environment variables in YAML safe loader
-env_var_pattern = re.compile(r"\$\{([^}^{]+)\}")
+env_var_pattern = re.compile(r".*\$\{([^}^{]+)\}.*")
 
 
 def env_var_constructor(loader, node):
@@ -97,7 +97,6 @@ def read_config(fname, cfg=None, defaults=None):
             else:
                 cfg_new = _read_config_pyrad(cfgfile)
     except Exception:
-        raise
         raise Exception("ERROR: Could not find|open config file '" + fname + "'")
 
     # Merge with existing dict
