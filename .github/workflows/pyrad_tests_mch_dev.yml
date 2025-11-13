@@ -24,24 +24,24 @@ jobs:
         shell: bash -l {0}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
         with:
          ref : dev
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462
         with:
           environment-file: ci/environment-ci.yml
           activate-environment: pyrad-dev
           cache-downloads: true
           python-version: ${{ matrix.python-version }}
       - name: Clone pyrad-tests
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
       - name: Clone pyart
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           repository: MeteoSwiss/pyart
           path: pyart
@@ -70,6 +70,3 @@ jobs:
             PYART_CONFIG: ${{github.workspace}}/config/pyart/mch_config.py
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
-      - name: tmate session if tests fail
-        if:  ${{ github.event_name == 'workflow_dispatch' && failure() }}
-        uses: mxschmitt/action-tmate@v3

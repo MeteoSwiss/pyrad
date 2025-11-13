@@ -30,11 +30,11 @@ jobs:
         os: [ubuntu]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Run Linting
         working-directory: ${{github.workspace}}/src/pyrad_proc/pyrad/
         shell: bash -l {0}
         run: |
           pip install --user ruff
-          ruff check --ignore E501 . 
+          ruff check --ignore E501 .

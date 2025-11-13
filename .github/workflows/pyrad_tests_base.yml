@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [ master ]
   workflow_dispatch:
-  
+
 jobs:
   unit_tests:
     name: Unit Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -28,28 +28,28 @@ jobs:
         shell: bash -l {0}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
          submodules: recursive
          ref : master
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462
         with:
           environment-file: ci/environment-ci.yml
           activate-environment: pyrad-dev
           cache-downloads: true
           python-version: ${{ matrix.python-version }}
       - name: Clone pyart
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: ARM-DOE/pyart
           path: pyart
       - name: Clone pyrad-tests
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
         with:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
@@ -75,7 +75,3 @@ jobs:
             PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
         working-directory: ${{github.workspace}}/pyrad-tests/
         run: pytest "run_tests.py::test_base"
-      - name: tmate session if tests fail
-        if:  ${{ github.event_name == 'workflow_dispatch' && failure() }}
-        uses: mxschmitt/action-tmate@v3
-        

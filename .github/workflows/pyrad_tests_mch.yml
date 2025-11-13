@@ -15,7 +15,7 @@ on:
           type: boolean
           description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
           required: false
-          default: false          
+          default: false
 jobs:
   unit_tests:
     name: Unit Tests (${{ matrix.python-version }}, ${{ matrix.os }})
@@ -33,20 +33,20 @@ jobs:
         shell: bash -l {0}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
          submodules: recursive
          ref : master
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462
         with:
           environment-file: ci/environment-ci.yml
           activate-environment: pyrad-dev
           cache-downloads: true
           python-version: ${{ matrix.python-version }}
       - name: Clone pyrad-tests
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
         with:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
@@ -73,6 +73,3 @@ jobs:
            PYART_CONFIG: ${{github.workspace}}/config/pyart/mch_config.py
         working-directory: ${{github.workspace}}/pyrad-tests//
         run: pytest "run_tests.py::test_mch"
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() && github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
