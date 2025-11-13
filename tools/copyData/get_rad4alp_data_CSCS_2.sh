@@ -11,6 +11,7 @@ umask 0002
 dateCmd="/bin/date"
 
 phdata_origbase=/store_new/mch/msrad/radar/polarHR/data/
+phdata_archivebase=/archive/mch/msrad/radar/polarHR/data/
 rawdata_origbase=/store_new/mch/msrad/radar/swiss/data/
 
 file_type=M
@@ -156,7 +157,11 @@ for ((irad=0; irad<${nrad}; irad++)); do
         # transfer polar data from CSCS to destination folder, unzip it and remove zip file
         if [ "${res}" == "H" ]
         then
-            data_origpath=${phdata_origbase}${yearl}/${years}${julday}/
+
+            if [ ! -d "$data_origpath" ]; then
+                data_origpath="${phdata_archivebase}${yearl}/${years}${julday}/"
+            fi
+
             # check type of file that exists in the repository
             if [ `ls ${data_origpath}M${res}${radar}${years}${julday}.zip` ]
             then
