@@ -32,7 +32,7 @@ jobs:
         uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462
         with:
           environment-file: ci/environment-ci.yml
-          activate-environment: pyrad-dev
+          environment-name: pyrad-dev
           cache-downloads: true
           python-version: ${{ matrix.python-version }}
       - name: Clone pyrad-tests

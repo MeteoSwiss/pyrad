@@ -29,6 +29,7 @@ jobs:
           environment-file: doc/environment.yml
           environment-name: pyrad-docs
           cache-downloads: true
+          python-version: 3.12
 
       - name: Install pyart
         working-directory: ${{github.workspace}}/src/pyart/
