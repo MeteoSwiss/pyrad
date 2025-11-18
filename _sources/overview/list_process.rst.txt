@@ -3431,7 +3431,7 @@ returns
 INTERCOMP_TIME_AVG
 """"""""""""""""""""""""""""""
 description
-   intercomparison between the average reflectivity of two radars
+   intercomparison between the average reflectivity of two radars.
  `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_time_avg>`_
 parameters
    datatype : list of string. Dataset keyword
@@ -3459,14 +3459,18 @@ parameters
      | range tolerance between the two radars. Default 50 m
    clt_max : int. Dataset keyword
      | maximum percentage of samples that can be clutter contaminated.
-     |     Default 100%& i.e. all
+     |     Default 100% i.e. all
    phi_excess_max : int. Dataset keyword
      | maximum percentage of samples that can have excess instantaneous
-     |     PhiDP. Default 100% i.e. all
+     |     PhiDP. Excess phidp is computed in the FLAG_TIME_AVG dataset, it corresponds to
+     |     an exceedance of a threshold in PhiDP at the native time resolution of the data
+     |     (no averaging). Default 100% i.e. all
    non_rain_max : int. Dataset keyword
      | maximum percentage of samples that can be no rain. Default 100% i.e. all
    phi_avg_max : float. Dataset keyword
-     | maximum average PhiDP allowed. Default 600 deg i.e. any
+     | maximum average (hourly) PhiDP in degrees allowed. This conditions differs from
+     |     phi_excess_max, because it concerns only average values and is defined in degrees
+     |     and not in percentage of samples. Default is infinite, i.e. any
 
 returns
    new_dataset : dict

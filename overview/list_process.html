@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>List of pyrad datasets separated by dataset type &#8212; Pyrad 2.1.1 documentation</title>
+    <title>List of pyrad datasets separated by dataset type &#8212; Pyrad 2.1.2 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=841abef3"></script>
+    <script src="../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Product configuration file" href="prod.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.1.1" />   
+  <meta name="docsearch:version" content="2.1.2" />   
   </head>
   
   
@@ -120,7 +120,7 @@
   
   
   
-    <p class="title logo__title">Pyrad 2.1.1 documentation</p>
+    <p class="title logo__title">Pyrad 2.1.2 documentation</p>
   
 </a></div>
     
@@ -7003,7 +7003,7 @@
 <h3>INTERCOMP_TIME_AVG<a class="headerlink" href="#intercomp-time-avg" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>intercomparison between the average reflectivity of two radars</p>
+<div><p>intercomparison between the average reflectivity of two radars.</p>
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_time_avg">[Source]</a></p>
 </dd>
@@ -7056,14 +7056,16 @@
 <dt>clt_max<span class="classifier">int. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">maximum percentage of samples that can be clutter contaminated.</div>
 <div class="line-block">
-<div class="line">Default 100%&amp; i.e. all</div>
+<div class="line">Default 100% i.e. all</div>
 </div>
 </div>
 </dd>
 <dt>phi_excess_max<span class="classifier">int. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">maximum percentage of samples that can have excess instantaneous</div>
 <div class="line-block">
-<div class="line">PhiDP. Default 100% i.e. all</div>
+<div class="line">PhiDP. Excess phidp is computed in the FLAG_TIME_AVG dataset, it corresponds to</div>
+<div class="line">an exceedance of a threshold in PhiDP at the native time resolution of the data</div>
+<div class="line">(no averaging). Default 100% i.e. all</div>
 </div>
 </div>
 </dd>
@@ -7072,7 +7074,11 @@
 </div>
 </dd>
 <dt>phi_avg_max<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">maximum average PhiDP allowed. Default 600 deg i.e. any</div>
+<div class="line">maximum average (hourly) PhiDP in degrees allowed. This conditions differs from</div>
+<div class="line-block">
+<div class="line">phi_excess_max, because it concerns only average values and is defined in degrees</div>
+<div class="line">and not in percentage of samples. Default is infinite, i.e. any</div>
+</div>
 </div>
 </dd>
 </dl>
@@ -9443,7 +9449,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
