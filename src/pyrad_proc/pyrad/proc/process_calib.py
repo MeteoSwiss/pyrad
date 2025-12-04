@@ -31,6 +31,7 @@ else:
     _PYSOLAR_AVAILABLE = False
 
 import pyart
+from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sun import read_sun_hits_multiple_days, read_solar_flux
 from ..io.read_data_other import read_excess_gates
@@ -1938,7 +1939,9 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
     dscfg["global_data"]["timeinfo"] = dscfg["timeinfo"]
 
     # get time for sunscan
-    time = num2date(radar.time["data"], radar.time["units"], radar.time["calendar"])
+    time = cftodatetime(
+        num2date(radar.time["data"], radar.time["units"], radar.time["calendar"])
+    )
     center_index = int(len(time) / 2.0)
     sunscan_time = time[center_index]
 

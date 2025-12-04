@@ -1,7 +1,6 @@
 name: pyart-docs
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - gdal
   - numpy

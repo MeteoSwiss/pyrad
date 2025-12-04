@@ -29,6 +29,7 @@ from netCDF4 import num2date
 
 import pyart
 
+from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, find_raw_icon_file
 from ..io.io_aux import find_hzt_file, find_iso0_file, find_iso0_grib_file
 from ..io.io_aux import get_fieldname_pyart
@@ -175,7 +176,9 @@ def process_icon(procstatus, dscfg, radar_list=None):
             warn("icon data not found")
             return None, None
 
-    dticon = num2date(icon_data["time"]["data"][:], icon_data["time"]["units"])
+    dticon = cftodatetime(
+        num2date(icon_data["time"]["data"][:], icon_data["time"]["units"])
+    )
     time_index = np.argmin(abs(dticon - dscfg["timeinfo"]))
 
     if keep_in_memory and regular_grid:
@@ -233,16 +236,12 @@ def process_hzt(procstatus, dscfg, radar_list=None):
         datatype : string. Dataset keyword
             arbitrary data type supported by pyrad
         keep_in_memory : int. Dataset keyword
-            if set keeps the icon data dict, the icon coordinates dict and
-            the icon field in radar coordinates in memory
+            if set keeps the hzt data dict, the hzt coordinates dict and
+            the hzt field in radar coordinates in memory
         regular_grid : int. Dataset keyword
             if set it is assume that the radar has a grid constant in time and
-            there is no need to compute a new icon field if the icon
+            there is no need to compute a new hzt field if the hzt
             data has not changed
-        icon_type : str. Dataset keyword
-            name of the icon field to process. Default TEMP
-        icon_variables : list of strings. Dataset keyword
-            Py-art name of the icon fields. Default temperature
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -250,7 +249,7 @@ def process_hzt(procstatus, dscfg, radar_list=None):
     -------
     new_dataset : dict
         dictionary containing the output fields corresponding to
-        icon_variables
+        height over iso0
     ind_rad : int
         radar index
 
@@ -273,7 +272,6 @@ def process_hzt(procstatus, dscfg, radar_list=None):
 
     keep_in_memory = dscfg.get("keep_in_memory", 0)
     regular_grid = dscfg.get("regular_grid", 0)
-
     fname = find_hzt_file(dscfg["timeinfo"], dscfg, ind_rad=ind_rad)
 
     if fname is None:
@@ -314,7 +312,9 @@ def process_hzt(procstatus, dscfg, radar_list=None):
             return None, None
         hzt_coord = {"x": hzt_data["x"], "y": hzt_data["y"]}
 
-    dthzt = num2date(hzt_data["time"]["data"][:], hzt_data["time"]["units"])
+    dthzt = cftodatetime(
+        num2date(hzt_data["time"]["data"][:], hzt_data["time"]["units"])
+    )
     time_index = np.argmin(abs(dthzt - dscfg["timeinfo"]))
 
     if keep_in_memory and regular_grid:
@@ -643,7 +643,9 @@ def process_icon_lookup_table(procstatus, dscfg, radar_list=None):
         print("raw icon data already in memory")
         icon_data = dscfg["global_data"]["icon_data"]
 
-    dticon = num2date(icon_data["time"]["data"][:], icon_data["time"]["units"])
+    dticon = cftodatetime(
+        num2date(icon_data["time"]["data"][:], icon_data["time"]["units"])
+    )
 
     time_index = np.argmin(abs(dticon - dscfg["timeinfo"]))
 
@@ -800,7 +802,9 @@ def process_hzt_lookup_table(procstatus, dscfg, radar_list=None):
         print("HZT data already in memory")
         hzt_data = dscfg["global_data"]["hzt_data"]
 
-    dthzt = num2date(hzt_data["time"]["data"][:], hzt_data["time"]["units"])
+    dthzt = cftodatetime(
+        num2date(hzt_data["time"]["data"][:], hzt_data["time"]["units"])
+    )
     time_index = np.argmin(abs(dthzt - dscfg["timeinfo"]))
 
     if (
@@ -941,7 +945,9 @@ def process_icon_to_radar(procstatus, dscfg, radar_list=None):
         warn("icon data not found")
         return None, None
 
-    dticon = num2date(icon_data["time"]["data"][:], icon_data["time"]["units"])
+    dticon = cftodatetime(
+        num2date(icon_data["time"]["data"][:], icon_data["time"]["units"])
+    )
 
     if time_index_min is None:
         time_index_min = 0

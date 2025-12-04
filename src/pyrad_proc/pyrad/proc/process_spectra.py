@@ -40,6 +40,7 @@ from netCDF4 import num2date
 
 import pyart
 
+from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 
 
@@ -379,8 +380,8 @@ def process_spectra_point(procstatus, dscfg, radar_list=None):
     ind_rng = np.argmin(np.abs(psr.range["data"] - r))
     nrays = ind_ray.size
 
-    time_poi = num2date(
-        psr.time["data"][ind_ray], psr.time["units"], psr.time["calendar"]
+    time_poi = cftodatetime(
+        num2date(psr.time["data"][ind_ray], psr.time["units"], psr.time["calendar"])
     )
     if nrays > 1:
         time_ref = time_poi[0]
@@ -444,7 +445,9 @@ def process_spectra_point(procstatus, dscfg, radar_list=None):
     psr_poi.elevation["data"] = np.append(
         psr_poi.elevation["data"], np.zeros(nrays) + el
     )
-    start_time = num2date(0, psr_poi.time["units"], psr_poi.time["calendar"])
+    start_time = cftodatetime(
+        num2date(0, psr_poi.time["units"], psr_poi.time["calendar"])
+    )
     for i in range(nrays):
         psr_poi.time["data"] = np.append(
             psr_poi.time["data"], (time_poi[i] - start_time).total_seconds()
