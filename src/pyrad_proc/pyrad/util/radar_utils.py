@@ -522,7 +522,6 @@ def rainfall_accumulation(
 
     val_out_vec = np.ma.asarray(val_out_vec)
     val_out_vec[np.isnan(val_out_vec)] = np.ma.masked
-
     return t_out_vec, val_out_vec, np_vec
 
 
@@ -569,7 +568,11 @@ def time_series_statistics(
     )()
     if dropnan is True:
         df_out = df_out.dropna(how="any")
-    t_out_vec = df_out.index.to_pydatetime()
+    t_out_vec = (
+        df_out.index.tz_localize("UTC")
+        if df_out.index.tz is None
+        else df_out.index.tz_convert("UTC")
+    ).to_pydatetime()
     val_out_vec = df_out.values.flatten()
 
     return t_out_vec, val_out_vec
@@ -661,7 +664,11 @@ def join_time_series(t1, val1, t2, val2, dropnan=False):
     df_out = pd.concat([df1, df2], join="outer", axis=1)
     if dropnan is True:
         df_out = df_out.dropna(how="any")
-    t_out_vec = df_out.index.to_pydatetime()
+    t_out_vec = (
+        df_out.index.tz_localize("UTC")
+        if df_out.index.tz is None
+        else df_out.index.tz_convert("UTC")
+    ).to_pydatetime()
     val1_out_vec = df_out.values[:, 0].flatten()
     val2_out_vec = df_out.values[:, 1].flatten()
 

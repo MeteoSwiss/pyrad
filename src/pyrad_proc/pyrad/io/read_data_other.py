@@ -1241,7 +1241,12 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
             unlock_file(csvfile)
 
         # Extract date and NP values
-        date = df["date"].dt.to_pydatetime()
+        date = (
+            df["date"].dt.tz_localize("UTC")
+            if df["date"].dt.tz is None
+            else df["date"].dt.tz_convert("UTC")
+        ).to_pydatetime()
+
         np_t = df["NP"].to_numpy(dtype=int)
 
         # Extract all quantile values dynamically

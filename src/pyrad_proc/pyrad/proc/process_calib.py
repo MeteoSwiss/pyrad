@@ -2120,6 +2120,9 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             par = np.ma.asarray(sun_retrieval_h[7])
             fit_stddev = np.ma.asarray(sun_retrieval_h[1])
             if fit_stddev >= max_fit_stddev:
+                warn(
+                    f"Sun retrieval fit stddev too high on horizontal channel {fit_stddev}>{max_fit_stddev}!"
+                )
                 return None, None
 
         if pwrv_field is not None:
@@ -2136,12 +2139,15 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
                 el_width_cross=el_width_cross,
                 is_zdr=False,
             )
-
             azoff = np.ma.asarray(sun_retrieval_v[2])
             eloff = np.ma.asarray(sun_retrieval_v[3])
             par = np.ma.asarray(sun_retrieval_v[7])
             fit_stddev = np.ma.asarray(sun_retrieval_v[1])
+
             if fit_stddev >= max_fit_stddev:
+                warn(
+                    f"Sun retrieval fit stddev too high on vertical channel {fit_stddev}>{max_fit_stddev}!"
+                )
                 return None, None
 
         sundist = np.zeros_like(sunvol)
@@ -2359,7 +2365,6 @@ def process_sunscan(procstatus, dscfg, radar_list=None):
             el_width_cross=el_width_cross,
             is_zdr=True,
         )
-
     sun_retrieval_dict = {
         "first_hit_time": sun_hits["time"][0],
         "sunscan_time": sunscan_time,

@@ -791,7 +791,6 @@ def generate_timeseries_products(dataset, prdcfg):
             }
         )
         new_dataset.update(prdcfg)
-
         write_ts_cum(new_dataset, csvfname)
 
         print("saved CSV file: " + csvfname)

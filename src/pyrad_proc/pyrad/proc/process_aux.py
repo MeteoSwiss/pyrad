@@ -704,7 +704,6 @@ def process_raw(procstatus, dscfg, radar_list=None):
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
     ind_rad = int(radarnr[5:8]) - 1
-
     if (radar_list is None) or (radar_list[ind_rad] is None):
         warn("ERROR: No valid radar")
         return None, None

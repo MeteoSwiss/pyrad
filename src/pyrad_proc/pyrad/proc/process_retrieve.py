@@ -23,7 +23,6 @@ Functions for retrieving new moments and products
     process_rainfall_accumulation
     process_bird_density
 
-
 """
 
 import datetime
