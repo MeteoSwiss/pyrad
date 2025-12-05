@@ -3606,34 +3606,14 @@ def find_hzt_file(voltime, cfg, ind_rad=0):
         Name of HZT file if it exists. None otherwise
 
     """
-    # initial run time to look for
-    runhour0 = int(voltime.hour / cfg["IconRunFreq"]) * cfg["IconRunFreq"]
-    runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
 
-    # look for icon file
-    found = False
-    nruns_to_check = int((cfg["IconForecasted"] - 1) / cfg["IconRunFreq"])
-    for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg["IconRunFreq"])
-        target_hour = int((voltime - runtime).total_seconds() / 3600.0)
-        runtimestr = runtime.strftime("%y%j%H00")
-
-        daydir = runtime.strftime("%y%j")
-        if cfg["path_convention"][ind_rad] == "RT":
-            datapath = cfg["iconpath"][ind_rad] + "HZT/"
-        else:
-            datapath = cfg["iconpath"][ind_rad] + "HZT/" + daydir + "/"
-        search_name = (
-            datapath + "HZT" + runtimestr + "0L.8" + "{:02d}".format(target_hour)
-        )
-
-        print("Looking for file: " + search_name)
-        fname = glob.glob(search_name)
-        if fname:
-            found = True
-            break
-
-    if not found:
+    # Look into datapath
+    daydir = voltime.strftime("%y%j")
+    dirname = os.path.join(cfg["datapath"][ind_rad], daydir, "HZT" + daydir)
+    pattern = os.path.join(dirname, f"HZT{voltime.strftime('%y%j%H')}00*.*")
+    print(f"Looking for file: {pattern}")
+    fname = glob.glob(pattern)
+    if not fname:
         warn("WARNING: Unable to find HZT file")
         return None
 

@@ -825,7 +825,6 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
     # get data of master radar
     radar_list = list()
     radar_list.append(get_data(master_voltime, datatypesdescr_list[0], datacfg))
-
     if num_radars == 1:
         return radar_list
 
@@ -857,7 +856,6 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
                 )
             voltime_ref = min(voltime_ref_list, key=lambda x: abs(x - master_voltime))
             radar_list.append(get_data(voltime_ref, datatypesdescr_list[i], datacfg))
-
     return radar_list
 
 
@@ -1534,6 +1532,7 @@ def _create_dscfg_dict(cfg, dataset):
     # Path related parameters
     dscfg.update({"configpath": cfg["configpath"]})
     dscfg.update({"basepath": cfg["saveimgbasepath"]})
+    dscfg.update({"datapath": cfg["datapath"]})
     dscfg.update({"loadbasepath": cfg["loadbasepath"]})
     dscfg.update({"loadname": cfg["loadname"]})
     dscfg.update({"path_convention": cfg["path_convention"]})

@@ -41,7 +41,7 @@ except ImportError:
     warn("ARM version of Py-ART detected, you will not be able to use some products")
     warn("Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)")
 
-
+from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_field_unit, get_field_name
 from ..io.timeseries import TimeSeries
@@ -427,7 +427,9 @@ def process_traj_lightning(procstatus, dscfg, radar_list=None, trajectory=None):
         return None, None
 
     ttask_start = radar.time["data"].max()
-    dt_task_start = num2date(ttask_start, radar.time["units"], radar.time["calendar"])
+    dt_task_start = cftodatetime(
+        num2date(ttask_start, radar.time["units"], radar.time["calendar"])
+    )
 
     if not dscfg["initialized"]:
         # init
@@ -693,7 +695,9 @@ def process_traj_atplane(procstatus, dscfg, radar_list=None, trajectory=None):
         return None, None
 
     ttask_start = radar.time["data"].min()
-    dt_task_start = num2date(ttask_start, radar.time["units"], radar.time["calendar"])
+    dt_task_start = cftodatetime(
+        num2date(ttask_start, radar.time["units"], radar.time["calendar"])
+    )
 
     # User defined parameter
     ang_tol = dscfg.get("ang_tol", 1.2)
@@ -1016,7 +1020,9 @@ def process_traj_antenna_pattern(procstatus, dscfg, radar_list=None, trajectory=
         return None, None
 
     ttask_start = radar.time["data"].min()
-    dt_task_start = num2date(ttask_start, radar.time["units"], radar.time["calendar"])
+    dt_task_start = cftodatetime(
+        num2date(ttask_start, radar.time["units"], radar.time["calendar"])
+    )
     if not dscfg["initialized"]:
         # === init ============================================================
         if trajectory is None:

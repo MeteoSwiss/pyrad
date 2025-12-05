@@ -31,6 +31,7 @@ from netCDF4 import num2date
 
 import pyart
 
+from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_coord_sensors
 from ..util.radar_utils import time_avg_range
@@ -447,7 +448,9 @@ def process_grid_point(procstatus, dscfg, radar_list=None):
         alt = grid.point_altitude["data"][iz, iy, ix]
 
     val = grid.fields[field_name]["data"][iz, iy, ix]
-    time = num2date(grid.time["data"][0], grid.time["units"], grid.time["calendar"])
+    time = cftodatetime(
+        num2date(grid.time["data"][0], grid.time["units"], grid.time["calendar"])
+    )
 
     # initialize dataset
     if dscfg["initialized"] == 0:
@@ -577,8 +580,8 @@ def process_grid_multiple_points(procstatus, dscfg, radar_list=None):
         )
 
         val[ind] = grid.fields[field_name]["data"][iz, iy, ix]
-        time[ind] = num2date(
-            grid.time["data"][0], grid.time["units"], grid.time["calendar"]
+        time[ind] = cftodatetime(
+            num2date(grid.time["data"][0], grid.time["units"], grid.time["calendar"])
         )
         used_lon[ind] = grid.point_longitude["data"][iz, iy, ix]
         used_lat[ind] = grid.point_latitude["data"][iz, iy, ix]

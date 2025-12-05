@@ -25,6 +25,7 @@ from netCDF4 import num2date
 
 import pyart
 
+from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_coord_sensors
 
@@ -290,8 +291,10 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             # val is not masked array
             pass
 
-    time = num2date(
-        radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
+    time = cftodatetime(
+        num2date(
+            radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
+        )
     )
 
     # initialize dataset
@@ -482,8 +485,10 @@ def process_multiple_points(procstatus, dscfg, radar_list=None):
         used_alt[ind] = radar.gate_altitude["data"][ind_ray, ind_r]
 
         val[ind] = radar.fields[field_name]["data"].data[ind_ray, ind_r]
-        time[ind] = num2date(
-            radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
+        time[ind] = cftodatetime(
+            num2date(
+                radar.time["data"][ind_ray], radar.time["units"], radar.time["calendar"]
+            )
         )
 
     # prepare for exit

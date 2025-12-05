@@ -1539,11 +1539,8 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         return None, None
 
     if "HYDRO_METHOD" not in dscfg:
-        raise Exception(
-            "ERROR: Undefined parameter 'HYDRO_METHOD' for dataset {}".format(
-                dscfg["dsname"]
-            )
-        )
+        warn("HYDRO_METHOD not specified, using SEMISUPERVISED as default")
+        dscfg["HYDRO_METHOD"] = "SEMISUPERVISED"
 
     temp_field = None
     iso0_field = None
@@ -1650,9 +1647,17 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
 
         # load centroids
         if centroids_file is not None:
-            mass_centers, hydro_names, var_names = read_centroids(
-                dscfg["configpath"] + "centroids_hydroclass/" + centroids_file
-            )
+            # If centroids_file contains a directory, use it as provided.
+            # Otherwise, build the full path.
+            if os.path.dirname(centroids_file):
+                centroids_path = centroids_file
+            else:
+                centroids_path = os.path.join(
+                    dscfg["configpath"], "centroids_hydroclass", centroids_file
+                )
+
+            mass_centers, hydro_names, var_names = read_centroids(centroids_path)
+
             if mass_centers is None:
                 warn(
                     "Unable to read centroids file. "

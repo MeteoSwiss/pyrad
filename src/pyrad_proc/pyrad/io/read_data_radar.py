@@ -71,7 +71,10 @@ try:
     _WRADLIB_AVAILABLE = True
 except ImportError:
     _WRADLIB_AVAILABLE = False
-
+    warn(
+        "WARNING: wradlib is not installed, RAINBOW data cannot be read!",
+        use_debug=False,
+    )
 import pyart
 
 # check existence of METRANET library
@@ -1485,7 +1488,6 @@ def merge_scans_rainbow(
     """
 
     radar = merge_fields_rainbow(basepath, scan_list[0], voltime, datatype_list)
-
     # merge scans into a single radar instance
     nscans = len(scan_list)
     if nscans > 1:
