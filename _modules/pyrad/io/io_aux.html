@@ -4055,34 +4055,14 @@
 <span class="sd">        Name of HZT file if it exists. None otherwise</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># initial run time to look for</span>
-    <span class="n">runhour0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">voltime</span><span class="o">.</span><span class="n">hour</span> <span class="o">/</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;IconRunFreq&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;IconRunFreq&quot;</span><span class="p">]</span>
-    <span class="n">runtime0</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="n">runhour0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="c1"># look for icon file</span>
-    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">nruns_to_check</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;IconForecasted&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;IconRunFreq&quot;</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nruns_to_check</span><span class="p">):</span>
-        <span class="n">runtime</span> <span class="o">=</span> <span class="n">runtime0</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">i</span> <span class="o">*</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;IconRunFreq&quot;</span><span class="p">])</span>
-        <span class="n">target_hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">voltime</span> <span class="o">-</span> <span class="n">runtime</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">/</span> <span class="mf">3600.0</span><span class="p">)</span>
-        <span class="n">runtimestr</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%j%H00&quot;</span><span class="p">)</span>
-
-        <span class="n">daydir</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%j&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;path_convention&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RT&quot;</span><span class="p">:</span>
-            <span class="n">datapath</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;HZT/&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">datapath</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;iconpath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;HZT/&quot;</span> <span class="o">+</span> <span class="n">daydir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
-        <span class="n">search_name</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">datapath</span> <span class="o">+</span> <span class="s2">&quot;HZT&quot;</span> <span class="o">+</span> <span class="n">runtimestr</span> <span class="o">+</span> <span class="s2">&quot;0L.8&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_hour</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Looking for file: &quot;</span> <span class="o">+</span> <span class="n">search_name</span><span class="p">)</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">search_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fname</span><span class="p">:</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">break</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+    <span class="c1"># Look into datapath</span>
+    <span class="n">daydir</span> <span class="o">=</span> <span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%j&quot;</span><span class="p">)</span>
+    <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;datapath&quot;</span><span class="p">][</span><span class="n">ind_rad</span><span class="p">],</span> <span class="n">daydir</span><span class="p">,</span> <span class="s2">&quot;HZT&quot;</span> <span class="o">+</span> <span class="n">daydir</span><span class="p">)</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;HZT</span><span class="si">{</span><span class="n">voltime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%y%j%H&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">00*.*&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Looking for file: </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WARNING: Unable to find HZT file&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 

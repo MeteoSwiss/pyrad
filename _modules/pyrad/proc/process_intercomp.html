@@ -410,6 +410,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.date_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">cftodatetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_save_dir</span><span class="p">,</span> <span class="n">make_filename</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_colocated_gates</span><span class="p">,</span> <span class="n">read_colocated_data</span>
@@ -2233,10 +2234,12 @@
             <span class="n">val1_vec</span> <span class="o">=</span> <span class="n">val1_vec</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
             <span class="n">val2_vec</span> <span class="o">=</span> <span class="n">val2_vec</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
 
-        <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-            <span class="n">radar1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rad1_ray_ind</span><span class="p">],</span>
-            <span class="n">radar1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
-            <span class="n">radar1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">],</span>
+        <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cftodatetime</span><span class="p">(</span>
+            <span class="n">num2date</span><span class="p">(</span>
+                <span class="n">radar1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rad1_ray_ind</span><span class="p">],</span>
+                <span class="n">radar1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
+                <span class="n">radar1</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
         <span class="p">)</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad1_ray_ind</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad1_rng_ind</span>
@@ -2245,10 +2248,12 @@
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar1</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rad1_rng_ind</span><span class="p">]</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val1_vec</span>
 
-        <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-            <span class="n">radar2</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rad2_ray_ind</span><span class="p">],</span>
-            <span class="n">radar2</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
-            <span class="n">radar2</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">],</span>
+        <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cftodatetime</span><span class="p">(</span>
+            <span class="n">num2date</span><span class="p">(</span>
+                <span class="n">radar2</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rad2_ray_ind</span><span class="p">],</span>
+                <span class="n">radar2</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
+                <span class="n">radar2</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
         <span class="p">)</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad2_ray_ind</span>
         <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rad2_rng_ind</span>

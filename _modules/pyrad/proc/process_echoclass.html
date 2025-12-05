@@ -1967,11 +1967,8 @@
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="s2">&quot;HYDRO_METHOD&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-            <span class="s2">&quot;ERROR: Undefined parameter &#39;HYDRO_METHOD&#39; for dataset </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;dsname&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;HYDRO_METHOD not specified, using SEMISUPERVISED as default&quot;</span><span class="p">)</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;HYDRO_METHOD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SEMISUPERVISED&quot;</span>
 
     <span class="n">temp_field</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">iso0_field</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2078,9 +2075,17 @@
 
         <span class="c1"># load centroids</span>
         <span class="k">if</span> <span class="n">centroids_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">mass_centers</span><span class="p">,</span> <span class="n">hydro_names</span><span class="p">,</span> <span class="n">var_names</span> <span class="o">=</span> <span class="n">read_centroids</span><span class="p">(</span>
-                <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;configpath&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;centroids_hydroclass/&quot;</span> <span class="o">+</span> <span class="n">centroids_file</span>
-            <span class="p">)</span>
+            <span class="c1"># If centroids_file contains a directory, use it as provided.</span>
+            <span class="c1"># Otherwise, build the full path.</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">centroids_file</span><span class="p">):</span>
+                <span class="n">centroids_path</span> <span class="o">=</span> <span class="n">centroids_file</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">centroids_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;configpath&quot;</span><span class="p">],</span> <span class="s2">&quot;centroids_hydroclass&quot;</span><span class="p">,</span> <span class="n">centroids_file</span>
+                <span class="p">)</span>
+
+            <span class="n">mass_centers</span><span class="p">,</span> <span class="n">hydro_names</span><span class="p">,</span> <span class="n">var_names</span> <span class="o">=</span> <span class="n">read_centroids</span><span class="p">(</span><span class="n">centroids_path</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">mass_centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
                     <span class="s2">&quot;Unable to read centroids file. &quot;</span>

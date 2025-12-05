@@ -648,21 +648,17 @@ parameters
    datatype : string. Dataset keyword
      | arbitrary data type supported by pyrad
    keep_in_memory : int. Dataset keyword
-     | if set keeps the icon data dict, the icon coordinates dict and
-     |     the icon field in radar coordinates in memory
+     | if set keeps the hzt data dict, the hzt coordinates dict and
+     |     the hzt field in radar coordinates in memory
    regular_grid : int. Dataset keyword
      | if set it is assume that the radar has a grid constant in time and
-     |     there is no need to compute a new icon field if the icon
+     |     there is no need to compute a new hzt field if the hzt
      |     data has not changed
-   icon_type : str. Dataset keyword
-     | name of the icon field to process. Default TEMP
-   icon_variables : list of strings. Dataset keyword
-     | Py-art name of the icon fields. Default temperature
 
 returns
    new_dataset : dict
      |     dictionary containing the output fields corresponding to
-     |     icon_variables
+     |     height over iso0
 
 HZT_LOOKUP
 """"""""""""""""""""""""""""""

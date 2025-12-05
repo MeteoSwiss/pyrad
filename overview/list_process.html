@@ -1621,26 +1621,18 @@
 </div>
 </dd>
 <dt>keep_in_memory<span class="classifier">int. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">if set keeps the icon data dict, the icon coordinates dict and</div>
+<div class="line">if set keeps the hzt data dict, the hzt coordinates dict and</div>
 <div class="line-block">
-<div class="line">the icon field in radar coordinates in memory</div>
+<div class="line">the hzt field in radar coordinates in memory</div>
 </div>
 </div>
 </dd>
 <dt>regular_grid<span class="classifier">int. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">if set it is assume that the radar has a grid constant in time and</div>
 <div class="line-block">
-<div class="line">there is no need to compute a new icon field if the icon</div>
+<div class="line">there is no need to compute a new hzt field if the hzt</div>
 <div class="line">data has not changed</div>
 </div>
-</div>
-</dd>
-<dt>icon_type<span class="classifier">str. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">name of the icon field to process. Default TEMP</div>
-</div>
-</dd>
-<dt>icon_variables<span class="classifier">list of strings. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">Py-art name of the icon fields. Default temperature</div>
 </div>
 </dd>
 </dl>
@@ -1648,7 +1640,7 @@
 <dt>returns</dt><dd><dl>
 <dt>new_dataset<span class="classifier">dict</span></dt><dd><div class="line-block">
 <div class="line">dictionary containing the output fields corresponding to</div>
-<div class="line">icon_variables</div>
+<div class="line">height over iso0</div>
 </div>
 </dd>
 </dl>

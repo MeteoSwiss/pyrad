@@ -421,6 +421,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.date_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">cftodatetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datatype_fields</span><span class="p">,</span> <span class="n">get_fieldname_pyart</span>
 
 
@@ -768,8 +769,8 @@
     <span class="n">ind_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">psr</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
     <span class="n">nrays</span> <span class="o">=</span> <span class="n">ind_ray</span><span class="o">.</span><span class="n">size</span>
 
-    <span class="n">time_poi</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-        <span class="n">psr</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">],</span> <span class="n">psr</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">psr</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">]</span>
+    <span class="n">time_poi</span> <span class="o">=</span> <span class="n">cftodatetime</span><span class="p">(</span>
+        <span class="n">num2date</span><span class="p">(</span><span class="n">psr</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">],</span> <span class="n">psr</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">psr</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">])</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">nrays</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">time_ref</span> <span class="o">=</span> <span class="n">time_poi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -833,7 +834,9 @@
     <span class="n">psr_poi</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="n">psr_poi</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrays</span><span class="p">)</span> <span class="o">+</span> <span class="n">el</span>
     <span class="p">)</span>
-    <span class="n">start_time</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">])</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">cftodatetime</span><span class="p">(</span>
+        <span class="n">num2date</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">psr_poi</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">])</span>
+    <span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrays</span><span class="p">):</span>
         <span class="n">psr_poi</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">psr_poi</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="p">(</span><span class="n">time_poi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>

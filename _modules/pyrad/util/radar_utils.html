@@ -917,7 +917,6 @@
 
     <span class="n">val_out_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">val_out_vec</span><span class="p">)</span>
     <span class="n">val_out_vec</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val_out_vec</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
-
     <span class="k">return</span> <span class="n">t_out_vec</span><span class="p">,</span> <span class="n">val_out_vec</span><span class="p">,</span> <span class="n">np_vec</span></div>
 
 
@@ -967,7 +966,11 @@
     <span class="p">)()</span>
     <span class="k">if</span> <span class="n">dropnan</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">df_out</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
-    <span class="n">t_out_vec</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+    <span class="n">t_out_vec</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz_convert</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
     <span class="n">val_out_vec</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">t_out_vec</span><span class="p">,</span> <span class="n">val_out_vec</span></div>
@@ -1065,7 +1068,11 @@
     <span class="n">df_out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">],</span> <span class="n">join</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dropnan</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">df_out</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
-    <span class="n">t_out_vec</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+    <span class="n">t_out_vec</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="n">df_out</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz_convert</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
     <span class="n">val1_out_vec</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">val2_out_vec</span> <span class="o">=</span> <span class="n">df_out</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
