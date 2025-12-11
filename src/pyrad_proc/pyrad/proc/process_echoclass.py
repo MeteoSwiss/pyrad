@@ -1663,14 +1663,14 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                     "Unable to read centroids file. "
                     + "Default centroids will be used in classification."
                 )
-                hydro_names = ("AG", "CR", "LR", "RP", "RN", "VI", "WS", "MH", "IH/HDG")
+                hydro_names = ("AG", "CR", "LR", "RP", "RN", "VI", "WS", "MH", "IH")
         else:
             warn(
                 "No centroids were specified. "
                 + "Default centroids will be used in classification."
             )
             mass_centers = None
-            hydro_names = ("AG", "CR", "LR", "RP", "RN", "VI", "WS", "MH", "IH/HDG")
+            hydro_names = ("AG", "CR", "LR", "RP", "RN", "VI", "WS", "MH", "IH")
 
         fields_dict = pyart.retrieve.hydroclass_semisupervised(
             radar,
@@ -1868,7 +1868,6 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 dscfg["HYDRO_METHOD"]
             )
         )
-
     return new_dataset, ind_rad
 
 

@@ -4692,7 +4692,6 @@ def generate_vol_products(dataset, prdcfg):
             return None
 
         print("saved file: " + fname)
-
         return fname
 
     if prdcfg["type"] == "SAVEALL" or prdcfg["type"] == "SAVEALL_VOL":
