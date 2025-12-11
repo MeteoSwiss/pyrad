@@ -2091,14 +2091,14 @@
                     <span class="s2">&quot;Unable to read centroids file. &quot;</span>
                     <span class="o">+</span> <span class="s2">&quot;Default centroids will be used in classification.&quot;</span>
                 <span class="p">)</span>
-                <span class="n">hydro_names</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH/HDG&quot;</span><span class="p">)</span>
+                <span class="n">hydro_names</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;No centroids were specified. &quot;</span>
                 <span class="o">+</span> <span class="s2">&quot;Default centroids will be used in classification.&quot;</span>
             <span class="p">)</span>
             <span class="n">mass_centers</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">hydro_names</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH/HDG&quot;</span><span class="p">)</span>
+            <span class="n">hydro_names</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH&quot;</span><span class="p">)</span>
 
         <span class="n">fields_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">hydroclass_semisupervised</span><span class="p">(</span>
             <span class="n">radar</span><span class="p">,</span>
@@ -2296,7 +2296,6 @@
                 <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;HYDRO_METHOD&quot;</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span>
-
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 

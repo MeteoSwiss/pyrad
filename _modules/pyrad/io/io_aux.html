@@ -640,15 +640,6 @@
     <span class="s2">&quot;propWS&quot;</span><span class="p">:</span> <span class="s2">&quot;proportion_WS&quot;</span><span class="p">,</span>
     <span class="s2">&quot;propMH&quot;</span><span class="p">:</span> <span class="s2">&quot;proportion_MH&quot;</span><span class="p">,</span>
     <span class="s2">&quot;propIH&quot;</span><span class="p">:</span> <span class="s2">&quot;proportion_IH&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probAG&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_AG&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probCR&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_CR&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probLR&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_LR&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probRP&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_RP&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probRN&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_RN&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probVI&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_VI&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probWS&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_WS&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probMH&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_MH&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;probIH&quot;</span><span class="p">:</span> <span class="s2">&quot;probability_IH&quot;</span><span class="p">,</span>
     <span class="s2">&quot;time_avg_flag&quot;</span><span class="p">:</span> <span class="s2">&quot;time_avg_flag&quot;</span><span class="p">,</span>
     <span class="s2">&quot;colocated_gates&quot;</span><span class="p">:</span> <span class="s2">&quot;colocated_gates&quot;</span><span class="p">,</span>
     <span class="s2">&quot;nsamples&quot;</span><span class="p">:</span> <span class="s2">&quot;number_of_samples&quot;</span><span class="p">,</span>
@@ -1244,14 +1235,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">hydro_data_py</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">hydro_data_op</span><span class="p">)</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">25</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># crystals</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># aggregate</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">75</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># light rain</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># rain</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">125</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># graupel</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">150</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># wet snow</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">175</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># ice hail</span>
-    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">200</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>  <span class="c1"># melting hail</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">25</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># crystals</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># aggregate</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">75</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># light rain</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># rain</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">125</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># graupel</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">150</span><span class="p">]</span> <span class="o">=</span> <span class="mi">7</span>  <span class="c1"># wet snow</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">175</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>  <span class="c1"># ice hail</span>
+    <span class="n">hydro_data_py</span><span class="p">[</span><span class="n">hydro_data_op</span> <span class="o">==</span> <span class="mi">200</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># melting hail</span>
 
     <span class="k">return</span> <span class="n">hydro_data_py</span></div>
 
