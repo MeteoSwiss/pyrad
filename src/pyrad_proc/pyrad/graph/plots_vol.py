@@ -57,6 +57,17 @@ except ImportError:
     warn("shapely not available", use_debug=False)
     _SHAPELY_AVAILABLE = False
 
+try:
+    import geopandas
+
+    _GEOPANDAS_AVAILABLE = True
+except ImportError:
+    warn(
+        "geopandas not available, you won't be able to display geojson files",
+        use_debug=False,
+    )
+    _GEOPANDAS_AVAILABLE = False
+
 # Test whether ARM or MCH fork of pyart
 if hasattr(pyart, "__ismchfork__"):
     _PYARTMCH_AVAILABLE = True
@@ -356,7 +367,6 @@ def plot_ppi_map(
     dpi = prdcfg["ppiMapImageConfig"].get("dpi", 72)
 
     norm, ticks, ticklabs = get_norm(field_name, field_dict=radar.fields[field_name])
-
     xsize = prdcfg["ppiMapImageConfig"]["xsize"]
     ysize = prdcfg["ppiMapImageConfig"]["ysize"]
     lonstep = prdcfg["ppiMapImageConfig"].get("lonstep", 0.5)
@@ -528,6 +538,35 @@ def plot_ppi_map(
                     category="physical", name="rivers_europe", scale=resolution
                 )
                 ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
+            elif (
+                _GEOPANDAS_AVAILABLE
+                and os.path.isfile(cartomap)
+                and cartomap.lower().endswith((".shp", ".geojson", ".json"))
+            ):
+                # --- VECTOR CARTOMAP (GeoPandas: SHP / GeoJSON / JSON) ---
+                try:
+                    gdf = geopandas.read_file(cartomap)
+                    # Detect / assume CRS if missing (Swiss datasets)
+                    if gdf.crs is None:
+                        xmin, ymin, xmax, ymax = gdf.total_bounds
+                        if xmin > 1e6:
+                            gdf = gdf.set_crs(epsg=2056)  # CH1903+ / LV95
+                        else:
+                            gdf = gdf.set_crs(epsg=21781)  # CH1903 / LV03
+
+                    # Reproject to WGS84 (what Cartopy expects)
+                    gdf = gdf.to_crs(epsg=4326)
+
+                    ax.add_geometries(
+                        gdf.geometry,
+                        crs=cartopy.crs.PlateCarree(),
+                        facecolor="none",
+                        edgecolor="black",
+                        linewidth=1.2,
+                    )
+
+                except Exception as e:
+                    warn(f"Failed to load cartomap {cartomap}: {e}")
             else:
                 warn(
                     "cartomap "
