@@ -1839,14 +1839,14 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 # re-mapping into semi-supervised classes
                 hydro_ukmo_aux = hydro_object.hydro_class
                 hydro_ukmo = np.ma.masked_all(hydro_ukmo_aux.shape, dtype=np.uint8)
-                hydro_ukmo[hydro_ukmo_aux == -1] = 1  # No data to NC
-                hydro_ukmo[hydro_ukmo_aux == 1] = 6  # RAIN to RN
-                hydro_ukmo[hydro_ukmo_aux == 2] = 8  # WET_SNOW to WS
-                hydro_ukmo[hydro_ukmo_aux == 3] = 2  # DRY_SNOW to AG
-                hydro_ukmo[hydro_ukmo_aux == 5] = 10  # HAIL to IH/HDG
-                hydro_ukmo[hydro_ukmo_aux == 6] = 4  # DRIZZLE to LR
-                hydro_ukmo[hydro_ukmo_aux == 7] = 3  # ICE to CR
-                hydro_ukmo[hydro_ukmo_aux == 8] = 5  # GRAUPEL to RP
+                hydro_ukmo[hydro_ukmo_aux == -1] = 0  # No data to NC
+                hydro_ukmo[hydro_ukmo_aux == 1] = 5  # RAIN to RN
+                hydro_ukmo[hydro_ukmo_aux == 2] = 7  # WET_SNOW to WS
+                hydro_ukmo[hydro_ukmo_aux == 3] = 1  # DRY_SNOW to AG
+                hydro_ukmo[hydro_ukmo_aux == 5] = 9  # HAIL to IH/HDG
+                hydro_ukmo[hydro_ukmo_aux == 6] = 3  # DRIZZLE to LR
+                hydro_ukmo[hydro_ukmo_aux == 7] = 2  # ICE to CR
+                hydro_ukmo[hydro_ukmo_aux == 8] = 4  # GRAUPEL to RP
             else:
                 hydro_ukmo = hydro_object.hydro_class
             new_dataset["radar_out"].fields[hydro_field]["data"][
