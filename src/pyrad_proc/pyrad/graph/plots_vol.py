@@ -368,7 +368,7 @@ def plot_ppi_map(
     alpha = prdcfg["ppiMapImageConfig"].get("alpha", 1)
     exact_limits = prdcfg["ppiMapImageConfig"].get("exact_limits", True)
     resolution = prdcfg["ppiMapImageConfig"].get("mapres", "110m")
-    maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
+    maps_list = prdcfg["ppiMapImageConfig"].get("maps", [])
     if resolution not in ("110m", "50m", "10m"):
         warn("Unknown map resolution: " + resolution)
         resolution = "110m"
