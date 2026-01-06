@@ -548,18 +548,17 @@ def plot_ppi_map(
                     gdf = geopandas.read_file(cartomap)
                     # Detect / assume CRS if missing (Swiss datasets)
                     if gdf.crs is None:
-                        xmin, ymin, xmax, ymax = gdf.total_bounds
+                        xmin, _, _, _ = gdf.total_bounds
                         if xmin > 1e6:
                             gdf = gdf.set_crs(epsg=2056)  # CH1903+ / LV95
                         else:
                             gdf = gdf.set_crs(epsg=21781)  # CH1903 / LV03
 
                     # Reproject to WGS84 (what Cartopy expects)
-                    gdf = gdf.to_crs(epsg=4326)
 
                     ax.add_geometries(
                         gdf.geometry,
-                        crs=cartopy.crs.PlateCarree(),
+                        crs=cartopy.crs.epsg(gdf.crs.to_epsg()),
                         facecolor="none",
                         edgecolor="black",
                         linewidth=1.2,
