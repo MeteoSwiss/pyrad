@@ -1643,6 +1643,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
         output_distances = dscfg.get("output_distances", False)
         vectorize = dscfg.get("vectorize", False)
         weights = dscfg.get("weights", np.array((1.0, 1.0, 1.0, 0.75, 0.5)))
+        weights = np.array(weights)
         freq = dscfg.get("frequency", None)
 
         # load centroids
