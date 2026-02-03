@@ -1,0 +1,46 @@
+dataSetList:
+- l0:dBZ
+- l0:V
+- l0:dealV
+dBZ:
+  type: RAW
+  datatype:
+  - RAD4ALP:dBZ
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dBZ
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dBZ
+V:
+  type: RAW
+  datatype:
+  - RAD4ALP:V
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: V
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: V
+dealV:
+  type: RAW
+  datatype:
+  - RAD4ALPDOPPLER:dealV
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dealV
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dealV

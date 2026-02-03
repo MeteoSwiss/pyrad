@@ -26,7 +26,6 @@ from ..io.io_aux import get_save_dir, make_filename
 from ..io.read_data_other import read_intercomp_scores_ts
 
 from ..io.write_data import write_colocated_gates, write_colocated_data
-from ..io.write_data import write_colocated_data_time_avg
 from ..io.write_data import write_intercomp_scores_ts
 
 from ..graph.plots import plot_scatter
@@ -110,7 +109,7 @@ def generate_intercomp_products(dataset, prdcfg):
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
-        'WRITE_INTERCOMP_TIME_AVG': Writes the time-averaged intercompared
+        'WRITE_INTERCOMP_WITH_QC': Writes the time-averaged intercompared
             data (gate positions, values, etc.) in a csv file.
             User defined parameters:
                 voltype: str
@@ -157,35 +156,9 @@ def generate_intercomp_products(dataset, prdcfg):
         )
 
         fname = savedir + fname[0]
+
         write_colocated_data(dataset["intercomp_dict"], fname)
-
         print("saved colocated data file: " + fname)
-
-        return fname
-
-    if prdcfg["type"] == "WRITE_INTERCOMP_TIME_AVG":
-        if dataset["final"]:
-            return None
-
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdname"],
-            timeinfo=dataset["timeinfo"],
-        )
-
-        fname = make_filename(
-            "colocated_data",
-            prdcfg["dstype"],
-            prdcfg["voltype"],
-            ["csv"],
-            timeinfo=dataset["timeinfo"],
-            timeformat="%Y%m%d",
-        )
-        fname = savedir + fname[0]
-        write_colocated_data_time_avg(dataset["intercomp_dict"], fname)
-        print("saved colocated time averaged data file: " + fname)
 
         return fname
 
@@ -195,11 +168,7 @@ def generate_intercomp_products(dataset, prdcfg):
             return None
 
         timeformat = "%Y%m%d"
-        if scatter_type == "instant":
-            timeformat = "%Y%m%d%H%M%S"
-            colname = "dBZavg"
-        else:
-            colname = "val"
+        colname = "val"
         if f"rad1_{colname}" not in dataset["intercomp_dict"]:
             return
 
@@ -250,6 +219,8 @@ def generate_intercomp_products(dataset, prdcfg):
                 f"colocated radar gates {rad1}-{rad2} \n {rangebin_info_title} "
                 + dataset["timeinfo"].strftime(timeformat)
             )
+            if transform_str != "x":
+                titl += f"\n f(x)={transform_str}"
 
             selection = np.logical_and(
                 dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
@@ -300,7 +271,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 + "\n"
             )
             if transform_str != "x":
-                field_name = f"{transform_str} of {field_name}"
+                field_name = f"f({field_name})"
             plot_scatter(
                 bin_edges1,
                 bin_edges2,

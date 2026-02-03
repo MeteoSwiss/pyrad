@@ -1,0 +1,388 @@
+dataSetList:
+- l0:TEMP
+- l0:SNRh
+- l0:RhoHV
+- l1:echoID
+- l2:echoFilter
+- l3:SNRFilter
+- l4:PhiDPc_smooth2w
+- l5:KDPc_Vulpiani
+- l5:Att_ZPhi
+- l6:hydroclass
+- l7:ml_Giangrande
+- l8:ml_Giangrande_plots
+- l9:ml_wolf
+- l10:ml_wolf_plots
+- l11:ml_hydro
+- l12:ml_hydro_plots
+TEMP:
+  type: COSMO_LOOKUP
+  datatype:
+  - RAD4ALP:dBZ
+  cosmo_type: TEMP
+  regular_grid: 1
+  lookup_table: 1
+  MAKE_GLOBAL: 1
+SNRh:
+  type: SNR
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:Nh
+  output_type: SNRh
+  MAKE_GLOBAL: 1
+RhoHV:
+  type: RHOHV_CORRECTION
+  datatype:
+  - RAD4ALP:uRhoHV
+  - RAD4ALP:ZDR
+  - RAD4ALP:Nh
+  - RAD4ALP:Nv
+  - PROC:SNRh
+  MAKE_GLOBAL: 1
+echoID:
+  type: SAN
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:ZDR
+  - RAD4ALP:uPhiDP
+  - PROC:RhoHV
+  MAKE_GLOBAL: 1
+echoFilter:
+  type: ECHO_FILTER
+  datatype:
+  - PROC:echoID
+  - RAD4ALP:dBZ
+  - RAD4ALP:ZDR
+  - PROC:RhoHV
+  - RAD4ALP:uPhiDP
+  echo_type: 3
+  MAKE_GLOBAL: 1
+SNRFilter:
+  type: SNR_FILTER
+  datatype:
+  - PROC:SNRh
+  - PROC:PhiDPc
+  SNRmin: 10.0
+  MAKE_GLOBAL: 1
+PhiDPc_smooth2w:
+  type: PHIDP_SMOOTH_2W
+  datatype:
+  - PROC:PhiDPc
+  - PROC:dBZc
+  rmin: 1000.0
+  rmax: 50000.0
+  rcell: 1000.0
+  Zmin: 20.0
+  Zmax: 40.0
+  rwinds: 1000.0
+  rwindl: 3000.0
+  Zthr: 40.0
+  MAKE_GLOBAL: 1
+KDPc_Vulpiani:
+  type: PHIDP_KDP_VULPIANI
+  datatype:
+  - PROC:PhiDPc
+  rwind: 1000.0
+  n_iter: 6
+  interp: 0
+  parallel: 0
+  get_phidp: 0
+  MAKE_GLOBAL: 1
+Att_ZPhi:
+  type: ATTENUATION
+  datatype:
+  - PROC:dBZc
+  - PROC:ZDRc
+  - PROC:PhiDPc
+  - PROC:TEMP
+  ATT_METHOD: ZPhi
+  fzl: 2000.0
+  MAKE_GLOBAL: 1
+hydroclass:
+  type: HYDROCLASS
+  datatype:
+  - PROC:dBZc
+  - PROC:ZDRc
+  - PROC:RhoHVc
+  - PROC:KDPc
+  - PROC:TEMP
+  HYDRO_METHOD: SEMISUPERVISED
+  RADARCENTROIDS: A
+  MAKE_GLOBAL: 1
+ml_Giangrande:
+  type: ML_DETECTION
+  ML_METHOD: GIANGRANDE
+  datatype:
+  - PROC:dBZc
+  - PROC:ZDRc
+  - PROC:RhoHVc
+  - PROC:TEMP
+  get_iso0: 1
+  MAKE_GLOBAL: 1
+  products:
+    EL005_5_ml:
+      type: PPI_IMAGE
+      anglenr: 7
+      voltype: ml
+    AZ093_ml:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: ml
+    EL005_5_H_ISO0:
+      type: PPI_IMAGE
+      anglenr: 7
+      voltype: H_ISO0
+    AZ093_H_ISO0:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: H_ISO0
+    ML_TS:
+      type: ML_TS
+    SAVE_ML:
+      type: SAVE_ML
+ml_Giangrande_plots:
+  type: RAW
+  datatype:
+  - PROC:dBZc
+  - PROC:RhoHVc
+  - PROC:ZDRc
+  - PROC:ml
+  products:
+    EL005_5_dBZc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: dBZc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_dBZc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: dBZc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    EL005_5_RhoHVc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: RhoHVc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_RhoHVc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: RhoHVc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    EL005_5_ZDRc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: ZDRc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_ZDRc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: ZDRc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+ml_wolf:
+  type: ML_DETECTION
+  ML_METHOD: WOLFENSBERGER
+  datatype:
+  - PROC:dBZc
+  - PROC:RhoHVc
+  max_range: 20000.0
+  detect_threshold: 0.02
+  interp_holes: 0
+  max_length_holes: 250.0
+  check_min_length: 1
+  MAKE_GLOBAL: 1
+  products:
+    EL005_5_ml:
+      type: PPI_IMAGE
+      anglenr: 7
+      voltype: ml
+    AZ093_ml:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: ml
+    EL005_5_H_ISO0:
+      type: PPI_IMAGE
+      anglenr: 7
+      voltype: H_ISO0
+    AZ093_H_ISO0:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: H_ISO0
+    ML_TS:
+      type: ML_TS
+    SAVE_ML:
+      type: SAVE_ML
+ml_wolf_plots:
+  type: RAW
+  datatype:
+  - PROC:dBZc
+  - PROC:RhoHVc
+  - PROC:ZDRc
+  - PROC:ml
+  products:
+    EL005_5_dBZc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: dBZc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_dBZc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: dBZc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    EL005_5_RhoHVc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: RhoHVc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_RhoHVc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: RhoHVc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    EL005_5_ZDRc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: ZDRc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_ZDRc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: ZDRc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+ml_hydro:
+  type: ML_DETECTION
+  ML_METHOD: FROM_HYDROCLASS
+  datatype:
+  - PROC:hydro
+  force_continuity: 1
+  dist_max: 350.0
+  get_iso0: 1
+  MAKE_GLOBAL: 1
+  products:
+    EL005_5_ml:
+      type: PPI_IMAGE
+      anglenr: 7
+      voltype: ml
+    AZ093_ml:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: ml
+    EL005_5_H_ISO0:
+      type: PPI_IMAGE
+      anglenr: 7
+      voltype: H_ISO0
+    AZ093_H_ISO0:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: H_ISO0
+    ML_TS:
+      type: ML_TS
+    SAVE_ML:
+      type: SAVE_ML
+ml_hydro_plots:
+  type: RAW
+  datatype:
+  - PROC:dBZc
+  - PROC:RhoHVc
+  - PROC:ZDRc
+  - PROC:ml
+  products:
+    EL005_5_dBZc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: dBZc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_dBZc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: dBZc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    EL005_5_RhoHVc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: RhoHVc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_RhoHVc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: RhoHVc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    EL005_5_ZDRc:
+      type: PPI_CONTOUR_OVERPLOT
+      anglenr: 7
+      voltype: ZDRc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0
+    AZ093_ZDRc:
+      type: PSEUDORHI_CONTOUR_OVERPLOT
+      angle: 93.0
+      AziTol: 1.0
+      voltype: ZDRc
+      contourtype: ml
+      contour_values:
+      - 2.0
+      - 4.0

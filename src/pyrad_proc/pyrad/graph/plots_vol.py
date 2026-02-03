@@ -229,9 +229,15 @@ def plot_ppi(
         ticks = None
         ticklabs = None
         if vmin is None or vmax is None:
-            norm, ticks, ticklabs = get_norm(
-                field_name, field_dict=radar.fields[field_name]
-            )
+            if isinstance(field_name, (tuple, list)):  #  rgb case
+                norm, ticks, ticklabs = get_norm(
+                    field_name[0], field_dict=radar.fields[field_name[0]]
+                )
+            else:
+                norm, ticks, ticklabs = get_norm(
+                    field_name, field_dict=radar.fields[field_name]
+                )
+
             vmin = None
             vmax = None
 
@@ -366,7 +372,15 @@ def plot_ppi_map(
 
     dpi = prdcfg["ppiMapImageConfig"].get("dpi", 72)
 
-    norm, ticks, ticklabs = get_norm(field_name, field_dict=radar.fields[field_name])
+    if isinstance(field_name, (tuple, list)):  #  rgb case
+        norm, ticks, ticklabs = get_norm(
+            field_name[0], field_dict=radar.fields[field_name[0]]
+        )
+    else:
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=radar.fields[field_name]
+        )
+
     xsize = prdcfg["ppiMapImageConfig"]["xsize"]
     ysize = prdcfg["ppiMapImageConfig"]["ysize"]
     lonstep = prdcfg["ppiMapImageConfig"].get("lonstep", 0.5)
@@ -560,7 +574,7 @@ def plot_ppi_map(
                         gdf.geometry,
                         crs=cartopy.crs.epsg(gdf.crs.to_epsg()),
                         facecolor="none",
-                        edgecolor="black",
+                        edgecolor="gray",
                         linewidth=1.2,
                     )
                 except Exception as e:
@@ -651,9 +665,15 @@ def plot_rhi(
         ticks = None
         ticklabs = None
         if vmin is None or vmax is None:
-            norm, ticks, ticklabs = get_norm(
-                field_name, field_dict=radar.fields[field_name]
-            )
+            if isinstance(field_name, (tuple, list)):  #  rgb case
+                norm, ticks, ticklabs = get_norm(
+                    field_name[0], field_dict=radar.fields[field_name[0]]
+                )
+            else:
+                norm, ticks, ticklabs = get_norm(
+                    field_name, field_dict=radar.fields[field_name]
+                )
+
             vmin = None
             vmax = None
 
@@ -788,9 +808,14 @@ def plot_bscope(
     ticks = None
     ticklabs = None
     if vmin is None or vmax is None:
-        norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=radar.fields[field_name]
-        )
+        if isinstance(field_name, (tuple, list)):  #  rgb case
+            norm, ticks, ticklabs = get_norm(
+                field_name[0], field_dict=radar.fields[field_name[0]]
+            )
+        else:
+            norm, ticks, ticklabs = get_norm(
+                field_name, field_dict=radar.fields[field_name]
+            )
 
         if norm is None:  # if norm is set do not override with vmin/vmax
             vmin, vmax = pyart.config.get_field_limits(field_name)
@@ -1551,7 +1576,14 @@ def plot_cappi(
         list of names of the saved plots or handle of the figure an axes
 
     """
-    norm, ticks, ticklabs = get_norm(field_name, field_dict=radar.fields[field_name])
+    if isinstance(field_name, (tuple, list)):  #  rgb case
+        norm, ticks, ticklabs = get_norm(
+            field_name[0], field_dict=radar.fields[field_name[0]]
+        )
+    else:
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=radar.fields[field_name]
+        )
 
     xmin = prdcfg["ppiImageConfig"]["xmin"]
     xmax = prdcfg["ppiImageConfig"]["xmax"]
@@ -1646,7 +1678,6 @@ def plot_cappi(
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
-
         return fname_list
 
     return (fig, ax)
@@ -1719,9 +1750,15 @@ def plot_xsection(
     ticks = None
     ticklabs = None
     if vmin is None or vmax is None:
-        norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=radar.fields[field_name]
-        )
+        if isinstance(field_name, (tuple, list)):  #  rgb case
+            norm, ticks, ticklabs = get_norm(
+                field_name[0], field_dict=radar.fields[field_name[0]]
+            )
+        else:
+            norm, ticks, ticklabs = get_norm(
+                field_name, field_dict=radar.fields[field_name]
+            )
+
         vmin = None
         vmax = None
 
@@ -1766,8 +1803,6 @@ def plot_xsection(
         return fname_list
 
     return (fig, ax)
-
-    return fname_list
 
 
 def plot_traj(

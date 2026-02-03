@@ -1,0 +1,16 @@
+name: dda_doppler
+datapath:
+- /store/msrad/radar/rad4alp/rawdata/
+- /store/msrad/radar/DX50/rawdata/
+loadbasepath:
+- /store/msrad/radar/pyrad_products/
+- /store/msrad/radar/pyrad_products/
+loadname:
+- dda_doppler_A
+- dda_doppler_DX50
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+saveimg: 1
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/processing/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/dda_example_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/dda_example_prod.txt

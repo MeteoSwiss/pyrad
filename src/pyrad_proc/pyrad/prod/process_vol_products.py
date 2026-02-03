@@ -72,8 +72,8 @@ def generate_vol_products(dataset, prdcfg):
 
         'CDF': plots and writes the cumulative density function of data
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 quantiles: list of floats
                     The quantiles to compute in percent. Default None
                 sector: dict
@@ -105,8 +105,9 @@ def generate_vol_products(dataset, prdcfg):
                     Default empty list.
         'BSCOPE_IMAGE': Creates a B-scope image (azimuth, range)
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 anglenr : int
                     The elevation angle number to use
                 ray_dim : str
@@ -120,8 +121,9 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'CAPPI_IMAGE': Creates a CAPPI image
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 altitude: flt
                     CAPPI altitude [m MSL]
                 wfunc: str
@@ -132,8 +134,9 @@ def generate_vol_products(dataset, prdcfg):
         'CROSS_SECTION' : Plots a cross-section of polar data through
             arbitrary coordinates
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 coord1, coord2, ..., coordN: dict
                     The two lat-lon coordinates marking the limits. They have
                     the keywords 'lat' and 'lon' [degree].
@@ -153,8 +156,8 @@ def generate_vol_products(dataset, prdcfg):
                     must be in the dempath specified in the main config file
         'FIELD_COVERAGE': Gets the field coverage over a certain sector
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 threshold: float or None
                     Minimum value to consider the data valid. Default None
                 nvalid_min: float
@@ -178,8 +181,9 @@ def generate_vol_products(dataset, prdcfg):
                     a fixed grid
         'FIXED_RNG_IMAGE': Plots a fixed range image
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 AngTol : float
                     The tolerance between the nominal angles and the actual
                     radar angles. Default 1.
@@ -192,8 +196,8 @@ def generate_vol_products(dataset, prdcfg):
         'FIXED_RNG_SPAN_IMAGE': Plots a user-defined statistic over a fixed
             range image
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 AngTol : float
                     The tolerance between the nominal angles and the actual
                     radar angles. Default 1.
@@ -205,8 +209,8 @@ def generate_vol_products(dataset, prdcfg):
                     'mode'. Default 'max'
         'HISTOGRAM': Computes a histogram of the radar volume data
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 step: float or None
                     the data quantization step. If none it will be obtained
                     from the Py-ART configuration file
@@ -215,8 +219,8 @@ def generate_vol_products(dataset, prdcfg):
         'PLOT_ALONG_COORD': Plots the radar volume data along a particular
             coordinate
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 colors: list of str or None
                     The colors of each ploted line
                 data_on_y : bool
@@ -250,8 +254,8 @@ def generate_vol_products(dataset, prdcfg):
             sunscan.
         'PPI_CONTOUR': Plots a PPI countour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -263,8 +267,8 @@ def generate_vol_products(dataset, prdcfg):
         'PPI_CONTOUR_OVERPLOT': Plots a PPI of a field with another field
             overplotted as a contour plot.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -276,8 +280,9 @@ def generate_vol_products(dataset, prdcfg):
         'PPI_IMAGE': Plots a PPI image. It can also plot the histogram and the
             quantiles of the data in the PPI.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 anglenr: float
                     The elevation angle number
                 plot_type: str
@@ -302,8 +307,9 @@ def generate_vol_products(dataset, prdcfg):
             type of maps used are defined in the variables 'mapres' and 'maps'
             in 'ppiMapImageConfig' in the loc config file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 anglenr: float
                     The elevation angle number
                 vmin, vmax : float or None
@@ -314,15 +320,15 @@ def generate_vol_products(dataset, prdcfg):
             type of maps used are defined in the variables 'mapres' and 'maps'
             in 'ppiMapImageConfig' in the loc config file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 anglenr: float
                     The elevation angle number
         'PROFILE_STATS': Computes and plots a vertical profile statistics.
             The statistics are saved in a csv file
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 heightResolution: float
                     The height resolution of the profile [m]. Default 100.
                 heightMin, heightMax: float or None
@@ -351,8 +357,8 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'PSEUDOPPI_CONTOUR': Plots a pseudo-PPI countour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -367,8 +373,8 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDOPPI_CONTOUR_OVERPLOT': Plots a pseudo-PPI of a field with
             another field over-plotted as a contour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -383,8 +389,9 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDOPPI_IMAGE': Plots a pseudo-PPI image. It can also plot the
             histogram and the quantiles of the data in the pseudo-PPI.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 angle: float
                     The elevation angle of the pseudo-PPI
                 EleTol: float
@@ -408,8 +415,9 @@ def generate_vol_products(dataset, prdcfg):
             resolution and the type of maps used are defined in the variables
             'mapres' and 'maps' in 'ppiMapImageConfig' in the loc config file.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 angle: float
                     The elevation angle of the pseudo-PPI
                 EleTol: float
@@ -420,8 +428,8 @@ def generate_vol_products(dataset, prdcfg):
                     are taken from the Py-ART config file
         'PSEUDORHI_CONTOUR': Plots a pseudo-RHI countour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -436,8 +444,8 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDORHI_CONTOUR_OVERPLOT': Plots a pseudo-RHI of a field with
             another field over-plotted as a contour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -452,8 +460,9 @@ def generate_vol_products(dataset, prdcfg):
         'PSEUDORHI_IMAGE': Plots a pseudo-RHI image. It can also plot the
             histogram and the quantiles of the data in the pseudo-RHI.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 angle: float
                     The azimuth angle at which to compute the RPI
                 AziTol: float
@@ -475,8 +484,8 @@ def generate_vol_products(dataset, prdcfg):
                     are taken from the Py-ART config file
         'QUANTILES': Plots and writes the quantiles of a radar volume
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 quantiles: list of floats or None
                     the list of quantiles to compute. If None a default list
                     of quantiles will be computed.
@@ -491,8 +500,8 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'RHI_CONTOUR': Plots an RHI countour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -504,8 +513,8 @@ def generate_vol_products(dataset, prdcfg):
         'RHI_CONTOUR_OVERPLOT': Plots an RHI of a field with another field
             over-plotted as a contour plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 contour_values: list of floats or None
                     The list of contour values to plot. If None the contour
                     values are going to be obtained from the Py-ART config
@@ -517,8 +526,9 @@ def generate_vol_products(dataset, prdcfg):
         'RHI_IMAGE': Plots an RHI image. It can also plot the
             histogram and the quantiles of the data in the RHI.
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 anglenr: int
                     The azimuth angle number
                 plot_type: str
@@ -540,8 +550,8 @@ def generate_vol_products(dataset, prdcfg):
             an RHI.
             The statistics are saved in a csv file
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 rangeStart, rangeStop: float
                     The range start and stop of the data to extract from the
                     RHI to compute the statistics [m]. Default 0., 25000.
@@ -573,8 +583,8 @@ def generate_vol_products(dataset, prdcfg):
                     config file
         'SAMPLES_HISTOGRAM': Computes a histogram of the number of samples used
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 step: float or None
                     the data quantization step. If none it will be obtained
                     from the Py-ART configuration file
@@ -658,14 +668,16 @@ def generate_vol_products(dataset, prdcfg):
                     level).
         'SAVEVOL_CSV': Saves one field of a radar volume data in a CSV file
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 ignore_masked: bool
                     If True masked values will not be saved. Default False
         'SAVEVOL_KML': Saves one field of a radar volume data in a KML file
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 ignore_masked: bool
                     If True masked values will not be saved. Default False
                 azi_res : float or None
@@ -676,8 +688,9 @@ def generate_vol_products(dataset, prdcfg):
             dataset, as there is no ambiguity with SAVEVOL for GRID datasets
         'SAVE_FIXED_ANGLE': Saves the position of the first fix angle in a csv file
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str or list of str
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
         'SELFCONSISTENCY': Plots a ZDR versus KDP/ZH histogram of data.
             User defined parameters:
                 retrieve_relation : bool
@@ -699,8 +712,8 @@ def generate_vol_products(dataset, prdcfg):
                     number of gates at each bin. Default True
         'TIME_RANGE': Plots a time-range/azimuth/elevation plot
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 anglenr: float
                     The number of the fixed angle to plot
                 vmin, vmax: float or None
@@ -711,8 +724,8 @@ def generate_vol_products(dataset, prdcfg):
             Meant primarily for writing and plotting the results of the
             SELFCONSISTENCY2 algorithm
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 ref_value: float
                     The reference value. Default 0
                 sort_by_date: Bool
@@ -782,8 +795,8 @@ def generate_vol_products(dataset, prdcfg):
             sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and
             additional quantiles
             User defined parameters:
-                voltype: name of the pyrad variable to use, it must be available
-                    in the dataset
+                voltype: str
+                    Name of the pyrad variable to use, it must be a voltype available in the dataset
                 ele_min: float
                     Max elevation angle defining the sector [deg].
                     Default 0.
@@ -890,8 +903,10 @@ def generate_vol_products(dataset, prdcfg):
         return fname_list
 
     if prdcfg["type"] == "PPI_IMAGE":
+        fields = dataset["radar_out"].fields
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -915,7 +930,9 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             "ppi",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="el" + "{:.1f}".format(el),
             timeinfo=prdcfg["timeinfo"],
@@ -939,7 +956,9 @@ def generate_vol_products(dataset, prdcfg):
                 + make_filename(
                     "ppi",
                     prdcfg["dstype"],
-                    prdcfg["voltype"],
+                    "RGB"
+                    if isinstance(prdcfg["voltype"], (tuple, list))
+                    else prdcfg["voltype"],
                     ["csv"],
                     prdcfginfo="el" + "{:.1f}".format(el),
                     timeinfo=prdcfg["timeinfo"],
@@ -967,7 +986,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDOPPI_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -999,7 +1020,9 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 "ppi",
                 prdcfg["dstype"],
-                prdcfg["voltype"],
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"],
                 prdcfg["imgformat"],
                 prdcfginfo="el" + "{:.1f}".format(prdcfg["angle"]),
                 timeinfo=prdcfg["timeinfo"],
@@ -1037,7 +1060,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PPI_MAP":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1063,7 +1088,9 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             "ppi_map",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="el" + "{:.1f}".format(el),
             timeinfo=prdcfg["timeinfo"],
@@ -1089,7 +1116,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PPI_CONTOUR_OVERPLOT":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1169,7 +1198,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PPIMAP_ROI_OVERPLOT":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1226,7 +1257,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDOPPI_CONTOUR_OVERPLOT":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1310,7 +1343,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PPI_CONTOUR":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1361,7 +1396,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDOPPI_CONTOUR":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1417,7 +1454,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "RHI_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1441,7 +1480,9 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             "rhi",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="az" + "{:.1f}".format(az),
             timeinfo=prdcfg["timeinfo"],
@@ -1476,7 +1517,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDORHI_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1508,7 +1551,9 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 "rhi",
                 prdcfg["dstype"],
-                prdcfg["voltype"],
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"],
                 prdcfg["imgformat"],
                 prdcfginfo="az" + "{:.1f}".format(prdcfg["angle"]),
                 timeinfo=prdcfg["timeinfo"],
@@ -1545,7 +1590,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "RHI_CONTOUR_OVERPLOT":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1625,7 +1672,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDORHI_CONTOUR_OVERPLOT":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1708,7 +1757,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "RHI_CONTOUR":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1759,7 +1810,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDORHI_CONTOUR":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -1814,7 +1867,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "RHI_PROFILE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -2013,7 +2068,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PROFILE_STATS":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -2706,7 +2763,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PSEUDOPPI_MAP":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -2758,7 +2817,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "CAPPI_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -2797,7 +2858,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "CROSS_SECTION":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -2897,7 +2960,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "FIXED_RNG_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -2952,7 +3017,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "FIXED_RNG_SPAN_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3008,7 +3075,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "PLOT_ALONG_COORD":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3250,7 +3319,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "BSCOPE_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3315,7 +3386,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "TIME_RANGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3377,7 +3450,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "HISTOGRAM":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3554,7 +3629,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "QUANTILES":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3653,7 +3730,9 @@ def generate_vol_products(dataset, prdcfg):
             warn("WRITE_MEAN product is deprecated, please use 'WRITE_STATS' instead")
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3764,7 +3843,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "FIELD_COVERAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -3966,7 +4047,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "CDF":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -4533,7 +4616,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "SAVEVOL_CSV":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -4577,7 +4662,9 @@ def generate_vol_products(dataset, prdcfg):
             return None
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -4641,7 +4728,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "SAVEVOL" or prdcfg["type"] == "SAVEVOL_VOL":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -4761,7 +4850,9 @@ def generate_vol_products(dataset, prdcfg):
             return None
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -5039,7 +5130,9 @@ def generate_vol_products(dataset, prdcfg):
 
     if prdcfg["type"] == "SAVE_FIXED_ANGLE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name

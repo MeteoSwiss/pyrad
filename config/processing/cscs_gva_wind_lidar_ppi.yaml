@@ -1,0 +1,12 @@
+name: gva_wind_lidar_ppi
+datapath: /users/wolfensb/wind_lidar/
+path_convention: ODIM
+psrpath: /store/msrad/radar/DX50/psr/
+cosmopath: /store/msrad/cosmo/
+loadbasepath: /store/msrad/radar/pyrad_products/
+loadname: gva_wind_lidar_ppi
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/gva_wind_lidar_ppi_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/gva_wind_lidar_ppi_prod.txt

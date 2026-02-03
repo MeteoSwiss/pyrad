@@ -216,7 +216,7 @@ def parse_math_expression(expr):
 
     def eval_(node, x):
         if isinstance(node, ast.Constant):  # Numeric literals
-            return node.n
+            return node.value
         elif isinstance(node, ast.BinOp):  # Binary operations (e.g., +, -, *, **)
             return operators[type(node.op)](eval_(node.left, x), eval_(node.right, x))
         elif isinstance(node, ast.UnaryOp):  # Unary operations (e.g., -x)

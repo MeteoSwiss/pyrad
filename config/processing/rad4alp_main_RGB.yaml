@@ -1,0 +1,7 @@
+# Plots different RGB plots on MeteoSwiss radar data
+name: lsn_event_RGB_plots
+datapath: /store_new/mch/msrad/radar/rad4alp/rawdata/
+saveimgbasepath: /store_new/mch/msrad/pyrad_outputs/
+imgformat: png
+locationConfigFile: rad4alp_loc_RGB.yaml
+productConfigFile: rad4alp_prod_RGB.yaml

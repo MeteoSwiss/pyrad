@@ -1,0 +1,567 @@
+dataSetList:
+- l0:hydroMF_semisupervised
+- l0:hydro_fromMF_semisupervised
+dBuZ:
+  type: RAW
+  datatype: ODIM:dBuZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: dBuZ
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: dBuZ
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: dBuZ
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: dBuZ
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: dBuZ
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: dBuZ
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: dBuZ
+      angle: 90.0
+      AziTol: 0.5
+dBZ:
+  type: RAW
+  datatype: ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: dBZ
+      angle: 90.0
+      AziTol: 0.5
+ZDR:
+  type: RAW
+  datatype: ODIM:ZDR,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: ZDR
+      angle: 90.0
+      AziTol: 0.5
+RhoHV:
+  type: RAW
+  datatype: ODIM:RhoHV,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: RhoHV
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: RhoHV
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: RhoHV
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: RhoHV
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: RhoHV
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: RhoHV
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: RhoHV
+      angle: 90.0
+      AziTol: 0.5
+PhiDP:
+  type: RAW
+  datatype: ODIM:PhiDP,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: PhiDP
+      angle: 90.0
+      AziTol: 0.5
+KDP:
+  type: RAW
+  datatype: ODIM:KDP,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: KDP
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: KDP
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: KDP
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: KDP
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: KDP
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: KDP
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: KDP
+      angle: 90.0
+      AziTol: 0.5
+PIA:
+  type: RAW
+  datatype: ODIM:PIA,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: PIA
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: PIA
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: PIA
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: PIA
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: PIA
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: PIA
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: PIA
+      angle: 90.0
+      AziTol: 0.5
+V:
+  type: RAW
+  datatype: ODIM:V,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: V
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: V
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: V
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: V
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: V
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: V
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: V
+      angle: 90.0
+      AziTol: 0.5
+H_ISO0:
+  type: ISO0_MF
+  datatype: ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  iso0_statistic: avg_by_dist
+  MAKE_GLOBAL: 1
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: H_ISO0
+      angle: 90.0
+      AziTol: 0.5
+H_ISO0_GRIB:
+  type: ISO0_GRIB
+  datatype: ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  MAKE_GLOBAL: 1
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: H_ISO0
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: H_ISO0
+      angle: 90.0
+      AziTol: 0.5
+hydroMF:
+  type: RAW
+  datatype: ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: hydroMF
+      angle: 90.0
+      AziTol: 0.5
+hydro_fromMF:
+  type: hydroMF_to_hydro
+  datatype: ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: hydro
+      angle: 90.0
+      AziTol: 0.5
+hydroMF_semisupervised:
+  type: RAW
+  datatype: ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: hydroMF
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: hydroMF
+      angle: 90.0
+      AziTol: 0.5
+hydro_fromMF_semisupervised:
+  type: hydroMF_to_hydro
+  datatype: ODIM:hydroMF,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: hydro
+      angle: 90.0
+      AziTol: 0.5
+hydro_semisupervised:
+  type: HYDROCLASS
+  datatype:
+  - ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - ODIM:ZDR,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - ODIM:RhoHV,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - ODIM:KDP,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - PROC:H_ISO0
+  HYDRO_METHOD: SEMISUPERVISED
+  RADARCENTROIDS: D
+  compute_entropy: 0
+  output_distances: 0
+  vectorize: 1
+  MAKE_GLOBAL: 0
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: hydro
+      angle: 90.0
+      AziTol: 0.5
+hydro_semisupervised_2d_iso:
+  type: HYDROCLASS
+  datatype:
+  - ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - ODIM:ZDR,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - ODIM:RhoHV,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - ODIM:KDP,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  - PROC:H_ISO0
+  HYDRO_METHOD: SEMISUPERVISED
+  RADARCENTROIDS: D
+  compute_entropy: 0
+  output_distances: 0
+  vectorize: 1
+  MAKE_GLOBAL: 0
+  products:
+    PPI_EL00:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 0
+    PPI_EL01:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 1
+    PPI_EL02:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 2
+    PPI_EL03:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 3
+    PPI_EL04:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 4
+    PPI_EL05:
+      type: PPI_IMAGE
+      voltype: hydro
+      anglenr: 5
+    RHI:
+      type: PSEUDORHI_IMAGE
+      voltype: hydro
+      angle: 90.0
+      AziTol: 0.5
+SAVEVOL:
+  type: NCVOL
+  datatype:
+  - ODIM:dBZ,D{%Y%m%d????00}-F{%Y%m%d%H%M00}
+  products:
+    NC:
+      type: SAVEALL
+      file_type: nc
+H5:
+  type: SAVEALL
+  file_type: h5

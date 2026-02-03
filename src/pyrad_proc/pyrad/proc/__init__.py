@@ -167,7 +167,7 @@ Monitoring, calibration and noise correction
     process_time_stats2
     process_colocated_gates
     process_intercomp
-    process_intercomp_time_avg
+    process_intercomp_with_QC
     process_fields_diff
     process_intercomp_fields
 
@@ -337,6 +337,7 @@ from .process_phase import process_phidp_kdp_lp, process_phidp_kdp_Maesaka  # no
 from .process_phase import process_phidp_kdp_Vulpiani  # noqa
 from .process_phase import process_phidp_kdp_Kalman  # noqa
 from .process_phase import process_attenuation  # noqa
+from .process_phase import process_kdp_operational_mch  # noqa
 
 from .process_calib import process_correct_bias, process_correct_noise_rhohv  # noqa
 from .process_calib import process_occurrence, process_occurrence_period  # noqa
@@ -347,7 +348,7 @@ from .process_calib import process_sunscan  # noqa
 from .process_intercomp import process_time_avg, process_weighted_time_avg  # noqa
 from .process_intercomp import process_time_avg_flag, process_time_stats  # noqa
 from .process_intercomp import process_colocated_gates, process_time_stats2  # noqa
-from .process_intercomp import process_intercomp, process_intercomp_time_avg  # noqa
+from .process_intercomp import process_intercomp, process_intercomp_with_QC  # noqa
 from .process_intercomp import process_fields_diff, process_intercomp_fields  # noqa
 
 from .process_monitoring import process_zdr_snow, process_zdr_precip  # noqa

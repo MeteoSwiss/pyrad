@@ -1,0 +1,11 @@
+name: sunscan
+datapath: /store/msrad/radar/DX50/rawdata/
+psrpath: /store/msrad/radar/DX50/psr/
+solarfluxpath: /store/msrad/radar/solar_flux/
+configpath: /users/wolfensb/pyrad/config/
+saveimg: 1
+saveimgbasepath: /scratch/mlainer/pyrad_products/
+imgformat: png
+locationConfigFile: /users/wolfensb/pyrad_prod/pyrad/config/processing/sunscan_loc.txt
+productConfigFile: /users/wolfensb/pyrad_prod/pyrad/config/processing/sunscan_prod.txt
+lastStateFile: /scratch/mlainer/sunscan_lastState.txt

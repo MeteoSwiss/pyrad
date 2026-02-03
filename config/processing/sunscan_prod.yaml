@@ -1,0 +1,56 @@
+dataSetList:
+- noise_h
+- noise_v
+- txpower
+noise_h:
+  type: SUNSCAN
+  datatype: PSR:NdBmh
+  sun_hit_method: PSR
+  elmin: 5.0
+  n_noise_bins: 8
+  noise_threshold: 1.5
+  max_fit_stddev: 0.8
+  do_second_noise_est: 'Yes'
+  n_indfar_bins: 10
+  products:
+    SUNLOG:
+      type: WRITE_SUNSCAN
+    AZ_EL:
+      type: PLOT_SUNSCAN
+      vmin: -108.0
+      vmax: -102.0
+    SAVESTATE:
+      type: SAVESTATE
+      voltype: dBZ
+noise_v:
+  type: SUNSCAN
+  datatype: PSR:NdBmv
+  sun_hit_method: PSR
+  elmin: 5.0
+  n_noise_bins: 8
+  noise_threshold: 1.5
+  max_fit_stddev: 0.8
+  do_second_noise_est: 'Yes'
+  n_indfar_bins: 10
+  products:
+    SUNLOG:
+      type: WRITE_SUNSCAN
+    AZ_EL:
+      type: PLOT_SUNSCAN
+      vmin: -108.0
+      vmax: -102.0
+txpower:
+  type: RAW
+  datatype: PSR:TXh
+  products:
+    AZ_EL:
+      type: PLOT_TXH
+    TXMEAN:
+      type: WRITE_MEAN
+      voltype: TXh
+      ele_min: 0.0
+      ele_max: 90.0
+      azi_min: 0.0
+      azi_max: 360.0
+      rmin: 0.0
+      rmax: 50.0

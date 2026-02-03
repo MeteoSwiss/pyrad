@@ -1,0 +1,62 @@
+NumRadars: 2
+TimeTol: 3600.0
+RadarName:
+- A
+- DX50
+RadarRes:
+- L
+- '-'
+ScanList:
+- RADAR001:001
+- RADAR001:002
+- RADAR001:003
+- RADAR001:004
+- RADAR001:005
+- RADAR001:006
+- RADAR001:007
+- RADAR001:008
+- RADAR001:009
+- RADAR001:010
+- RADAR001:011
+- RADAR001:012
+- RADAR001:013
+- RADAR001:014
+- RADAR001:015
+- RADAR001:016
+- RADAR001:017
+- RADAR001:018
+- RADAR001:019
+- RADAR001:020
+- RADAR002:MALS_MEI21_VOL.vol/
+ppiImageConfig:
+  xsize: 8.0
+  ysize: 7.0
+  xmin: -24.0
+  xmax: 0.0
+  ymin: -32.0
+  ymax: -8.0
+rhiImageConfig:
+  xsize: 10.0
+  ysize: 5.0
+  xmin: -20.0
+  xmax: 20.0
+  ymin: 0.0
+  ymax: 10.0
+gridMapImageConfig:
+  exact_limits: 1
+  xsize: 15.0
+  ysize: 12.0
+  lonmin: 7.8
+  lonmax: 8.4
+  lonstep: 0.2
+  latmin: 46.5
+  latmax: 47.0
+  latstep: 0.2
+  mapres: h
+  dpi: 72
+  maps:
+  - countries
+  - lakes_europe
+  - coastlines
+  - rivers
+  - rivers_europe

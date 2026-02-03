@@ -1,0 +1,12 @@
+name: gva_cloud_radar_mmclx
+datapath: /store/msrad/radar/GENEVA/cloud_radar/
+path_convention: ODIM
+psrpath: /store/msrad/radar/DX50/psr/
+cosmopath: /store/msrad/cosmo/
+loadbasepath: /store/msrad/radar/pyrad_products/
+loadname: gva_cloud_radar_mmclx
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/gva_cloud_radar_mmclx_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/gva_cloud_radar_mmclx_prod.txt

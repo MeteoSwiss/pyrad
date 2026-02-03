@@ -98,6 +98,7 @@ it is not necessarily defined in this file. The fields are described in the tabl
        - ymax: FLOAT: minimum displayed y-coordinate (altitude)
        - xmin: FLOAT: minimum displayed x-coordinate (distance at ground along RHI)
        - xmax: FLOAT: minimum displayed x-coordinate (distance at ground along RHI)
+       - aspect: FLOAT or STRING: aspect ratio of the RHI image, "auto", "equal" or a float. Default is "equal".
    * - ppiMapImageConfig
      - STRUCT
      - Structure defining the PPI image overlaid on a map (PPI_MAP product). It can contain the following keys:
@@ -112,7 +113,7 @@ it is not necessarily defined in this file. The fields are described in the tabl
        - resolution: INT: resolution of additional cartopy geodata, only "10m", "50m" or "110m" is supported
        - alpha: FLOAT: transparency value (between 0 and 1) of the displayed radar data, alpha smaller than 1 is required when plotting over a relief or OTM map
        - background_zoom: INT: Zoom level of the additional cartopy raster geodata, the higher the value, the higher the resolution (typically between 8 and 12). Default is 8.
-       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe.
+       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe, as well as any shapefile or geojson filename. Note that for custom geojson or shapefiles, geopandas is required.
        - rngRing: INT: if defined will plot range rings every x kilometers from the radar (x is the specified value)
    * - gridMapImageConfig
      - STRUCT
@@ -128,7 +129,7 @@ it is not necessarily defined in this file. The fields are described in the tabl
        - resolution: INT: resolution of additional cartopy geodata, only "10m", "50m" or "110m" is supported
        - alpha: FLOAT: transparency value (between 0 and 1) of the displayed radar data, alpha smaller than 1 is required when plotting over a relief or OTM map
        - background_zoom: INT: Zoom level of the additional cartopy raster geodata, the higher the value, the higher the resolution (typically between 8 and 12). Default is 8.
-       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe.
+       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe, as well as any shapefile or geojson filename. Note that for custom geojson or shapefiles, geopandas is required.
    * - xsecImageConfig
      - STRUCT
      - Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products). It can contain the following keys:
@@ -140,6 +141,7 @@ it is not necessarily defined in this file. The fields are described in the tabl
        - ymax: FLOAT: minimum displayed y-coordinate (altitude)
        - xmin: FLOAT: minimum displayed x-coordinate (distance at ground along cross-section)
        - xmax: FLOAT: minimum displayed x-coordinate (distance at ground along cross-section)
+       - aspect: FLOAT or STRING: aspect ratio of the cross-section image, "auto", "equal" or a float. Default is "equal".
    * - spectraImageConfig
      - STRUCT
      - Structure defining the Doppler spectral plots (radar observable as a function of altitude and velocity).  It can contain the following keys:

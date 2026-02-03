@@ -1,0 +1,11 @@
+name: MF
+datapath: /data/figuerasiventuraj/SERVAL/serval_data_test/DATA_OUT/produits_binaires/
+path_convention: ODIM
+loadbasepath: STRING /data/figuerasiventuraj/pyrad_products/
+loadname: MF
+saveimgbasepath: /data/figuerasiventuraj/pyrad_products/
+imgformat:
+- png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/mf_mtcy_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/mf_prod.txt

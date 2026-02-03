@@ -1,0 +1,29 @@
+NumRadars: 1
+ScanPeriod: 2.5
+CosmoRunFreq: 3
+CosmoForecasted: 7
+rhiImageConfig:
+  xsize: 10.0
+  ysize: 5.0
+gridMapImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  lonmin: 8.0
+  lonmax: 10.0
+  lonstep: 0.5
+  latmin: 47.0
+  latmax: 48.0
+  latstep: 0.5
+  mapres: h
+  dpi: 72
+  maps:
+  - countries
+  - provinces
+  - urban_areas
+  - roads
+  - railroads
+  - coastlines
+  - lakes
+  - lakes_europe
+  - rivers
+  - rivers_europe

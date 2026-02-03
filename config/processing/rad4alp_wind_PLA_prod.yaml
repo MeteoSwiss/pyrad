@@ -1,0 +1,65 @@
+dataSetList:
+- l0:dealV
+dealV:
+  type: RAW
+  datatype:
+  - RAD4ALPDOPPLER:dealV
+  products:
+    EL002_5_MAP:
+      type: PPI_MAP
+      anglenr: 4
+      voltype: dealV
+EL002_5:
+  type: PPI_IMAGE
+  anglenr: 4
+  voltype: dealV
+AZ093:
+  type: PSEUDORHI_IMAGE
+  angle: 93.0
+  AziTol: 1.0
+  voltype: dealV
+SAVEVOL:
+  type: SAVEVOL
+  voltype: dealV
+wind:
+  type: WIND_VEL
+  datatype:
+  - RAD4ALPDOPPLER:dealV
+  vert_proj: 0
+  MAKE_GLOBAL: 1
+  products:
+    EL002_5:
+      type: PPI_IMAGE
+      anglenr: 4
+      voltype: wind_vel_h_az
+    AZ093:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: wind_vel_h_az
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: wind_vel_h_az
+VP_Santis:
+  type: TIME_HEIGHT
+  datatype:
+  - RAD4ALPDOPPLER:dealV
+  - PROC:wind_vel_h_az
+  lon: 9.3393
+  lat: 47.2429
+  latlon_tol: 0.005
+  hres: 500.0
+  hmax: 12000.0
+  products:
+    TIME_HEIGHT_dealV:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: dealV
+    TIME_HEIGHT_wind_vel_h_az:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: wind_vel_h_az
+    SAVEVOL:
+      type: SAVEALL

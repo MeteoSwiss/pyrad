@@ -1,0 +1,58 @@
+NumRadars: 1
+RadarName: A
+RadarRes: L
+ScanList:
+- '001'
+- '002'
+- '003'
+- '004'
+- '005'
+- '006'
+- '007'
+- 008
+- 009
+- '010'
+- '011'
+- '012'
+- '013'
+- '014'
+- '015'
+- '016'
+- '017'
+- 018
+- 019
+- '020'
+ScanPeriod: 2.5
+CosmoRunFreq: 3
+CosmoForecasted: 7
+ppiImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  xmin: -70.0
+  xmax: 70.0
+  ymin: -70.0
+  ymax: 70.0
+rhiImageConfig:
+  xsize: 10.0
+  ysize: 6.0
+  xmin: -100.0
+  xmax: -55.0
+  ymin: 0.0
+  ymax: 10.0
+gridMapImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  lonmin: 7.4
+  lonmax: 8.4
+  lonstep: 0.1
+  latmin: 46.4
+  latmax: 47.1
+  latstep: 0.1
+  mapres: h
+  dpi: 72
+  maps:
+  - lakes_europe
+  - provinces
+  - coastlines
+  - rivers
+  - rivers_europe

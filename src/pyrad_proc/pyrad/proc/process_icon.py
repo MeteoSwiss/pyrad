@@ -334,7 +334,6 @@ def process_hzt(procstatus, dscfg, radar_list=None):
         if iso0_field is None:
             warn("Unable to obtain HZT fields")
             return None, None
-
     # prepare for exit
     new_dataset = {"radar_out": deepcopy(radar)}
     new_dataset["radar_out"].fields = dict()

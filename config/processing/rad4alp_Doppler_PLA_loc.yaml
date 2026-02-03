@@ -1,0 +1,85 @@
+NumRadars: 1
+TimeTol: 3600.0
+RadarName: A
+RadarRes: L
+rmax: 25000.0
+ScanList:
+- '001'
+- '002'
+- '003'
+- '004'
+- '005'
+- '006'
+- '007'
+- 008
+- 009
+- '010'
+- '011'
+- '012'
+- '013'
+- '014'
+- '015'
+- '016'
+- '017'
+- 018
+- 019
+- '020'
+ScanPeriod: 5
+CosmoRunFreq: 3
+CosmoForecasted: 7
+radconsth: 73.23
+radconstv: 73.33
+mflossh: 1.0
+mflossv: 1.0
+attg: 0.008
+RadarBeamwidth: 1.0
+AntennaGain: 45.0
+lrxh: 3.4
+lrxv: 3.5
+lradomeh: 0.2
+lradomev: 0.2
+ppiImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  xmin: -25.0
+  xmax: 25.0
+  ymin: -25.0
+  ymax: 25.0
+  rngRing: 5.0
+sunhitsImageConfig:
+  xsize: 8.0
+  ysize: 7.0
+  azmin: -2.0
+  azmax: 2.0
+  elmin: -2.0
+  elmax: 2.0
+  azres: 0.1
+  elres: 0.1
+ppiMapImageConfig:
+  rngRing: 20.0
+  xsize: 7.0
+  ysize: 7.0
+  lonmin: 7.19
+  lonmax: 9.83
+  latmin: 46.39
+  latmax: 48.18
+  mapres: 10m
+  maps:
+  - relief
+  - countries
+  - provinces
+  - urban_areas
+  - roads
+  - railroads
+  - coastlines
+  - lakes
+  - lakes_europe
+  - rivers
+  - rivers_europe
+rhiImageConfig:
+  xsize: 10.0
+  ysize: 5.0
+  xmin: -25.0
+  xmax: 0.0
+  ymin: 0.0
+  ymax: 5.0
