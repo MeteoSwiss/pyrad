@@ -44,7 +44,7 @@ Functions for writing pyrad output data
     write_intercomp_scores_ts
     write_colocated_gates
     write_colocated_data
-    write_colocated_data_time_avg
+    write_colocated_data_with_QC
     write_sun_hits
     write_sun_retrieval
 
@@ -2796,7 +2796,8 @@ def write_colocated_gates(coloc_gates, fname):
 
 def write_colocated_data(coloc_data, fname):
     """
-    Writes the data of gates colocated with two radars
+    Writes the time averaged data of gates colocated with two radars, if QC metadata
+    is available, it will be written as well.
 
     Parameters
     ----------
@@ -2809,224 +2810,44 @@ def write_colocated_data(coloc_data, fname):
     -------
     fname : str
         the name of the file where data has written
-
     """
-    filelist = glob.glob(fname)
-    if not filelist:
-        with open(fname, "w", newline="") as csvfile:
-            csvfile.write("# Colocated radar gates data file\n")
-            csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write("#\n")
 
-            fieldnames = [
-                "rad1_time",
-                "rad1_ray_ind",
-                "rad1_rng_ind",
-                "rad1_ele",
-                "rad1_azi",
-                "rad1_rng",
-                "rad1_val",
-                "rad2_time",
-                "rad2_ray_ind",
-                "rad2_rng_ind",
-                "rad2_ele",
-                "rad2_azi",
-                "rad2_rng",
-                "rad2_val",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writeheader()
-            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
-                writer.writerow(
-                    {
-                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
-                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
-                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
-                        "rad1_ele": coloc_data["rad1_ele"][i],
-                        "rad1_azi": coloc_data["rad1_azi"][i],
-                        "rad1_rng": coloc_data["rad1_rng"][i],
-                        "rad1_val": coloc_data["rad1_val"][i],
-                        "rad2_time": (
-                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
-                        ),
-                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
-                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
-                        "rad2_ele": coloc_data["rad2_ele"][i],
-                        "rad2_azi": coloc_data["rad2_azi"][i],
-                        "rad2_rng": coloc_data["rad2_rng"][i],
-                        "rad2_val": coloc_data["rad2_val"][i],
-                    }
-                )
+    file_exists = bool(glob.glob(fname))
+    dataset_dict = {
+        "rad1_time": pd.to_datetime(coloc_data["rad1_time"]).strftime("%Y%m%d%H%M%S"),
+        "rad1_ray_ind": coloc_data["rad1_ray_ind"],
+        "rad1_rng_ind": coloc_data["rad1_rng_ind"],
+        "rad1_ele": coloc_data["rad1_ele"],
+        "rad1_azi": coloc_data["rad1_azi"],
+        "rad1_rng": coloc_data["rad1_rng"],
+        "rad1_val": coloc_data.get("rad1_val"),
+        "rad2_time": pd.to_datetime(coloc_data["rad2_time"]).strftime("%Y%m%d%H%M%S"),
+        "rad2_ray_ind": coloc_data["rad2_ray_ind"],
+        "rad2_rng_ind": coloc_data["rad2_rng_ind"],
+        "rad2_ele": coloc_data["rad2_ele"],
+        "rad2_azi": coloc_data["rad2_azi"],
+        "rad2_rng": coloc_data["rad2_rng"],
+        "rad2_val": coloc_data["rad2_val"],
+    }
 
-            csvfile.close()
+    if "rad1_PhiDPavg" in coloc_data:  # QC data available
+        dataset_dict["rad1_PhiDPavg"] = coloc_data["rad1_PhiDPavg"]
+        dataset_dict["rad1_Flagavg"] = coloc_data["rad1_Flagavg"]
+        dataset_dict["rad2_PhiDPavg"] = coloc_data["rad2_PhiDPavg"]
+        dataset_dict["rad2_Flagavg"] = coloc_data["rad2_Flagavg"]
+
+    # Build dataframe
+    df = pd.DataFrame(dataset_dict)
+
+    # Write file
+    if not file_exists:
+        with open(fname, "w") as f:
+            f.write("# Colocated radar gates data file\n")
+            f.write('# Comment lines are preceded by "#"\n')
+            f.write("#\n")
+        df.to_csv(fname, mode="a", index=False)
     else:
-        with open(fname, "a", newline="") as csvfile:
-            fieldnames = [
-                "rad1_time",
-                "rad1_ray_ind",
-                "rad1_rng_ind",
-                "rad1_ele",
-                "rad1_azi",
-                "rad1_rng",
-                "rad1_val",
-                "rad2_time",
-                "rad2_ray_ind",
-                "rad2_rng_ind",
-                "rad2_ele",
-                "rad2_azi",
-                "rad2_rng",
-                "rad2_val",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
-                writer.writerow(
-                    {
-                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
-                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
-                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
-                        "rad1_ele": coloc_data["rad1_ele"][i],
-                        "rad1_azi": coloc_data["rad1_azi"][i],
-                        "rad1_rng": coloc_data["rad1_rng"][i],
-                        "rad1_val": coloc_data["rad1_val"][i],
-                        "rad2_time": (
-                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
-                        ),
-                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
-                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
-                        "rad2_ele": coloc_data["rad2_ele"][i],
-                        "rad2_azi": coloc_data["rad2_azi"][i],
-                        "rad2_rng": coloc_data["rad2_rng"][i],
-                        "rad2_val": coloc_data["rad2_val"][i],
-                    }
-                )
-            csvfile.close()
-
-    return fname
-
-
-def write_colocated_data_time_avg(coloc_data, fname):
-    """
-    Writes the time averaged data of gates colocated with two radars
-
-    Parameters
-    ----------
-    coloc_data : dict
-        dictionary containing the colocated data parameters
-    fname : str
-        file name where to store the data
-
-    Returns
-    -------
-    fname : str
-        the name of the file where data has written
-
-    """
-    filelist = glob.glob(fname)
-    if not filelist:
-        with open(fname, "w", newline="") as csvfile:
-            csvfile.write("# Colocated radar gates data file\n")
-            csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write("#\n")
-
-            fieldnames = [
-                "rad1_time",
-                "rad1_ray_ind",
-                "rad1_rng_ind",
-                "rad1_ele",
-                "rad1_azi",
-                "rad1_rng",
-                "rad1_dBZavg",
-                "rad1_PhiDPavg",
-                "rad1_Flagavg",
-                "rad2_time",
-                "rad2_ray_ind",
-                "rad2_rng_ind",
-                "rad2_ele",
-                "rad2_azi",
-                "rad2_rng",
-                "rad2_dBZavg",
-                "rad2_PhiDPavg",
-                "rad2_Flagavg",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writeheader()
-            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
-                writer.writerow(
-                    {
-                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
-                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
-                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
-                        "rad1_ele": coloc_data["rad1_ele"][i],
-                        "rad1_azi": coloc_data["rad1_azi"][i],
-                        "rad1_rng": coloc_data["rad1_rng"][i],
-                        "rad1_dBZavg": coloc_data["rad1_dBZavg"][i],
-                        "rad1_PhiDPavg": coloc_data["rad1_PhiDPavg"][i],
-                        "rad1_Flagavg": coloc_data["rad1_Flagavg"][i],
-                        "rad2_time": (
-                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
-                        ),
-                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
-                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
-                        "rad2_ele": coloc_data["rad2_ele"][i],
-                        "rad2_azi": coloc_data["rad2_azi"][i],
-                        "rad2_rng": coloc_data["rad2_rng"][i],
-                        "rad2_dBZavg": coloc_data["rad2_dBZavg"][i],
-                        "rad2_PhiDPavg": coloc_data["rad2_PhiDPavg"][i],
-                        "rad2_Flagavg": coloc_data["rad2_Flagavg"][i],
-                    }
-                )
-
-            csvfile.close()
-    else:
-        with open(fname, "a", newline="") as csvfile:
-            fieldnames = [
-                "rad1_time",
-                "rad1_ray_ind",
-                "rad1_rng_ind",
-                "rad1_ele",
-                "rad1_azi",
-                "rad1_rng",
-                "rad1_dBZavg",
-                "rad1_PhiDPavg",
-                "rad1_Flagavg",
-                "rad2_time",
-                "rad2_ray_ind",
-                "rad2_rng_ind",
-                "rad2_ele",
-                "rad2_azi",
-                "rad2_rng",
-                "rad2_dBZavg",
-                "rad2_PhiDPavg",
-                "rad2_Flagavg",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            for i, rad1_time in enumerate(coloc_data["rad1_time"]):
-                writer.writerow(
-                    {
-                        "rad1_time": rad1_time.strftime("%Y%m%d%H%M%S"),
-                        "rad1_ray_ind": coloc_data["rad1_ray_ind"][i],
-                        "rad1_rng_ind": coloc_data["rad1_rng_ind"][i],
-                        "rad1_ele": coloc_data["rad1_ele"][i],
-                        "rad1_azi": coloc_data["rad1_azi"][i],
-                        "rad1_rng": coloc_data["rad1_rng"][i],
-                        "rad1_dBZavg": coloc_data["rad1_dBZavg"][i],
-                        "rad1_PhiDPavg": coloc_data["rad1_PhiDPavg"][i],
-                        "rad1_Flagavg": coloc_data["rad1_Flagavg"][i],
-                        "rad2_time": (
-                            coloc_data["rad2_time"][i].strftime("%Y%m%d%H%M%S")
-                        ),
-                        "rad2_ray_ind": coloc_data["rad2_ray_ind"][i],
-                        "rad2_rng_ind": coloc_data["rad2_rng_ind"][i],
-                        "rad2_ele": coloc_data["rad2_ele"][i],
-                        "rad2_azi": coloc_data["rad2_azi"][i],
-                        "rad2_rng": coloc_data["rad2_rng"][i],
-                        "rad2_dBZavg": coloc_data["rad2_dBZavg"][i],
-                        "rad2_PhiDPavg": coloc_data["rad2_PhiDPavg"][i],
-                        "rad2_Flagavg": coloc_data["rad2_Flagavg"][i],
-                    }
-                )
-            csvfile.close()
-
+        df.to_csv(fname, mode="a", index=False, header=False)
     return fname
 
 

@@ -988,7 +988,7 @@ def read_colocated_data(fname):
         return (None,) * 14
 
 
-def read_colocated_data_time_avg(fname):
+def read_colocated_data_with_QC(fname):
     """
     Reads a CSV file containing time-averaged colocated data using pandas.
 
@@ -1025,7 +1025,7 @@ def read_colocated_data_time_avg(fname):
             to_masked_array("rad1_ele", dtype=float),
             to_masked_array("rad1_azi", dtype=float),
             to_masked_array("rad1_rng", dtype=float),
-            to_masked_array("rad1_dBZavg", dtype=float),
+            to_masked_array("rad1_val", dtype=float),
             to_masked_array("rad1_PhiDPavg", dtype=float),
             to_masked_array("rad1_Flagavg", dtype=float),
             to_masked_array("rad2_time"),
@@ -1034,7 +1034,7 @@ def read_colocated_data_time_avg(fname):
             to_masked_array("rad2_ele", dtype=float),
             to_masked_array("rad2_azi", dtype=float),
             to_masked_array("rad2_rng", dtype=float),
-            to_masked_array("rad2_dBZavg", dtype=float),
+            to_masked_array("rad2_val", dtype=float),
             to_masked_array("rad2_PhiDPavg", dtype=float),
             to_masked_array("rad2_Flagavg", dtype=float),
         )

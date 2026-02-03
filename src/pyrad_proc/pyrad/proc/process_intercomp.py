@@ -14,7 +14,7 @@ Functions used in the inter-comparison between radars
     process_time_avg_flag
     process_colocated_gates
     process_intercomp
-    process_intercomp_time_avg
+    process_intercomp_with_QC
     process_fields_diff
     process_intercomp_fields
 
@@ -33,7 +33,7 @@ from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.io_aux import get_save_dir, make_filename
 from ..io.read_data_other import read_colocated_gates, read_colocated_data
-from ..io.read_data_other import read_colocated_data_time_avg
+from ..io.read_data_other import read_colocated_data_with_QC
 from ..io.read_data_radar import interpol_field
 
 from ..util.radar_utils import time_avg_range, get_range_bins_to_avg
@@ -1923,75 +1923,31 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
         return new_dataset, None
 
 
-def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
+def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
     """
-    intercomparison between the average reflectivity of two radars.
+    Intercomparison between the time-averaged value of an arbitrary radar field
+    for two radars (at co-located gates), including QC based on PhiDP and a
+    time-averaging flag field.
 
-    Parameters
-    ----------
-    procstatus : int
-        Processing status: 0 initializing, 1 processing volume,
-        2 post-processing
-    dscfg : dictionary of dictionaries
-        data set configuration. Accepted Configuration Keywords::
+    Expected dscfg["datatype"] content (for each radar):
+      - one "main" datatype to be intercompared (ANY pyrad-supported datatype),
+      - one PhiDP datatype: "PhiDP" or "PhiDPc",
+      - one flag datatype: "time_avg_flag"
 
-        datatype : list of string. Dataset keyword
-            The input data types, must contain
-            dBZ" or "dBZc" or "dBuZ" or "dBZv" or "dBZvc" or "dBuZv, and,
-            "PhiDP" or "PhiDPc", and,
-            "time_avg_flag"
-            for the two radars
-        colocgatespath : string.
-            base path to the file containing the coordinates of the co-located
-            gates
-        coloc_data_dir : string. Dataset keyword
-            name of the directory containing the csv file with colocated data
-        coloc_radars_name : string. Dataset keyword
-            string identifying the radar names
-        rays_are_indexed : bool. Dataset keyword
-            If True it is considered that the rays are indexed and that the
-            data can be selected simply looking at the ray number.
-            Default false
-        azi_tol : float. Dataset keyword
-            azimuth tolerance between the two radars. Default 0.5 deg
-        ele_tol : float. Dataset keyword
-            elevation tolerance between the two radars. Default 0.5 deg
-        rng_tol : float. Dataset keyword
-            range tolerance between the two radars. Default 50 m
-        clt_max : int. Dataset keyword
-            maximum percentage of samples that can be clutter contaminated.
-            Default 100% i.e. all
-        phi_excess_max : int. Dataset keyword
-            maximum percentage of samples that can have excess instantaneous
-            PhiDP. Excess phidp is computed in the FLAG_TIME_AVG dataset, it corresponds to
-            an exceedance of a threshold in PhiDP at the native time resolution of the data
-            (no averaging). Default 100% i.e. all
-        non_rain_max : int. Dataset keyword
-            maximum percentage of samples that can be no rain. Default 100% i.e. all
-        phi_avg_max : float. Dataset keyword
-            maximum average (hourly) PhiDP in degrees allowed. This conditions differs from
-            phi_excess_max, because it concerns only average values and is defined in degrees
-            and not in percentage of samples. Default is infinite, i.e. any
+    Output:
+      - in procstatus==1: intercomp_dict contains rad1_val / rad2_val (the main field),
+        plus rad1_PhiDPavg/rad2_PhiDPavg and rad1_Flagavg/rad2_Flagavg (kept for QC/debug)
+      - in procstatus==2: final intercomp_dict contains rad1_val / rad2_val only (after QC)
 
-    radar_list : list of Radar objects
-        Optional. list of radar objects
-
-    Returns
-    -------
-    new_dataset : dict
-        dictionary containing a dictionary with intercomparison data and the
-        key "final" which contains a boolean that is true when all volumes
-        have been processed
-    ind_rad : int
-        radar index
-
+    Notes:
+      - This function keeps using read_colocated_data_time_avg(...) in procstatus==2.
+        That reader likely returns the "main field" column as the same slot previously
+        called rad*_dBZ. Here we treat it generically as rad*_val.
     """
     if procstatus == 0:
         savedir = dscfg["colocgatespath"] + dscfg["coloc_radars_name"] + "/"
 
-        prdtype = "info"
-        if "prdtype" in dscfg:
-            prdtype = dscfg["prdtype"]
+        prdtype = dscfg.get("prdtype", "info")
 
         fname = make_filename(
             prdtype,
@@ -2016,7 +1972,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
         if rad1_ele is None:
             raise ValueError(
-                "Unable to intercompare radars. " + "Missing colocated gates file"
+                "Unable to intercompare radars. Missing colocated gates file"
             )
 
         dscfg["global_data"] = {
@@ -2031,19 +1987,19 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "rad2_azi": rad2_azi,
             "rad2_rng": rad2_rng,
         }
-
         return None, None
 
     if procstatus == 1:
-        # check how many radars are there
-        ind_radar_list = set()
+        # -----------------------------
+        # Determine the two radars involved
+        # -----------------------------
+        ind_radar_set = set()
         for datatypedescr in dscfg["datatype"]:
             radarnr = datatypedescr.split(":")[0]
-            ind_radar_list.add(int(radarnr[5:8]) - 1)
+            ind_radar_set.add(int(radarnr[5:8]) - 1)
+        ind_radar_list = list(ind_radar_set)
 
-        ind_radar_list = list(ind_radar_list)
-
-        if (len(ind_radar_list) != 2) or (len(radar_list) < 2):
+        if (len(ind_radar_list) != 2) or (radar_list is None) or (len(radar_list) < 2):
             warn("Intercomparison requires data from two different radars")
             return None, None
 
@@ -2052,55 +2008,95 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "RADAR" + "{:03d}".format(ind_radar_list[1] + 1),
         ]
 
-        # get field names
+        # -----------------------------
+        # Parse datatypes -> field names per radar
+        # -----------------------------
+        # main field = any datatype that is not PhiDP/PhiDPc/time_avg_flag
+        rad1_main_field = rad1_phidp_field = rad1_flag_field = None
+        rad2_main_field = rad2_phidp_field = rad2_flag_field = None
+
+        main_type = None  # for procstatus==2 filename
         for datatypedescr in dscfg["datatype"]:
             radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+            fname = get_fieldname_pyart(datatype)
+
+            is_phidp = datatype in ("PhiDP", "PhiDPc")
+            is_flag = datatype == "time_avg_flag"
+            is_main = (not is_phidp) and (not is_flag)
+
+            if is_main and main_type is None:
+                main_type = datatype
+
             if radarnr == radarnr_list[0]:
-                if datatype in ("dBZ", "dBZc", "dBuZ", "dBZv", "dBZvc", "dBuZv"):
-                    rad1_refl_field = get_fieldname_pyart(datatype)
-                elif datatype in ("PhiDP", "PhiDPc"):
-                    rad1_phidp_field = get_fieldname_pyart(datatype)
-                elif datatype == "time_avg_flag":
-                    rad1_flag_field = get_fieldname_pyart(datatype)
+                if is_main:
+                    rad1_main_field = fname
+                elif is_phidp:
+                    rad1_phidp_field = fname
+                elif is_flag:
+                    rad1_flag_field = fname
             elif radarnr == radarnr_list[1]:
-                if datatype in ("dBZ", "dBZc", "dBuZ", "dBZv", "dBZvc", "dBuZv"):
-                    rad2_refl_field = get_fieldname_pyart(datatype)
-                elif datatype in ("PhiDP", "PhiDPc"):
-                    rad2_phidp_field = get_fieldname_pyart(datatype)
-                elif datatype == "time_avg_flag":
-                    rad2_flag_field = get_fieldname_pyart(datatype)
+                if is_main:
+                    rad2_main_field = fname
+                elif is_phidp:
+                    rad2_phidp_field = fname
+                elif is_flag:
+                    rad2_flag_field = fname
+
+        if main_type is None:
+            warn(
+                "No main datatype found (datatype must include one non-PhiDP/non-time_avg_flag entry)"
+            )
+            return None, None
 
         radar1 = radar_list[ind_radar_list[0]]
         radar2 = radar_list[ind_radar_list[1]]
 
+        dscfg.setdefault("global_data", {})
         dscfg["global_data"].update({"timeinfo": dscfg["timeinfo"]})
+        dscfg["global_data"].update({"main_type": main_type})
 
         if radar1 is None or radar2 is None:
             warn("Unable to inter-compare radars. Missing radar")
             return None, None
 
+        if any(
+            v is None
+            for v in (
+                rad1_main_field,
+                rad1_phidp_field,
+                rad1_flag_field,
+                rad2_main_field,
+                rad2_phidp_field,
+                rad2_flag_field,
+            )
+        ):
+            warn(
+                "Unable to compare radar time avg fields. Missing datatype definitions"
+            )
+            return None, None
+
         if (
-            (rad1_refl_field not in radar1.fields)
+            (rad1_main_field not in radar1.fields)
             or (rad1_phidp_field not in radar1.fields)
             or (rad1_flag_field not in radar1.fields)
-            or (rad2_refl_field not in radar2.fields)
+            or (rad2_main_field not in radar2.fields)
             or (rad2_phidp_field not in radar2.fields)
             or (rad2_flag_field not in radar2.fields)
         ):
-            warn("Unable to compare radar time avg fields. " + "Fields missing")
+            warn("Unable to compare radar time avg fields. Fields missing")
             return None, None
 
-        if not dscfg["initialized"]:
+        if not dscfg.get("initialized", False):
             dscfg["global_data"].update(
                 {"rad1_name": dscfg["RadarName"][ind_radar_list[0]]}
             )
             dscfg["global_data"].update(
                 {"rad2_name": dscfg["RadarName"][ind_radar_list[1]]}
             )
-            dscfg["initialized"] = 1
+            dscfg["initialized"] = True
 
-        refl1 = radar1.fields[rad1_refl_field]["data"]
-        refl2 = radar2.fields[rad2_refl_field]["data"]
+        val1 = radar1.fields[rad1_main_field]["data"]
+        val2 = radar2.fields[rad2_main_field]["data"]
 
         phidp1 = radar1.fields[rad1_phidp_field]["data"]
         phidp2 = radar2.fields[rad2_phidp_field]["data"]
@@ -2115,7 +2111,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "rad1_ele": [],
             "rad1_azi": [],
             "rad1_rng": [],
-            "rad1_dBZavg": [],
+            "rad1_val": [],
             "rad1_PhiDPavg": [],
             "rad1_Flagavg": [],
             "rad2_time": [],
@@ -2124,7 +2120,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "rad2_ele": [],
             "rad2_azi": [],
             "rad2_rng": [],
-            "rad2_dBZavg": [],
+            "rad2_val": [],
             "rad2_PhiDPavg": [],
             "rad2_Flagavg": [],
             "rad1_name": dscfg["global_data"]["rad1_name"],
@@ -2138,7 +2134,6 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
 
         # rays are indexed to regular grid
         rays_are_indexed = dscfg.get("rays_are_indexed", False)
-        # get current radars gates indices
         if not rays_are_indexed:
             azi_tol = dscfg.get("azi_tol", 0.5)
             ele_tol = dscfg.get("ele_tol", 0.5)
@@ -2168,26 +2163,21 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_ray_ind = deepcopy(dscfg["global_data"]["rad2_ray_ind"])
             rad2_rng_ind = deepcopy(dscfg["global_data"]["rad2_rng_ind"])
 
-        # keep only indices and data of valid gates
-        refl1_vec = refl1[rad1_ray_ind, rad1_rng_ind]
+        # keep only indices and data of valid gates (val + phidp must be valid on both)
+        val1_vec = val1[rad1_ray_ind, rad1_rng_ind]
         phidp1_vec = phidp1[rad1_ray_ind, rad1_rng_ind]
         flag1_vec = flag1[rad1_ray_ind, rad1_rng_ind]
 
-        refl2_vec = refl2[rad2_ray_ind, rad2_rng_ind]
+        val2_vec = val2[rad2_ray_ind, rad2_rng_ind]
         phidp2_vec = phidp2[rad2_ray_ind, rad2_rng_ind]
         flag2_vec = flag2[rad2_ray_ind, rad2_rng_ind]
 
-        mask_refl1 = np.ma.getmaskarray(refl1_vec)
+        mask_val1 = np.ma.getmaskarray(val1_vec)
         mask_phidp1 = np.ma.getmaskarray(phidp1_vec)
-        mask_refl2 = np.ma.getmaskarray(refl2_vec)
+        mask_val2 = np.ma.getmaskarray(val2_vec)
         mask_phidp2 = np.ma.getmaskarray(phidp2_vec)
 
-        isvalid = np.logical_not(
-            np.logical_or(
-                np.logical_or(mask_refl1, mask_refl2),
-                np.logical_or(mask_phidp1, mask_phidp2),
-            )
-        )
+        isvalid = ~((mask_val1 | mask_val2) | (mask_phidp1 | mask_phidp2))
 
         rad1_ray_ind = rad1_ray_ind[isvalid]
         rad1_rng_ind = rad1_rng_ind[isvalid]
@@ -2198,15 +2188,17 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         # only if all gates valid
         if avg_rad1:
             ngates_valid = len(rad1_ray_ind)
-            refl1_vec = np.ma.masked_all(ngates_valid, dtype=float)
+            val1_vec = np.ma.masked_all(ngates_valid, dtype=float)
             phidp1_vec = np.ma.masked_all(ngates_valid, dtype=float)
             flag1_vec = np.ma.masked_all(ngates_valid, dtype=int)
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
+
             for i in range(ngates_valid):
                 if rad1_rng_ind[i] + avg_rad_lim[1] >= radar1.ngates:
                     continue
                 if rad1_rng_ind[i] + avg_rad_lim[0] < 0:
                     continue
+
                 ind_rng = list(
                     range(
                         rad1_rng_ind[i] + avg_rad_lim[0],
@@ -2214,26 +2206,24 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
                     )
                 )
 
-                if np.any(np.ma.getmaskarray(refl1[rad1_ray_ind[i], ind_rng])):
+                if np.any(np.ma.getmaskarray(val1[rad1_ray_ind[i], ind_rng])):
                     continue
                 if np.any(np.ma.getmaskarray(phidp1[rad1_ray_ind[i], ind_rng])):
                     continue
 
-                refl1_vec[i] = np.ma.asarray(
-                    np.ma.mean(refl1[rad1_ray_ind[i], ind_rng])
-                )
+                val1_vec[i] = np.ma.asarray(np.ma.mean(val1[rad1_ray_ind[i], ind_rng]))
                 phidp1_vec[i] = np.ma.asarray(
                     np.ma.mean(phidp1[rad1_ray_ind[i], ind_rng])
                 )
 
                 rad1_flag = flag1[rad1_ray_ind[i], ind_rng]
-
                 rad1_nsamples = rad1_flag % int(1e3)
                 rad1_excess_phi = (rad1_flag // int(1e3)) % int(1e3)
                 rad1_clt = (rad1_flag // int(1e6)) % int(1e3)
-                rad1_prec = (rad1_flag // int(1e9)) % int(1e3)
+                rad1_non_rain = (rad1_flag // int(1e9)) % int(1e3)
+
                 flag1_vec[i] = (
-                    int(1e9) * np.max(rad1_prec)
+                    int(1e9) * np.max(rad1_non_rain)
                     + int(1e6) * np.max(rad1_clt)
                     + int(1e3) * np.max(rad1_excess_phi)
                     + np.max(rad1_nsamples)
@@ -2245,25 +2235,27 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_ray_ind = rad2_ray_ind[is_valid_avg]
             rad2_rng_ind = rad2_rng_ind[is_valid_avg]
 
-            refl1_vec = refl1_vec[is_valid_avg]
+            val1_vec = val1_vec[is_valid_avg]
             phidp1_vec = phidp1_vec[is_valid_avg]
             flag1_vec = flag1_vec[is_valid_avg]
 
-            refl2_vec = refl2[rad2_ray_ind, rad2_rng_ind]
+            val2_vec = val2[rad2_ray_ind, rad2_rng_ind]
             phidp2_vec = phidp2[rad2_ray_ind, rad2_rng_ind]
             flag2_vec = flag2[rad2_ray_ind, rad2_rng_ind]
 
         elif avg_rad2:
             ngates_valid = len(rad2_ray_ind)
-            refl2_vec = np.ma.masked_all(ngates_valid, dtype=float)
+            val2_vec = np.ma.masked_all(ngates_valid, dtype=float)
             phidp2_vec = np.ma.masked_all(ngates_valid, dtype=float)
             flag2_vec = np.ma.masked_all(ngates_valid, dtype=int)
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
+
             for i in range(ngates_valid):
                 if rad2_rng_ind[i] + avg_rad_lim[1] >= radar2.ngates:
                     continue
                 if rad2_rng_ind[i] + avg_rad_lim[0] < 0:
                     continue
+
                 ind_rng = list(
                     range(
                         rad2_rng_ind[i] + avg_rad_lim[0],
@@ -2271,30 +2263,27 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
                     )
                 )
 
-                if np.any(np.ma.getmaskarray(refl2[rad2_ray_ind[i], ind_rng])):
+                if np.any(np.ma.getmaskarray(val2[rad2_ray_ind[i], ind_rng])):
                     continue
                 if np.any(np.ma.getmaskarray(phidp2[rad2_ray_ind[i], ind_rng])):
                     continue
 
-                refl2_vec[i] = np.ma.asarray(
-                    np.ma.mean(refl2[rad2_ray_ind[i], ind_rng])
-                )
+                val2_vec[i] = np.ma.asarray(np.ma.mean(val2[rad2_ray_ind[i], ind_rng]))
                 phidp2_vec[i] = np.ma.asarray(
                     np.ma.mean(phidp2[rad2_ray_ind[i], ind_rng])
                 )
 
                 rad2_flag = flag2[rad2_ray_ind[i], ind_rng]
+                rad2_nsamples = rad2_flag % int(1e3)
+                rad2_excess_phi = (rad2_flag // int(1e3)) % int(1e3)
+                rad2_clt = (rad2_flag // int(1e6)) % int(1e3)
+                rad2_non_rain = (rad2_flag // int(1e9)) % int(1e3)
 
-                rad2_nsamples = rad1_flag % int(1e3)
-                rad2_excess_phi = (rad1_flag // int(1e3)) % int(1e3)
-                rad2_clt = (rad1_flag // int(1e6)) % int(1e3)
-                rad2_prec = (rad1_flag // int(1e9)) % int(1e3)
-
-                flag2_vec[i] = int(
-                    int(1e9) * np.max(rad2_prec)
+                flag2_vec[i] = (
+                    int(1e9) * np.max(rad2_non_rain)
                     + int(1e6) * np.max(rad2_clt)
                     + int(1e3) * np.max(rad2_excess_phi)
-                    + rad2_nsamples
+                    + np.max(rad2_nsamples)
                 )
                 is_valid_avg[i] = True
 
@@ -2303,31 +2292,33 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_ray_ind = rad2_ray_ind[is_valid_avg]
             rad2_rng_ind = rad2_rng_ind[is_valid_avg]
 
-            refl2_vec = refl2_vec[is_valid_avg]
+            val2_vec = val2_vec[is_valid_avg]
             phidp2_vec = phidp2_vec[is_valid_avg]
             flag2_vec = flag2_vec[is_valid_avg]
 
-            refl1_vec = refl1[rad1_ray_ind, rad1_rng_ind]
+            val1_vec = val1[rad1_ray_ind, rad1_rng_ind]
             phidp1_vec = phidp1[rad1_ray_ind, rad1_rng_ind]
             flag1_vec = flag1[rad1_ray_ind, rad1_rng_ind]
         else:
-            refl1_vec = refl1_vec[isvalid]
+            val1_vec = val1_vec[isvalid]
             phidp1_vec = phidp1_vec[isvalid]
             flag1_vec = flag1_vec[isvalid]
-            refl2_vec = refl2_vec[isvalid]
+            val2_vec = val2_vec[isvalid]
             phidp2_vec = phidp2_vec[isvalid]
             flag2_vec = flag2_vec[isvalid]
 
+        # time is the same for all samples in this volume -> fill with timeinfo
         intercomp_dict["rad1_time"] = np.empty(
             len(rad1_ray_ind), dtype=datetime.datetime
         )
         intercomp_dict["rad1_time"][:] = dscfg["timeinfo"]
+
         intercomp_dict["rad1_ray_ind"] = rad1_ray_ind
         intercomp_dict["rad1_rng_ind"] = rad1_rng_ind
         intercomp_dict["rad1_ele"] = radar1.elevation["data"][rad1_ray_ind]
         intercomp_dict["rad1_azi"] = radar1.azimuth["data"][rad1_ray_ind]
         intercomp_dict["rad1_rng"] = radar1.range["data"][rad1_rng_ind]
-        intercomp_dict["rad1_dBZavg"] = refl1_vec
+        intercomp_dict["rad1_val"] = val1_vec
         intercomp_dict["rad1_PhiDPavg"] = phidp1_vec
         intercomp_dict["rad1_Flagavg"] = flag1_vec
 
@@ -2337,9 +2328,10 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         intercomp_dict["rad2_ele"] = radar2.elevation["data"][rad2_ray_ind]
         intercomp_dict["rad2_azi"] = radar2.azimuth["data"][rad2_ray_ind]
         intercomp_dict["rad2_rng"] = radar2.range["data"][rad2_rng_ind]
-        intercomp_dict["rad2_dBZavg"] = refl2_vec
+        intercomp_dict["rad2_val"] = val2_vec
         intercomp_dict["rad2_PhiDPavg"] = phidp2_vec
         intercomp_dict["rad2_Flagavg"] = flag2_vec
+
         new_dataset = {
             "intercomp_dict": intercomp_dict,
             "timeinfo": dscfg["global_data"]["timeinfo"],
@@ -2348,16 +2340,17 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         return new_dataset, None
 
     if procstatus == 2:
-        # get field name
-        refl_type = None
-        for datatypedescr in dscfg["datatype"]:
-            radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-            if datatype in ("dBZ", "dBZc", "dBuZ", "dBZv", "dBZvc", "dBuZv"):
-                refl_type = datatype
-                break
+        # Main datatype for filename (stored during procstatus==1; fallback to parsing)
+        main_type = dscfg.get("global_data", {}).get("main_type", None)
+        if main_type is None:
+            for datatypedescr in dscfg["datatype"]:
+                _, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+                if datatype not in ("PhiDP", "PhiDPc", "time_avg_flag"):
+                    main_type = datatype
+                    break
 
-        if refl_type is None:
-            warn("Unknown reflectivity type")
+        if main_type is None:
+            warn("No main datatype found")
             return None, None
 
         tseries_prod = [
@@ -2378,13 +2371,13 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         fname = make_filename(
             "colocated_data",
             dscfg["type"],
-            refl_type,
+            main_type,
             ["csv"],
             timeinfo=dscfg["global_data"]["timeinfo"],
             timeformat="%Y%m%d",
-        )
+        )[0]
 
-        fname = savedir + fname[0]
+        fname = savedir + fname
 
         (
             rad1_time,
@@ -2393,7 +2386,7 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad1_ele,
             rad1_azi,
             rad1_rng,
-            rad1_dBZ,
+            rad1_val,
             rad1_phi,
             rad1_flag,
             rad2_time,
@@ -2402,14 +2395,15 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             rad2_ele,
             rad2_azi,
             rad2_rng,
-            rad2_dBZ,
+            rad2_val,
             rad2_phi,
             rad2_flag,
-        ) = read_colocated_data_time_avg(fname)
+        ) = read_colocated_data_with_QC(fname)
 
         if rad1_time is None:
             return None, None
 
+        # Decode flags
         rad1_nsamples = rad1_flag % int(1e3)
         rad1_excess_phi = (rad1_flag // int(1e3)) % int(1e3)
         rad1_clt = (rad1_flag // int(1e6)) % int(1e3)
@@ -2425,21 +2419,26 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         non_rain_max = dscfg.get("non_rain_max", 100)
         phi_avg_max = dscfg.get("phi_avg_max", np.inf)
 
-        # filter out invalid data
+        # Avoid division by zero
+        rad1_ns = np.maximum(rad1_nsamples.astype(float), 1.0)
+        rad2_ns = np.maximum(rad2_nsamples.astype(float), 1.0)
+
+        # Filter out invalid data (percentages are in 0..100)
         ind_val = np.where(
             np.logical_and.reduce(
                 (
-                    rad1_clt / rad2_nsamples <= clt_max,
-                    rad2_clt / rad2_nsamples <= clt_max,
-                    rad1_excess_phi / rad2_nsamples <= phi_excess_max,
-                    rad2_excess_phi / rad2_nsamples <= phi_excess_max,
-                    rad1_non_rain / rad1_nsamples <= non_rain_max,
-                    rad2_non_rain / rad1_nsamples <= non_rain_max,
-                    rad1_phi / rad1_nsamples <= phi_avg_max,
-                    rad2_phi / rad1_nsamples <= phi_avg_max,
+                    (rad1_clt / rad1_ns) <= clt_max,
+                    (rad2_clt / rad2_ns) <= clt_max,
+                    (rad1_excess_phi / rad1_ns) <= phi_excess_max,
+                    (rad2_excess_phi / rad2_ns) <= phi_excess_max,
+                    (rad1_non_rain / rad1_ns) <= non_rain_max,
+                    (rad2_non_rain / rad2_ns) <= non_rain_max,
+                    (rad1_phi / rad1_ns) <= phi_avg_max,
+                    (rad2_phi / rad2_ns) <= phi_avg_max,
                 )
             )
         )[0]
+
         intercomp_dict = {
             "rad1_name": dscfg["global_data"]["rad1_name"],
             "rad1_time": rad1_time[ind_val],
@@ -2448,16 +2447,17 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
             "rad1_ele": rad1_ele[ind_val],
             "rad1_azi": rad1_azi[ind_val],
             "rad1_rng": rad1_rng[ind_val],
-            "rad1_val": rad1_dBZ[ind_val],
+            "rad1_val": rad1_val[ind_val],
             "rad2_name": dscfg["global_data"]["rad2_name"],
             "rad2_time": rad2_time[ind_val],
-            "rad2_ray_ind": rad1_ray_ind[ind_val],
-            "rad2_rng_ind": rad1_rng_ind[ind_val],
+            "rad2_ray_ind": rad2_ray_ind[ind_val],
+            "rad2_rng_ind": rad2_rng_ind[ind_val],
             "rad2_ele": rad2_ele[ind_val],
             "rad2_azi": rad2_azi[ind_val],
             "rad2_rng": rad2_rng[ind_val],
-            "rad2_val": rad2_dBZ[ind_val],
+            "rad2_val": rad2_val[ind_val],
         }
+
         new_dataset = {
             "intercomp_dict": intercomp_dict,
             "timeinfo": dscfg["global_data"]["timeinfo"],
@@ -2465,11 +2465,14 @@ def process_intercomp_time_avg(procstatus, dscfg, radar_list=None):
         }
         return new_dataset, None
 
+    return None, None
+
 
 def process_fields_diff(procstatus, dscfg, radar_list=None):
     """
-    Computes the field difference between RADAR001 and radar002,
-    i.e. RADAR001-RADAR002. Assumes both radars have the same geometry
+    Extracts the difference between two radars fields at a given time, assuming that
+    their gates are all colocated. It does not do any time post-processing and
+    only extracts the data at volume time.
 
     Parameters
     ----------
@@ -2551,7 +2554,10 @@ def process_fields_diff(procstatus, dscfg, radar_list=None):
 
 def process_intercomp_fields(procstatus, dscfg, radar_list=None):
     """
-    intercomparison between two radars
+    Intercomparison between two radars fields at a given time.
+    This functions extracts the data from both radars, assuming that
+    their gates are all colocated. It does not do any time post-processing and
+    only extracts the data at volume time.
 
     Parameters
     ----------
