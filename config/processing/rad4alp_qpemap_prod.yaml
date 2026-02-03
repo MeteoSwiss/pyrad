@@ -1,0 +1,26 @@
+dataSetList:
+- RZC
+RZC:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:RZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      vmin: 0.25
+      vmax: 20.0
+      mask_outside: 1
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: RR
+      mask_val: 0.03526497
+      write_data: 1
+reflectivity:
+  type: RAW
+  datatype: RAD4ALP:dBZ
+  products:
+    RHI228:
+      type: PSEUDORHI_IMAGE
+      angle: 228.0
+      AziTol: 5.0
+      voltype: dBZ

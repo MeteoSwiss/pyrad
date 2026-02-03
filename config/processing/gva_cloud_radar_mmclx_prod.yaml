@@ -1,0 +1,123 @@
+dataSetList:
+- Z
+- Ze
+- Zg
+- SNR
+- VEL
+- RMS
+- NPK
+- LDR
+Z:
+  type: RAW
+  datatype: CF1:Z,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: Z
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+Ze:
+  type: RAW
+  datatype: CF1:Ze,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: Ze
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+Zg:
+  type: RAW
+  datatype: CF1:Zg,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: Zg
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+SNR:
+  type: RAW
+  datatype: CF1:SNR,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: SNR
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+VEL:
+  type: RAW
+  datatype: CF1:VEL,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: VEL
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+RMS:
+  type: RAW
+  datatype: CF1:RMS,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: RMS
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+      vmin: 0.0
+      vmax: 2.0
+NPK:
+  type: RAW
+  datatype: CF1:NPK,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: NPK
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+      vmin: 0.0
+      vmax: 3.0
+LDR:
+  type: RAW
+  datatype: CF1:LDR,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: LDR
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+TEMP:
+  type: RAW
+  datatype: CF1:TEMPcr,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: TEMPcr
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+RR:
+  type: RAW
+  datatype: CF1:RRcr,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: RRcr
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0
+LWC:
+  type: RAW
+  datatype: CF1:LWCcr,D{}-F{%Y%m%d_%H%M}
+  products:
+    BSCOPE:
+      type: BSCOPE_IMAGE
+      voltype: LWCcr
+      ray_dim: time
+      xaxis_rng: 0
+      anglenr: 0

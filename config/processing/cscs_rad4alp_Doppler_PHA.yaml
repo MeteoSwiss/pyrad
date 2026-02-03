@@ -1,0 +1,12 @@
+name: rad4alp_Doppler_PHA
+datapath: /store/msrad/radar/rad4alp/rawdata/
+cosmopath: /store/msrad/cosmo/cosmo1/
+dempath: /opt/ccs4/lookuptables/
+loadbasepath: /store/msrad/radar/pyrad_products/
+loadname: rad4alp_Doppler_PHA
+solarfluxpath: /srn/analysis/solar_flux/
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_Doppler_PHA_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_Doppler_PHA_prod.txt

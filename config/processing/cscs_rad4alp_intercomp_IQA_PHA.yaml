@@ -1,0 +1,15 @@
+name: rad4alp_IQA_PHA_intercomp
+datapath:
+- /store/msrad/radar/rad4alp/rawdata/
+- /store/msrad/radar/rad4alp/rawdata/
+loadbasepath:
+- /store/msrad/radar/pyrad_products/
+- /store/msrad/radar/pyrad_products/
+loadname:
+- rad4alp_IQA
+- rad4alp_PHA
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_intercomp_IQA_PHA_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_intercomp_IQA_PHA_prod.txt

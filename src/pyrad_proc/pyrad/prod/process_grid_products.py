@@ -161,11 +161,17 @@ def generate_grid_products(dataset, prdcfg):
         'CROSS_SECTION': Plots a cross-section of gridded data
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset
-                coord1, coord2: dict
-                    The two lat-lon coordinates marking the limits. They have
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
+                coord1: dict
+                    Lat, lon  coordinates of the start point. It must be a dict with
                     the keywords 'lat' and 'lon' [degree]. The altitude limits
-                    are defined by the parameters in 'xsecImageConfig' in the
+                    are defined by the parameters ymin, ymax in 'xsecImageConfig' in the
+                    'loc' configuration file
+                coord2: dict
+                    Lat, lon  coordinates of the end point. It must be a dict with
+                    the keywords 'lat' and 'lon' [degree]. The altitude limits
+                    are defined by the parameters ymin, ymax in 'xsecImageConfig' in the
                     'loc' configuration file
         'HISTOGRAM': Computes a histogram of the radar volum data
             User defined parameters:
@@ -185,20 +191,26 @@ def generate_grid_products(dataset, prdcfg):
             constant latitude.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset
-                lon, lat: floats
-                    The starting point of the cross-section. The ending point
-                    is defined by the parameters in 'xsecImageConfig' in the
-                    'loc' configuration file
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
+                lon: float
+                    Start longitude of the cross-section. Default is to use the radar longitude. The end coordinates
+                    are obtained from the parameter xmax in 'xsecImageConfig' in the loc
+                    config file
+                lat: float
+                    Latitude of the cross-section. Default is to use the radar latitude.
         'LONGITUDE_SLICE': Plots a cross-ection of gridded data over a
             constant longitude.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset
-                lon, lat: floats
-                    The starting point of the cross-section. The ending point
-                    is defined by the parameters in 'xsecImageConfig' in the
-                    'loc' configuration file
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
+                lon: float
+                    Longitude of the cross-section. Default is to use the radar longitude.
+                lat: float
+                    Start latitude of the cross-section. Default is to use the radar latitude. The end coordinates
+                    are obtained from the parameter xmax in 'xsecImageConfig' in the loc
+                    config file
         'SAVEALL': Saves a gridded data object including all or a list of
             user-defined fields in a netcdf file
             User defined parameters:
@@ -239,7 +251,8 @@ def generate_grid_products(dataset, prdcfg):
             projecting it into a map
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
@@ -247,7 +260,8 @@ def generate_grid_products(dataset, prdcfg):
         'SURFACE_IMAGE': Plots a surface image of gridded data.
             User defined parameters:
                 voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset
+                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
+                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
                 level: int
                     The altitude level to plot. The rest of the parameters are
                     defined by the parameters in 'ppiImageConfig' and
@@ -492,8 +506,10 @@ def generate_grid_products(dataset, prdcfg):
         return fname
 
     if prdcfg["type"] == "SURFACE_RAW":
+        fields = dataset["radar_out"].fields
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -516,7 +532,9 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "surface",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="l" + str(level),
             timeinfo=prdcfg["timeinfo"],
@@ -534,7 +552,9 @@ def generate_grid_products(dataset, prdcfg):
 
     if prdcfg["type"] == "SURFACE_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        fields = dataset["radar_out"].fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -557,7 +577,9 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "surface",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="l" + str(level),
             timeinfo=prdcfg["timeinfo"],
@@ -796,8 +818,10 @@ def generate_grid_products(dataset, prdcfg):
         return fname_list
 
     if prdcfg["type"] == "LATITUDE_SLICE":
+        fields = dataset["radar_out"].fields
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -821,7 +845,9 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "lat_slice",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="lat" + "{:.2f}".format(lat),
             timeinfo=prdcfg["timeinfo"],
@@ -840,8 +866,10 @@ def generate_grid_products(dataset, prdcfg):
         return fname_list
 
     if prdcfg["type"] == "LONGITUDE_SLICE":
+        fields = dataset["radar_out"].fields
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -865,7 +893,9 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "lon_slice",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="lon" + "{:.2f}".format(lon),
             timeinfo=prdcfg["timeinfo"],
@@ -884,8 +914,10 @@ def generate_grid_products(dataset, prdcfg):
         return fname_list
 
     if prdcfg["type"] == "CROSS_SECTION":
+        fields = dataset["radar_out"].fields
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        if field_name not in dataset["radar_out"].fields:
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+        if not all(f in fields for f in names):
             warn(
                 " Field type "
                 + field_name
@@ -925,7 +957,9 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "lonlat",
             prdcfg["dstype"],
-            prdcfg["voltype"],
+            "RGB"
+            if isinstance(prdcfg["voltype"], (tuple, list))
+            else prdcfg["voltype"],
             prdcfg["imgformat"],
             prdcfginfo="lon-lat1_"
             + "{:.2f}".format(lon1)

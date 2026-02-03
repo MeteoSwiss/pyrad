@@ -1,0 +1,294 @@
+dataSetList:
+- hydroclass_trt_traj
+hydroclass_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:hydro,hydroclass,SAVEVOL_hydro
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: hydro
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: hydro
+      step: 1.0
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: hydro
+      quantity: mode
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 9.0
+hydroclass_entropy_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:hydro,hydroclass_entropy,SAVEVOL_hydro
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: hydro
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: hydro
+      step: 1.0
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: hydro
+      quantity: mode
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 9.0
+entropy_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:entropy,hydroclass_entropy,SAVEVOL_entropy
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: entropy
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: entropy
+      step: 0.1
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: entropy
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: entropy
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 1.0
+propAG_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propAG,hydroclass_entropy,SAVEVOL_propAG
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propAG
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propAG
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propAG
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propAG
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propCR_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propCR,hydroclass_entropy,SAVEVOL_propCR
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propCR
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propCR
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propCR
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propCR
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propLR_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propLR,hydroclass_entropy,SAVEVOL_propLR
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propLR
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propLR
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propLR
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propLR
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propRP_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propRP,hydroclass_entropy,SAVEVOL_propRP
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propRP
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propRP
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propRP
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propRP
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propRN_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propRN,hydroclass_entropy,SAVEVOL_propRN
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propRN
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propRN
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propRN
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propRN
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propVI_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propVI,hydroclass_entropy,SAVEVOL_propVI
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propVI
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propVI
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propVI
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propVI
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propWS_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propWS,hydroclass_entropy,SAVEVOL_propWS
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propWS
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propWS
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propWS
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propWS
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propMH_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propMH,hydroclass_entropy,SAVEVOL_propMH
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propMH
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propMH
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propMH
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propMH
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0
+propIH_trt_traj:
+  type: TRAJ_TRT
+  datatype: CFRADIAL:propIH,hydroclass_entropy,SAVEVOL_propIH
+  products:
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: propIH
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: propIH
+      step: 1.0
+      write_data: 1.0
+    QUANTILES:
+      type: QUANTILES
+      voltype: propIH
+      write_data: 1.0
+    PROFILE:
+      type: PROFILE_STATS
+      voltype: propIH
+      quantity: mean
+      heightMin: 0.0
+      heightMax: 15000.0
+      heightResolution: 250.0
+      vmin: 0.0
+      vmax: 100.0

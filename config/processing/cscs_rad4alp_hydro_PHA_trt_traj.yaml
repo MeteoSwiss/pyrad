@@ -1,0 +1,12 @@
+name: rad4alp_hydro_PHA
+datapath: /store/msrad/radar/rad4alp/rawdata/
+cosmopath: /store/msrad/cosmo/cosmo1/
+loadbasepath: /store/msrad/radar/pyrad_products/
+loadname: rad4alp_hydro_PHA
+smnpath: /data/meteo_products/SMNRetrieve/
+disdropath: /data/scattering/dsd_ts/
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_hydro_PHA_trt_traj_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_hydro_PHA_trt_traj_prod.txt

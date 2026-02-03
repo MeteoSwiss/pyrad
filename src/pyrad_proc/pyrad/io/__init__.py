@@ -154,7 +154,7 @@ Writing data
     write_intercomp_scores_ts
     write_colocated_gates
     write_colocated_data
-    write_colocated_data_time_avg
+    write_colocated_data_with_QC
     write_sun_hits
     write_sun_retrieval
     write_fixed_angle
@@ -234,7 +234,7 @@ from .read_data_other import read_timeseries, read_monitoring_ts, read_ts_cum  #
 from .read_data_other import read_intercomp_scores_ts, read_quantiles  # noqa
 from .read_data_other import read_selfconsistency, read_colocated_gates  # noqa
 from .read_data_other import read_colocated_data, read_antenna_pattern  # noqa
-from .read_data_other import read_colocated_data_time_avg  # noqa
+from .read_data_other import read_colocated_data_with_QC  # noqa
 from .read_data_other import read_last_state, read_rhi_profile, read_centroids  # noqa
 from .read_data_other import read_excess_gates, read_histogram  # noqa
 from .read_data_other import read_profile_ts, read_histogram_ts  # noqa
@@ -268,7 +268,7 @@ from .write_data import write_smn, write_ts_polar_data, write_ts_cum  # noqa
 from .write_data import write_monitoring_ts, write_intercomp_scores_ts  # noqa
 from .write_data import write_sun_hits, write_sun_retrieval  # noqa
 from .write_data import write_colocated_gates, write_colocated_data  # noqa
-from .write_data import write_colocated_data_time_avg, write_cdf  # noqa
+from .write_data import write_cdf  # noqa
 from .write_data import write_rhi_profile, write_field_coverage  # noqa
 from .write_data import write_last_state, write_alarm_msg, send_msg  # noqa
 from .write_data import write_excess_gates, write_trt_cell_data  # noqa

@@ -1841,7 +1841,10 @@ def get_fieldname_pyart(datatype):
     """
     Maps the config file radar data type name into the corresponding Py-ART field name
     """
-    return pyrad_to_pyart_keys_dict.get(datatype)
+    if isinstance(datatype, (list, tuple)):
+        return [pyrad_to_pyart_keys_dict.get(dt) for dt in datatype]
+    else:
+        return pyrad_to_pyart_keys_dict.get(datatype)
 
 
 # Inverted function to map Py-ART field name back to datatype

@@ -1,0 +1,12 @@
+name: rad4alp_qpemap
+datapath: /store/msrad/radar/rad4alp/rawdata/
+cosmopath: /store/msrad/cosmo/cosmo1/
+loadbasepath: /store/msrad/radar/pyrad_products/
+loadname: rad4alp_grid
+smnpath: /data/meteo_products/SMNRetrieve/
+disdropath: /data/scattering/dsd_ts/
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_qpemap_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_qpemap_prod.txt

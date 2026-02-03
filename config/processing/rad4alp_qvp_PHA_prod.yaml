@@ -1,0 +1,228 @@
+dataSetList:
+- QVP
+- rQVP
+- SVP
+- EVP
+- VP
+QVP:
+  type: QVP
+  datatype:
+  - CFRADIAL:dBZc,Att_ZPhi,SAVEVOL_dBZc
+  - CFRADIAL:ZDRc,Att_ZPhi,SAVEVOL_ZDRc
+  - CFRADIAL:RhoHVc,echoFilter,SAVEVOL_RhoHVc
+  - CFRADIAL:KDPc,KDPc_Vulpiani,SAVEVOL_KDPc
+  - CFRADIAL:PhiDPc,PhiDPc_smooth2w,SAVEVOL_PhiDPc
+  - CFRADIAL:TEMP,TEMP,SAVEVOL_TEMP
+  angle: 11
+  interp_kind: nearest
+  hres: 2.0
+  products:
+    TIME_HEIGHT_dBZc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: dBZc
+    TIME_HEIGHT_ZDRc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: ZDRc
+    TIME_HEIGHT_RhoHVc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: RhoHVc
+    TIME_HEIGHT_KDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: KDPc
+    TIME_HEIGHT_PhiDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: PhiDPc
+    TIME_HEIGHT_TEMP:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: TEMP
+rQVP:
+  type: rQVP
+  datatype:
+  - CFRADIAL:dBZc,Att_ZPhi,SAVEVOL_dBZc
+  - CFRADIAL:ZDRc,Att_ZPhi,SAVEVOL_ZDRc
+  - CFRADIAL:RhoHVc,echoFilter,SAVEVOL_RhoHVc
+  - CFRADIAL:KDPc,KDPc_Vulpiani,SAVEVOL_KDPc
+  - CFRADIAL:PhiDPc,PhiDPc_smooth2w,SAVEVOL_PhiDPc
+  - CFRADIAL:TEMP,TEMP,SAVEVOL_TEMP
+  interp_kind: nearest
+  weight_power: -1.0
+  hres: 2.0
+  products:
+    TIME_HEIGHT_dBZc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: dBZc
+    TIME_HEIGHT_ZDRc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: ZDRc
+    TIME_HEIGHT_RhoHVc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: RhoHVc
+    TIME_HEIGHT_KDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: KDPc
+    TIME_HEIGHT_PhiDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: PhiDPc
+    TIME_HEIGHT_TEMP:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: TEMP
+SVP:
+  type: SVP
+  datatype:
+  - CFRADIAL:dBZc,Att_ZPhi,SAVEVOL_dBZc
+  - CFRADIAL:ZDRc,Att_ZPhi,SAVEVOL_ZDRc
+  - CFRADIAL:RhoHVc,echoFilter,SAVEVOL_RhoHVc
+  - CFRADIAL:KDPc,KDPc_Vulpiani,SAVEVOL_KDPc
+  - CFRADIAL:PhiDPc,PhiDPc_smooth2w,SAVEVOL_PhiDPc
+  - CFRADIAL:TEMP,TEMP,SAVEVOL_TEMP
+  angle: 1
+  lon: 9.343
+  lat: 47.249
+  latlon_tol: 0.005
+  interp_kind: nearest
+  hres: 2.0
+  products:
+    TIME_HEIGHT_dBZc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: dBZc
+    TIME_HEIGHT_ZDRc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: ZDRc
+    TIME_HEIGHT_RhoHVc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: RhoHVc
+    TIME_HEIGHT_KDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: KDPc
+    TIME_HEIGHT_PhiDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: PhiDPc
+    TIME_HEIGHT_TEMP:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: TEMP
+EVP:
+  type: EVP
+  datatype:
+  - CFRADIAL:dBZc,Att_ZPhi,SAVEVOL_dBZc
+  - CFRADIAL:ZDRc,Att_ZPhi,SAVEVOL_ZDRc
+  - CFRADIAL:RhoHVc,echoFilter,SAVEVOL_RhoHVc
+  - CFRADIAL:KDPc,KDPc_Vulpiani,SAVEVOL_KDPc
+  - CFRADIAL:PhiDPc,PhiDPc_smooth2w,SAVEVOL_PhiDPc
+  - CFRADIAL:TEMP,TEMP,SAVEVOL_TEMP
+  lon: 9.343
+  lat: 47.249
+  latlon_tol: 0.005
+  interp_kind: nearest
+  hres: 2.0
+  products:
+    TIME_HEIGHT_dBZc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: dBZc
+    TIME_HEIGHT_ZDRc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: ZDRc
+    TIME_HEIGHT_RhoHVc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: RhoHVc
+    TIME_HEIGHT_KDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: KDPc
+    TIME_HEIGHT_PhiDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: PhiDPc
+    TIME_HEIGHT_TEMP:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: TEMP
+VP:
+  type: TIME_HEIGHT
+  datatype:
+  - CFRADIAL:dBZc,Att_ZPhi,SAVEVOL_dBZc
+  - CFRADIAL:ZDRc,Att_ZPhi,SAVEVOL_ZDRc
+  - CFRADIAL:RhoHVc,echoFilter,SAVEVOL_RhoHVc
+  - CFRADIAL:KDPc,KDPc_Vulpiani,SAVEVOL_KDPc
+  - CFRADIAL:PhiDPc,PhiDPc_smooth2w,SAVEVOL_PhiDPc
+  - CFRADIAL:TEMP,TEMP,SAVEVOL_TEMP
+  lon: 9.343
+  lat: 47.249
+  latlon_tol: 0.005
+  interp_kind: nearest
+  hres: 2.0
+  products:
+    TIME_HEIGHT_dBZc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: dBZc
+    TIME_HEIGHT_ZDRc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: ZDRc
+    TIME_HEIGHT_RhoHVc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: RhoHVc
+    TIME_HEIGHT_KDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: KDPc
+    TIME_HEIGHT_PhiDPc:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: PhiDPc
+    TIME_HEIGHT_TEMP:
+      qvp_type: final
+      type: TIME_RANGE
+      anglenr: 0
+      voltype: TEMP

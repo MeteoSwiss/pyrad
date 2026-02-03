@@ -1,0 +1,21 @@
+RadarName: MTCY
+RadarRes: L
+ScanList:
+- ODIM_VOL_HR_MTCY_
+ScanPeriod: 5
+CosmoRunFreq: 12
+CosmoForecasted: 24
+ppiImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  xmin: -100.0
+  xmax: 100.0
+  ymin: -100.0
+  ymax: 100.0
+rhiImageConfig:
+  xsize: 9.0
+  ysize: 7.0
+  xmin: 0.0
+  xmax: 100.0
+  ymin: 0.0
+  ymax: 8.0

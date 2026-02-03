@@ -1,0 +1,46 @@
+dataSetList:
+- l0:dBZ
+- l0:W
+- l0:EDR
+dBZ:
+  type: RAW
+  datatype: RAD4ALP:dBZ
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dBZ
+    AZ093:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: dBZ
+W:
+  type: RAW
+  datatype: RAD4ALP:W
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: W
+    AZ093:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: W
+EDR:
+  type: TURBULENCE
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:W
+  verbose: 0
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: EDR
+    AZ093:
+      type: PSEUDORHI_IMAGE
+      angle: 93.0
+      AziTol: 1.0
+      voltype: EDR

@@ -1,0 +1,49 @@
+dataSetList:
+- l0:dda
+dda:
+  type: DDA
+  datatype:
+  - RADAR001:RAD4ALP:dBZ
+  - RADAR002:RAINBOW:dBZ
+  - RADAR001:RAD4ALPDOPPLER:dealV
+  - RADAR002:RAINBOW:V
+  wfunc: NEAREST
+  gridConfig:
+    xmin: -20.0
+    xmax: 20.0
+    ymin: -20.0
+    ymax: 20.0
+    zmin: 2000.0
+    zmax: 6000.0
+    hres: 1000.0
+    vres: 200.0
+    altorig: 570.0
+    latorig: 46.74
+    lonorig: 8.0
+  signs:
+  - 1
+  - -1
+  products:
+    quiver_map:
+      type: DDA_MAP
+      voltype: dBZ
+      display_type: quiver
+      bg_ref_rad: 0
+      quiver_len: 20.0
+      vector_spacing_km: 2.0
+      vmin: 0.0
+      vmax: 40.0
+      alpha: 0.6
+      level: 10
+    lon_slice_8:
+      type: DDA_LONGITUDE_SLICE
+      voltype: dBZ
+      display_type: quiver
+      bg_ref_rad: 0
+      quiver_len: 10.0
+      vector_spacing_km: 2.0
+      vmin: 0.0
+      vmax: 40.0
+      alpha: 0.6
+      wind_vectors: hor
+      lon: 8.0

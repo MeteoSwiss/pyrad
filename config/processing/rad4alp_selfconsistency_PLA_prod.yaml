@@ -1,0 +1,599 @@
+dataSetList:
+- l0:H_ISO0_LOOKUP
+- l0:PhiDPc
+- l1:visibilityFilter
+- l2:Att_ZPhi
+- l3:PhiDP_selfconsistency
+- l3:reflectivity_bias
+- l4:monitoring_Zh_bias
+dBZ:
+  type: RAW
+  datatype:
+  - RAD4ALP:dBZ
+  products:
+    EL001:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 0
+    EL002:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 1
+    EL003:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 2
+    EL004:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 3
+    EL005:
+      type: PPI_IMAGE
+      voltype: dBZ
+      anglenr: 4
+EL006:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 5
+EL007:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 6
+EL008:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 7
+EL009:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 8
+EL010:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 9
+EL011:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 10
+EL012:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 11
+EL013:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 12
+EL014:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 13
+EL015:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 14
+EL016:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 15
+EL017:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 16
+EL018:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 17
+EL019:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 18
+EL020:
+  type: PPI_IMAGE
+  voltype: dBZ_bias
+  anglenr: 19
+ZDR:
+  type: RAW
+  datatype:
+  - RAD4ALP:ZDR
+  products:
+    EL001:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 0
+    EL002:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 1
+    EL003:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 2
+    EL004:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 3
+    EL005:
+      type: PPI_IMAGE
+      voltype: ZDR
+      anglenr: 4
+uPhiDP:
+  type: RAW
+  datatype:
+  - RAD4ALP:uPhiDP
+  products:
+    EL001:
+      type: PPI_IMAGE
+      voltype: uPhiDP
+      anglenr: 0
+    EL002:
+      type: PPI_IMAGE
+      voltype: uPhiDP
+      anglenr: 1
+    EL003:
+      type: PPI_IMAGE
+      voltype: uPhiDP
+      anglenr: 2
+    EL004:
+      type: PPI_IMAGE
+      voltype: uPhiDP
+      anglenr: 3
+    EL005:
+      type: PPI_IMAGE
+      voltype: uPhiDP
+      anglenr: 4
+uRhoHV:
+  type: RAW
+  datatype:
+  - RAD4ALP:uRhoHV
+  products:
+    EL001:
+      type: PPI_IMAGE
+      voltype: uRhoHV
+      anglenr: 0
+    EL002:
+      type: PPI_IMAGE
+      voltype: uRhoHV
+      anglenr: 1
+    EL003:
+      type: PPI_IMAGE
+      voltype: uRhoHV
+      anglenr: 2
+    EL004:
+      type: PPI_IMAGE
+      voltype: uRhoHV
+      anglenr: 3
+    EL005:
+      type: PPI_IMAGE
+      voltype: uRhoHV
+      anglenr: 4
+H_ISO0_LOOKUP:
+  type: HZT_LOOKUP
+  datatype:
+  - RAD4ALP:dBZ
+  regular_grid: 1
+  lookup_table: 0
+  MAKE_GLOBAL: 1
+SNRh:
+  type: SNR
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:Nh
+  output_type: SNRh
+  MAKE_GLOBAL: 1
+PhiDPc:
+  type: PHIDP_SMOOTH_1W
+  datatype:
+  - RAD4ALP:uPhiDP
+  - RAD4ALP:dBZ
+  rmin: 1000.0
+  rmax: 50000.0
+  rcell: 1000.0
+  Zmin: 20.0
+  Zmax: 40.0
+  rwind: 6000.0
+  MAKE_GLOBAL: 1
+PhiDP0_estimation:
+  type: PHIDP0_ESTIMATE
+  datatype:
+  - RAD4ALP:uPhiDP
+  - RAD4ALP:dBZ
+  rmin: 1000.0
+  rmax: 50000.0
+  rcell: 1000.0
+  Zmin: 20.0
+  Zmax: 40.0
+  MAKE_GLOBAL: 1
+visibilityFilter:
+  type: VIS_FILTER
+  datatype:
+  - RAD4ALPDEM:VIS
+  - RAD4ALP:dBZ
+  - RAD4ALP:ZDR
+  - PROC:PhiDPc
+  VISmin: 95.0
+  MAKE_GLOBAL: 1
+Att_ZPhi:
+  type: ATTENUATION
+  datatype:
+  - PROC:dBZc
+  - PROC:ZDRc
+  - PROC:PhiDPc
+  - PROC:H_ISO0
+  ATT_METHOD: ZPhi
+  fzl: 2000.0
+  MAKE_GLOBAL: 1
+PhiDP_selfconsistency:
+  type: SELFCONSISTENCY_KDP_PHIDP
+  datatype:
+  - PROC:dBZc
+  - PROC:ZDRc
+  - PROC:PhiDPc
+  - RAD4ALP:uRhoHV
+  - RAD4ALPHYDRO:hydro
+  fzl: 2000.0
+  parametrization: Gorgucci
+  rsmooth: 2000.0
+  products:
+    EL001:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 0
+    EL002:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 1
+    EL003:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 2
+    EL004:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 3
+    EL005:
+      type: PPI_IMAGE
+      voltype: PhiDP
+      anglenr: 4
+reflectivity_bias:
+  type: SELFCONSISTENCY_BIAS
+  datatype:
+  - PROC:dBZc
+  - PROC:ZDRc
+  - PROC:PhiDPc
+  - RAD4ALP:uRhoHV
+  - RAD4ALPHYDRO:hydro
+  fzl: 2000.0
+  parametrization: Gorgucci
+  rsmooth: 2000.0
+  MAKE_GLOBAL: 1
+  products:
+    EL001:
+      type: PPI_IMAGE
+      voltype: dBZ_bias
+      anglenr: 0
+    EL002:
+      type: PPI_IMAGE
+      voltype: dBZ_bias
+      anglenr: 1
+    EL003:
+      type: PPI_IMAGE
+      voltype: dBZ_bias
+      anglenr: 2
+    EL004:
+      type: PPI_IMAGE
+      voltype: dBZ_bias
+      anglenr: 3
+    EL005:
+      type: PPI_IMAGE
+      voltype: dBZ_bias
+      anglenr: 4
+RhoHV_rain:
+  type: RHOHV_RAIN
+  datatype:
+  - RAD4ALP:uRhoHV
+  - RAD4ALP:dBZ
+  - PROC:H_ISO0
+  fzl: 2000.0
+  rmin: 1000.0
+  rmax: 50000.0
+  Zmin: 20.0
+  Zmax: 40.0
+  ml_thickness: 700.0
+  MAKE_GLOBAL: 1
+ZDR_rain:
+  type: ZDR_PREC
+  datatype:
+  - RAD4ALP:ZDR
+  - PROC:PhiDPc
+  - RAD4ALP:uRhoHV
+  - RAD4ALP:dBZ
+  - PROC:H_ISO0
+  fzl: 2000.0
+  rmin: 1000.0
+  rmax: 50000.0
+  Zmin: 20.0
+  Zmax: 22.0
+  RhoHVmin: 0.97
+  PhiDPmax: 10.0
+  elmax: 20.0
+  ml_thickness: 700.0
+  MAKE_GLOBAL: 1
+ZDR_snow:
+  type: ZDR_SNOW
+  datatype:
+  - RAD4ALP:ZDR
+  - PROC:PhiDPc
+  - RAD4ALP:uRhoHV
+  - RAD4ALP:dBZ
+  - RAD4ALPHYDRO:hydro
+  - PROC:SNRh
+  rmin: 1000.0
+  rmax: 50000.0
+  Zmin: 0.0
+  Zmax: 30.0
+  SNRmin: 10.0
+  SNRmax: 50.0
+  RhoHVmin: 0.97
+  PhiDPmax: 10.0
+  elmax: 25.0
+  hydroclass:
+  - 1.0
+  MAKE_GLOBAL: 1
+monitoring_RhoHV:
+  type: MONITORING
+  datatype:
+  - PROC:RhoHV_rain
+  step: 0.001
+  products:
+    VOL_TS:
+      add_date_in_fname: 1
+      type: VOL_TS
+      hist_type: cumulative
+      voltype: RhoHV_rain
+      quantiles:
+      - 65.0
+      - 80.0
+      - 95.0
+      ref_value: 0.99
+      tol_abs: 0.04
+      tol_trend: 0.02
+      npoints_min: 5000
+      vmin: 0.95
+      vmax: 1.01
+      nevents_min: 10
+      alarm: 1
+      sender: jordi.figuerasiventura@meteoswiss.ch
+      receiver_list:
+      - jordi.figuerasiventura@meteoswiss.ch
+    VOL_HISTOGRAM:
+      type: VOL_HISTOGRAM
+      hist_type: cumulative
+      voltype: RhoHV_rain
+monitoring_ZDR:
+  type: MONITORING
+  datatype:
+  - PROC:ZDR_prec
+  step: 0.05
+  products:
+    VOL_TS:
+      add_date_in_fname: 1
+      type: VOL_TS
+      hist_type: cumulative
+      voltype: ZDR_prec         .
+      ref_value: 0.2
+      tol_abs: 0.2
+      tol_trend: 0.2
+      npoints_min: 5000
+      vmin: -2.0
+      vmax: 2.0
+      nevents_min: 10
+      alarm: 1
+      sender: jordi.figuerasiventura@meteoswiss.ch
+      receiver_list:
+      - jordi.figuerasiventura@meteoswiss.ch
+    VOL_HISTOGRAM:
+      type: VOL_HISTOGRAM
+      hist_type: cumulative
+      voltype: ZDR_prec
+monitoring_ZDR_snow:
+  type: MONITORING
+  datatype:
+  - PROC:ZDR_snow
+  step: 0.05
+  products:
+    VOL_TS:
+      add_date_in_fname: 1
+      type: VOL_TS
+      hist_type: cumulative
+      voltype: ZDR_snow
+      quantiles:
+      - 25.0
+      - 50.0
+      - 75.0
+      ref_value: 0.2
+      tol_abs: 0.2
+      tol_trend: 0.2
+      npoints_min: 5000
+      vmin: -2.0
+      vmax: 2.0
+      nevents_min: 10
+      alarm: 1
+      sender: jordi.figuerasiventura@meteoswiss.ch
+      receiver_list:
+      - jordi.figuerasiventura@meteoswiss.ch
+    VOL_HISTOGRAM:
+      type: VOL_HISTOGRAM
+      hist_type: cumulative
+      voltype: ZDR_snow
+monitoring_Zh_bias:
+  type: MONITORING
+  datatype:
+  - PROC:dBZ_bias
+  step: 0.5
+  products:
+    VOL_TS:
+      add_date_in_fname: 1
+      type: VOL_TS
+      hist_type: cumulative
+      voltype: dBZ_bias         .
+      ref_value: 0.0
+      tol_abs: 2.0
+      tol_trend: 2.0
+      npoints_min: 100
+      vmin: -30.0
+      vmax: 30.0
+      nevents_min: 10
+      alarm: 0
+      sender: jordi.figuerasiventura@meteoswiss.ch
+      receiver_list:
+      - jordi.figuerasiventura@meteoswiss.ch
+    VOL_HISTOGRAM:
+      type: VOL_HISTOGRAM
+      hist_type: cumulative
+      voltype: dBZ_bias
+    EL001_DENSITY:
+      type: ANGULAR_DENSITY
+      hist_type: cumulative
+      voltype: dBZ_bias
+      anglenr: 0
+      ref_value: 0.0
+    EL002_DENSITY:
+      type: ANGULAR_DENSITY
+      hist_type: cumulative
+      voltype: dBZ_bias
+      anglenr: 1
+      ref_value: 0.0
+    EL003_DENSITY:
+      type: ANGULAR_DENSITY
+      hist_type: cumulative
+      voltype: dBZ_bias
+      anglenr: 2
+      ref_value: 0.0
+    EL004_DENSITY:
+      type: ANGULAR_DENSITY
+      hist_type: cumulative
+      voltype: dBZ_bias
+      anglenr: 3
+      ref_value: 0.0
+    EL005_DENSITY:
+      type: ANGULAR_DENSITY
+      hist_type: cumulative
+      voltype: dBZ_bias
+      anglenr: 4
+      ref_value: 0.0
+EL006_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 5
+  ref_value: 0.0
+EL007_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 6
+  ref_value: 0.0
+EL008_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 7
+  ref_value: 0.0
+EL009_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 8
+  ref_value: 0.0
+EL010_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 9
+  ref_value: 0.0
+EL011_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 10
+  ref_value: 0.0
+EL012_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 11
+  ref_value: 0.0
+EL013_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 12
+  ref_value: 0.0
+EL014_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 13
+  ref_value: 0.0
+EL015_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 14
+  ref_value: 0.0
+EL016_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 15
+  ref_value: 0.0
+EL017_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 16
+  ref_value: 0.0
+EL018_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 17
+  ref_value: 0.0
+EL019_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 18
+  ref_value: 0.0
+EL020_DENSITY:
+  type: ANGULAR_DENSITY
+  hist_type: cumulative
+  voltype: dBZ_bias
+  anglenr: 19
+  ref_value: 0.0
+monitoring_PhiDP0:
+  type: MONITORING
+  datatype:
+  - PROC:PhiDP0
+  step: 1.0
+  products:
+    VOL_TS:
+      add_date_in_fname: 1
+      type: VOL_TS
+      hist_type: cumulative
+      voltype: PhiDP0         .
+      ref_value: 0.0
+      tol_abs: 10.0
+      tol_trend: 10.0
+      npoints_min: 500000
+      nevents_min: 10
+      vmin: -20.0
+      vmax: 20.0
+      alarm: 1
+      sender: jordi.figuerasiventura@meteoswiss.ch
+      receiver_list:
+      - jordi.figuerasiventura@meteoswiss.ch
+    VOL_HISTOGRAM:
+      type: VOL_HISTOGRAM
+      hist_type: cumulative
+      voltype: PhiDP0

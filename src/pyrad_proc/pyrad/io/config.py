@@ -96,8 +96,10 @@ def read_config(fname, cfg=None, defaults=None):
                 cfg_new = yaml.load(cfgfile, Loader=yaml.SafeLoader)
             else:
                 cfg_new = _read_config_pyrad(cfgfile)
-    except Exception:
-        raise Exception("ERROR: Could not find|open config file '" + fname + "'")
+    except Exception as err:
+        raise Exception(
+            f"ERROR: Could not find|open config file {fname}, error is {err}"
+        )
 
     # Merge with existing dict
     cfg = merge_dicts(cfg, cfg_new)

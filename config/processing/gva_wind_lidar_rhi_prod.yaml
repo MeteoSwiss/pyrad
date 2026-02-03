@@ -1,0 +1,74 @@
+dataSetList:
+- radial_wind_speed
+radial_wind_speed:
+  type: RAW
+  datatype: CFRADIAL2:wind_vel_rad,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: wind_vel_rad
+      anglenr: 0
+radial_wind_speed_ci:
+  type: RAW
+  datatype: CFRADIAL2:wind_vel_rad_ci,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: wind_vel_rad_ci
+      anglenr: 0
+radial_wind_speed_status:
+  type: RAW
+  datatype: CFRADIAL2:wind_vel_rad_status,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: wind_vel_rad_status
+      anglenr: 0
+doppler_spectrum_width:
+  type: RAW
+  datatype: CFRADIAL2:WD,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: WD
+      anglenr: 0
+doppler_spectrum_mean_error:
+  type: RAW
+  datatype: CFRADIAL2:WD_err,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: WD_err
+      anglenr: 0
+atmospherical_structures_type:
+  type: RAW
+  datatype: CFRADIAL2:atmos_type,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: atmos_type
+      anglenr: 0
+relative_beta:
+  type: RAW
+  datatype: CFRADIAL2:beta_rel,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: beta_rel
+      anglenr: 0
+absolute_beta:
+  type: RAW
+  datatype: CFRADIAL2:beta_abs,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: beta_abs
+      anglenr: 0
+cnr:
+  type: RAW
+  datatype: CFRADIAL2:CNR,D{}-F{%Y-%m-%d_%H-%M-%S}
+  products:
+    RHI:
+      type: RHI_IMAGE
+      voltype: CNR
+      anglenr: 0

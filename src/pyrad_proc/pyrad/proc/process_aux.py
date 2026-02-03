@@ -108,6 +108,7 @@ def get_process_func(dataset_type, dsname):
                 'ISO0_MF': process_iso0_mf
                 'KDP_LEASTSQUARE_1W': process_kdp_leastsquare_single_window
                 'KDP_LEASTSQUARE_2W': process_kdp_leastsquare_double_window
+                'KDP_OPERATIONAL_MCH': process_kdp_operational
                 'KEEP_ROI': process_keep_roi
                 'L': process_l
                 'MEAN_PHASE_IQ': process_mean_phase_iq
@@ -214,7 +215,7 @@ def get_process_func(dataset_type, dsname):
             'INTERCOMP' format output:
                 'INTERCOMP': process_intercomp
                 'INTERCOMP_FIELDS': process_intercomp_fields
-                'INTERCOMP_TIME_AVG': process_intercomp_time_avg
+                'INTERCOMP_WITH_QC': process_intercomp_with_qc
             'ML' format output:
                 'ML_DETECTION': process_melting_layer
             'VPR' format output:
@@ -461,6 +462,8 @@ def get_process_func(dataset_type, dsname):
         func_name = "process_kdp_leastsquare_single_window"
     elif dataset_type == "KDP_LEASTSQUARE_2W":
         func_name = "process_kdp_leastsquare_double_window"
+    elif dataset_type == "KDP_OPERATIONAL_MCH":
+        func_name = "process_kdp_operational_mch"
     elif dataset_type == "ATTENUATION":
         func_name = "process_attenuation"
     elif dataset_type == "RAINRATE":
@@ -602,8 +605,8 @@ def get_process_func(dataset_type, dsname):
     elif dataset_type == "INTERCOMP_FIELDS":
         func_name = "process_intercomp_fields"
         dsformat = "INTERCOMP"
-    elif dataset_type == "INTERCOMP_TIME_AVG":
-        func_name = "process_intercomp_time_avg"
+    elif dataset_type == "INTERCOMP_WITH_QC":
+        func_name = "process_intercomp_with_QC"
         dsformat = "INTERCOMP"
     elif dataset_type == "FIELDS_DIFF":
         func_name = "process_fields_diff"

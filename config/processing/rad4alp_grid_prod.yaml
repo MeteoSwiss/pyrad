@@ -1,0 +1,269 @@
+dataSetList:
+- dACC
+SAVEGRID:
+  type: RAW_GRID
+  datatype:
+  - RAD4ALPGRID:RZC
+  - RAD4ALPGRID:BZC
+  - RAD4ALPGRID:LZC
+  products:
+    SAVEALL:
+      type: SAVEALL
+LOADGRID:
+  type: RAW_GRID
+  datatype: PYRADGRID:all_fields,SAVEGRID,SAVEALL
+  MAKE_GLOBAL: 1
+dACC:
+  type: RAW_GRID
+  datatype: RAD4ALPBIN:dACC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: Raccu
+      level: 0
+CPC0005:
+  type: RAW_GRID
+  datatype: RAD4ALPGIF:CPC0005
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      level: 0
+CPC0060:
+  type: RAW_GRID
+  datatype: RAD4ALPGIF:CPC0060
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: Raccu
+      level: 0
+CAPPI_Zh:
+  type: RAW_GRID
+  datatype:
+  - RAD4ALPGRID:OZC01
+  - RAD4ALPGRID:OZC02
+  - RAD4ALPGRID:OZC03
+  - RAD4ALPGRID:OZC04
+  - RAD4ALPGRID:OZC05
+  - RAD4ALPGRID:OZC06
+  - RAD4ALPGRID:OZC07
+  - RAD4ALPGRID:OZC08
+  - RAD4ALPGRID:OZC09
+  - RAD4ALPGRID:OZC10
+  - RAD4ALPGRID:OZC11
+  - RAD4ALPGRID:OZC12
+  - RAD4ALPGRID:OZC13
+  - RAD4ALPGRID:OZC14
+  - RAD4ALPGRID:OZC15
+  - RAD4ALPGRID:OZC16
+  - RAD4ALPGRID:OZC17
+  - RAD4ALPGRID:OZC18
+  products:
+    SURFACE_01km:
+      type: SURFACE_IMAGE
+      voltype: dBZ
+      level: 0
+    SURFACE_10km:
+      type: SURFACE_IMAGE
+      voltype: dBZ
+      level: 9
+    LAT:
+      type: LATITUDE_SLICE
+      voltype: dBZ
+      lat: 47.5
+      lon: 9.0
+    LON:
+      type: LONGITUDE_SLICE
+      voltype: dBZ
+      lat: 47.5
+      lon: 9.0
+    LATLON:
+      type: CROSS_SECTION
+      voltype: dBZ
+      coord1:
+        lat: 47.18
+        lon: 9.25
+      coord2:
+        lat: 47.61
+        lon: 9.7
+nowpal720_P720:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:nowpal720_P720
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: Raccu
+      level: 0
+nowpal720_P360_F360:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:nowpal720_P360_F360
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: Raccu
+      level: 0
+Hail:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:GZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: POH
+      level: 0
+AZC01:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:AZC01
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: Raccu
+      level: 0
+ETOP15:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:EZC15
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: ETOP15
+      level: 0
+dETOP15:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:dEZC15
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: ETOP15
+      level: 0
+MAXECHO:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:CZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: MAXECHO
+      level: 0
+dMAXECHO:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:dCZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: MAXECHO
+      level: 0
+HMAXECHO:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:HZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: HMAXECHO
+      level: 0
+RZC:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:RZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      level: 0
+    SURFACE_CONTOUR:
+      type: SURFACE_CONTOUR
+      voltype: RR
+      level: 0
+    HISTOGRAM:
+      type: HISTOGRAM
+      voltype: RR
+      mask_val: 0.03526497
+      write_data: 1
+POH:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:BZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: POH
+      level: 0
+    SURFACE_CONTOUR:
+      type: SURFACE_CONTOUR
+      voltype: POH
+      level: 0
+      contour_values:
+      - 80.0
+VIL:
+  type: RAW_GRID
+  datatype: RAD4ALPGRID:LZC
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: VIL
+      level: 0
+    SURFACE_CONTOUR:
+      type: SURFACE_CONTOUR
+      voltype: VIL
+      level: 0
+RZC_POH:
+  type: RAW_GRID
+  datatype:
+  - RAD4ALPGRID:RZC
+  - RAD4ALPGRID:BZC
+  products:
+    SURFACE_CONTOUR:
+      type: SURFACE_CONTOUR_OVERPLOT
+      voltype: RR
+      contourtype: POH
+      level: 0
+      contour_values:
+      - 90.0
+RZC_TS:
+  type: GRID_POINT_MEASUREMENT
+  datatype: RAD4ALPGRID:RZC
+  latlon: 1
+  lon: 9.3393
+  lat: 47.2429
+  products:
+    RR:
+      type: PLOT_AND_WRITE_POINT
+RZC_max:
+  type: GRID_TIME_STATS
+  datatype: RAD4ALPGRID:RZC
+  start_average: 0.0
+  period: -1.0
+  stat: max
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      level: 0
+RZC_quant50:
+  type: GRID_TIME_STATS2
+  datatype: RAD4ALPGRID:RZC
+  start_average: 0.0
+  period: -1.0
+  stat: percentile50
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      level: 0
+RZC_mode:
+  type: GRID_TIME_STATS2
+  datatype: RAD4ALPGRID:RZC
+  start_average: 0.0
+  period: -1.0
+  stat: mode
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      level: 0
+RZC_median:
+  type: GRID_TIME_STATS2
+  datatype: RAD4ALPGRID:RZC
+  start_average: 0.0
+  period: -1.0
+  stat: median
+  products:
+    SURFACE:
+      type: SURFACE_IMAGE
+      voltype: RR
+      level: 0

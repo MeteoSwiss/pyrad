@@ -4638,3 +4638,17 @@ DEFAULT_FIELD_LIMITS = {
     # absolute_beta: (0., 4e-6),
     # cnr: 'Carbone17',
 }
+
+DEFAULT_RGB_BOUNDS = {
+    reflectivity: ((30, 60), (0, 1)),
+    differential_reflectivity: ((0, 4), (0, 1)),
+    cross_correlation_ratio: ((1, 0.7), (0, 1)),
+    uncorrected_cross_correlation_ratio: ((1, 0.7), (0, 1)),
+}
+
+DEFAULT_RGB_ALPHA = {
+    reflectivity: (
+        (-10, 0, 10, 15, 20, 24, 28, 31, 34, 37, 40),
+        (0.05, 0.12, 0.22, 0.29, 0.39, 0.48, 0.58, 0.67, 0.77, 0.88, 1),
+    )
+}

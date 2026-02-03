@@ -1,0 +1,9 @@
+name: rad4alp_dataquality_PLA
+datapath: /store/msrad/radar/rad4alp/rawdata/
+cosmopath: /store/msrad/cosmo/
+dempath: /store/msrad/radar/rad4alp/visibRad4Alp/
+saveimgbasepath: /store/msrad/radar/pyrad_products/
+imgformat: png
+configpath: /users/wolfensb/pyrad/config/
+locationConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_selfconsistency_PLA_loc.txt
+productConfigFile: /users/wolfensb/pyrad/config/processing/rad4alp_selfconsistency_PLA_prod.txt

@@ -1,0 +1,92 @@
+dataSetList:
+- entropy_traj
+entropy_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:entropy,hydroclass_entropy,SAVEVOL_entropy
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 0.1
+propAG_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propAG,hydroclass_entropy,SAVEVOL_propAG
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propCR_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propCR,hydroclass_entropy,SAVEVOL_propCR
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propLR_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propLR,hydroclass_entropy,SAVEVOL_propLR
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propRP_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propRP,hydroclass_entropy,SAVEVOL_propRP
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propRN_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propRN,hydroclass_entropy,SAVEVOL_propRN
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propVI_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propVI,hydroclass_entropy,SAVEVOL_propVI
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propWS_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propWS,hydroclass_entropy,SAVEVOL_propWS
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propMH_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propMH,hydroclass_entropy,SAVEVOL_propMH
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0
+propIH_traj:
+  type: TRAJ_LIGHTNING
+  datatype: CFRADIAL:propIH,hydroclass_entropy,SAVEVOL_propIH
+  products:
+    AT_FLASH:
+      type: PLOT_AND_WRITE
+    HIST:
+      type: PLOT_HIST
+      step: 10.0

@@ -1,0 +1,131 @@
+dataSetList:
+- l0:dBZ
+- l0:V
+- l0:SNRh
+- l1:RhoHV
+- l2:echoID
+- l3:echoFilter
+- l4:Vc_dealias_4DD
+- l4:Vc_dealias_region_based
+- l4:Vc_dealias_unwrap_phase
+dBZ:
+  type: RAW
+  datatype:
+  - RAD4ALP:dBZ
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dBZ
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dBZ
+V:
+  type: RAW
+  datatype:
+  - RAD4ALP:V
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: V
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: V
+SNRh:
+  type: SNR
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:Nh
+  output_type: SNRh
+  MAKE_GLOBAL: 1
+RhoHV:
+  type: RHOHV_CORRECTION
+  datatype:
+  - RAD4ALP:uRhoHV
+  - RAD4ALP:ZDR
+  - RAD4ALP:Nh
+  - RAD4ALP:Nv
+  - PROC:SNRh
+  MAKE_GLOBAL: 1
+echoID:
+  type: SAN
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:ZDR
+  - RAD4ALP:uPhiDP
+  - PROC:RhoHV
+  MAKE_GLOBAL: 1
+echoFilter:
+  type: ECHO_FILTER
+  datatype:
+  - PROC:echoID
+  - RAD4ALP:dBZ
+  - RAD4ALP:V
+  echo_type: 3
+  MAKE_GLOBAL: 1
+  products:
+    EL001_dBZc:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dBZc
+    AZ270_dBZc:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dBZc
+    EL001_Vc:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: Vc
+    AZ270_Vc:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: Vc
+Vc_dealias_4DD:
+  type: DEALIAS_FOURDD
+  datatype:
+  - PROC:Vc
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dealVc
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dealVc
+Vc_dealias_region_based:
+  type: DEALIAS_REGION
+  datatype:
+  - PROC:Vc
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dealVc
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dealVc
+Vc_dealias_unwrap_phase:
+  type: DEALIAS_UNWRAP
+  datatype:
+  - PROC:Vc
+  products:
+    EL001:
+      type: PPI_IMAGE
+      anglenr: 2
+      voltype: dealVc
+    AZ270:
+      type: PSEUDORHI_IMAGE
+      angle: 270.0
+      AziTol: 1.0
+      voltype: dealVc

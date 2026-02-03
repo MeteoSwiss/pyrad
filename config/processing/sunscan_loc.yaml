@@ -1,0 +1,38 @@
+ScanList:
+- SunScan.vol/
+RAINBOW_PPI_SECTORMERGE: 1
+ScanPeriod: 10
+CosmoRunFreq: 3
+CosmoForecasted: 7
+iso0setup:
+  xcoord: '185'
+  ycoord: '560'
+RADARBEAMWIDTH: 1.35
+AntennaGainH: 42.2
+AntennaGainV: 42.2
+ang_tol: 0.03
+clutterMap: cluttermaps_RHI_payerne_east_q75.sav
+RcovFile: Rcov_2gatesV2.txt
+PcovFile: Pcov_2gatesV3.txt
+ppiImageConfig:
+  xsize: 10
+  ysize: 5
+  xmin: -20.0
+  xmax: 20.0
+  ymin: -40.0
+  ymax: 0.0
+rhiImageConfig:
+  xsize: 1000
+  ysize: 200
+  xmin: 0.0
+  xmax: 40.0
+  ymin: 0.0
+  ymax: 7.5
+par_azimuth_antenna:
+  azPatternFile: PAR_AzAntenna_AzimuthPattern.csv
+  elPatternFile: PAR_AzAntenna_ElevationPattern.csv
+  fixed_angle: 9.5
+par_elevation_antenna:
+  azPatternFile: PAR_ElAntenna_AzimuthPattern.csv
+  elPatternFile: PAR_ElAntenna_ElevationPattern.csv
+  fixed_angle: 49.0

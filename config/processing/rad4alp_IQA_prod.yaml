@@ -1,0 +1,477 @@
+dataSetList:
+- uPhiDP_offset_corrected
+IQhhADU:
+  type: RAW_IQ
+  datatype: RAD4ALPIQ:IQhhADU
+  products:
+    ELN00_2_RNG50000:
+      type: AMPLITUDE_PHASE_ANGLE_DOPPLER
+      along_azi: 1
+      rng: 50000.0
+      ang: -0.2
+      xaxis_info: pulse_number
+      voltype: IQhhADU
+    ELN00_2_AZ000:
+      type: COMPLEX_RANGE_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      voltype: IQhhADU
+    ELN00_2_AZ000_AMP_PHASE:
+      type: AMPLITUDE_PHASE_RANGE_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      ampli_vmin: 0.0
+      ampli_vmax: 100.0
+      voltype: IQhhADU
+    ELN00_2_AZ000_RNG50000:
+      type: COMPLEX_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      rng: 50000.0
+      voltype: IQhhADU
+IQNADUh:
+  type: RAW_IQ
+  datatype: RAD4ALPIQ:IQNADUh
+  products:
+    ELN00_2_AZ000:
+      type: RANGE_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      voltype: IQNADUh
+    ELN00_2_AZ000_RNG50000:
+      type: DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      rng: 50000.0
+      voltype: IQNADUh
+IQ_time_series:
+  type: SPECTRA_POINT
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQvvADU
+  latlon: 0
+  truealt: 0
+  ele: -0.2
+  azi: 0.5
+  rng: 50000.0
+  AziTol: 0.5
+  EleTol: 0.5
+  RngTol: 50.0
+  products:
+    ELN00_2_AZ000_RNG50000_IQhhADU:
+      type: AMPLITUDE_PHASE_TIME_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.5
+      rng: 50000.0
+      voltype: IQhhADU
+    ELN00_2_AZ000_RNG50000_IQvvADU:
+      type: AMPLITUDE_PHASE_TIME_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.5
+      rng: 50000.0
+      voltype: IQvvADU
+PolVariables:
+  type: POL_VARIABLES_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQvvADU
+  - RAD4ALPIQ:IQNADUh
+  - RAD4ALPIQ:IQNADUv
+  lag: 0
+  subtract_noise: 1
+  variables:
+  - dBZ
+  - ZDR
+  - RhoHV
+  - uPhiDP
+  - V
+  - W
+  products:
+    ELN00_2_dBZ:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: dBZ
+    ELN00_2_ZDR:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: ZDR
+    ELN00_2_RhoHV:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: RhoHV
+    ELN00_2_uPhiDP:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: uPhiDP
+    ELN00_2_V:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: V
+    ELN00_2_W:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: W
+dBZ:
+  type: REFLECTIVITY_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQNADUh
+  subtract_noise: 1
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: dBZ
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: dBZ
+dBZv:
+  type: REFLECTIVITY_IQ
+  datatype:
+  - RAD4ALPIQ:IQvvADU
+  - RAD4ALPIQ:IQNADUv
+  subtract_noise: 1
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: dBZv
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: dBZv
+ZDR:
+  type: ZDR_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQNADUh
+  - RAD4ALPIQ:IQvvADU
+  - RAD4ALPIQ:IQNADUv
+  lag: 0
+  subtract_noise: 1
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: ZDR
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: ZDR
+RhoHV:
+  type: RhoHV_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQNADUh
+  - RAD4ALPIQ:IQvvADU
+  - RAD4ALPIQ:IQNADUv
+  lag: 0
+  subtract_noise: 0
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: RhoHV
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: RhoHV
+uPhiDP:
+  type: PhiDP_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQvvADU
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: uPhiDP
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: uPhiDP
+uPhiDP_offset_corrected:
+  type: PhiDP_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQvvADU
+  phase_offset: -120.0
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: uPhiDP
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: uPhiDP
+V:
+  type: DOPPLER_VELOCITY_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: V
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: V
+W:
+  type: DOPPLER_WIDTH_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQNADUh
+  lag: 0
+  subtract_noise: 1
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: W
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: W
+MPH:
+  type: MEAN_PHASE_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: MPH
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: MPH
+ST1:
+  type: ST1_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: ST1
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: ST1
+ST2:
+  type: ST2_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: ST2
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: ST2
+WBN:
+  type: WBN_IQ
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: WBN
+    SAVEVOL:
+      type: SAVEVOL
+      voltype: WBN
+Spectra:
+  type: FFT
+  datatype:
+  - RAD4ALPIQ:IQhhADU
+  - RAD4ALPIQ:IQNADUh
+  window:
+  - hamming
+  MAKE_GLOBAL: 1
+  products:
+    ELN00_2_AZ000_NOISE:
+      type: RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      voltype: sNADUh
+    ELN00_2_AZ000:
+      type: COMPLEX_RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      voltype: ShhADUu
+    ELN00_2_AZ000_AMP_PHASE:
+      type: AMPLITUDE_PHASE_RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      ampli_vmin: 0.0
+      ampli_vmax: 1000.0
+      voltype: ShhADUu
+ELN00_2_AZ000_RNG50000:
+  type: COMPLEX_DOPPLER
+  xaxis_info: Doppler_velocity
+  ele: -0.2
+  azi: 0.0
+  rng: 50000.0
+  voltype: ShhADUu
+sNADUh:
+  type: SPECTRAL_NOISE
+  datatype:
+  - PROC:ShhADUu
+  units: ADU
+  navg: 1
+  rmin: 200000.0
+  products:
+    ELN00_2_AZ000_NOISE:
+      type: RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      voltype: NADUh
+NdBmh:
+  type: NOISE_POWER
+  datatype:
+  - PROC:ShhADUu
+  units: dBm
+  navg: 1
+  rmin: 200000.0
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      vmin: -112.0
+      vmax: -110.0
+      voltype: NdBmh
+IQ:
+  type: IFFT
+  datatype:
+  - PROC:ShhADUu
+  window:
+  - hamming
+  MAKE_GLOBAL: 1
+  products:
+    ELN00_2_AZ000:
+      type: COMPLEX_RANGE_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      voltype: IQhhADU
+    ELN00_2_AZ000_AMP_PHASE:
+      type: AMPLITUDE_PHASE_RANGE_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      ampli_vmin: 0.0
+      ampli_vmax: 100.0
+      voltype: IQhhADU
+    ELN00_2_AZ000_RNG50000:
+      type: COMPLEX_DOPPLER
+      xaxis_info: pulse_number
+      ele: -0.2
+      azi: 0.0
+      rng: 50000.0
+      voltype: IQhhADU
+dBZ_IQ:
+  type: REFLECTIVITY_IQ
+  datatype:
+  - PROC:IQhhADU
+  - PROC:IQNADUh
+  subtract_noise: 1
+  products:
+    ELN00_2:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: dBZ
+Spectra_Noise_filtered:
+  type: FILTER_SPECTRA_NOISE
+  datatype:
+  - PROC:ShhADUu
+  - PROC:sNADUh
+  - PROC:ShhADUu
+  clipping_level: 10.0
+  MAKE_GLOBAL: 1
+  products:
+    ELN00_2_AZ000:
+      type: COMPLEX_RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      voltype: ShhADUu
+    ELN00_2_AZ000_AMP_PHASE:
+      type: AMPLITUDE_PHASE_RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      ampli_vmin: 0.0
+      ampli_vmax: 1000.0
+      voltype: ShhADUu
+    ELN00_2_AZ000_RNG50000:
+      type: COMPLEX_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      rng: 50000.0
+      voltype: ShhADUu
+Spectra_0Doppler_filtered:
+  type: FILTER_0DOPPLER
+  datatype:
+  - PROC:ShhADUu
+  filter_width: 4.0
+  MAKE_GLOBAL: 1
+  products:
+    ELN00_2_AZ000:
+      type: COMPLEX_RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      voltype: ShhADU
+    ELN00_2_AZ000_AMP_PHASE:
+      type: AMPLITUDE_PHASE_RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      ampli_vmin: 0.0
+      ampli_vmax: 1000.0
+      voltype: ShhADU
+    ELN00_2_AZ000_RNG50000:
+      type: COMPLEX_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      rng: 50000.0
+      voltype: ShhADU
+sdBZ:
+  type: SPECTRAL_REFLECTIVITY
+  datatype:
+  - PROC:ShhADU
+  subtract_noise: 0
+  MAKE_GLOBAL: 1
+  products:
+    ELN00_2_AZ000:
+      type: RANGE_DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      voltype: sdBZ
+    ELN00_2_AZ000_RNG50000:
+      type: DOPPLER
+      xaxis_info: Doppler_velocity
+      ele: -0.2
+      azi: 0.0
+      rng: 50000.0
+      voltype: sdBZ
+PolVariables_Spectra:
+  type: POL_VARIABLES
+  datatype:
+  - PROC:ShhADU
+  variables:
+  - dBZ
+  products:
+    ELN00_2_dBZ:
+      type: PPI_IMAGE
+      anglenr: 0
+      voltype: dBZ

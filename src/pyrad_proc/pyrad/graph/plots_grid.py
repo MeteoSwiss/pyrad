@@ -119,9 +119,12 @@ def plot_surface(
     vmax = prdcfg.get("vmax", None)
     mask_outside = prdcfg.get("mask_outside", False)
 
-    norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=False
-    )
+    if isinstance(field_name, list):  # rgb case:
+        norm, ticks, ticklabs = None, None, None
+    else:
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=grid.fields[field_name], isxarray=False
+        )
 
     xsize = prdcfg["gridMapImageConfig"]["xsize"]
     ysize = prdcfg["gridMapImageConfig"]["ysize"]
@@ -383,7 +386,7 @@ def plot_surface(
                         gdf.geometry,
                         crs=cartopy.crs.epsg(gdf.crs.to_epsg()),
                         facecolor="none",
-                        edgecolor="black",
+                        edgecolor="gray",
                         linewidth=1.2,
                     )
 
@@ -462,9 +465,12 @@ def plot_surface_raw(
     vmin = prdcfg.get("vmin", None)
     vmax = prdcfg.get("vmax", None)
 
-    norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=False
-    )
+    if isinstance(field_name, (tuple, list)):  #  rgb case
+        norm, ticks, ticklabs = get_norm(
+            field_name[0], field_dict=grid.fields[field_name[0]]
+        )
+    else:
+        norm, ticks, ticklabs = get_norm(field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg["gridMapImageConfig"]["xsize"]
     ysize = prdcfg["gridMapImageConfig"]["ysize"]
@@ -749,9 +755,12 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     if "dpi" in prdcfg["xsecImageConfig"]:
         dpi = prdcfg["xsecImageConfig"]["dpi"]
 
-    norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True
-    )
+    if isinstance(field_name, (tuple, list)):  #  rgb case
+        norm, ticks, ticklabs = get_norm(
+            field_name[0], field_dict=grid.fields[field_name[0]]
+        )
+    else:
+        norm, ticks, ticklabs = get_norm(field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
     ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
@@ -763,7 +772,8 @@ def plot_latitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     vmax = prdcfg.get("vmax", None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111, aspect="equal")
+    aspect = prdcfg["xsecImageConfig"].get("aspect", "equal")
+    ax = fig.add_subplot(111, aspect=aspect)
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_latitude_slice(
         field_name,
@@ -813,9 +823,12 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     if "dpi" in prdcfg["xsecImageConfig"]:
         dpi = prdcfg["xsecImageConfig"]["dpi"]
 
-    norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True
-    )
+    if isinstance(field_name, (tuple, list)):  #  rgb case
+        norm, ticks, ticklabs = get_norm(
+            field_name[0], field_dict=grid.fields[field_name[0]]
+        )
+    else:
+        norm, ticks, ticklabs = get_norm(field_name, field_dict=grid.fields[field_name])
 
     xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
     ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
@@ -827,7 +840,8 @@ def plot_longitude_slice(grid, field_name, lon, lat, prdcfg, fname_list):
     vmax = prdcfg.get("vmax", None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111, aspect="equal")
+    aspect = prdcfg["xsecImageConfig"].get("aspect", "equal")
+    ax = fig.add_subplot(111, aspect=aspect)
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_longitude_slice(
         field_name,
@@ -877,9 +891,12 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
     if "dpi" in prdcfg["xsecImageConfig"]:
         dpi = prdcfg["xsecImageConfig"]["dpi"]
 
-    norm, ticks, ticklabs = get_norm(
-        field_name, field_dict=grid.fields[field_name], isxarray=True
-    )
+    if isinstance(field_name, list):  # rgb case:
+        norm, ticks, ticklabs = None, None, None
+    else:
+        norm, ticks, ticklabs = get_norm(
+            field_name, field_dict=grid.fields[field_name], isxarray=False
+        )
 
     xsize = prdcfg["xsecImageConfig"].get("xsize", 10.0)
     ysize = prdcfg["xsecImageConfig"].get("ysize", 5.0)
@@ -891,7 +908,8 @@ def plot_cross_section(grid, field_name, coord1, coord2, prdcfg, fname_list):
     # ymax = prdcfg['xsecImageConfig'].get('ymax', None)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-    ax = fig.add_subplot(111, aspect="equal")
+    aspect = prdcfg["xsecImageConfig"].get("aspect", "equal")
+    ax = fig.add_subplot(111, aspect=aspect)
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_cross_section(
         field_name,

@@ -16,6 +16,7 @@ Functions for PhiDP and KDP processing and attenuation correction
     process_phidp_kdp_Kalman
     process_phidp_kdp_Maesaka
     process_phidp_kdp_lp
+    process_phidp_kdp_operational
     process_selfconsistency_kdp_phidp
     process_selfconsistency_bias
     process_attenuation
@@ -1569,5 +1570,79 @@ def process_attenuation(procstatus, dscfg, radar_list=None):
             " Specific differential attenuation and attenuation "
             + "corrected differential reflectivity not available"
         )
+
+    return new_dataset, ind_rad
+
+
+def process_kdp_operational_mch(procstatus, dscfg, radar_list=None):
+    """
+    Computes specific differential phase with the method used
+    operationnally for the computation of hydroclass at
+    MeteoSwiss
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types, must contain,
+            "PhiDP" or "PhiDPc" or "uPhiDP"
+        windsize : float. Dataset keyword
+            The size of the moving window in number of gates. Default 3.
+    radar_list : list of Radar objects
+        Optional. list of radar objects
+
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing the output field "KDPc"
+    ind_rad : int
+        radar index
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    for datatypedescr in dscfg["datatype"]:
+        radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+        if datatype == "PhiDP":
+            phidp_field = "differential_phase"
+        if datatype == "PhiDPc":
+            phidp_field = "corrected_differential_phase"
+        if datatype == "uPhiDP":
+            phidp_field = "uncorrected_differential_phase"
+
+    ind_rad = int(radarnr[5:8]) - 1
+    if radar_list[ind_rad] is None:
+        warn("No valid radar")
+        return None, None
+    radar = radar_list[ind_rad]
+
+    if phidp_field not in radar.fields:
+        warn("Unable to retrieve KDP from PhiDP using least square. " + "Missing data")
+        return None, None
+
+    # user defined parameters
+    windsize = dscfg.get("windsize", 3)
+
+    kdp_field = "corrected_specific_differential_phase"
+
+    kdp_dict = pyart.retrieve.kdp_operational_mch(
+        radar,
+        gatefilter=None,
+        fill_value=None,
+        psidp_field=phidp_field,
+        kdp_field=kdp_field,
+        windsize=windsize,
+    )
+
+    # prepare for exit
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+    new_dataset["radar_out"].add_field(kdp_field, kdp_dict)
 
     return new_dataset, ind_rad

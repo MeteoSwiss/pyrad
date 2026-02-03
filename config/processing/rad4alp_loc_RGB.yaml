@@ -1,0 +1,77 @@
+NumRadars: 1
+TimeTol: 3600.0
+RadarName: D
+RadarRes: L
+ScanList:
+- '001'
+- '002'
+- '003'
+- '004'
+- '005'
+- '006'
+- '007'
+- '008'
+- '009'
+- '010'
+- '011'
+- '012'
+- '013'
+- '014'
+- '015'
+- '016'
+- '017'
+- '018'
+- '019'
+- '020'
+ScanPeriod: 5
+IconRunFreq: 1
+IconForecasted: 7
+ppiImageConfig:
+  xsize: 11.0
+  ysize: 11.0
+  xmin: 0.0
+  xmax: 50.0
+  ymin: -50.0
+  ymax: 50.0
+rhiImageConfig:
+  xsize: 10.0
+  ysize: 5.0
+  xmin: 0.0
+  xmax: 60.0
+  ymin: 0.0
+  ymax: 10.0
+  aspect: "auto"
+xsecImageConfig:
+  xsize: 15.0
+  ysize: 8.0
+  xmin: 0.0
+  xmax: 60.0
+  ymin: 0.0
+  ymax: 10.0
+  aspect: "auto"
+ppiMapImageConfig:
+  mapres: "10m"
+  latmin: 46.2
+  latmax: 46.85
+  lonmin: 6.3
+  lonmax: 7.0
+  exact_limits: 1
+  lonstep: 0.05
+  latstep: 0.05
+  xsize: 11.0
+  ysize: 11.0
+  maps:
+    - /users/wolfensb/projects/personal_projects/rad4alp_zarr_database/geodata/Lausanne.geojson
+gridMapImageConfig:
+  mapres: "10m"
+  latmin: 46.2
+  latmax: 46.85
+  lonmin: 6.3
+  lonmax: 7.0
+  exact_limits: 1
+  lonstep: 0.05
+  latstep: 0.05
+  xsize: 11.0
+  ysize: 11.0
+  maps:
+    - /users/wolfensb/projects/personal_projects/rad4alp_zarr_database/geodata/Lausanne.geojson

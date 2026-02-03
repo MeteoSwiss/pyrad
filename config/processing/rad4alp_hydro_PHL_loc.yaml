@@ -1,0 +1,57 @@
+NumRadars: 1
+TimeTol: 3600.0
+RadarName:
+- L
+RadarRes:
+- L
+ScanList:
+- '003'
+ScanPeriod: 5
+CosmoRunFreq: 3
+CosmoForecasted: 7
+radconsth: 71.67
+radconstv: 72.27
+mflossh: 1.0
+mflossv: 1.0
+attg: 0.008
+RadarBeamwidth: 1.0
+AzimTol: 0.4
+ppiImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  xmin: -100.0
+  xmax: 100.0
+  ymin: -100.0
+  ymax: 100.0
+  rngRing: 20.0
+  dpi: 300
+rhiImageConfig:
+  xsize: 10.0
+  ysize: 5.0
+  xmin: 0.0
+  xmax: 100.0
+  ymin: 0.0
+  ymax: 12.0
+  dpi: 300
+ppiMapImageConfig:
+  rngRing: 20.0
+  xsize: 7.0
+  ysize: 7.0
+  lonmin: 9.0
+  lonmax: 10.0
+  latmin: 46.0
+  latmax: 49.0
+  mapres: 10m
+  dpi: 300
+  maps:
+  - relief
+  - countries
+  - provinces
+  - urban_areas
+  - roads
+  - railroads
+  - coastlines
+  - lakes
+  - lakes_europe
+  - rivers
+  - rivers_europe

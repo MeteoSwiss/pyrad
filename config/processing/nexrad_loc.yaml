@@ -1,0 +1,18 @@
+RadarName: KATX
+RadarRes: L
+ScanList:
+- ar2v
+ppiImageConfig:
+  xsize: 10.0
+  ysize: 8.0
+  xmin: -100.0
+  xmax: 100.0
+  ymin: -100.0
+  ymax: 100.0
+rhiImageConfig:
+  xsize: 9.0
+  ysize: 7.0
+  xmin: 0.0
+  xmax: 15.0
+  ymin: 0.0
+  ymax: 8.0

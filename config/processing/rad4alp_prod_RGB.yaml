@@ -1,0 +1,92 @@
+# Check that RGB products are supported in pyrad
+dataSetList:
+- l0:raw
+- l0:grid
+
+raw:
+  type: RAW
+  datatype:
+  - RAD4ALP:dBZ
+  - RAD4ALP:uRhoHV
+  - RAD4ALP:ZDR
+  products:
+    ppimap_sweep1_RGB:
+      type: PPI_MAP
+      anglenr: 1
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+    ppi_sweep1_RGB:
+      type: PPI_IMAGE
+      anglenr: 1
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+    rhi_az69_RGB:
+      type: PSEUDORHI_IMAGE
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+      angle: 69
+
+grid:
+  type: GRID
+  datatype:
+    - RAD4ALP:dBZ
+    - RAD4ALP:uRhoHV
+    - RAD4ALP:ZDR
+  wfunc: NEAREST
+  gridConfig:
+    xmin: -50.0
+    xmax: 50.0
+    ymin: -50.0
+    ymax: 50.0
+    zmin: 2000.0
+    zmax: 5000.0
+    hres: 2000.0
+    vres: 200.0
+    altorig: 0.0
+  products:
+    grid_image_RGB:
+      type: SURFACE_IMAGE
+      level: 0
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+    grid_raw_RGB:
+      type: SURFACE_RAW
+      level: 0
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+    lon_6_5_RGB:
+      type: LONGITUDE_SLICE
+      lon: 6.5
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+    lat_46_5_RGB:
+      type: LATITUDE_SLICE
+      lat: 46.5
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
+    crosssection_RGB:
+      type: CROSS_SECTION
+      coord1:
+        lat: 46.5
+        lon: 6.0
+      coord2:
+        lat: 47.0
+        lon: 7.0
+      voltype:
+        - dBZ
+        - uRhoHV
+        - ZDR
