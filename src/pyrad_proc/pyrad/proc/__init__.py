@@ -337,7 +337,6 @@ from .process_phase import process_phidp_kdp_lp, process_phidp_kdp_Maesaka  # no
 from .process_phase import process_phidp_kdp_Vulpiani  # noqa
 from .process_phase import process_phidp_kdp_Kalman  # noqa
 from .process_phase import process_attenuation  # noqa
-from .process_phase import process_kdp_operational_mch  # noqa
 
 from .process_calib import process_correct_bias, process_correct_noise_rhohv  # noqa
 from .process_calib import process_occurrence, process_occurrence_period  # noqa

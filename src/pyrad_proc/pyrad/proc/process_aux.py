@@ -108,7 +108,6 @@ def get_process_func(dataset_type, dsname):
                 'ISO0_MF': process_iso0_mf
                 'KDP_LEASTSQUARE_1W': process_kdp_leastsquare_single_window
                 'KDP_LEASTSQUARE_2W': process_kdp_leastsquare_double_window
-                'KDP_OPERATIONAL_MCH': process_kdp_operational
                 'KEEP_ROI': process_keep_roi
                 'L': process_l
                 'MEAN_PHASE_IQ': process_mean_phase_iq
@@ -462,8 +461,6 @@ def get_process_func(dataset_type, dsname):
         func_name = "process_kdp_leastsquare_single_window"
     elif dataset_type == "KDP_LEASTSQUARE_2W":
         func_name = "process_kdp_leastsquare_double_window"
-    elif dataset_type == "KDP_OPERATIONAL_MCH":
-        func_name = "process_kdp_operational_mch"
     elif dataset_type == "ATTENUATION":
         func_name = "process_attenuation"
     elif dataset_type == "RAINRATE":

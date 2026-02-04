@@ -104,13 +104,7 @@ def generate_intercomp_products(dataset, prdcfg):
                     and generating the plots. Any mathematical function with argument "x"
                     is accepted for example "sin(x) + x**2" or "10 * log10(x)"
                     Default is to use no transform
-        'WRITE_INTERCOMP': Writes the instantaneously intercompared data
-            (gate positions, values, etc.) in a csv file.
-            User defined parameters:
-                voltype: str
-                    name of the pyrad variable to use, it must be available in the dataset
-        'WRITE_INTERCOMP_WITH_QC': Writes the time-averaged intercompared
-            data (gate positions, values, etc.) in a csv file.
+        'WRITE_INTERCOMP': Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
