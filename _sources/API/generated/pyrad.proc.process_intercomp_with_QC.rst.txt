@@ -1,0 +1,6 @@
+pyrad.proc.process\_intercomp\_with\_QC
+=======================================
+
+.. currentmodule:: pyrad.proc
+
+.. autofunction:: process_intercomp_with_QC

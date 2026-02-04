@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -1426,9 +1426,9 @@
 
 
 
-<div class="viewcode-block" id="read_colocated_data_time_avg">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_colocated_data_time_avg.html#pyrad.io.read_colocated_data_time_avg">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_colocated_data_time_avg</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_colocated_data_with_QC">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_colocated_data_with_QC.html#pyrad.io.read_colocated_data_with_QC">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_colocated_data_with_QC</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Reads a CSV file containing time-averaged colocated data using pandas.</span>
 
@@ -1465,7 +1465,7 @@
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
-            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">),</span>
@@ -1474,7 +1474,7 @@
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
-            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+            <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
             <span class="n">to_masked_array</span><span class="p">(</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
         <span class="p">)</span>
@@ -2334,7 +2334,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

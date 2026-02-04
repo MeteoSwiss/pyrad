@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -425,7 +425,7 @@
 <span class="sd">    write_intercomp_scores_ts</span>
 <span class="sd">    write_colocated_gates</span>
 <span class="sd">    write_colocated_data</span>
-<span class="sd">    write_colocated_data_time_avg</span>
+<span class="sd">    write_colocated_data_with_QC</span>
 <span class="sd">    write_sun_hits</span>
 <span class="sd">    write_sun_retrieval</span>
 
@@ -3278,7 +3278,8 @@
 <a class="viewcode-back" href="../../../API/generated/pyrad.io.write_colocated_data.html#pyrad.io.write_colocated_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">write_colocated_data</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Writes the data of gates colocated with two radars</span>
+<span class="sd">    Writes the time averaged data of gates colocated with two radars, if QC metadata</span>
+<span class="sd">    is available, it will be written as well.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -3291,227 +3292,44 @@
 <span class="sd">    -------</span>
 <span class="sd">    fname : str</span>
 <span class="sd">        the name of the file where data has written</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Colocated radar gates data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;rad1_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_val&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_val&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rad1_time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;rad1_time&quot;</span><span class="p">:</span> <span class="n">rad1_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_val&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_time&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-                        <span class="p">),</span>
-                        <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_val&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
+    <span class="n">file_exists</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+    <span class="n">dataset_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;rad1_time&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad1_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad1_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad1_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad1_val&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;rad2_time&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad2_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad2_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad2_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;rad2_val&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
 
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">&quot;rad1_PhiDPavg&quot;</span> <span class="ow">in</span> <span class="n">coloc_data</span><span class="p">:</span>  <span class="c1"># QC data available</span>
+        <span class="n">dataset_dict</span><span class="p">[</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">]</span>
+        <span class="n">dataset_dict</span><span class="p">[</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">]</span>
+        <span class="n">dataset_dict</span><span class="p">[</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">]</span>
+        <span class="n">dataset_dict</span><span class="p">[</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Build dataframe</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset_dict</span><span class="p">)</span>
+
+    <span class="c1"># Write file</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Colocated radar gates data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;rad1_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_val&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_val&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rad1_time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;rad1_time&quot;</span><span class="p">:</span> <span class="n">rad1_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_val&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_val&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_time&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-                        <span class="p">),</span>
-                        <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_val&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_val&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">fname</span></div>
-
-
-
-<div class="viewcode-block" id="write_colocated_data_time_avg">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.write_colocated_data_time_avg.html#pyrad.io.write_colocated_data_time_avg">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">write_colocated_data_time_avg</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Writes the time averaged data of gates colocated with two radars</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    coloc_data : dict</span>
-<span class="sd">        dictionary containing the colocated data parameters</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        file name where to store the data</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        the name of the file where data has written</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Colocated radar gates data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;rad1_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rad1_time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;rad1_time&quot;</span><span class="p">:</span> <span class="n">rad1_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_time&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-                        <span class="p">),</span>
-                        <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;rad1_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_time&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_ele&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_azi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_rng&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">rad1_time</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_time&quot;</span><span class="p">]):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;rad1_time&quot;</span><span class="p">:</span> <span class="n">rad1_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_dBZavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_PhiDPavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad1_Flagavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_time&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_time&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-                        <span class="p">),</span>
-                        <span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ray_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng_ind&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_ele&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_ele&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_azi&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_azi&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_rng&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_rng&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_dBZavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_PhiDPavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">:</span> <span class="n">coloc_data</span><span class="p">[</span><span class="s2">&quot;rad2_Flagavg&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">fname</span></div>
 
 
@@ -3871,7 +3689,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

@@ -114,7 +114,7 @@
     
     read_colocated_data
     
-    read_colocated_data_time_avg
+    read_colocated_data_with_QC
     
     read_colocated_gates
     
@@ -243,8 +243,6 @@
     write_centroids
     
     write_colocated_data
-    
-    write_colocated_data_time_avg
     
     write_colocated_gates
     

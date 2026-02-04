@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -407,7 +407,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_intercomp_scores_ts</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_colocated_gates</span><span class="p">,</span> <span class="n">write_colocated_data</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_colocated_data_time_avg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_intercomp_scores_ts</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_scatter</span>
@@ -488,13 +487,7 @@
 <span class="sd">                    and generating the plots. Any mathematical function with argument &quot;x&quot;</span>
 <span class="sd">                    is accepted for example &quot;sin(x) + x**2&quot; or &quot;10 * log10(x)&quot;</span>
 <span class="sd">                    Default is to use no transform</span>
-<span class="sd">        &#39;WRITE_INTERCOMP&#39;: Writes the instantaneously intercompared data</span>
-<span class="sd">            (gate positions, values, etc.) in a csv file.</span>
-<span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
-<span class="sd">        &#39;WRITE_INTERCOMP_TIME_AVG&#39;: Writes the time-averaged intercompared</span>
-<span class="sd">            data (gate positions, values, etc.) in a csv file.</span>
+<span class="sd">        &#39;WRITE_INTERCOMP&#39;: Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
@@ -540,35 +533,9 @@
         <span class="p">)</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
         <span class="n">write_colocated_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">)</span>
-
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved colocated data file: &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">fname</span>
-
-    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;WRITE_INTERCOMP_TIME_AVG&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
-            <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-        <span class="p">)</span>
-
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
-            <span class="s2">&quot;colocated_data&quot;</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
-            <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-            <span class="n">timeformat</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">write_colocated_data_time_avg</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">],</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved colocated time averaged data file: &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname</span>
 
@@ -578,11 +545,7 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">scatter_type</span> <span class="o">==</span> <span class="s2">&quot;instant&quot;</span><span class="p">:</span>
-            <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-            <span class="n">colname</span> <span class="o">=</span> <span class="s2">&quot;dBZavg&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">colname</span> <span class="o">=</span> <span class="s2">&quot;val&quot;</span>
+        <span class="n">colname</span> <span class="o">=</span> <span class="s2">&quot;val&quot;</span>
         <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">]:</span>
             <span class="k">return</span>
 
@@ -633,6 +596,8 @@
                 <span class="sa">f</span><span class="s2">&quot;colocated radar gates </span><span class="si">{</span><span class="n">rad1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rad2</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">rangebin_info_title</span><span class="si">}</span><span class="s2"> &quot;</span>
                 <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeformat</span><span class="p">)</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+                <span class="n">titl</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> f(x)=</span><span class="si">{</span><span class="n">transform_str</span><span class="si">}</span><span class="s2">&quot;</span>
 
             <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
@@ -683,7 +648,7 @@
                 <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
-                <span class="n">field_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">transform_str</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">field_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;f(</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">)&quot;</span>
             <span class="n">plot_scatter</span><span class="p">(</span>
                 <span class="n">bin_edges1</span><span class="p">,</span>
                 <span class="n">bin_edges2</span><span class="p">,</span>
@@ -1047,7 +1012,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

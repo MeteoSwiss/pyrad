@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -455,8 +455,8 @@
 
 <span class="sd">        &#39;CDF&#39;: plots and writes the cumulative density function of data</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                quantiles: list of floats</span>
 <span class="sd">                    The quantiles to compute in percent. Default None</span>
 <span class="sd">                sector: dict</span>
@@ -488,8 +488,9 @@
 <span class="sd">                    Default empty list.</span>
 <span class="sd">        &#39;BSCOPE_IMAGE&#39;: Creates a B-scope image (azimuth, range)</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                anglenr : int</span>
 <span class="sd">                    The elevation angle number to use</span>
 <span class="sd">                ray_dim : str</span>
@@ -503,8 +504,9 @@
 <span class="sd">                    config file</span>
 <span class="sd">        &#39;CAPPI_IMAGE&#39;: Creates a CAPPI image</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                altitude: flt</span>
 <span class="sd">                    CAPPI altitude [m MSL]</span>
 <span class="sd">                wfunc: str</span>
@@ -515,8 +517,9 @@
 <span class="sd">        &#39;CROSS_SECTION&#39; : Plots a cross-section of polar data through</span>
 <span class="sd">            arbitrary coordinates</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                coord1, coord2, ..., coordN: dict</span>
 <span class="sd">                    The two lat-lon coordinates marking the limits. They have</span>
 <span class="sd">                    the keywords &#39;lat&#39; and &#39;lon&#39; [degree].</span>
@@ -536,8 +539,8 @@
 <span class="sd">                    must be in the dempath specified in the main config file</span>
 <span class="sd">        &#39;FIELD_COVERAGE&#39;: Gets the field coverage over a certain sector</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                threshold: float or None</span>
 <span class="sd">                    Minimum value to consider the data valid. Default None</span>
 <span class="sd">                nvalid_min: float</span>
@@ -561,8 +564,9 @@
 <span class="sd">                    a fixed grid</span>
 <span class="sd">        &#39;FIXED_RNG_IMAGE&#39;: Plots a fixed range image</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                AngTol : float</span>
 <span class="sd">                    The tolerance between the nominal angles and the actual</span>
 <span class="sd">                    radar angles. Default 1.</span>
@@ -575,8 +579,8 @@
 <span class="sd">        &#39;FIXED_RNG_SPAN_IMAGE&#39;: Plots a user-defined statistic over a fixed</span>
 <span class="sd">            range image</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                AngTol : float</span>
 <span class="sd">                    The tolerance between the nominal angles and the actual</span>
 <span class="sd">                    radar angles. Default 1.</span>
@@ -588,8 +592,8 @@
 <span class="sd">                    &#39;mode&#39;. Default &#39;max&#39;</span>
 <span class="sd">        &#39;HISTOGRAM&#39;: Computes a histogram of the radar volume data</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                step: float or None</span>
 <span class="sd">                    the data quantization step. If none it will be obtained</span>
 <span class="sd">                    from the Py-ART configuration file</span>
@@ -598,8 +602,8 @@
 <span class="sd">        &#39;PLOT_ALONG_COORD&#39;: Plots the radar volume data along a particular</span>
 <span class="sd">            coordinate</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                colors: list of str or None</span>
 <span class="sd">                    The colors of each ploted line</span>
 <span class="sd">                data_on_y : bool</span>
@@ -633,8 +637,8 @@
 <span class="sd">            sunscan.</span>
 <span class="sd">        &#39;PPI_CONTOUR&#39;: Plots a PPI countour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -646,8 +650,8 @@
 <span class="sd">        &#39;PPI_CONTOUR_OVERPLOT&#39;: Plots a PPI of a field with another field</span>
 <span class="sd">            overplotted as a contour plot.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -659,8 +663,9 @@
 <span class="sd">        &#39;PPI_IMAGE&#39;: Plots a PPI image. It can also plot the histogram and the</span>
 <span class="sd">            quantiles of the data in the PPI.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                anglenr: float</span>
 <span class="sd">                    The elevation angle number</span>
 <span class="sd">                plot_type: str</span>
@@ -685,8 +690,9 @@
 <span class="sd">            type of maps used are defined in the variables &#39;mapres&#39; and &#39;maps&#39;</span>
 <span class="sd">            in &#39;ppiMapImageConfig&#39; in the loc config file.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                anglenr: float</span>
 <span class="sd">                    The elevation angle number</span>
 <span class="sd">                vmin, vmax : float or None</span>
@@ -697,15 +703,15 @@
 <span class="sd">            type of maps used are defined in the variables &#39;mapres&#39; and &#39;maps&#39;</span>
 <span class="sd">            in &#39;ppiMapImageConfig&#39; in the loc config file.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                anglenr: float</span>
 <span class="sd">                    The elevation angle number</span>
 <span class="sd">        &#39;PROFILE_STATS&#39;: Computes and plots a vertical profile statistics.</span>
 <span class="sd">            The statistics are saved in a csv file</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                heightResolution: float</span>
 <span class="sd">                    The height resolution of the profile [m]. Default 100.</span>
 <span class="sd">                heightMin, heightMax: float or None</span>
@@ -734,8 +740,8 @@
 <span class="sd">                    config file</span>
 <span class="sd">        &#39;PSEUDOPPI_CONTOUR&#39;: Plots a pseudo-PPI countour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -750,8 +756,8 @@
 <span class="sd">        &#39;PSEUDOPPI_CONTOUR_OVERPLOT&#39;: Plots a pseudo-PPI of a field with</span>
 <span class="sd">            another field over-plotted as a contour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -766,8 +772,9 @@
 <span class="sd">        &#39;PSEUDOPPI_IMAGE&#39;: Plots a pseudo-PPI image. It can also plot the</span>
 <span class="sd">            histogram and the quantiles of the data in the pseudo-PPI.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                angle: float</span>
 <span class="sd">                    The elevation angle of the pseudo-PPI</span>
 <span class="sd">                EleTol: float</span>
@@ -791,8 +798,9 @@
 <span class="sd">            resolution and the type of maps used are defined in the variables</span>
 <span class="sd">            &#39;mapres&#39; and &#39;maps&#39; in &#39;ppiMapImageConfig&#39; in the loc config file.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                angle: float</span>
 <span class="sd">                    The elevation angle of the pseudo-PPI</span>
 <span class="sd">                EleTol: float</span>
@@ -803,8 +811,8 @@
 <span class="sd">                    are taken from the Py-ART config file</span>
 <span class="sd">        &#39;PSEUDORHI_CONTOUR&#39;: Plots a pseudo-RHI countour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -819,8 +827,8 @@
 <span class="sd">        &#39;PSEUDORHI_CONTOUR_OVERPLOT&#39;: Plots a pseudo-RHI of a field with</span>
 <span class="sd">            another field over-plotted as a contour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -835,8 +843,9 @@
 <span class="sd">        &#39;PSEUDORHI_IMAGE&#39;: Plots a pseudo-RHI image. It can also plot the</span>
 <span class="sd">            histogram and the quantiles of the data in the pseudo-RHI.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                angle: float</span>
 <span class="sd">                    The azimuth angle at which to compute the RPI</span>
 <span class="sd">                AziTol: float</span>
@@ -858,8 +867,8 @@
 <span class="sd">                    are taken from the Py-ART config file</span>
 <span class="sd">        &#39;QUANTILES&#39;: Plots and writes the quantiles of a radar volume</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                quantiles: list of floats or None</span>
 <span class="sd">                    the list of quantiles to compute. If None a default list</span>
 <span class="sd">                    of quantiles will be computed.</span>
@@ -874,8 +883,8 @@
 <span class="sd">                    config file</span>
 <span class="sd">        &#39;RHI_CONTOUR&#39;: Plots an RHI countour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -887,8 +896,8 @@
 <span class="sd">        &#39;RHI_CONTOUR_OVERPLOT&#39;: Plots an RHI of a field with another field</span>
 <span class="sd">            over-plotted as a contour plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                contour_values: list of floats or None</span>
 <span class="sd">                    The list of contour values to plot. If None the contour</span>
 <span class="sd">                    values are going to be obtained from the Py-ART config</span>
@@ -900,8 +909,9 @@
 <span class="sd">        &#39;RHI_IMAGE&#39;: Plots an RHI image. It can also plot the</span>
 <span class="sd">            histogram and the quantiles of the data in the RHI.</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                anglenr: int</span>
 <span class="sd">                    The azimuth angle number</span>
 <span class="sd">                plot_type: str</span>
@@ -923,8 +933,8 @@
 <span class="sd">            an RHI.</span>
 <span class="sd">            The statistics are saved in a csv file</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                rangeStart, rangeStop: float</span>
 <span class="sd">                    The range start and stop of the data to extract from the</span>
 <span class="sd">                    RHI to compute the statistics [m]. Default 0., 25000.</span>
@@ -956,8 +966,8 @@
 <span class="sd">                    config file</span>
 <span class="sd">        &#39;SAMPLES_HISTOGRAM&#39;: Computes a histogram of the number of samples used</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                step: float or None</span>
 <span class="sd">                    the data quantization step. If none it will be obtained</span>
 <span class="sd">                    from the Py-ART configuration file</span>
@@ -1041,14 +1051,16 @@
 <span class="sd">                    level).</span>
 <span class="sd">        &#39;SAVEVOL_CSV&#39;: Saves one field of a radar volume data in a CSV file</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                ignore_masked: bool</span>
 <span class="sd">                    If True masked values will not be saved. Default False</span>
 <span class="sd">        &#39;SAVEVOL_KML&#39;: Saves one field of a radar volume data in a KML file</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                ignore_masked: bool</span>
 <span class="sd">                    If True masked values will not be saved. Default False</span>
 <span class="sd">                azi_res : float or None</span>
@@ -1059,8 +1071,9 @@
 <span class="sd">            dataset, as there is no ambiguity with SAVEVOL for GRID datasets</span>
 <span class="sd">        &#39;SAVE_FIXED_ANGLE&#39;: Saves the position of the first fix angle in a csv file</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str or list of str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">        &#39;SELFCONSISTENCY&#39;: Plots a ZDR versus KDP/ZH histogram of data.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                retrieve_relation : bool</span>
@@ -1082,8 +1095,8 @@
 <span class="sd">                    number of gates at each bin. Default True</span>
 <span class="sd">        &#39;TIME_RANGE&#39;: Plots a time-range/azimuth/elevation plot</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                anglenr: float</span>
 <span class="sd">                    The number of the fixed angle to plot</span>
 <span class="sd">                vmin, vmax: float or None</span>
@@ -1094,8 +1107,8 @@
 <span class="sd">            Meant primarily for writing and plotting the results of the</span>
 <span class="sd">            SELFCONSISTENCY2 algorithm</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                ref_value: float</span>
 <span class="sd">                    The reference value. Default 0</span>
 <span class="sd">                sort_by_date: Bool</span>
@@ -1165,8 +1178,8 @@
 <span class="sd">            sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and</span>
 <span class="sd">            additional quantiles</span>
 <span class="sd">            User defined parameters:</span>
-<span class="sd">                voltype: name of the pyrad variable to use, it must be available</span>
-<span class="sd">                    in the dataset</span>
+<span class="sd">                voltype: str</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be a voltype available in the dataset</span>
 <span class="sd">                ele_min: float</span>
 <span class="sd">                    Max elevation angle defining the sector [deg].</span>
 <span class="sd">                    Default 0.</span>
@@ -1273,8 +1286,10 @@
         <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PPI_IMAGE&quot;</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1298,7 +1313,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;el&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1322,7 +1339,9 @@
                 <span class="o">+</span> <span class="n">make_filename</span><span class="p">(</span>
                     <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
                     <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-                    <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;RGB&quot;</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+                    <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
                     <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
                     <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;el&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
                     <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1350,7 +1369,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDOPPI_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1382,7 +1403,9 @@
             <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
                 <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
                 <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;RGB&quot;</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+                <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
                 <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
                 <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;el&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]),</span>
                 <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1420,7 +1443,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PPI_MAP&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1446,7 +1471,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;ppi_map&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;el&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">el</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1472,7 +1499,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PPI_CONTOUR_OVERPLOT&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1552,7 +1581,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PPIMAP_ROI_OVERPLOT&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1609,7 +1640,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDOPPI_CONTOUR_OVERPLOT&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1693,7 +1726,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PPI_CONTOUR&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1744,7 +1779,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDOPPI_CONTOUR&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1800,7 +1837,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RHI_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1824,7 +1863,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;rhi&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;az&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">az</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1859,7 +1900,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDORHI_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1891,7 +1934,9 @@
             <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
                 <span class="s2">&quot;rhi&quot;</span><span class="p">,</span>
                 <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;RGB&quot;</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+                <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
                 <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
                 <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;az&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;angle&quot;</span><span class="p">]),</span>
                 <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1928,7 +1973,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RHI_CONTOUR_OVERPLOT&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -2008,7 +2055,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDORHI_CONTOUR_OVERPLOT&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -2091,7 +2140,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RHI_CONTOUR&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -2142,7 +2193,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDORHI_CONTOUR&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -2197,7 +2250,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RHI_PROFILE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -2396,7 +2451,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PROFILE_STATS&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3089,7 +3146,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PSEUDOPPI_MAP&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3141,7 +3200,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CAPPI_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3180,7 +3241,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CROSS_SECTION&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3280,7 +3343,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;FIXED_RNG_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3335,7 +3400,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;FIXED_RNG_SPAN_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3391,7 +3458,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PLOT_ALONG_COORD&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3633,7 +3702,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;BSCOPE_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3698,7 +3769,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TIME_RANGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3760,7 +3833,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;HISTOGRAM&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -3937,7 +4012,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;QUANTILES&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -4036,7 +4113,9 @@
             <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;WRITE_MEAN product is deprecated, please use &#39;WRITE_STATS&#39; instead&quot;</span><span class="p">)</span>
 
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -4147,7 +4226,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;FIELD_COVERAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -4349,7 +4430,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CDF&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -4916,7 +4999,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SAVEVOL_CSV&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -4960,7 +5045,9 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -5024,7 +5111,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SAVEVOL&quot;</span> <span class="ow">or</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SAVEVOL_VOL&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -5144,7 +5233,9 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -5422,7 +5513,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SAVE_FIXED_ANGLE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -5504,7 +5597,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

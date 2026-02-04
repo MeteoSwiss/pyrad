@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyrad.io.read_colocated_data_time_avg &#8212; Pyrad 2.1.2 documentation</title>
+    <title>pyrad.proc.process_intercomp_with_QC &#8212; Pyrad 2.1.2 documentation</title>
   
   
   
@@ -44,18 +44,18 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'API/generated/pyrad.io.read_colocated_data_time_avg';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'API/generated/pyrad.proc.process_intercomp_with_QC';</script>
     <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyrad.io.read_colocated_gates" href="pyrad.io.read_colocated_gates.html" />
-    <link rel="prev" title="pyrad.io.read_colocated_data" href="pyrad.io.read_colocated_data.html" /> 
+    <link rel="next" title="pyrad.proc.process_iso0_grib" href="pyrad.proc.process_iso0_grib.html" />
+    <link rel="prev" title="pyrad.proc.process_intercomp_fields" href="pyrad.proc.process_intercomp_fields.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="2.1.2" />   
@@ -462,7 +462,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.graph.plot_traj.html">pyrad.graph.plot_traj</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="pyrad.io.html">pyrad.io</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.io.html">pyrad.io</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.get_data.html">pyrad.io.get_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.icon2radar_data.html">pyrad.io.icon2radar_data</a></li>
@@ -567,7 +567,6 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_intercomp_scores_ts.html">pyrad.io.write_intercomp_scores_ts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_colocated_gates.html">pyrad.io.write_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_colocated_data.html">pyrad.io.write_colocated_data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_colocated_data_time_avg.html">pyrad.io.write_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_sun_hits.html">pyrad.io.write_sun_hits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_sun_retrieval.html">pyrad.io.write_sun_retrieval</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.io.write_fixed_angle.html">pyrad.io.write_fixed_angle</a></li>
@@ -674,7 +673,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids.html">pyrad.io.read_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_centroids_npz.html">pyrad.io.read_centroids_npz</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data.html">pyrad.io.read_colocated_data</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">pyrad.io.read_colocated_data_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_data_with_QC.html">pyrad.io.read_colocated_data_with_QC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_colocated_gates.html">pyrad.io.read_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_config.html">pyrad.io.read_config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.read_coord_sensors.html">pyrad.io.read_coord_sensors</a></li>
@@ -739,7 +738,6 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_cdf.html">pyrad.io.write_cdf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_centroids.html">pyrad.io.write_centroids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_colocated_data.html">pyrad.io.write_colocated_data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_colocated_data_time_avg.html">pyrad.io.write_colocated_data_time_avg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_colocated_gates.html">pyrad.io.write_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_excess_gates.html">pyrad.io.write_excess_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_field_coverage.html">pyrad.io.write_field_coverage</a></li>
@@ -773,7 +771,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.io.write_vpr_theo_params.html">pyrad.io.write_vpr_theo_params</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyrad.proc.html">pyrad.proc</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="pyrad.proc.html">pyrad.proc</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.get_process_func.html">pyrad.proc.get_process_func</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_raw.html">pyrad.proc.process_raw</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_save_radar.html">pyrad.proc.process_save_radar</a></li>
@@ -886,7 +884,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_time_stats2.html">pyrad.proc.process_time_stats2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_colocated_gates.html">pyrad.proc.process_colocated_gates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp.html">pyrad.proc.process_intercomp</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp_time_avg.html">pyrad.proc.process_intercomp_time_avg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp_with_QC.html">pyrad.proc.process_intercomp_with_QC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_fields_diff.html">pyrad.proc.process_fields_diff</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_intercomp_fields.html">pyrad.proc.process_intercomp_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pyrad.proc.process_ccor.html">pyrad.proc.process_ccor</a></li>
@@ -1009,7 +1007,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_ifft.html">pyrad.proc.process_ifft</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp.html">pyrad.proc.process_intercomp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp_fields.html">pyrad.proc.process_intercomp_fields</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_intercomp_time_avg.html">pyrad.proc.process_intercomp_time_avg</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">pyrad.proc.process_intercomp_with_QC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_iso0_grib.html">pyrad.proc.process_iso0_grib</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_iso0_mf.html">pyrad.proc.process_iso0_mf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyrad.proc.process_kdp_leastsquare_double_window.html">pyrad.proc.process_kdp_leastsquare_double_window</a></li>
@@ -1276,9 +1274,9 @@
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">API Reference Manual</a></li>
     
     
-    <li class="breadcrumb-item"><a href="pyrad.io.html" class="nav-link">pyrad.io</a></li>
+    <li class="breadcrumb-item"><a href="pyrad.proc.html" class="nav-link">pyrad.proc</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyrad.io.read_colocated_data_time_avg</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyrad.proc.process_intercomp_with_QC</span></li>
   </ul>
 </nav>
 </div>
@@ -1294,24 +1292,34 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section id="pyrad-io-read-colocated-data-time-avg">
-<h1>pyrad.io.read_colocated_data_time_avg<a class="headerlink" href="#pyrad-io-read-colocated-data-time-avg" title="Link to this heading">#</a></h1>
+                   <section id="pyrad-proc-process-intercomp-with-qc">
+<h1>pyrad.proc.process_intercomp_with_QC<a class="headerlink" href="#pyrad-proc-process-intercomp-with-qc" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pyrad.io.read_colocated_data_time_avg">
-<span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">read_colocated_data_time_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/io/read_data_other.html#read_colocated_data_time_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.read_colocated_data_time_avg" title="Link to this definition">#</a></dt>
-<dd><p>Reads a CSV file containing time-averaged colocated data using pandas.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – Path of time series file.</p>
+<dt class="sig sig-object py" id="pyrad.proc.process_intercomp_with_QC">
+<span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_intercomp_with_QC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/proc/process_intercomp.html#process_intercomp_with_QC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_intercomp_with_QC" title="Link to this definition">#</a></dt>
+<dd><p>Intercomparison between the time-averaged value of an arbitrary radar field
+for two radars (at co-located gates), including QC based on PhiDP and a
+time-averaging flag field.</p>
+<dl class="simple">
+<dt>Expected dscfg[“datatype”] content (for each radar):</dt><dd><ul class="simple">
+<li><p>one “main” datatype to be intercompared (ANY pyrad-supported datatype),</p></li>
+<li><p>one PhiDP datatype: “PhiDP” or “PhiDPc”,</p></li>
+<li><p>one flag datatype: “time_avg_flag”</p></li>
+</ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>tuple</em> – A tuple with the data read:
-(rad1_time, rad1_ray_ind, rad1_rng_ind, rad1_ele, rad1_azi, rad1_rng,
-rad1_dBZavg, rad1_PhiDPavg, rad1_Flagavg, rad2_time, rad2_ray_ind,
-rad2_rng_ind, rad2_ele, rad2_azi, rad2_rng, rad2_dBZavg, rad2_PhiDPavg,
-rad2_Flagavg). Returns None for all if unable to read the file.</p>
+<dt>Output:</dt><dd><ul class="simple">
+<li><p>in procstatus==1: intercomp_dict contains rad1_val / rad2_val (the main field),
+plus rad1_PhiDPavg/rad2_PhiDPavg and rad1_Flagavg/rad2_Flagavg (kept for QC/debug)</p></li>
+<li><p>in procstatus==2: final intercomp_dict contains rad1_val / rad2_val only (after QC)</p></li>
+</ul>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>This function keeps using read_colocated_data_time_avg(…) in procstatus==2.
+That reader likely returns the “main field” column as the same slot previously
+called rad*_dBZ. Here we treat it generically as rad*_val.</p></li>
+</ul>
 </dd></dl>
 
 </section>
@@ -1330,20 +1338,20 @@ rad2_Flagavg). Returns None for all if unable to read the file.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="pyrad.io.read_colocated_data.html"
+       href="pyrad.proc.process_intercomp_fields.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">pyrad.io.read_colocated_data</p>
+        <p class="prev-next-title">pyrad.proc.process_intercomp_fields</p>
       </div>
     </a>
     <a class="right-next"
-       href="pyrad.io.read_colocated_gates.html"
+       href="pyrad.proc.process_iso0_grib.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">pyrad.io.read_colocated_gates</p>
+        <p class="prev-next-title">pyrad.proc.process_iso0_grib</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1366,7 +1374,7 @@ rad2_Flagavg). Returns None for all if unable to read the file.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyrad.io.read_colocated_data_time_avg"><code class="docutils literal notranslate"><span class="pre">read_colocated_data_time_avg()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pyrad.proc.process_intercomp_with_QC"><code class="docutils literal notranslate"><span class="pre">process_intercomp_with_QC()</span></code></a></li>
 </ul>
   </nav></div>
 
@@ -1374,7 +1382,7 @@ rad2_Flagavg). Returns None for all if unable to read the file.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/API/generated/pyrad.io.read_colocated_data_time_avg.rst.txt"
+      <li><a href="../../_sources/API/generated/pyrad.proc.process_intercomp_with_QC.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -1403,7 +1411,7 @@ rad2_Flagavg). Returns None for all if unable to read the file.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

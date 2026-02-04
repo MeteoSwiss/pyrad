@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -439,12 +439,12 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">wradlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wrl</span>
@@ -456,7 +456,6 @@
         <span class="s2">&quot;WARNING: wradlib is not installed, RAINBOW data cannot be read!&quot;</span><span class="p">,</span>
         <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
 <span class="c1"># check existence of METRANET library</span>
 <span class="k">try</span><span class="p">:</span>
@@ -490,6 +489,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rad4alp_prod_fname</span><span class="p">,</span> <span class="n">get_rad4alp_grid_dir</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rad4alp_dir</span><span class="p">,</span> <span class="n">get_scan_files_to_merge</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_scan_files_to_merge_s3</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_warn</span><span class="p">():</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;This is a test warning!&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_open_s3_client</span><span class="p">(</span><span class="n">cfg</span><span class="p">):</span>
@@ -1544,6 +1547,9 @@
                         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No radar data could be loaded for time </span><span class="si">{</span><span class="n">voltime</span><span class="si">}</span><span class="s2"> and descriptor </span><span class="si">{</span><span class="n">datatypesdescr</span><span class="si">}</span><span class="s2">!&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">radar</span>
 
     <span class="c1"># if it is specified, get the position from the config file</span>
@@ -1903,6 +1909,9 @@
                 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">radar_utils</span><span class="o">.</span><span class="n">join_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">radar_aux</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No radar data could be loaded for basepath </span><span class="si">{</span><span class="n">basepath</span><span class="si">}</span><span class="s2">, time </span><span class="si">{</span><span class="n">scantime</span><span class="si">}</span><span class="s2"> and datatype_list </span><span class="si">{</span><span class="n">datatype_list</span><span class="si">}</span><span class="s2">!&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">radar</span>
 
     <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
@@ -7006,7 +7015,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

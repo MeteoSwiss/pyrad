@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -417,6 +417,18 @@
     <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShadedReliefESRI</span><span class="p">,</span> <span class="n">OTM</span>
 
 <span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span>
+
+    <span class="n">_GEOPANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;geopandas not available, you won&#39;t be able to display geojson files&quot;</span><span class="p">,</span>
+        <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_GEOPANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">pydda</span>
 
     <span class="n">_PYDDA_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
@@ -490,9 +502,12 @@
     <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">mask_outside</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mask_outside&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
-    <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
-        <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># rgb case:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
+            <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
     <span class="n">xsize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;xsize&quot;</span><span class="p">]</span>
     <span class="n">ysize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;ysize&quot;</span><span class="p">]</span>
@@ -732,6 +747,34 @@
                     <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rivers_europe&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
                 <span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">rivers_europe</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">_GEOPANDAS_AVAILABLE</span>
+                <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">cartomap</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">cartomap</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;.geojson&quot;</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">))</span>
+            <span class="p">):</span>
+                <span class="c1"># --- VECTOR CARTOMAP (GeoPandas: SHP / GeoJSON / JSON) ---</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">gdf</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">cartomap</span><span class="p">)</span>
+                    <span class="c1"># Detect / assume CRS if missing (Swiss datasets)</span>
+                    <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">xmin</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">total_bounds</span>
+                        <span class="k">if</span> <span class="n">xmin</span> <span class="o">&gt;</span> <span class="mf">1e6</span><span class="p">:</span>
+                            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2056</span><span class="p">)</span>  <span class="c1"># CH1903+ / LV95</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">21781</span><span class="p">)</span>  <span class="c1"># CH1903 / LV03</span>
+
+                    <span class="c1"># Reproject to WGS84 (what Cartopy expects)</span>
+
+                    <span class="n">ax</span><span class="o">.</span><span class="n">add_geometries</span><span class="p">(</span>
+                        <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+                        <span class="n">crs</span><span class="o">=</span><span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">epsg</span><span class="p">(</span><span class="n">gdf</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">to_epsg</span><span class="p">()),</span>
+                        <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                        <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load cartomap </span><span class="si">{</span><span class="n">cartomap</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span>
                     <span class="s2">&quot;cartomap &quot;</span>
@@ -808,9 +851,12 @@
     <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-    <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
-        <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>  <span class="c1">#  rgb case</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
+            <span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
     <span class="n">xsize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;xsize&quot;</span><span class="p">]</span>
     <span class="n">ysize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;gridMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;ysize&quot;</span><span class="p">]</span>
@@ -1098,9 +1144,12 @@
     <span class="k">if</span> <span class="s2">&quot;dpi&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]:</span>
         <span class="n">dpi</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;dpi&quot;</span><span class="p">]</span>
 
-    <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
-        <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>  <span class="c1">#  rgb case</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
+            <span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
     <span class="n">xsize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xsize&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
     <span class="n">ysize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ysize&quot;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
@@ -1112,7 +1161,8 @@
     <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">aspect</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span>
         <span class="n">field_name</span><span class="p">,</span>
@@ -1165,9 +1215,12 @@
     <span class="k">if</span> <span class="s2">&quot;dpi&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]:</span>
         <span class="n">dpi</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;dpi&quot;</span><span class="p">]</span>
 
-    <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
-        <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>  <span class="c1">#  rgb case</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
+            <span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
     <span class="n">xsize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xsize&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
     <span class="n">ysize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ysize&quot;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
@@ -1179,7 +1232,8 @@
     <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">aspect</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot_longitude_slice</span><span class="p">(</span>
         <span class="n">field_name</span><span class="p">,</span>
@@ -1232,9 +1286,12 @@
     <span class="k">if</span> <span class="s2">&quot;dpi&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]:</span>
         <span class="n">dpi</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;dpi&quot;</span><span class="p">]</span>
 
-    <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
-        <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># rgb case:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span> <span class="o">=</span> <span class="n">get_norm</span><span class="p">(</span>
+            <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">],</span> <span class="n">isxarray</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
     <span class="n">xsize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;xsize&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
     <span class="n">ysize</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ysize&quot;</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
@@ -1246,7 +1303,8 @@
     <span class="c1"># ymax = prdcfg[&#39;xsecImageConfig&#39;].get(&#39;ymax&#39;, None)</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">aspect</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;xsecImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;aspect&quot;</span><span class="p">,</span> <span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="n">aspect</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot_cross_section</span><span class="p">(</span>
         <span class="n">field_name</span><span class="p">,</span>
@@ -2112,7 +2170,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

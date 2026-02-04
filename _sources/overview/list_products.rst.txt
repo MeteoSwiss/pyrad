@@ -9,7 +9,7 @@ description
  | Plots time series of the antenna position with respect
  | to elevation or azimuth 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L833>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L846>`_
 parameters
    dpi: : *float*
        dpi of the plot 
@@ -21,10 +21,10 @@ CDF
 description
  | plots and writes the cumulative density function of data
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3967>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4048>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    quantiles: : *list of floats*
        The quantiles to compute in percent. Default None 
    sector: : *dict*
@@ -57,10 +57,10 @@ BSCOPE_IMAGE
 description
  | Creates a B-scope image (azimuth, range)
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3251>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3320>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    anglenr : *: int*
        The elevation angle number to use 
    ray_dim : *: str*
@@ -75,10 +75,10 @@ CAPPI_IMAGE
 description
  | Creates a CAPPI image
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2759>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2818>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    altitude: : *flt*
        CAPPI altitude [m MSL] 
    wfunc: : *str*
@@ -92,10 +92,10 @@ description
  | Plots a cross-section of polar data through
  | arbitrary coordinates 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2798>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2859>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    coord1, : *coord2, ..., coordN: dict*
        The two lat-lon coordinates marking the limits. They have the keywords 'lat' and 'lon' [degree]. 
    step : *: int*
@@ -114,10 +114,10 @@ FIELD_COVERAGE
 description
  | Gets the field coverage over a certain sector
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3765>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3844>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    threshold: : *float or None*
        Minimum value to consider the data valid. Default None 
    nvalid_min: : *float*
@@ -140,10 +140,10 @@ FIXED_RNG_IMAGE
 description
  | Plots a fixed range image
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2898>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2961>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    AngTol : *: float*
        The tolerance between the nominal angles and the actual radar angles. Default 1. 
    ele_res, : *azi_res: float or None*
@@ -157,10 +157,10 @@ description
  | Plots a user-defined statistic over a fixed
  | range image 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2953>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3018>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    AngTol : *: float*
        The tolerance between the nominal angles and the actual radar angles. Default 1. 
    ele_res, : *azi_res: float or None*
@@ -173,10 +173,10 @@ HISTOGRAM
 description
  | Computes a histogram of the radar volume data
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3467>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3542>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    step: : *float or None*
        the data quantization step. If none it will be obtained from the Py-ART configuration file 
    write_data: : *Bool*
@@ -188,10 +188,10 @@ description
  | Plots the radar volume data along a particular
  | coordinate 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3009>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3076>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    colors: : *list of str or None*
        The colors of each ploted line 
    data_on_y : *: bool*
@@ -217,17 +217,17 @@ description
  | Plots the transmitted signal power (H) for a standard
  | sunscan. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3194>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3263>`_
 
 PPI_CONTOUR
 """"""""""""""""""""""""""""""
 description
  | Plots a PPI countour plot
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1362>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1397>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    anglenr: : *float*
@@ -239,10 +239,10 @@ description
  | Plots a PPI of a field with another field
  | overplotted as a contour plot. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1227>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1258>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    anglenr: : *float*
@@ -254,10 +254,10 @@ description
  | Plots a PPI image. It can also plot the histogram and the
  | quantiles of the data in the PPI. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2759>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2818>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    anglenr: : *float*
        The elevation angle number 
    plot_type: : *str*
@@ -278,10 +278,10 @@ description
  | type of maps used are defined in the variables 'mapres' and 'maps' 
  | in 'ppiMapImageConfig' in the loc config file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2707>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2764>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    anglenr: : *float*
        The elevation angle number 
    vmin, : *vmax : float or None*
@@ -295,10 +295,10 @@ description
  | type of maps used are defined in the variables 'mapres' and 'maps' 
  | in 'ppiMapImageConfig' in the loc config file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1170>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1199>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    anglenr: : *float*
        The elevation angle number  
 
@@ -308,10 +308,10 @@ description
  | Computes and plots a vertical profile statistics.
  | The statistics are saved in a csv file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2014>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2069>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    heightResolution: : *float*
        The height resolution of the profile [m]. Default 100. 
    heightMin, : *heightMax: float or None*
@@ -336,10 +336,10 @@ PSEUDOPPI_CONTOUR
 description
  | Plots a pseudo-PPI countour plot
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1362>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1397>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    angle: : *float*
@@ -353,10 +353,10 @@ description
  | Plots a pseudo-PPI of a field with
  | another field over-plotted as a contour plot 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1227>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1258>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    angle: : *float*
@@ -370,10 +370,10 @@ description
  | Plots a pseudo-PPI image. It can also plot the
  | histogram and the quantiles of the data in the pseudo-PPI. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L968>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L987>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    angle: : *float*
        The elevation angle of the pseudo-PPI 
    EleTol: : *float*
@@ -394,10 +394,10 @@ description
  | resolution and the type of maps used are defined in the variables 
  | 'mapres' and 'maps' in 'ppiMapImageConfig' in the loc config file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2707>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2764>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    angle: : *float*
        The elevation angle of the pseudo-PPI 
    EleTol: : *float*
@@ -410,10 +410,10 @@ PSEUDORHI_CONTOUR
 description
  | Plots a pseudo-RHI countour plot
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1760>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1811>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    angle: : *float*
@@ -427,10 +427,10 @@ description
  | Plots a pseudo-RHI of a field with
  | another field over-plotted as a contour plot 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1626>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1673>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    angle: : *float*
@@ -444,10 +444,10 @@ description
  | Plots a pseudo-RHI image. It can also plot the
  | histogram and the quantiles of the data in the pseudo-RHI. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1477>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1518>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    angle: : *float*
        The azimuth angle at which to compute the RPI 
    AziTol: : *float*
@@ -466,10 +466,10 @@ QUANTILES
 description
  | Plots and writes the quantiles of a radar volume
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3555>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3630>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    quantiles: : *list of floats or None*
        the list of quantiles to compute. If None a default list of quantiles will be computed. 
    write_data: : *Bool*
@@ -484,10 +484,10 @@ RHI_CONTOUR
 description
  | Plots an RHI countour plot
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1760>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1811>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    anglenr: : *int*
@@ -499,10 +499,10 @@ description
  | Plots an RHI of a field with another field
  | over-plotted as a contour plot 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1626>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1673>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    contour_values: : *list of floats or None*
        The list of contour values to plot. If None the contour values are going to be obtained from the Py-ART config file either with the dictionary key 'contour_values' or from the minimum and maximum values of the field with an assumed division of 10 levels. 
    anglenr: : *int*
@@ -514,10 +514,10 @@ description
  | Plots an RHI image. It can also plot the
  | histogram and the quantiles of the data in the RHI. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1477>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1518>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    anglenr: : *int*
        The azimuth angle number 
    plot_type: : *str*
@@ -536,10 +536,10 @@ description
  | an RHI. 
  | The statistics are saved in a csv file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1815>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1868>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    rangeStart, : *rangeStop: float*
        The range start and stop of the data to extract from the RHI to compute the statistics [m]. Default 0., 25000. 
    heightResolution: : *float*
@@ -566,10 +566,10 @@ SAMPLES_HISTOGRAM
 description
  | Computes a histogram of the number of samples used
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3467>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3542>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    step: : *float or None*
        the data quantization step. If none it will be obtained from the Py-ART configuration file 
    write_data: : *Bool*
@@ -581,7 +581,7 @@ description
  | Saves radar volume data including all or a list of user-
  | defined fields in a C/F radial or ODIM file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4697>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4786>`_
 parameters
    file_type: : *str*
        The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
@@ -600,7 +600,7 @@ description
  | Same as before but can be used in a mixed GRID/VOL
  | dataset, as there is no ambiguity with SAVEALL for VOL datasets 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4697>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4786>`_
 
 SAVESTATE
 """"""""""""""""""""""""""""""
@@ -608,7 +608,7 @@ description
  | Saves the last processed data in a file. Used for real-
  | time data processing 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4758>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4847>`_
 
 SAVEPSEUDORHI
 """"""""""""""""""""""""""""""
@@ -616,7 +616,7 @@ description
  | Saves one field of a pseudo-RHI computed from a
  | volume scan in C/F radial or ODIM file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4913>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5004>`_
 parameters
    file_type: : *str*
        The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
@@ -633,7 +633,7 @@ description
  | Saves one field of a pseudo-PPI computed from a
  | volume scan in C/F radial or ODIM file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4977>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5068>`_
 parameters
    file_type: : *str*
        The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
@@ -650,7 +650,7 @@ description
  | Saves one field of a radar volume data in a C/F radial or
  | ODIM file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4642>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4729>`_
 parameters
    file_type: : *str*
        The type of file used to save the data. Can be 'nc' or 'h5'. Default 'nc' 
@@ -666,10 +666,10 @@ SAVEVOL_CSV
 description
  | Saves one field of a radar volume data in a CSV file
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4534>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4617>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    ignore_masked: : *bool*
        If True masked values will not be saved. Default False  
 
@@ -678,10 +678,10 @@ SAVEVOL_KML
 description
  | Saves one field of a radar volume data in a KML file
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4574>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4659>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    ignore_masked: : *bool*
        If True masked values will not be saved. Default False 
    azi_res : *: float or None*
@@ -693,24 +693,24 @@ description
  | Same as before but can be used in a mixed GRID/VOL
  | dataset, as there is no ambiguity with SAVEVOL for GRID datasets 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4642>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4729>`_
 
 SAVE_FIXED_ANGLE
 """"""""""""""""""""""""""""""
 description
  | Saves the position of the first fix angle in a csv file
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5040>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5131>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset  
+   voltype: : *str or list of str*
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)  
 
 SELFCONSISTENCY
 """"""""""""""""""""""""""""""
 description
  | Plots a ZDR versus KDP/ZH histogram of data.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4214>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4297>`_
 parameters
    retrieve_relation : *: bool*
        If True plots also the retrieved relationship. Default True 
@@ -725,7 +725,7 @@ description
  | Plots a ZH measured versus ZH inferred from a
  | self-consistency relation histogram of data. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4214>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4297>`_
 parameters
    normalize : *: bool*
        If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True  
@@ -735,10 +735,10 @@ TIME_RANGE
 description
  | Plots a time-range/azimuth/elevation plot
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3316>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3387>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    anglenr: : *float*
        The number of the fixed angle to plot 
    vmin, : *vmax: float or None*
@@ -751,10 +751,10 @@ description
  | Meant primarily for writing and plotting the results of the 
  | SELFCONSISTENCY2 algorithm 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4256>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4339>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    ref_value: : *float*
        The reference value. Default 0 
    sort_by_date: : *Bool*
@@ -790,7 +790,7 @@ description
  | difference between the estimated radial velocity (assuming the 
  | wind to be uniform) and the actual measured radial velocity. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2197>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2254>`_
 parameters
    heightResolution: : *float*
        The height resolution of the profile [m]. Default 100. 
@@ -812,10 +812,10 @@ description
  | sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and 
  | additional quantiles 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3651>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3728>`_
 parameters
-   voltype: : *name of the pyrad variable to use, it must be available*
-       in the dataset 
+   voltype: : *str*
+       Name of the pyrad variable to use, it must be a voltype available in the dataset 
    ele_min: : *float*
        Max elevation angle defining the sector [deg]. Default 0. 
    ele_max: : *float*
@@ -940,7 +940,7 @@ description
  | Writes the position of the co-located gates
  | in a csv file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L529>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L494>`_
 
 PLOT_COLOCATED_GATES
 """"""""""""""""""""""""""""""
@@ -951,7 +951,7 @@ description
  | average height. All other plotting parameters are obtained from the 
  | gridMapImageConfig structure of the loc file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L555>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L520>`_
 parameters
    grid_size: : *float*
        Size of the grid in degrees (lat/lon). If not provided, the grid size defined in gridMapImageConfig with lat_min, lon_min, lat_max, lon_max and lonstep, latstep will be used. All the products of the 'VOL' dataset group    
@@ -1004,19 +1004,21 @@ CROSS_SECTION
 description
  | Plots a cross-section of gridded data
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L886>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L916>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset 
-   coord1, : *coord2: dict*
-       The two lat-lon coordinates marking the limits. They have the keywords 'lat' and 'lon' [degree]. The altitude limits are defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file  
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
+   coord1: : *dict*
+       Lat, lon  coordinates of the start point. It must be a dict with the keywords 'lat' and 'lon' [degree]. The altitude limits are defined by the parameters ymin, ymax in 'xsecImageConfig' in the 'loc' configuration file 
+   coord2: : *dict*
+       Lat, lon  coordinates of the end point. It must be a dict with the keywords 'lat' and 'lon' [degree]. The altitude limits are defined by the parameters ymin, ymax in 'xsecImageConfig' in the 'loc' configuration file  
 
 HISTOGRAM
 """"""""""""""""""""""""""""""
 description
  | Computes a histogram of the radar volum data
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L953>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L987>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1035,12 +1037,14 @@ description
  | Plots a cross-section of gridded data over a
  | constant latitude. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1287>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1321>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset 
-   lon, : *lat: floats*
-       The starting point of the cross-section. The ending point is defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file  
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
+   lon: : *float*
+       Start longitude of the cross-section. Default is to use the radar longitude. The end coordinates are obtained from the parameter xmax in 'xsecImageConfig' in the loc config file 
+   lat: : *float*
+       Latitude of the cross-section. Default is to use the radar latitude.  
 
 LONGITUDE_SLICE
 """"""""""""""""""""""""""""""
@@ -1048,12 +1052,14 @@ description
  | Plots a cross-ection of gridded data over a
  | constant longitude. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1215>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1249>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset 
-   lon, : *lat: floats*
-       The starting point of the cross-section. The ending point is defined by the parameters in 'xsecImageConfig' in the 'loc' configuration file  
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
+   lon: : *float*
+       Longitude of the cross-section. Default is to use the radar longitude. 
+   lat: : *float*
+       Start latitude of the cross-section. Default is to use the radar latitude. The end coordinates are obtained from the parameter xmax in 'xsecImageConfig' in the loc config file  
 
 SAVEALL
 """"""""""""""""""""""""""""""
@@ -1061,7 +1067,7 @@ description
  | Saves a gridded data object including all or a list of
  | user-defined fields in a netcdf file 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1107>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1141>`_
 parameters
    datatypes: : *list of str or None*
        The list of data types to save. If it is None, all fields in the radar object will be saved  
@@ -1072,14 +1078,14 @@ description
  | Same as before but can be used in a mixed GRID/VOL
  | dataset, as there is no ambiguity with SAVEALL for VOL datasets 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1107>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1141>`_
 
 SAVEVOL
 """"""""""""""""""""""""""""""
 description
  | Saves on field of a gridded data object in a netcdf file.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1044>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1078>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1098,7 +1104,7 @@ description
  | Same as before but can be used in a mixed GRID/VOL
  | dataset, as there is no ambiguity with SAVEVOL for VOL datasets 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1044>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1078>`_
 
 STATS
 """"""""""""""""""""""""""""""
@@ -1106,7 +1112,7 @@ description
  | Computes statistics over the whole images and stores them in
  | a file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L438>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L452>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1119,10 +1125,10 @@ description
  | Plots a surface image of gridded data without
  | projecting it into a map 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L494>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L508>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset 
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    level: : *int*
        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file  
 
@@ -1131,10 +1137,10 @@ SURFACE_IMAGE
 description
  | Plots a surface image of gridded data.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L535>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L553>`_
 parameters
    voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset 
+       Name of the pyrad variable to use, it must be either a voltype available in the dataset or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available) 
    level: : *int*
        The altitude level to plot. The rest of the parameters are defined by the parameters in 'ppiImageConfig' and 'ppiMapImageConfig' in the 'loc' configuration file  
 
@@ -1143,7 +1149,7 @@ SURFACE_CONTOUR
 description
  | Plots a surface image of contour gridded data.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L629>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L651>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1162,7 +1168,7 @@ description
  | 
  | Plots a surface image of gridded data with a contour overplotted. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L629>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L651>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1181,7 +1187,7 @@ description
  | 
  | Plots on the same surface two images, one on top of the other. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L714>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L736>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1197,7 +1203,7 @@ description
  | Plots horizontal wind vectors obtained from a DDA analysis on a 2D map. 
  | The pyDDA package is required 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1155>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1189>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1230,7 +1236,7 @@ description
  | along a given longitude 
  | The pyDDA package is required 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1215>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1249>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1263,7 +1269,7 @@ description
  | along a given latitude 
  | The pyDDA package is required 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1287>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_grid_products.py#L1321>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1665,7 +1671,7 @@ description
  | statistics. Note that in order to use this product you need 
  | to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L328>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L293>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1691,7 +1697,7 @@ description
  | radar 1 versus the points of radar 2. Note that in order to use this product you need 
  | to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L192>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L159>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1713,21 +1719,9 @@ parameters
 WRITE_INTERCOMP
 """"""""""""""""""""""""""""""
 description
- | Writes the instantaneously intercompared data
- | (gate positions, values, etc.) in a csv file. 
+ | Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L328>`_
-parameters
-   voltype: : *str*
-       name of the pyrad variable to use, it must be available in the dataset  
-
-WRITE_INTERCOMP_TIME_AVG
-""""""""""""""""""""""""""""""
-description
- | Writes the time-averaged intercompared
- | data (gate positions, values, etc.) in a csv file. 
- |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L166>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L293>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset   

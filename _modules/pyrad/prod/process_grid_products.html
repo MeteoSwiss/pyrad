@@ -43,8 +43,8 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -547,11 +547,17 @@
 <span class="sd">        &#39;CROSS_SECTION&#39;: Plots a cross-section of gridded data</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
-<span class="sd">                coord1, coord2: dict</span>
-<span class="sd">                    The two lat-lon coordinates marking the limits. They have</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
+<span class="sd">                coord1: dict</span>
+<span class="sd">                    Lat, lon  coordinates of the start point. It must be a dict with</span>
 <span class="sd">                    the keywords &#39;lat&#39; and &#39;lon&#39; [degree]. The altitude limits</span>
-<span class="sd">                    are defined by the parameters in &#39;xsecImageConfig&#39; in the</span>
+<span class="sd">                    are defined by the parameters ymin, ymax in &#39;xsecImageConfig&#39; in the</span>
+<span class="sd">                    &#39;loc&#39; configuration file</span>
+<span class="sd">                coord2: dict</span>
+<span class="sd">                    Lat, lon  coordinates of the end point. It must be a dict with</span>
+<span class="sd">                    the keywords &#39;lat&#39; and &#39;lon&#39; [degree]. The altitude limits</span>
+<span class="sd">                    are defined by the parameters ymin, ymax in &#39;xsecImageConfig&#39; in the</span>
 <span class="sd">                    &#39;loc&#39; configuration file</span>
 <span class="sd">        &#39;HISTOGRAM&#39;: Computes a histogram of the radar volum data</span>
 <span class="sd">            User defined parameters:</span>
@@ -571,20 +577,26 @@
 <span class="sd">            constant latitude.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
-<span class="sd">                lon, lat: floats</span>
-<span class="sd">                    The starting point of the cross-section. The ending point</span>
-<span class="sd">                    is defined by the parameters in &#39;xsecImageConfig&#39; in the</span>
-<span class="sd">                    &#39;loc&#39; configuration file</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
+<span class="sd">                lon: float</span>
+<span class="sd">                    Start longitude of the cross-section. Default is to use the radar longitude. The end coordinates</span>
+<span class="sd">                    are obtained from the parameter xmax in &#39;xsecImageConfig&#39; in the loc</span>
+<span class="sd">                    config file</span>
+<span class="sd">                lat: float</span>
+<span class="sd">                    Latitude of the cross-section. Default is to use the radar latitude.</span>
 <span class="sd">        &#39;LONGITUDE_SLICE&#39;: Plots a cross-ection of gridded data over a</span>
 <span class="sd">            constant longitude.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
-<span class="sd">                lon, lat: floats</span>
-<span class="sd">                    The starting point of the cross-section. The ending point</span>
-<span class="sd">                    is defined by the parameters in &#39;xsecImageConfig&#39; in the</span>
-<span class="sd">                    &#39;loc&#39; configuration file</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
+<span class="sd">                lon: float</span>
+<span class="sd">                    Longitude of the cross-section. Default is to use the radar longitude.</span>
+<span class="sd">                lat: float</span>
+<span class="sd">                    Start latitude of the cross-section. Default is to use the radar latitude. The end coordinates</span>
+<span class="sd">                    are obtained from the parameter xmax in &#39;xsecImageConfig&#39; in the loc</span>
+<span class="sd">                    config file</span>
 <span class="sd">        &#39;SAVEALL&#39;: Saves a gridded data object including all or a list of</span>
 <span class="sd">            user-defined fields in a netcdf file</span>
 <span class="sd">            User defined parameters:</span>
@@ -625,7 +637,8 @@
 <span class="sd">            projecting it into a map</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                level: int</span>
 <span class="sd">                    The altitude level to plot. The rest of the parameters are</span>
 <span class="sd">                    defined by the parameters in &#39;ppiImageConfig&#39; and</span>
@@ -633,7 +646,8 @@
 <span class="sd">        &#39;SURFACE_IMAGE&#39;: Plots a surface image of gridded data.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
-<span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
+<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
+<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
 <span class="sd">                level: int</span>
 <span class="sd">                    The altitude level to plot. The rest of the parameters are</span>
 <span class="sd">                    defined by the parameters in &#39;ppiImageConfig&#39; and</span>
@@ -878,8 +892,10 @@
         <span class="k">return</span> <span class="n">fname</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SURFACE_RAW&quot;</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -902,7 +918,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;surface&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;l&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -920,7 +938,9 @@
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;SURFACE_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -943,7 +963,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;surface&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;l&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">level</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1182,8 +1204,10 @@
         <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;LATITUDE_SLICE&quot;</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1207,7 +1231,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;lat_slice&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lat</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1226,8 +1252,10 @@
         <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;LONGITUDE_SLICE&quot;</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1251,7 +1279,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;lon_slice&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lon</span><span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -1270,8 +1300,10 @@
         <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CROSS_SECTION&quot;</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
                 <span class="o">+</span> <span class="n">field_name</span>
@@ -1311,7 +1343,9 @@
         <span class="n">fname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
             <span class="s2">&quot;lonlat&quot;</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;RGB&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
+            <span class="k">else</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
             <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;lon-lat1_&quot;</span>
             <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lon1</span><span class="p">)</span>
@@ -1788,7 +1822,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
