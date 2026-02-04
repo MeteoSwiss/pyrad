@@ -58,12 +58,12 @@ import glob
 import datetime
 import platform
 import os
+import pyart
+import numpy as np
+from scipy.interpolate import RegularGridInterpolator
+
 from ..util import warn
 from copy import deepcopy
-
-import numpy as np
-
-from scipy.interpolate import RegularGridInterpolator
 
 try:
     import wradlib as wrl
@@ -75,7 +75,6 @@ except ImportError:
         "WARNING: wradlib is not installed, RAINBOW data cannot be read!",
         use_debug=False,
     )
-import pyart
 
 # check existence of METRANET library
 try:
@@ -109,6 +108,10 @@ from .io_aux import find_pyradicon_file, get_datatype_skyecho
 from .io_aux import get_rad4alp_prod_fname, get_rad4alp_grid_dir
 from .io_aux import get_rad4alp_dir, get_scan_files_to_merge
 from .io_aux import get_scan_files_to_merge_s3
+
+
+def test_warn():
+    warn("This is a test warning!")
 
 
 def _open_s3_client(cfg):
@@ -1161,6 +1164,9 @@ def get_data(voltime, datatypesdescr, cfg):
                         )
 
     if radar is None:
+        warn(
+            f"No radar data could be loaded for time {voltime} and descriptor {datatypesdescr}!"
+        )
         return radar
 
     # if it is specified, get the position from the config file
@@ -1519,6 +1525,9 @@ def merge_scans_rainbow(
                 radar = pyart.util.radar_utils.join_radar(radar, radar_aux)
 
     if radar is None:
+        warn(
+            f"No radar data could be loaded for basepath {basepath}, time {scantime} and datatype_list {datatype_list}!"
+        )
         return radar
 
     ind_rad = int(radarnr[5:8]) - 1
