@@ -1,0 +1,4495 @@
+List of pyrad datasets separated by dataset type
+=================================================
+
+VOL
+-----------------------------
+ATTENUATION
+""""""""""""""""""""""""""""""
+description
+   Computes specific attenuation and specific differential attenuation using the Z-Phi method and corrects reflectivity and differential reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_attenuation>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc", and,
+     |     "ZDR" or "ZDRc", and
+     |     "TEMP" or "H_ISO0" (Optional)
+   ATT_METHOD : float. Dataset keyword
+     | The attenuation estimation method used. One of the following:
+     |     ZPhi, Philin. Default ZPhi
+   fzl : float. Dataset keyword
+     | The default freezing level height. It will be used if no
+     |     temperature field name is specified or the temperature field is
+     |     not in the radar object. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used
+     |     to compute the freezing level, if no temperature field name is
+     |     specified, if the temperature field is in the radar object or if
+     |     no freezing_level is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields "Ah" (spec. attenuation),
+     |     "PIA" (path-integrated attenuation) and "dBZc" (corr. refl.)
+
+AZI_AVG
+""""""""""""""""""""""""""""""
+description
+   Averages radar data in azimuth obtaining and RHI as a result
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_azimuthal_average>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   angle : float or None. Dataset keyword
+     | The center angle to average. If not set or set to -1 all
+     |     available azimuth angles will be used
+   delta_azi : float. Dataset keyword
+     | The angle span to average. If not set or set to -1 all the
+     |     available azimuth angles will be used
+   avg_type : str. Dataset keyword
+     | Average type. Can be mean or median. Default mean
+   nvalid_min : int. Dataset keyword
+     | the minimum number of valid points to consdier the average valid.
+     |     Default 1
+   lin_trans : dict or None
+     | A dictionary specifying which data types have to be transformed
+     |     in linear units before averaging
+
+returns
+   new_dataset : dict
+     |     dictionary containing the gridded data
+
+MOVING_AZI_AVG
+""""""""""""""""""""""""""""""
+description
+   Applies a moving azimuthal average to the radar data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_moving_azimuthal_average>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   delta_azi : float. Dataset keyword
+     | The angle span to average. Default 20
+   avg_type : str. Dataset keyword
+     | Average type. Can be mean or median. Default mean
+   nvalid_min : int. Dataset keyword
+     | the minimum number of valid points to consdier the average valid.
+     |     Default 1
+   lin_trans : dict or None
+     | A dictionary specifying which data types have to be transformed
+     |     in linear units before averaging
+
+returns
+   new_dataset : dict
+     |     dictionary containing the gridded data
+
+BIAS_CORRECTION
+""""""""""""""""""""""""""""""
+description
+   Corrects a bias on the data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_correct_bias>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type to correct for bias, can be any datatype supported by pyrad
+   bias : float. Dataset keyword
+     | The bias to be corrected [dB]. Default 0
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+BIRDS_ID
+""""""""""""""""""""""""""""""
+description
+   identifies echoes as 0: No data, 1: Noise, 2: Clutter, 3: Birds
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_birds_id>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be
+     |     "dBZ" or "dBuZ", and,
+     |     "ZDR" or "ZDRu", and,
+     |     "RhoHV" or "uRhoHV"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "echoID"
+
+BIRD_DENSITY
+""""""""""""""""""""""""""""""
+description
+   Computes the bird density from the volumetric reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_bird_density>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "eta_h" or "eta_v" (volumetric reflectivities)
+   sigma_bird : float. Dataset keyword
+     | The bird radar cross section
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "bird_density"
+
+CCOR
+""""""""""""""""""""""""""""""
+description
+   Computes the Clutter Correction Ratio, i.e. the ratio between the signal without Doppler filtering and the signal with Doppler filtering
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_ccor>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZv", and,
+     |     "dBuZ", or "dBuZV"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "CCORh" or
+     |     "CCORv" (if vertical reflectivities were provided)
+
+CDF
+""""""""""""""""""""""""""""""
+description
+   Collects the fields necessary to compute the Cumulative Distribution Function
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_cdf>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be
+     |     "echoID" (if not provided, no clutter filtering is possible), and,
+     |     "hydro" (if not provided, no hydro filtering is possible), and,
+     |     "VIS" (if not provided no blocked gate filtering is possible), and,
+     |     any other field that will be used to compute CDF
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+CDR
+""""""""""""""""""""""""""""""
+description
+   Computes approximation of Circular Depolarization Ratio
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_cdr>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "RhoHV" or "uRhoHV" or "RhoHVu", and,
+     |     "ZDR" or "ZDRc"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "CDR"
+
+CLT_TO_SAN
+""""""""""""""""""""""""""""""
+description
+   Converts clutter exit code from rad4alp into pyrad echo ID
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_clt_to_echo_id>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be "CLT"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "echoID"
+
+ICON_LOOKUP
+""""""""""""""""""""""""""""""
+description
+   Gets icon data and put it in radar coordinates using look up tables computed or loaded when initializing
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_lookup_table>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   lookup_table : int. Dataset keyword
+     | if set a pre-computed look up table for the icon coordinates is
+     |     loaded. Otherwise the look up table is computed taking the first
+     |     radar object as reference
+   regular_grid : int. Dataset keyword
+     | if set it is assume that the radar has a grid constant in time and
+     |     therefore there is no need to interpolate the icon field in
+     |     memory to the current radar grid
+   icon_type : str. Dataset keyword
+     | name of the icon field to process. Default TEMP
+   icon_variables : list of strings. Dataset keyword
+     | Py-art name of the icon fields. Default temperature
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields corresponding to icon_variables
+
+DEM
+""""""""""""""""""""""""""""""
+description
+   Gets DEM data and put it in radar coordinates
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_dem>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   keep_in_memory : int. Dataset keyword
+     | if set keeps the COSMO data dict, the COSMO coordinates dict and
+     |     the COSMO field in radar coordinates in memory. Default False
+   regular_grid : int. Dataset keyword
+     | if set it is assume that the radar has a grid constant in time and
+     |     there is no need to compute a new COSMO field if the COSMO
+     |     data has not changed. Default False
+   dem_field : str. Dataset keyword
+     | name of the DEM field to process
+   demfile : str. Dataset keyword
+     | Name of the file containing the DEM data
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field with name corresponding
+     |     to dem_field
+
+DEALIAS_FOURDD
+""""""""""""""""""""""""""""""
+description
+   Dealiases the Doppler velocity field using the 4DD technique from Curtis and Houze, 2001
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_fourdd>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain
+     |     "V" or "Vc"
+   filt : int. Dataset keyword
+     | Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
+   sign : int. Dataset keyword
+     | Sign convention which the radial velocities in the volume created
+     |     from the sounding data will will. This should match the
+     |     convention used in the radar data. A value of 1 represents when
+     |     positive values velocities are towards the radar, -1 represents
+     |     when negative velocities are towards the radar.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
+
+DEALIAS_REGION
+""""""""""""""""""""""""""""""
+description
+   Dealiases the Doppler velocity field using a region based algorithm
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_region_based>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "V" or "Vc"
+   interval_splits : int, optional
+     | Number of segments to split the nyquist interval into when finding
+     |     regions of similar velocity.  More splits creates a larger number
+     |     of initial regions which takes longer to process but may result in
+     |     better dealiasing.  The default value of 3 seems to be a good
+     |     compromise between performance and artifact free dealiasing. This
+     |     value is not used if the interval_limits parameter is not None.
+   skip_between_rays, skip_along_ray : int, optional
+     | Maximum number of filtered gates to skip over when joining
+     |     regions, gaps between region larger than this will not be
+     |     connected. Parameters specify the maximum number of filtered gates
+     |     between and along a ray. Set these parameters to 0 to disable
+     |     unfolding across filtered gates.
+   centered : bool, optional
+     | True to apply centering to each sweep after the dealiasing
+     |     algorithm so that the average number of unfolding is near 0. False
+     |     does not apply centering which may results in individual sweeps
+     |     under or over folded by the nyquist interval.
+   nyquist_vel : float, optional
+     | Nyquist velocity of the aquired radar velocity.
+     |     Usually this parameter is provided in the
+     |     Radar object intrument_parameters. If it is not available it can
+     |     be provided as a keyword here.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
+
+DEALIAS_UNWRAP
+""""""""""""""""""""""""""""""
+description
+   Dealiases the Doppler velocity field using multi-dimensional phase unwrapping
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dealias_unwrap_phase>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "V" or "Vc"
+   unwrap_unit : {'ray', 'sweep', 'volume'}, optional
+     | Unit to unwrap independently.  'ray' will unwrap each ray
+     |     individually, 'sweep' each sweep, and 'volume' will unwrap the
+     |     entire volume in a single pass.  'sweep', the default, often gives
+     |     superior results when the lower sweeps of the radar volume are
+     |     contaminated by clutter. 'ray' does not use the gatefilter
+     |     parameter and rays where gates ared masked will result in poor
+     |     dealiasing for that ray.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dealV" or "dealVc" (if Vc was provided)
+
+DOPPLER_VELOCITY
+""""""""""""""""""""""""""""""
+description
+   Compute the Doppler velocity from the spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_Doppler_velocity>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "sdBZ" or "sdBZv" or "sdBuZ" or "sdBuZv"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "V" if "sdBZ" was provided
+     |     "Vv" if "sdBZv" was provided
+     |     "Vu" if "sdBuZ" was provided
+
+DOPPLER_VELOCITY_IQ
+""""""""""""""""""""""""""""""
+description
+   Compute the Doppler velocity from the spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_Doppler_velocity_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU"
+   direction : str
+     | The convention used in the Doppler mean field. Can be
+     |     negative_away or negative_towards
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "V"
+     |     (if IQhhADU was provided) or "Vv" (if IQvvADU was provided)
+
+DOPPLER_WIDTH
+""""""""""""""""""""""""""""""
+description
+   Compute the Doppler spectrum width from the spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_Doppler_width>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "sdBZ" or "sdBZv" or "sdBuZ" or "sdBuZv"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "W" if "sdBZ" was provided
+     |     "Wv" if "sdBZv" was provided
+     |     "Wu" if "sdBuZ" was provided
+
+DOPPLER_WIDTH_IQ
+""""""""""""""""""""""""""""""
+description
+   Compute the Doppler spectrum width from the spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_Doppler_width_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU"
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signals
+   lag : int
+     | Time lag used in the denominator of the computation
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "W" (if IQhhADU was provided),
+     |     or "Wv" (if IQvvADU was provided)
+
+ECHO_FILTER
+""""""""""""""""""""""""""""""
+description
+   Masks all echo types that are not of the class specified in keyword echo_type
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_echo_filter>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be
+     |     "echoID" at minimum, as well as any other fields
+     |     that will be echo filtered (e.g. dBZ, ZDR)
+   echo_type : int or list of ints
+     | The type of echoes to keep: 1 noise, 2 clutter, 3 precipitation.
+     |     Default 3
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+FIELDS_DIFF
+""""""""""""""""""""""""""""""
+description
+   Extracts the difference between two radars fields at a given time, assuming that their gates are all colocated. It does not do any time post-processing and only extracts the data at volume time.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_fields_diff>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types for each radar,
+     |     Any datatype supported by pyrad is supported
+
+returns
+   new_dataset : dict
+     |     dictionary containing a radar object containing the field differences
+
+FIXED_RNG
+""""""""""""""""""""""""""""""
+description
+   Obtains radar data at a fixed range
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_fixed_rng>`_
+parameters
+   datatype : list of strings. Dataset keyword
+     | The fields we want to extract
+   rng : float. Dataset keyword
+     | The fixed range [m]
+   RngTol : float. Dataset keyword
+     | The tolerance between the nominal range and the radar range
+   ele_min, ele_max, azi_min, azi_max : floats. Dataset keyword
+     | The azimuth and elevation limits of the data [deg]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+FIXED_RNG_SPAN
+""""""""""""""""""""""""""""""
+description
+   For each azimuth-elevation gets the data within a fixed range span and computes a user-defined statistic: mean, min, max, mode, median
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_fixed_rng_span>`_
+parameters
+   datatype : list of strings. Dataset keyword
+     | The fields we want to extract
+   rmin, rmax : float. Dataset keyword
+     | The range limits [m]
+   ele_min, ele_max, azi_min, azi_max : floats. Dataset keyword
+     | The azimuth and elevation limits of the data [deg]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+GATEFILTER
+""""""""""""""""""""""""""""""
+description
+   filters out all available moments based on specified upper/lower bounds for moments based on the Py-ART gatefilter. Every value below upper bound or above upper bound will be filtered. To ignore lower/upper bound enter an impossible value such as -9999 or 9999.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_gatefilter>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any any data type supported by
+     |     pyrad, the number of datatypes must match the lower and upper bounds
+     |     dimensions
+   lower_bounds : list of float
+     | The list of lower bounds for every input data type
+   upper_bounds : list of float
+     | The list of upper bounds  for every input data type
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+GECSX 
+""""""""""""""""""""""""""""""
+description
+   Computes ground clutter RCS, radar visibility and many others using the GECSX algorithmn translated from IDL into python
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_gecsx>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   
+     | 
+   range_discretization : float. Dataset keyword
+     | Range discretization used when computing the Cartesian visibility field
+     |     the larger the better but the slower the processing will be
+   az_discretization : float. Dataset keyword
+     | Azimuth discretization used when computing the Cartesian visibility
+     |     field, the larger the better but the slower the processing will be
+   ke : float. Dataset keyword
+     | Equivalent earth-radius factor used in the computation of the radar
+     |     beam refraction
+   atm_att : float. Dataset keyword
+     | One-way atmospheric refraction in db / km
+   mosotti_kw : float. Dataset keyword
+     | Clausius-Mosotti factor K, depends on material (water) and wavelength
+     |     for water = sqrt(0.93)
+   raster_oversampling : int. Dataset keyword
+     | The raster resolution of the DEM should be smaller than
+     |     the range resolution of the radar (defined by the pulse length).
+     |     If this is not the case, this keyword can be set to increase the
+     |     raster resolution. The values for the elevation, sigma naught,
+     |     visibility are repeated. The other values are recalculated.
+     |     Values for raster_oversampling:
+     |     0 or undefined: No oversampling is done
+     |     1: Oversampling is done. The factor N is automatically calculated
+     |     such that 2*dx/N < pulse length
+     |     2 or larger: Oversampling is done with this value as N
+   min_radar_elevation : float. Dataset keyword
+     | Minimum scanning elevation supported by the radar system. If provided
+     |     it will add the field min_rad_vis_height_above_ground_field to the output.
+     |     It contains the minimum visible height above ground  given the constraint
+     |     on minimum scanning elevation.
+   sigma0_method : string. Dataset keyword
+     | Which estimation method to use, either 'Gabella' or 'Delrieu'
+   clip : int. Dataset keyword
+     | If set to true, the provided DEM will be clipped to the extent
+     |     of the polar radar domain. Decreases computation speed a lot but
+     |     Cartesian output fields will be available only over radar domain
+
+returns
+   new_dataset : list of dict
+     |     list of dictionaries containing the polar data output and the
+     |     Cartesian data output in this order
+     |     The first dictionary (polar) contains the following fields:
+     |     "rcs_clutter", "dBm_clutter", "dBZ_clutter" and "visibility_polar"
+     |     The second dictionary (cart) contains the following fields:
+     |     "bent_terrain_altitude", "terrain_slope", "terrain_aspect",
+     |     "elevation_angle", "min_vis_elevation", "min_vis_altitude",
+     |     "incident_angle", "sigma_0", "effective_area"
+
+HYDROCLASS
+""""""""""""""""""""""""""""""
+description
+   Classifies precipitation echoes
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_hydroclass>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "RhoHV", or "uRhoHV", or "RhoHVc", and,
+     |     "KDP", or "KDPc", and,
+     |     "TEMP" or "H_ISO0" (optional)
+   HYDRO_METHOD : string. Dataset keyword
+     | The hydrometeor classification method. One of the following:
+     |     SEMISUPERVISED, UKMO
+   centroids_file : string or None. Dataset keyword
+     | Used with HYDRO_METHOD SEMISUPERVISED. The name of the .csv file
+     |     that stores the centroids. The path is given by
+     |     [configpath]/centroids_hydroclass/
+     |     If None is provided default centroids are going to be used
+   compute_entropy : bool. Dataset keyword
+     | Used with HYDRO_METHOD SEMISUPERVISED. If true the entropy is
+     |     computed and the field hydroclass_entropy is output
+   output_distances : bool. Dataset keyword
+     | Used with HYDRO_METHOD SEMISUPERVISED. If true the de-mixing
+     |     algorithm based on the distances to the centroids is computed and
+     |     the field proportions of each hydrometeor in the radar range gate
+     |     is output
+   vectorize : bool. Dataset keyword
+     | Used with HYDRO_METHOD SEMISUPERVISED. If true a vectorized
+     |     version of the algorithm is used
+   weights : array of floats. Dataset keyword
+     | Used with HYDRO_METHOD SEMISUPERVISED. The list of weights given
+     |     to each variable
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used.
+   hydropath : string. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. Directory of the UK MetOffice
+     |     hydrometeor classification code
+   mf_dir : string. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. Directory where the UK MetOffice
+     |     hydrometeor classification membership functions are stored
+   ml_depth: float. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. Depth of the melting layer [km].
+     |     Default 500.
+   perturb_ml_depth: float. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. if specified, the depth of the
+     |     melting layer can be varied by +/- this value [km], allowing a
+     |     less-rigidly defined melting layer. Default 0.
+   fzl: float or None. Dataset keyword
+     | If desired, a single freezing level
+     |     height can be specified for the entire PPI domain. This will be used
+     |     only if no temperature field is available.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used to
+     |     compute the freezing level, if no temperature field name is specified,
+     |     if the temperature field is not in the radar object or if no
+     |     fzl is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+   use_dualpol: Bool. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. If false no radar data is used and
+     |     the classification is performed using temperature information
+     |     only. Default True
+   use_temperature: Bool. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. If false no temperature information
+     |     is used and the classification is performed using radar data only.
+     |     Default True
+   use_interpolation: Bool. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. If True gaps in the classification
+     |     are filled using a nearest-neighbour interpolation. Default False
+   map_to_semisupervised: Bool. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. If True the output is map to the same
+     |     categories as the semi-supervised classification. Default True
+   append_all_fields: Bool. Dataset keyword
+     | Used with HYDRO_METHOD UKMO. If True auxiliary fields such as
+     |     confidence and probability for each class are going to be added to
+     |     the output
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields "hydro", "entropy" (if compute_entropy is 1),
+     |     and "propAG", "propCR", "propLR", "propRP", "propRN", "propVI", "propWS", "propMH",
+     |     "propIH" (if output_distances is 1)
+
+HZT
+""""""""""""""""""""""""""""""
+description
+   Gets iso0 degree data in HZT format and put it in radar coordinates
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt>`_
+parameters
+   metranet_read_lib : str. Global keyword
+     | Type of METRANET reader library used to read the data.
+     |     Can be 'C' or 'python'
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   keep_in_memory : int. Dataset keyword
+     | if set keeps the hzt data dict, the hzt coordinates dict and
+     |     the hzt field in radar coordinates in memory
+   regular_grid : int. Dataset keyword
+     | if set it is assume that the radar has a grid constant in time and
+     |     there is no need to compute a new hzt field if the hzt
+     |     data has not changed
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields corresponding to
+     |     height over iso0
+
+HZT_LOOKUP
+""""""""""""""""""""""""""""""
+description
+   Gets HZT data and put it in radar coordinates using look up tables computed or loaded when initializing
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt_lookup_table>`_
+parameters
+   metranet_read_lib : str. Global keyword
+     | Type of METRANET reader library used to read the data.
+     |     Can be 'C' or 'python'
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   lookup_table : int. Dataset keyword
+     | if set a pre-computed look up table for the icon coordinates is
+     |     loaded. Otherwise the look up table is computed taking the first
+     |     radar object as reference
+   regular_grid : int. Dataset keyword
+     | if set it is assume that the radar has a grid constant in time and
+     |     therefore there is no need to interpolate the icon field in
+     |     memory to the current radar grid
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field HISO0
+
+ISO0_GRIB
+""""""""""""""""""""""""""""""
+description
+   Gets iso0 degree data in GRIB format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. It can output the height over the iso0 of each gate or the iso0 height at each gate
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_grib>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   time_interp : bool. Dataset keyword
+     | whether to perform an interpolation in time between consecutive
+     |     model outputs. Default True
+   voltype: str. Dataset keyword
+     | The type of data to output. Can be H_ISO0 or HZT. Default H_ISO0
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field H_ISO0
+
+ISO0_MF
+""""""""""""""""""""""""""""""
+description
+   Gets iso0 degree data in text format and put it in radar coordinates. This function is meant to process data received from the MeteoFrance NWP model. The model provides a maximum of 9 points at 0.5 degree lat/lon spacing surrounding a given radar. If a point is not provided it means that the iso0 for that point is at or below the ground level. Out of these points a single reference iso-0 is obtained according to the user defined iso0 statistic.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_iso0_mf>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by prad
+   iso0_statistic : str. Dataset keyword
+     | The statistic used to weight the iso0 points. Can be avg_by_dist,
+     |     avg, min, max
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "H_ISO0"
+
+KDP_LEASTSQUARE_1W
+""""""""""""""""""""""""""""""
+description
+   Computes specific differential phase using a piecewise least square method
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_kdp_leastsquare_single_window>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   rwind : float. Dataset keyword
+     | The length of the segment for the least square method [m].
+     |     Default 6000.
+   vectorize : bool. Dataset keyword
+     | Whether to vectorize the KDP processing. Default false
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "KDPc"
+
+KDP_LEASTSQUARE_2W
+""""""""""""""""""""""""""""""
+description
+   Computes specific differential phase using a piecewise least square method
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_kdp_leastsquare_double_window>`_
+parameters
+   The input data types, must contain,
+     | "PhiDP" or "PhiDPc" or "uPhiDP", and,
+     |     "dBZ" or "dBZc"
+   rwinds : float. Dataset keyword
+     | The length of the short segment for the least square method [m].
+     |     Default 2000.
+   rwindl : float. Dataset keyword
+     | The length of the long segment for the least square method [m].
+     |     Default 6000.
+   Zthr : float. Dataset keyword
+     | The threshold defining which estimated data to use [dBZ]
+   vectorize : Bool. Dataset keyword
+     | Whether to vectorize the KDP processing. Default false
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "KDPc"
+
+KEEP_ROI
+""""""""""""""""""""""""""""""
+description
+   keep only data within a region of interest and mask anything else
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_keep_roi>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   trtfile : str. Dataset keyword
+     | TRT file from which to extract the region of interest
+   time_tol : float. Dataset keyword
+     | Time tolerance between the TRT file date and the nominal radar
+     |     volume time
+   lon_roi, lat_roi : float array. Dataset keyword
+     | latitude and longitude positions defining a region of interest
+   alt_min, alt_max : float. Dataset keyword
+     | Minimum and maximum altitude of the region of interest. Can be
+     |     None
+   cercle : boolean. Dataset keyword
+     | If True the region of interest is going to be defined as a cercle
+     |     centered at a particular point. Default False
+   lon_centre, lat_centre : Float. Dataset keyword
+     | The position of the centre of the cercle. If None, that of the
+     |     radar will be used
+   rad_cercle : Float. Dataset keyword
+     | The radius of the cercle in m. Default 1000.
+   res_cercle : int. Dataset keyword
+     | Number of points used to define a quarter of cercle. Default 16
+   box : boolean. Dataset keyword
+     | If True the region of interest is going to be defined by a
+     |     rectangle
+   lon_point, lat point : Float
+     | The position of the point of rotation of the box. If None the
+     |     position of the radar is going to be used
+   rotation : float
+     | The angle of rotation. Positive is counterclockwise from North in
+     |     deg. Default 0.
+   we_offset, sn_offset : float
+     | west-east and south-north offset from rotation position in m.
+     |     Default 0
+   we_length, sn_length : float
+     | west-east and south-north rectangle lengths in m. Default 1000.
+   origin : str
+     | origin of rotation. Can be center: center of the rectangle or
+     |     mid_south. East-west mid-point at the south of the rectangle.
+     |     Default center
+   use_latlon : Bool. Dataset keyword
+     | If True the coordinates used to find the radar gates within the
+     |     ROI will be lat/lon. If false it will use Cartesian Coordinates
+     |     with origin the radar position. Default True
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+L
+""""""""""""""""""""""""""""""
+description
+   Computes L parameter (logarithmic cross-correlation ratio)
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_l>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "RhoHV" or "RhoHVc" or "uRhoHV"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "L"
+
+MEAN_PHASE_IQ
+""""""""""""""""""""""""""""""
+description
+   Computes the mean phase from the horizontal or vertical IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_mean_phase_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "MPH" (mean_phase)
+
+NCVOL
+""""""""""""""""""""""""""""""
+description
+   Dummy function that allows to save the entire radar object
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_save_radar>`_
+parameters
+   
+     | 
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+NOISE_POWER
+""""""""""""""""""""""""""""""
+description
+   Computes the noise power from the spectra
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_noise_power>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
+   units : str
+     | The units of the returned signal. Can be 'ADU', 'dBADU' or 'dBm'
+   navg : int
+     | Number of spectra averaged
+   rmin : int
+     | Range from which the data is used to estimate the noise
+   nnoise_min : int
+     | Minimum number of samples to consider the estimated noise power
+     |     valid
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "NdBADUh" or "NdBADUv", or
+     |     "NdBmh" or "NdBmv", or
+     |     "Nh" or "Nv"
+     |     depending on which input datatype and units were provided
+
+OUTLIER_FILTER
+""""""""""""""""""""""""""""""
+description
+   filters out gates which are outliers respect to the surrounding
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_outlier_filter>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any any data type supported by pyrad
+   threshold : float. Dataset keyword
+     | The distance between the value of the examined range gate and the
+     |     median of the surrounding gates to consider the gate an outlier
+   nb : int. Dataset keyword
+     | The number of neighbours (to one side) to analyse. i.e. 2 would
+     |     correspond to 24 gates
+   nb_min : int. Dataset keyword
+     | Minimum number of neighbouring gates to consider the examined gate
+     |     valid
+   percentile_min, percentile_max : float. Dataset keyword
+     | gates below (above) these percentiles (computed over the sweep) are
+     |     considered potential outliers and further examined
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output,  it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+PHIDP0_CORRECTION
+""""""""""""""""""""""""""""""
+description
+   corrects phidp of the system phase
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_correct_phidp0>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   rmin : float. Dataset keyword
+     | The minimum range where to look for valid data [m]. Default 1000.
+   rmax : float. Dataset keyword
+     | The maximum range where to look for valid data [m]. Default 50000.
+   rcell : float. Dataset keyword
+     | The length of a continuous cell to consider it valid precip [m].
+     |     Default 1000.
+   Zmin : float. Dataset keyword
+     | The minimum reflectivity [dBZ]. Default 20.
+   Zmax : float. Dataset keyword
+     | The maximum reflectivity [dBZ]. Default 40.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc"
+
+PHIDP0_ESTIMATE
+""""""""""""""""""""""""""""""
+description
+   estimates the system differential phase offset at each ray
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_estimate_phidp0>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   rmin : float. Dataset keyword
+     | The minimum range where to look for valid data [m]
+   rmax : float. Dataset keyword
+     | The maximum range where to look for valid data [m]
+   rcell : float. Dataset keyword
+     | The length of a continuous cell to consider it valid precip [m]
+   Zmin : float. Dataset keyword
+     | The minimum reflectivity [dBZ]
+   Zmax : float. Dataset keyword
+     | The maximum reflectivity [dBZ]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields "PhiDP0" (system diff. phase) and
+     |     "PhiDP0_bin" (first gate diff. phase)
+
+PHIDP_KDP_KALMAN
+""""""""""""""""""""""""""""""
+description
+   Computes specific differential phase and differential phase using the Kalman filter as proposed by Schneebeli et al. The data is assumed to be clutter free and continous
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Kalman>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   parallel : boolean. Dataset keyword
+     | if set use parallel computing
+   get_phidp : boolean. Datset keyword
+     | if set the PhiDP computed by integrating the resultant KDP is
+     |     added to the radar field
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     it will be assumed that the radar is C band
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc" and "KDPc"
+
+PHIDP_KDP_LP
+""""""""""""""""""""""""""""""
+description
+   Estimates PhiDP and KDP using a linear programming algorithm. This method only retrieves data in rain (i.e. below the melting layer). The method has 3 steps: PhiDP unfolding (including clutter suppression), Processing PhiDP using the LP algorithm, Obtaining KDP by convoluting PhiDP with a Sobel window. Required inputs for the LP algorithm are PsiDP and reflectivity. RhoHV and SNR are used for the clutter suppression in the PhiDP unfolding step (note that SNR is used instead of Normalized Coherent Power used by the original algorithm). If they are not provided a gate_filter based on the values of reflectivity is used instead. Freezing level height can be retrieved from iso-0 or temperature fields, from radio sounding or set by the user.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_lp>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP", and,
+     |     "RhoHV" or "RhoHVc", (Optional, used when min_rhv is specified) and,
+     |     "SNRh" (Optional, used when min_snr is specified), and
+     |     "TEMP" or "H_ISO0" (Optional)
+   fzl : float. Dataset keyword
+     | The freezing level height [m]. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used
+     |     to compute the freezing level, if no temperature field name is
+     |     specified, if the temperature field is not in the radar object or
+     |     if no freezing_level is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+   ml_thickness : float. Dataset keyword
+     | The melting layer thickness in meters. Default 700.
+   beamwidth : float. Dataset keyword
+     | the antenna beamwidth [deg]. If None that of the keys
+     |     radar_beam_width_h or radar_beam_width_v in attribute
+     |     instrument_parameters of the radar object will be used. If the key
+     |     or the attribute are not present the beamwidth will be set to None
+   LP_solver : str.
+     | The LP solver to use. Can be pyglpk, cvxopt, cylp, cylp_mp.
+     |     Default cvxopt
+   proc : int
+     | Number of worker processes. Only used when LP_solver is cylp_mp.
+     |     Default 1
+   min_snr, min_rhv : float
+     | Minimum SNR and RhoHV. Used to filter out non-meteorological
+     |     echoes when performing the unfolding of the differential phase.
+     |     Default 10 and 0.6
+   sys_phase : float
+     | Default system differential phase offset in deg. Default 0.
+   overide_sys_phase : bool
+     | If True the dynamic sys_phase not computed and the default
+     |     sys_phase is used. If false a dynamic sys_phase is computed. If
+     |     no dynamic value is found the default sys_phase is used.
+     |     Default False
+   first_gate_sysp : int
+     | First gate to use when determining the system differential phase
+     |     offset. Default 0
+   nowrap : int or None
+     | Gate number where to begin the phase unwrapping. None will unwrap
+     |     from gate 0. Default None
+   ncpts : int
+     | Minimum number of continuous valid PhiDP points. Segments below
+     |     this number or starting at a gate below this number are going to
+     |     be excluded from the unfolding. Default 2.
+   z_bias : float
+     | reflectivity bias. Default 0 dBZ
+   low_z, high_z : float
+     | mininum and maximum reflectivity values. Values beyond this range
+     |     are going to be set to this range limits. The modified
+     |     reflectivity is used in the LP algorithm. Default 10 and 53 dBZ
+   min_phidp : float
+     | minimum differential phase. PhiDP values below this threshold are
+     |     going to be set to the threshold values. The modified PhiDP is
+     |     used in the LP algorithm. Default 0.1 deg
+   doc : int
+     | Number of gates to doc at the end of the ray. Used in the LP
+     |     algorithm. Default 0
+   self_const : float
+     | selfconsistency factor. Used in the LP algorithm. Default 60000
+   coef : float
+     | Exponent linking Z to KDP in selfconsistency. Used in the LP
+     |     algorithm. kdp = (10**(0.1z))**coef. Default 0.914
+   window_len : int
+     | Length of Sobel Window applied to PhiDP field before computing
+     |     KDP. Default 35
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc" and "KDPc"
+
+PHIDP_KDP_VULPIANI
+""""""""""""""""""""""""""""""
+description
+   Computes specific differential phase and differential phase using the method developed by Vulpiani et al. The data is assumed to be clutter free and monotonous
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Vulpiani>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   rwind : float. Dataset keyword
+     | The length of the segment [m]. Default 2000.
+   n_iter : int. Dataset keyword
+     | number of iterations. Default 3.
+   interp : boolean. Dataset keyword
+     | if set non valid values are interpolated using neighbouring valid
+     |     values. Default 0 (False)
+   parallel : boolean. Dataset keyword
+     | if set use parallel computing. Default 1 (True)
+   get_phidp : boolean. Datset keyword
+     | if set the PhiDP computed by integrating the resultant KDP is
+     |     added to the radar field. Default 0 (False)
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     it will be assumed that the radar is C band
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc" and "KDPc"
+
+PHIDP_KDP_MAESAKA
+""""""""""""""""""""""""""""""
+description
+   Estimates PhiDP and KDP using the method by Maesaka. This method only retrieves data in rain (i.e. below the melting layer)
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_phidp_kdp_Maesaka>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP", and
+     |     "TEMP" or "H_ISO0" (Optional)
+   rmin : float. Dataset keyword
+     | The minimum range where to look for valid data [m]. Default 1000.
+   rmax : float. Dataset keyword
+     | The maximum range where to look for valid data [m]. Default 50000.
+   rcell : float. Dataset keyword
+     | The length of a continuous cell to consider it valid precip [m].
+     |     Default 1000.
+   Zmin : float. Dataset keyword
+     | The minimum reflectivity [dBZ]. Default 20
+   Zmax : float. Dataset keyword
+     | The maximum reflectivity [dBZ]. Default 40
+   fzl : float. Dataset keyword
+     | The freezing level height [m]. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used
+     |     to compute the freezing level, if no temperature field name is
+     |     specified, if the temperature field isin the radar object or if no
+     |     freezing_level is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+   ml_thickness : float. Dataset keyword
+     | The melting layer thickness in meters. Default 700.
+   beamwidth : float. Dataset keyword
+     | the antenna beamwidth [deg]. If None that of the keys
+     |     radar_beam_width_h or radar_beam_width_v in attribute
+     |     instrument_parameters of the radar object will be used. If the key
+     |     or the attribute are not present the beamwidth will be set to None
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc" and "KDPc"
+
+PHIDP_SMOOTH_1W
+""""""""""""""""""""""""""""""
+description
+   corrects phidp of the system phase and smoothes it using one window
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_smooth_phidp_single_window>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   rmin : float. Dataset keyword
+     | The minimum range where to look for valid data [m]. Default 1000.
+   rmax : float. Dataset keyword
+     | The maximum range where to look for valid data [m]. Default 50000.
+   rcell : float. Dataset keyword
+     | The length of a continuous cell to consider it valid precip [m].
+     |     Default 1000.
+   rwind : float. Dataset keyword
+     | The length of the smoothing window [m]. Default 6000.
+   Zmin : float. Dataset keyword
+     | The minimum reflectivity [dBZ]. Default 20.
+   Zmax : float. Dataset keyword
+     | The maximum reflectivity [dBZ]. Default 40.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc"
+
+PHIDP_SMOOTH_2W
+""""""""""""""""""""""""""""""
+description
+   corrects phidp of the system phase and smoothes it using one window
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_phase.html#process_smooth_phidp_double_window>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "PhiDP" or "PhiDPc" or "uPhiDP"
+   rmin : float. Dataset keyword
+     | The minimum range where to look for valid data [m]
+   rmax : float. Dataset keyword
+     | The maximum range where to look for valid data [m]
+   rcell : float. Dataset keyword
+     | The length of a continuous cell to consider it valid precip [m]
+   rwinds : float. Dataset keyword
+     | The length of the short smoothing window [m]
+   rwindl : float. Dataset keyword
+     | The length of the long smoothing window [m]
+   Zmin : float. Dataset keyword
+     | The minimum reflectivity [dBZ]
+   Zmax : float. Dataset keyword
+     | The maximum reflectivity [dBZ]
+   Zthr : float. Dataset keyword
+     | The threshold defining wich smoothed data to used [dBZ]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "PhiDPc"
+
+POL_VARIABLES
+""""""""""""""""""""""""""""""
+description
+   Computes the polarimetric variables from the complex spectra
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_pol_variables>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     either a combination of signal and noise
+     |     ("ShhADU" and "SvvADU") or ("ShhADUu" and "SvvADUu"), and,
+     |     ("sNADUh" and "sNADUv"), or
+     |     the power signal
+     |     ("sPhhADU" and "sPvvADU") or ("sPhhADUu" and "sPvvADUu"), and
+     |     ("sRhoHV" or "sRhoHVu")
+   
+     | 
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signal. Default False
+   smooth_window : int or None
+     | Size of the moving Gaussian smoothing window. If none no smoothing
+     |     will be applied. Default None
+   variables : list of str
+     | list of variables to compute. Default dBZ
+
+returns
+   new_dataset : dict
+     |     dictionary containing the all outputs fields, that correspond to the
+     |     specified "variables" keyword
+
+POL_VARIABLES_IQ
+""""""""""""""""""""""""""""""
+description
+   Computes the polarimetric variables from the IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_pol_variables_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU", "IQvvADU", "IQNADUh" and "IQNADUv"
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signal
+   lag : int
+     | The time lag to use in the estimators
+   direction : str
+     | The convention used in the Doppler mean field. Can be
+     |     negative_away or negative_towards
+   variables : list of str
+     | list of variables to compute. Default dBZ
+   phase_offset : float. Dataset keyword
+     | The system differential phase offset to remove
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields corresponding to the specified
+     |     "variables"
+     |     ""
+
+PWR
+""""""""""""""""""""""""""""""
+description
+   Computes the signal power in dBm
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_signal_power>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
+   mflossh, mflossv : float. Dataset keyword
+     | The matching filter losses of the horizontal (vertical) channel
+     |     [dB]. If None it will be obtained from the attribute
+     |     radar_calibration of the radar object. Defaults to 0
+   radconsth, radconstv : float. Dataset keyword
+     | The horizontal (vertical) channel radar constant. If None it will
+     |     be obtained from the attribute radar_calibration of the radar
+     |     object
+   lrxh, lrxv : float. Global keyword
+     | The horizontal (vertical) receiver losses from the antenna feed to
+     |     the reference point. [dB] positive value. Default 0
+   lradomeh, lradomev : float. Global keyword
+     | The 1-way dry radome horizontal (vertical) channel losses.
+     |     [dB] positive value. Default 0.
+   attg : float. Dataset keyword
+     | The gas attenuation [dB/km]. If none it will be obtained from the
+     |     attribute radar_calibration of the radar object or assigned
+     |     according to the radar frequency. Defaults to 0.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dBm" or "dBmv" (if
+     |     vert. refl. was provided)
+
+RADAR_RESAMPLING
+""""""""""""""""""""""""""""""
+description
+   Resamples the radar data to mimic another radar with different geometry and antenna pattern
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_radar_resampling>`_
+parameters
+   
+     | 
+
+returns
+   new_dataset : dict
+     |     dictionary containing the new radar
+
+RADIAL_NOISE_HS
+""""""""""""""""""""""""""""""
+description
+   Computes the radial noise from the signal power using the Hildebrand and Sekhon 1974 method
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_radial_noise_hs>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "dBm" or "dBmv"
+   rmin : float. Dataset keyword
+     | The minimum range from which to start the computation
+   nbins_min : int. Dataset keyword
+     | The minimum number of noisy gates to consider the estimation valid
+   max_std_pwr : float. Dataset keyword
+     | The maximum standard deviation of the noise power to consider the
+     |     estimation valid
+   get_noise_pos : bool. Dataset keyword
+     | If True a field flagging the position of the noisy gets will be
+     |     returned
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "NdBmh" and "noise_pos_h" or
+     |     "NdBmh" and "noise_pos_v" (if vert. refl. were provided)
+
+RADIAL_NOISE_IVIC
+""""""""""""""""""""""""""""""
+description
+   Computes the radial noise from the signal power using the Ivic 2013 method
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_radial_noise_ivic>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "dBm" or "dBmv"
+   npulses_ray : int
+     | Default number of pulses used in the computation of the ray. If
+     |     the number of pulses is not in radar.instrument_parameters this
+     |     will be used instead. Default 30
+   ngates_min: int
+     | minimum number of gates with noise to consider the retrieval
+     |     valid. Default 800
+   iterations: int
+     | number of iterations in step 7. Default 10.
+   get_noise_pos : bool
+     | If true an additional field with gates containing noise according
+     |     to the algorithm is produced
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "NdBmh" and "noise_pos_h" or
+     |     "NdBmh" and "noise_pos_v" (if vert. refl. were provided)
+
+RADIAL_VELOCITY
+""""""""""""""""""""""""""""""
+description
+   Estimates the radial velocity respect to the radar from the wind velocity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_radial_velocity>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain
+     |     WIND_SPEED, and,
+     |     WIND_DIRECTION, and,
+     |     wind_vel_v
+   latitude, longitude : float
+     | arbitrary coordinates [deg] from where to compute the radial
+     |     velocity. If any of them is None it will be the radar position
+   altitude : float
+     | arbitrary altitude [m MSL] from where to compute the radial
+     |     velocity. If None it will be the radar altitude
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "V"
+
+RAINRATE
+""""""""""""""""""""""""""""""
+description
+   Estimates rainfall rate from polarimetric moments
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rainrate>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     If RR_METHOD == "Z" or "ZPoly":
+     |         "dBZ" or "dBZc"
+     |     If RR_METHOD == "KDP":
+     |         "KDP" or "KDPc"
+     |     If RR_METHOD == "A":
+     |         "Ah" or "Ahc"
+     |     If RR_METHOD == "ZKDP":
+     |         "dBZ" or "dBZc", and,
+     |         "KDP" or "KDPc"
+     |     IF RR_METHOD == "ZA":
+     |         "dBZ" or "dBZc", and,
+     |         "Ah" or "Ahc"
+     |     IF RR_METHID == "hydro":
+     |         "dBZ" or "dBZc", and,
+     |         "Ah" or "Ahc", and,
+     |         "hydro"
+   
+     | 
+   RR_METHOD : string. Dataset keyword
+     | The rainfall rate estimation method. One of the following:
+     |     Z, ZPoly, KDP, A, ZKDP, ZA, hydro
+   alpha, beta : float
+     | factor and exponent of the R-Var power law R = alpha*Var^Beta.
+     |     Default value depending on RR_METHOD. Z (0.0376, 0.6112),
+     |     KDP (None, None), A (None, None)
+   alphaz, betaz : float
+     | factor and exponent of the R-Z power law R = alpha*Z^Beta.
+     |     Default value (0.0376, 0.6112)
+   alphazr, betazr : float
+     | factor and exponent of the R-Z power law R = alpha*Z^Beta applied
+     |     to rain in method hydro. Default value (0.0376, 0.6112)
+   alphazs, betazs : float
+     | factor and exponent of the R-Z power law R = alpha*Z^Beta applied
+     |     to solid precipitation in method hydro. Default value (0.1, 0.5)
+   alphakdp, betakdp : float
+     | factor and exponent of the R-KDP power law R = alpha*KDP^Beta.
+     |     Default value (None, None)
+   alphaa, betaa : float
+     | factor and exponent of the R-Ah power law R = alpha*Ah^Beta.
+     |     Default value (None, None)
+   thresh : float
+     | In hybrid methods, Rainfall rate threshold at which the retrieval
+     |     method used changes [mm/h]. Default value depending on RR_METHOD.
+     |     ZKDP 10, ZA 10, hydro 10
+   mp_factor : float
+     | Factor by which the Z-R relation is multiplied in the melting layer
+     |     in method hydro. Default 0.6
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "RR" (rain rate)
+
+RAW
+""""""""""""""""""""""""""""""
+description
+   Dummy function that returns the initial input data set
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_raw>`_
+parameters
+   
+     | 
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+REFLECTIVITY
+""""""""""""""""""""""""""""""
+description
+   Computes reflectivity from the spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_reflectivity>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "sdBZ" or sdBZv" or "sdBuZ" or "sdBuZv"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dBZ", "dBZv",
+     |     "dBuZ" or "dBuZv" depending on the provided input datatype
+
+REFLECTIVITY_IQ
+""""""""""""""""""""""""""""""
+description
+   Computes reflectivity from the IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_reflectivity_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU", and,
+     |     "IQNADUh" or "IQNADUv"
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signal
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "dBZ" if "IQhhADU" and "IQNADUh" are specified
+     |     "dBZv" if "IQvvADU" and "IQNADUv" are specified
+
+RCS
+""""""""""""""""""""""""""""""
+description
+   Computes the radar cross-section (assuming a point target) from radar reflectivity.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rcs>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
+   kw2 : float. Dataset keyowrd
+     | The water constant
+   pulse_width : float. Dataset keyowrd
+     | The pulse width [s]
+   beamwidthv : float. Global keyword
+     | The vertical polarization antenna beamwidth [deg]. Used if input
+     |     is vertical reflectivity
+   beamwidthh : float. Global keyword
+     | The horizontal polarization antenna beamwidth [deg]. Used if input
+     |     is horizontal reflectivity
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were
+     |     provided)
+
+RCS_PR
+""""""""""""""""""""""""""""""
+description
+   Computes the radar cross-section (assuming a point target) from radar reflectivity by first computing the received power and then the RCS from it.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rcs_pr>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "dBZ" or "dBuZ" or "dBZc" or "dBuZc" or "dBZv" or "dBuZv" or "dBuZvc"
+   AntennaGainH, AntennaGainV : float. Dataset keyword
+     | The horizontal (vertical) polarization antenna gain [dB]. If None
+     |     it will be obtained from the attribute instrument_parameters of
+     |     the radar object
+   txpwrh, txpwrv : float. Dataset keyword
+     | The transmitted power of the horizontal (vertical) channel [dBm].
+     |     If None it will be obtained from the attribute radar_calibration
+     |     of the radar object
+   mflossh, mflossv : float. Dataset keyword
+     | The matching filter losses of the horizontal (vertical) channel
+     |     [dB]. If None it will be obtained from the attribute
+     |     radar_calibration of the radar object. Defaults to 0
+   radconsth, radconstv : float. Dataset keyword
+     | The horizontal (vertical) channel radar constant. If None it will
+     |     be obtained from the attribute radar_calibration of the radar
+     |     object
+   lrxh, lrxv : float. Global keyword
+     | The horizontal (vertical) receiver losses from the antenna feed to
+     |     the reference point. [dB] positive value. Default 0
+   ltxh, ltxv : float. Global keyword
+     | The horizontal (vertical) transmitter losses from the output of the
+     |     high power amplifier to the antenna feed. [dB] positive value.
+     |     Default 0
+   lradomeh, lradomev : float. Global keyword
+     | The 1-way dry radome horizontal (vertical) channel losses.
+     |     [dB] positive value. Default 0.
+   attg : float. Dataset keyword
+     | The gas attenuation [dB/km]. If none it will be obtained from the
+     |     attribute radar_calibration of the radar object or assigned
+     |     according to the radar frequency. Defaults to 0.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "rcs_h" or "rcs_v" (if vert. refl. were
+     |     provided)
+
+RHOHV_CORRECTION
+""""""""""""""""""""""""""""""
+description
+   identifies echoes as 0: No data, 1: Noise, 2: Clutter, 3: Precipitation
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_correct_noise_rhohv>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The data types used in the correction, it must contain
+     |     "uRhoHV", and,
+     |     "SNRh", and,
+     |     "ZDRc", and,
+     |     "Nh", and,
+     |     "Nv"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "RhoHV"
+
+RHOHV_RAIN
+""""""""""""""""""""""""""""""
+description
+   Keeps only suitable data to evaluate the 80 percentile of RhoHV in rain
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_rhohv_rain>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "RhoHV" or "RhoHVc" or "uRhoHV", and,
+     |     "dBZ" or "dBZc", and
+     |     "TEMP" (Optional), or
+     |     "H_ISO0" (Optional)
+   rmin : float. Dataset keyword
+     | minimum range where to look for rain [m]. Default 1000.
+   rmax : float. Dataset keyword
+     | maximum range where to look for rain [m]. Default 50000.
+   Zmin : float. Dataset keyword
+     | minimum reflectivity to consider the bin as precipitation [dBZ].
+     |     Default 20.
+   Zmax : float. Dataset keyword
+     | maximum reflectivity to consider the bin as precipitation [dBZ]
+     |     Default 40.
+   ml_thickness : float. Dataset keyword
+     | assumed thickness of the melting layer. Default 700.
+   fzl : float. Dataset keyword
+     | The default freezing level height. It will be used if no
+     |     temperature field name is specified or the temperature field is
+     |     not in the radar object. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used to
+     |     compute the freezing level, if no temperature field name is specified,
+     |     if the temperature field isin the radar object or if no freezing_level
+     |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "RhoHV_rain" (RhoHV in rain)
+
+ROI
+""""""""""""""""""""""""""""""
+description
+   Obtains the radar data at a region of interest defined by a TRT file or by the user.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_roi>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   trtfile : str. Dataset keyword
+     | TRT file from which to extract the region of interest
+   time_tol : float. Dataset keyword
+     | Time tolerance between the TRT file date and the nominal radar
+     |     volume time
+   lon_roi, lat_roi : float array. Dataset keyword
+     | latitude and longitude positions defining a region of interest
+   alt_min, alt_max : float. Dataset keyword
+     | Minimum and maximum altitude of the region of interest. Can be
+     |     None
+   cercle : boolean. Dataset keyword
+     | If True the region of interest is going to be defined as a cercle
+     |     centered at a particular point. Default False
+   lon_centre, lat_centre : Float. Dataset keyword
+     | The position of the centre of the cercle
+   rad_cercle : Float. Dataset keyword
+     | The radius of the cercle in m. Default 1000.
+   res_cercle : int. Dataset keyword
+     | Number of points used to define a quarter of cercle. Default 16
+   lon_point, lat point : Float
+     | The position of the point of rotation of the box. If None the
+     |     position of the radar is going to be used
+   rotation : float
+     | The angle of rotation. Positive is counterclockwise from North in
+     |     deg. Default 0.
+   we_offset, sn_offset : float
+     | west-east and south-north offset from rotation position in m.
+     |     Default 0
+   we_length, sn_length : float
+     | west-east and south-north rectangle lengths in m. Default 1000.
+   origin : str
+     | origin of rotation. Can be center: center of the rectangle or
+     |     mid_south. East-west mid-point at the south of the rectangle.
+     |     Default center
+   use_latlon : Bool. Dataset keyword
+     | If True the coordinates used to find the radar gates within the
+     |     ROI will be lat/lon. If false it will use Cartesian Coordinates
+     |     with origin the radar position. Default True
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+ROI2
+""""""""""""""""""""""""""""""
+description
+   Obtains the radar data at a region of interest defined by a TRT file or by the user. More information is kept
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_roi2>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   trtfile : str. Dataset keyword
+     | TRT file from which to extract the region of interest
+   time_tol : float. Dataset keyword
+     | Time tolerance between the TRT file date and the nominal radar
+     |     volume time
+   lon_roi, lat_roi : float array. Dataset keyword
+     | latitude and longitude positions defining a region of interest
+   alt_min, alt_max : float. Dataset keyword
+     | Minimum and maximum altitude of the region of interest. Can be
+     |     None
+   cercle : boolean. Dataset keyword
+     | If True the region of interest is going to be defined as a cercle
+     |     centered at a particular point. Default False
+   lon_centre, lat_centre : Float. Dataset keyword
+     | The position of the centre of the cercle
+   rad_cercle : Float. Dataset keyword
+     | The radius of the cercle in m. Default 1000.
+   res_cercle : int. Dataset keyword
+     | Number of points used to define a quarter of cercle. Default 16
+   box : boolean. Dataset keyword
+     | If True the region of interest is going to be defined by a
+     |     rectangle
+   lon_point, lat point : Float
+     | The position of the point of rotation of the box. If None the
+     |     position of the radar is going to be used
+   rotation : float
+     | The angle of rotation. Positive is counterclockwise from North in
+     |     deg. Default 0.
+   we_offset, sn_offset : float
+     | west-east and south-north offset from rotation position in m.
+     |     Default 0
+   we_length, sn_length : float
+     | west-east and south-north rectangle lengths in m. Default 1000.
+   origin : str
+     | origin of rotation. Can be center: center of the rectangle or
+     |     mid_south. East-west mid-point at the south of the rectangle.
+     |     Default center
+   use_latlon : Bool. Dataset keyword
+     | If True the coordinates used to find the radar gates within the
+     |     ROI will be lat/lon. If false it will use Cartesian Coordinates
+     |     with origin the radar position. Default True
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+SAN
+""""""""""""""""""""""""""""""
+description
+   identifies echoes as 0: No data, 1: Noise, 2: Clutter, 3: Precipitation
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_echo_id>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be
+     |     "dBZ" or "dBuZ", and,
+     |     "ZDR" or "ZDRu", and,
+     |     "RhoHV" or "uRhoHV", and,
+     |     "PhiDP" or "uPhiDP"
+   wind_size : int
+     | Size of the moving window used to compute the ray texture
+     |     (number of gates). Default 7
+   max_textphi, max_textrhv, max_textzdr, max_textrefl : float
+     | Maximum value for the texture of the differential phase, texture
+     |     of RhoHV, texture of Zdr and texture of reflectivity. Gates in
+     |     these. Default 20, 0.3, 2.85, 8
+   min_rhv : float
+     | Minimum value for the RhoHV. Default 0.6
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "echoID"
+
+SELFCONSISTENCY_BIAS
+""""""""""""""""""""""""""""""
+description
+   Estimates the reflectivity bias by means of the selfconsistency algorithm by Gourley
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_bias>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "PhiDP" or "PhiDPc", and,
+     |     "uRhoHV" or "RhoHV" or "RhoHVc", and,
+     |     "TEMP" (Optional), and,
+     |     "H_ISO0" (Optional), and,
+     |     "hydro" (Optional, only used if filter_rain)
+   parametrization : str
+     | The type of parametrization for the self-consistency curves. Can
+     |     be 'None', 'Gourley', 'Wolfensberger', 'Louf', 'Gorgucci' or
+     |     'Vaccarono'
+     |     'None' will use tables from config files. Default 'None'.
+   fzl : float. Dataset keyword
+     | Default freezing level height. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used to
+     |     compute the freezing level, if no temperature field name is specified,
+     |     if the temperature field isin the radar object or if no freezing_level
+     |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+   rsmooth : float. Dataset keyword
+     | length of the smoothing window [m]. Default 2000.
+   min_rhohv : float. Dataset keyword
+     | minimum valid RhoHV. Default 0.92
+   filter_rain : Bool. Dataset keyword
+     | If True the hydrometeor classification is used to filter out gates
+     |     that are not rain. Default True
+   max_phidp : float. Dataset keyword
+     | maximum valid PhiDP [deg]. Default 20.
+   ml_thickness : float. Dataset keyword
+     | Melting layer thickness [m]. Default 700.
+   rcell : float. Dataset keyword
+     | length of continuous precipitation to consider the precipitation
+     |     cell a valid phidp segment [m]. Default 15000.
+   dphidp_min : float. Dataset keyword
+     | minimum phase shift [deg]. Default 2.
+   dphidp_max : float. Dataset keyword
+     | maximum phase shift [deg]. Default 16.
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the selfconsistency will not be computed
+   check_wet_radome : Bool. Dataset keyword
+     | if True the average reflectivity of the closest gates to the radar
+     |     is going to be check to find out whether there is rain over the
+     |     radome. If there is rain no bias will be computed. Default True.
+   wet_radome_refl : Float. Dataset keyword
+     | Average reflectivity [dBZ] of the gates close to the radar to
+     |     consider the radome as wet. Default 25.
+   wet_radome_rng_min, wet_radome_rng_max : Float. Dataset keyword
+     | Min and max range [m] of the disk around the radar used to compute
+     |     the average reflectivity to determine whether the radome is wet.
+     |     Default 2000 and 4000.
+   wet_radome_ngates_min : int
+     | Minimum number of valid gates to consider that the radome is wet.
+     |     Default 180
+   valid_gates_only : Bool
+     | If True the reflectivity bias obtained for each valid ray is going
+     |     to be assigned only to gates of the segment used. That will give
+     |     more weight to longer segments when computing the total bias.
+     |     Default False
+   keep_points : Bool
+     | If True the ZDR, ZH and KDP of the gates used in the self-
+     |     consistency algorithm are going to be stored for further analysis.
+     |     Default False
+   rkdp : float
+     | The length of the window used to compute KDP with the single
+     |     window least square method [m]. Default 6000.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dBZ_bias" (refl. bias)
+
+SELFCONSISTENCY_BIAS2
+""""""""""""""""""""""""""""""
+description
+   Estimates the reflectivity bias by means of the selfconsistency algorithm by Gourley
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_bias2>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "PhiDP" or "PhiDPc", and,
+     |     "uRhoHV" or "RhoHV" or "RhoHVc", and,
+     |     "TEMP" (Optional), and,
+     |     "H_ISO0" (Optional), and,
+     |     "hydro" (Optional, only used if filter_rain)
+   parametrization : str
+     | The type of parametrization for the self-consistency curves. Can
+     |     be 'None', 'Gourley', 'Wolfensberger', 'Louf', 'Gorgucci' or
+     |     'Vaccarono'
+     |     'None' will use tables from config files. Default 'None'.
+   fzl : float. Dataset keyword
+     | Default freezing level height. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used to
+     |     compute the freezing level, if no temperature field name is specified,
+     |     if the temperature field isin the radar object or if no freezing_level
+     |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+   rsmooth : float. Dataset keyword
+     | length of the smoothing window [m]. Default 2000.
+   min_rhohv : float. Dataset keyword
+     | minimum valid RhoHV. Default 0.92
+   filter_rain : Bool. Dataset keyword
+     | If True the hydrometeor classification is used to filter out gates
+     |     that are not rain. Default True
+   max_phidp : float. Dataset keyword
+     | maximum valid PhiDP [deg]. Default 20.
+   ml_thickness : float. Dataset keyword
+     | Melting layer thickness [m]. Default 700.
+   rcell : float. Dataset keyword
+     | length of continuous precipitation to consider the precipitation
+     |     cell a valid phidp segment [m]. Default 15000.
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the selfconsistency will not be computed
+   check_wet_radome : Bool. Dataset keyword
+     | if True the average reflectivity of the closest gates to the radar
+     |     is going to be check to find out whether there is rain over the
+     |     radome. If there is rain no bias will be computed. Default True.
+   wet_radome_refl : Float. Dataset keyword
+     | Average reflectivity [dBZ] of the gates close to the radar to
+     |     consider the radome as wet. Default 25.
+   wet_radome_rng_min, wet_radome_rng_max : Float. Dataset keyword
+     | Min and max range [m] of the disk around the radar used to compute
+     |     the average reflectivity to determine whether the radome is wet.
+     |     Default 2000 and 4000.
+   wet_radome_ngates_min : int
+     | Minimum number of valid gates to consider that the radome is wet.
+     |     Default 180
+   keep_points : Bool
+     | If True the ZDR, ZH and KDP of the gates used in the self-
+     |     consistency algorithm are going to be stored for further analysis.
+     |     Default False
+   bias_per_gate : Bool
+     | If True the bias per gate will be computed
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "dBZ_bias" (refl. bias)
+
+SELFCONSISTENCY_KDP_PHIDP
+""""""""""""""""""""""""""""""
+description
+   Computes specific differential phase and differential phase in rain using the selfconsistency between Zdr, Zh and KDP
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_selfconsistency_kdp_phidp>`_
+parameters
+   datatype : list of strings. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "PhiDP" or "PhiDPc", and,
+     |     "uRhoHV" or "RhoHV" or "RhoHVc", and,
+     |     "TEMP" (Optional), and,
+     |     "H_ISO0" (Optional), and,
+     |     "hydro" (Optional, only used if filter_rain)
+   parametrization : str
+     | The type of parametrization for the self-consistency curves. Can
+     |     be 'None', 'Gourley', 'Wolfensberger', 'Louf', 'Gorgucci' or
+     |     'Vaccarono'
+     |     'None' will use tables from config files. Default 'None'.
+   rsmooth : float. Dataset keyword
+     | length of the smoothing window [m]. Default 2000.
+   min_rhohv : float. Dataset keyword
+     | minimum valid RhoHV. Default 0.92
+   filter_rain : Bool. Dataset keyword
+     | If True the hydrometeor classification is used to filter out gates
+     |     that are not rain. Default True
+   max_phidp : float. Dataset keyword
+     | maximum valid PhiDP [deg]. Default 20.
+   ml_thickness : float. Dataset keyword
+     | assumed melting layer thickness [m]. Default 700.
+   fzl : float. Dataset keyword
+     | The default freezing level height. It will be used if no
+     |     temperature field name is specified or the temperature field is
+     |     not in the radar object. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used to
+     |     compute the freezing level, if no temperature field name is specified,
+     |     if the temperature field isin the radar object or if no freezing_level
+     |     is explicitely defined.
+   sounding_source: str. Dataset keyword
+     | Web source from which to get the sounding data, either "IGRA", "WYOMING", or
+     |     "MCH". If not provided, IGRA is used.
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the selfconsistency will not be computed
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields KDP and PhiDP
+     |     ""
+
+SNR
+""""""""""""""""""""""""""""""
+description
+   Computes SNR
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_snr>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "dBZ" or "dBuZ" or "dBZv" or "dBuZv", and,
+     |     "Nh" or "Nv"
+   output_type : string. Dataset keyword
+     | The output data type. Either SNRh or SNRv
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "SNRh" or "SNRv" (if vert.
+     |     refl. were provided)
+
+SNR_FILTER
+""""""""""""""""""""""""""""""
+description
+   filters out low SNR echoes
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_snr>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data typesm, must contain
+     |     "SNRh", "SNRv", "SNR" or "CNR" as well
+     |     as any other datatype supported by pyrad that
+     |     will be SNR filtered.
+   SNRmin : float. Dataset keyword
+     | The minimum SNR to keep the data.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+ST1_IQ
+""""""""""""""""""""""""""""""
+description
+   Computes the statistical test one lag fluctuation from the horizontal or vertical IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_st1_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ST1" (stat_test_lag1)
+
+ST2_IQ
+""""""""""""""""""""""""""""""
+description
+   Computes the statistical test two lag fluctuation from the horizontal or vertical IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_st2_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ST2"
+
+TRAJ_TRT 
+""""""""""""""""""""""""""""""
+description
+   Processes data according to TRT trajectory
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_trt>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any datatype supported by pyrad
+     |     and available in the radar data
+   time_tol : float. Dataset keyword
+     | tolerance between reference time of the radar volume and that of
+     |     the TRT cell [s]. Default 100.
+   alt_min, alt_max : float. Dataset keyword
+     | Minimum and maximum altitude of the data inside the TRT cell to
+     |     retrieve [m MSL]. Default None
+   cell_center : Bool. Dataset keyword
+     | If True only the range gate closest to the center of the cell is
+     |     extracted. Default False
+   latlon_tol : Float. Dataset keyword
+     | Tolerance in lat/lon when extracting data only from the center of
+     |     the TRT cell. Default 0.01
+
+returns
+   new_dataset : dictionary
+     |     Dictionary containing radar_out, a radar object containing only data
+     |     from inside the TRT cell
+
+TRAJ_TRT_CONTOUR 
+""""""""""""""""""""""""""""""
+description
+   Gets the TRT cell contour corresponding to each radar volume
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_trt_contour>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any datatype supported by pyrad
+     |     and available in the radar data
+   time_tol : float. Dataset keyword
+     | tolerance between reference time of the radar volume and that of
+     |     the TRT cell [s]. Default 100.
+
+returns
+   new_dataset : dict
+     |     Dictionary containing radar_out and roi_dict. Radar out is the current
+     |     radar object. roi_dict contains the positions defining the TRT cell
+     |     contour
+
+TURBULENCE
+""""""""""""""""""""""""""""""
+description
+   Computes turbulence from the Doppler spectrum width and reflectivity using the PyTDA package
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_turbulence>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "dBuZ" or "dBZ" or "dBZc" or "dBuZv" or "dBZv" or "dBZvc" or "CNRc", and,
+     |     "W" or "Wv" or "Wu" or "Wvu" or "WD" or "WDc"
+   radius : float. Dataset keyword
+     | Search radius for calculating Eddy Dissipation Rate (EDR).
+     |     Default 2
+   split_cut : Bool. Dataset keyword
+     | Set to True for split-cut volumes. Default False
+   max_split_cut : Int. Dataset keyword
+     | Total number of tilts that are affected by split cuts. Only
+     |     relevant if split_cut=True. Default 2
+   xran, yran : float array. Dataset keyword
+     | Spatial range in X,Y to consider. Default [-100, 100] for both
+     |     X and Y
+   use_ntda : Bool. Dataset keyword
+     | Wether to use NCAR Turbulence Detection Algorithm (NTDA). Default
+     |     True
+   beamwidth : Float. Dataset keyword
+     | Radar beamwidth. Default None. If None it will be obtained from
+     |     the radar object metadata. If cannot be obtained defaults to 1
+     |     deg.
+   compute_gate_pos : Bool. Dataset keyword
+     | If True the gate position is going to be computed in PyTDA.
+     |     Otherwise the position from the radar object is used. Default
+     |     False
+   verbose : Bool. Dataset keyword
+     | True for verbose output. Default False
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "EDR"
+
+VAD
+""""""""""""""""""""""""""""""
+description
+   Estimates vertical wind profile using the VAD (velocity Azimuth Display) technique
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_vad>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain
+     |     "V" or "Vc"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields
+     |     "wind_vel_h_u", "wind_vel_h_v", "wind_vel_v",
+     |     "estV", "stdV", and "diffV"
+
+VEL_FILTER
+""""""""""""""""""""""""""""""
+description
+   filters out range gates that could not be used for Doppler velocity estimation
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_vel_diff>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "diffV", as well
+     |     as any other datatype supported by pyrad that
+     |     will be filtered where no Doppler velocity could be estimated.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+VIS
+""""""""""""""""""""""""""""""
+description
+   Gets the visibility in percentage from the minimum visible elevation. Anything with elevation lower than the minimum visible elevation plus and offset is set to 0 while above is set to 100.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_visibility>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   offset : float. Dataset keyword
+     | The offset above the minimum visibility that must be filtered
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "visibility"
+
+VIS_FILTER
+""""""""""""""""""""""""""""""
+description
+   filters out rays gates with low visibility and corrects the reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_visibility>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data typesm, must contain
+     |     "VIS" or "visibility_polar", as well
+     |     as any other datatype supported by pyrad that
+     |     will be filtered where the visibility is poor.
+   VISmin : float. Dataset keyword
+     | The minimum visibility to keep the data.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output, it will contain
+     |     the corrected version of the provided datatypes
+     |     For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc
+
+VOL_REFL
+""""""""""""""""""""""""""""""
+description
+   Computes the volumetric reflectivity eta in 10log10(cm^2 km^-3)
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_vol_refl>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |      "dBZ", "dBuZ", "dBZc", "dBuZc", "dBZv", "dBZvc" "dBuZv", or "dBuZvc"
+   freq : float. Dataset keyword
+     | The radar frequency
+   kw : float. Dataset keyword
+     | The water constant
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "eta_h" or "eta_v" (if vert. refl. were
+     |     provided)
+
+VOL2BIRD_FILTER
+""""""""""""""""""""""""""""""
+description
+   Masks all echo types that have been identified as non-biological by vol2bird
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_filter_vol2bird>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "VOL2BIRD_CLASS", as well
+     |     as any other datatype supported by pyrad that
+     |     will be filtered where vol2bird detected non-biological echoes
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+VOL2BIRD_GATE_FILTER
+""""""""""""""""""""""""""""""
+description
+   Adds filter on range gate values to the vol2bird filter
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_gate_filter_vol2bird>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "VOL2BIRD_CLASS", and,
+     |     "dBZ" or "dBZc", and,
+     |     "V" or "Vc"
+   dBZ_max : float
+     | Maximum reflectivity of biological scatterers
+   V_min : float
+     | Minimum Doppler velocity of biological scatterers
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+VSTATUS_TO_SAN
+""""""""""""""""""""""""""""""
+description
+   Converts velocity status from lidar data into pyrad echo ID
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_vstatus_to_echo_id>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be "wind_vel_rad_status"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "echoID"
+
+WBN
+""""""""""""""""""""""""""""""
+description
+   Computes the wide band noise from the horizontal or vertical IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_wbn_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU" or "IQvvADU"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "WBN" (wide-band noise)
+
+WIND_VEL
+""""""""""""""""""""""""""""""
+description
+   Estimates the horizontal or vertical component of the wind from the radial velocity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_wind_vel>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain
+     |     "V" or "Vc"
+   vert_proj : Boolean
+     | If true the vertical projection is computed. Otherwise the
+     |     horizontal projection is computed
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "wind_vel_h_az", (if vert_proj is False), or,
+     |     "wind_vel_v" (if vert_proj is True)
+
+WINDSHEAR
+""""""""""""""""""""""""""""""
+description
+   Estimates the wind shear from the wind velocity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_windshear>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type
+   az_tol : float
+     | The tolerance in azimuth when looking for gates on top
+     |     of the gate when computation is performed
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "windshear_v"
+
+WINDSHEAR_LIDAR
+""""""""""""""""""""""""""""""
+description
+   Estimates the wind shear from the wind velocity of lidar scans
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_windshear_lidar>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain
+     |     "V" or "Vc"
+   az_tol : float
+     | The tolerance in azimuth when looking for gates on top
+     |     of the gate when computation is performed
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "windshear_v"
+
+ZDR
+""""""""""""""""""""""""""""""
+description
+   Computes differential reflectivity from the horizontal and vertical spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_differential_reflectivity>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "sdBZ" and "sdBZv", or
+     |     "sdBuZ" and "sdBZuv"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields
+     |     "ZDR" or "ZDRu" depending on the specified input datatype
+
+ZDR_IQ
+""""""""""""""""""""""""""""""
+description
+   Computes differential reflectivity from the horizontal and vertical IQ data
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_differential_reflectivity_iq>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "IQhhADU", "IQvvADU", "IQNADUh" and "IQNADUv"
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signal
+   lag : int
+     | The time lag to use in the estimators
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ZDR"
+
+ZDR_PREC
+""""""""""""""""""""""""""""""
+description
+   Keeps only suitable data to evaluate the differential reflectivity in moderate rain or precipitation (for vertical scans)
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_zdr_precip>`_
+parameters
+   datatype : list of strings. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "PhiDP" or "PhiDPc", and,
+     |     "uRhoHV" or "RhoHV" or "RhoHVc", and,
+     |     "TEMP" (Optional), and,
+     |     "H_ISO0" (Optional)
+   ml_filter : boolean. Dataset keyword
+     | indicates if a filter on data in and above the melting layer is
+     |     applied. Default True.
+   rmin : float. Dataset keyword
+     | minimum range where to look for rain [m]. Default 1000.
+   rmax : float. Dataset keyword
+     | maximum range where to look for rain [m]. Default 50000.
+   Zmin : float. Dataset keyword
+     | minimum reflectivity to consider the bin as precipitation [dBZ].
+     |     Default 20.
+   Zmax : float. Dataset keyword
+     | maximum reflectivity to consider the bin as precipitation [dBZ]
+     |     Default 22.
+   RhoHVmin : float. Dataset keyword
+     | minimum RhoHV to consider the bin as precipitation
+     |     Default 0.97
+   PhiDPmax : float. Dataset keyword
+     | maximum PhiDP to consider the bin as precipitation [deg]
+     |     Default 10.
+   elmax : float. Dataset keyword
+     | maximum elevation angle where to look for precipitation [deg]
+     |     Default None.
+   ml_thickness : float. Dataset keyword
+     | assumed thickness of the melting layer. Default 700.
+   fzl : float. Dataset keyword
+     | The default freezing level height. It will be used if no
+     |     temperature field name is specified or the temperature field is
+     |     not in the radar object. Default 2000.
+   sounding : str. Dataset keyword
+     | The nearest radiosounding WMO code (5 int digits). It will be used to
+     |     compute the freezing level, if no temperature field name is specified,
+     |     if the temperature field isin the radar object or if no freezing_level
+     |     is explicitely defined.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ZDR_prec"
+
+ZDR_SNOW
+""""""""""""""""""""""""""""""
+description
+   Keeps only suitable data to evaluate the differential reflectivity in snow
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_zdr_snow>`_
+parameters
+   datatype : list of strings. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "PhiDP" or "PhiDPc", and,
+     |     "uRhoHV" or "RhoHV" or "RhoHVc", and,
+     |     "hydro", and,
+     |     "TEMP" (Optional), and,
+     |     "SNRh" or "SNRv" (Optional, used to filter with SNRmin and SNRmax)
+   rmin : float. Dataset keyword
+     | minimum range where to look for rain [m]. Default 1000.
+   rmax : float. Dataset keyword
+     | maximum range where to look for rain [m]. Default 50000.
+   Zmin : float. Dataset keyword
+     | minimum reflectivity to consider the bin as snow [dBZ].
+     |     Default 0.
+   Zmax : float. Dataset keyword
+     | maximum reflectivity to consider the bin as snow [dBZ]
+     |     Default 30.
+   SNRmin : float. Dataset keyword
+     | minimum SNR to consider the bin as snow [dB].
+     |     Default 10.
+   SNRmax : float. Dataset keyword
+     | maximum SNR to consider the bin as snow [dB]
+     |     Default 50.
+   RhoHVmin : float. Dataset keyword
+     | minimum RhoHV to consider the bin as snow
+     |     Default 0.97
+   PhiDPmax : float. Dataset keyword
+     | maximum PhiDP to consider the bin as snow [deg]
+     |     Default 10.
+   elmax : float. Dataset keyword
+     | maximum elevation angle where to look for snow [deg]
+     |     Default None.
+   KDPmax : float. Dataset keyword
+     | maximum KDP to consider the bin as snow [deg]
+     |     Default None
+   TEMPmin : float. Dataset keyword
+     | minimum temperature to consider the bin as snow [deg C].
+     |     Default None
+   TEMPmax : float. Dataset keyword
+     | maximum temperature to consider the bin as snow [deg C]
+     |     Default None
+   hydroclass : list of ints. Dataset keyword
+     | list of hydrometeor classes to keep for the analysis
+     |     Default [2] (dry snow)
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ZDR_snow"
+
+SPECTRA
+-----------------------------
+FFT
+""""""""""""""""""""""""""""""
+description
+   Compute the Doppler spectra form the IQ data with a Fourier transform
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_fft>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "IQNdBADUh" and/or "IQNdBADUv" and/or
+     |     "IQNADUh" and/or "IQNADUv" (see new_dataset below)
+   window : list of str
+     | Parameters of the window used to obtain the spectra. The
+     |     parameters are the ones corresponding to function
+     |     scipy.signal.windows.get_window. It can also be ['None'].
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields
+     |     "ShhADUu" (unfiltered_complex_spectra_hh_ADU) if IQNdBADUh was provided,
+     |     "SvvADUu" (unfiltered_complex_spectra_vv_ADU) if IQNdBADUv was provided,
+     |     "sNADUh" (spectral_noise_power_hh_ADU) if IQNADUh was provided,
+     |     "sNADUv" (spectral_noise_power_vv_ADU) if IQNADUv was provided,
+
+FILTER_0DOPPLER
+""""""""""""""""""""""""""""""
+description
+   Function to filter the 0-Doppler line bin and neighbours of the Doppler spectra
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_0Doppler>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any of the spectral fields supported by pyrad
+   
+     | 
+   filter_width : float
+     | The Doppler filter width. Default 0.
+   filter_units : str
+     | Can be 'm/s' or 'Hz'. Default 'm/s'
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, the names of the output fields
+     |     is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+     |     "dBuZ" => "dBZ"
+
+FILTER_SPECTRA_NOISE
+""""""""""""""""""""""""""""""
+description
+   Filter the noise of the Doppler spectra by clipping any data below the noise level plus a margin
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_spectra_noise>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+     |     "sNADUh" or "sNADUv"
+   clipping_level : float
+     | The clipping level [dB above noise level]. Default 10.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, the names of the output fields
+     |     is the same as the provided datatypes
+
+IFFT
+""""""""""""""""""""""""""""""
+description
+   Compute the Doppler spectrum width from the spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_ifft>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "ShhADU" or "ShhADUu", or,
+     |     "SvvADU" or "SvvADUu", or,
+     |     "sNADUh" or "sNADUv"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields
+     |     "IQhhADU" if "ShhADU" or "ShhADUu" were provided,
+     |     "IQhvvDU" if "SvvADU" or "SvvADUu" were provided,
+     |     "IQNADUh" if "sNADUh" was provided,
+     |     "IQNADUv" if "sNADUv" was provided.
+
+RAW_IQ
+""""""""""""""""""""""""""""""
+description
+   Dummy function that returns the initial input data set
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_iq.html#process_raw_iq>`_
+parameters
+   
+     | 
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+RAW_SPECTRA
+""""""""""""""""""""""""""""""
+description
+   Dummy function that returns the initial input data set
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_raw_spectra>`_
+parameters
+   
+     | 
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+SPECTRA_ANGULAR_AVERAGE
+""""""""""""""""""""""""""""""
+description
+   Function to average the spectra over the rays. This function is intended mainly for vertically pointing scans. The function assumes the volume is composed of a single sweep, it averages over the number of rays specified by the user and produces a single ray output.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectra_ang_avg>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types,
+     |     any spectral datatype supported by pyrad
+   navg : int
+     | Number of spectra to average. If -1 all spectra will be averaged.
+     |     Default -1.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the same output fields as the provided datatypes
+
+SPECTRA_POINT
+""""""""""""""""""""""""""""""
+description
+   Obtains the spectra or IQ data at a point location.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectra_point>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   single_point : boolean. Dataset keyword
+     | if True only one gate per radar volume is going to be kept.
+     |     Otherwise all gates within the azimuth and elevation tolerance
+     |     are going to be kept. This is useful to extract all data from
+     |     fixed pointing scans. Default True
+   latlon : boolean. Dataset keyword
+     | if True position is obtained from latitude, longitude information,
+     |     otherwise position is obtained from antenna coordinates
+     |     (range, azimuth, elevation). Default False
+   truealt : boolean. Dataset keyword
+     | if True the user input altitude is used to determine the point of
+     |     interest.
+     |     if False use the altitude at a given radar elevation ele over the
+     |     point of interest. Default True
+   lon : float. Dataset keyword
+     | the longitude [deg]. Use when latlon is True.
+   lat : float. Dataset keyword
+     | the latitude [deg]. Use when latlon is True.
+   alt : float. Dataset keyword
+     | altitude [m MSL]. Use when latlon is True. Default 0.
+   ele : float. Dataset keyword
+     | radar elevation [deg]. Use when latlon is False or when latlon is
+     |     True and truealt is False
+   azi : float. Dataset keyword
+     | radar azimuth [deg]. Use when latlon is False
+   rng : float. Dataset keyword
+     | range from radar [m]. Use when latlon is False
+   AziTol : float. Dataset keyword
+     | azimuthal tolerance to determine which radar azimuth to use [deg].
+     |     Default 0.5
+   EleTol : float. Dataset keyword
+     | elevation tolerance to determine which radar elevation to use
+     |     [deg]. Default 0.5
+   RngTol : float. Dataset keyword
+     | range tolerance to determine which radar bin to use [m]. Default
+     |     50.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+SPECTRAL_NOISE
+""""""""""""""""""""""""""""""
+description
+   Computes the spectral noise
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_noise>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
+   units : str
+     | The units of the returned signal. Can be 'ADU', 'dBADU' or 'dBm'
+   navg : int
+     | Number of spectra averaged
+   rmin : int
+     | Range from which the data is used to estimate the noise
+   nnoise_min : int
+     | Minimum number of samples to consider the estimated noise power
+     |     valid
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |         "sNADUh" or
+     |         "sNADUv" or
+     |         "sNdBADUh" or
+     |         "sNdBADUv" or
+     |         "sNdBmh" or
+     |         "sNdBmv"
+     |         depending on which input datatype and units were provided
+
+SPECTRAL_PHASE
+""""""""""""""""""""""""""""""
+description
+   Computes the spectral phase
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_phase>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "SPhasehh" if "ShhADU" was provided as input
+     |     "SPhasehhu" if "ShhADUu" was provided as input
+     |     "SPhasevv" if "SvvADU" was provided as input
+     |     "SPhasevvu" if "SvvADUu" was provided as input
+
+SPECTRAL_POWER
+""""""""""""""""""""""""""""""
+description
+   Computes the spectral power
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_power>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+     |     "sNADUh", or "sNADUv"
+   units : str
+     | The units of the returned signal. Can be 'ADU', 'dBADU' or 'dBm'
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signal
+   smooth_window : int or None
+     | Size of the moving Gaussian smoothing window. If none no smoothing
+     |     will be applied
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "sPhhADU" or "sPhhADUu", or
+     |     "sPvvADU" or "sPvvADUu", or
+     |     "sPhhdBADU" or "sPhhdBADUu", or
+     |     "sPvvdBADU" or "sPvvdBADUu", or
+     |     "sPhhAdBm" or "sPhhdBmu", or
+     |     "sPvvdBm" or "sPvvdBmu",
+     |     depending on which input datatype and units were provided
+
+SPECTRAL_REFLECTIVITY
+""""""""""""""""""""""""""""""
+description
+   Computes spectral reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_spectral_reflectivity>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     either a combination of signal and noise
+     |     "ShhADU" or "SvvADU" or "ShhADUu" or "SvvADUu", and,
+     |     "sNADUh" or "sNADUv", or
+     |     the power signal
+     |     "sPhhADU" or "sPvvADU" or "sPhhADUu" or "sPvvADUu"
+   subtract_noise : Bool
+     | If True noise will be subtracted from the signal
+   smooth_window : int or None
+     | Size of the moving Gaussian smoothing window. If none no smoothing
+     |     will be applied
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "sdBZ" if "ShhADU" (or "sPhhADU") was provided as input
+     |     "sdBuZ" if "ShhADUu" (or "sPhhADUu") was provided as input
+     |     "sdBZv" if "SvvADU" (or "sPvvADU") was provided as input
+     |     "sdBuZv" if "SvvADUu" (or "sPvvADUu") was provided as input
+
+SRHOHV_FILTER
+""""""""""""""""""""""""""""""
+description
+   Filter Doppler spectra as a function of spectral RhoHV
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_spectra.html#process_filter_srhohv>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "sRhoHV" or "sRhoHVu",
+     |     as well as any spectral field supported by pyrad
+   sRhoHV_threshold : float
+     | Data with sRhoHV module above this threshold will be filtered.
+     |     Default 1.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field, the names of the output fields
+     |     is the same as the provided datatypes, except for unfiltered fields which are renamed in the following
+     |     "dBuZ" => "dBZ"
+
+CENTROIDS
+-----------------------------
+CENTROIDS
+""""""""""""""""""""""""""""""
+description
+   Computes centroids for the semi-supervised hydrometeor classification
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_centroids>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "RhoHV", or "uRhoHV", or "RhoHVc", and,
+     |     "KDP", or "KDPc", and,
+     |     "TEMP" or "H_ISO0" (optional)
+   samples_per_vol : int. Dataset keyword
+     | Maximum number of samples per volume kept for further analysis.
+     |     Default 20000
+   nbins : int.
+     | Number of bins of the histogram used to make the data platykurtic.
+     |     Default 110
+   pdf_zh_max : int
+     | Multiplicative factor to the Guassian function used to make the
+     |     distribution of the reflectivity platykurtic that determines the
+     |     number of samples for each bin. Default 10000
+   pdf_relh_max : int
+     | Multiplicative factor to the Guassian function used to make the
+     |     distribution of the height relative to the iso-0 platykurtic that
+     |     determines the number of samples for each bin. Default 20000
+   sigma_zh, sigma_relh : float
+     | sigma of the respective Gaussian functions. Defaults 0.75 and 1.5
+   randomize : bool
+     | If True the data is randomized to avoid the effects of the
+     |     quantization. Default True
+   platykurtic_dBZ : bool
+     | If True makes the reflectivity distribution platykurtic. Default
+     |     True
+   platykurtic_H_ISO0 : bool
+     | If True makes the height respect to the iso-0 distribution
+     |     platykurtic. Default True
+   relh_slope : float. Dataset keyword
+     | The slope used to transform the height relative to the iso0 into
+     |     a sigmoid function. Default 0.001
+   external_iterations : int. Dataset keywords
+     | Number of iterations of the external loop. This number will
+     |     determine how many medoids are computed for each hydrometeor
+     |     class. Default 30
+   internal_iterations : int. Dataset keyword
+     | Maximum number of iterations of the internal loop. Default 10
+   sample_data : Bool.
+     | If True the data is going to be sampled prior to each external
+     |     iteration. Default False
+   nsamples_iter : int.
+     | Number of samples per iteration. Default 20000
+   alpha : float
+     | Minimum value to accept the cluster according to p. Default 0.01
+   cv_approach : Bool
+     | If true it is used a critical value approach to reject or accept
+     |     similarity between observations and reference. If false it is used
+     |     a p-value approach. Default True
+   n_samples_syn : int
+     | Number of samples drawn from reference to compare it with
+     |     observations in the KS test. Default 50
+   num_samples_arr : array of int
+     | Number of observation samples used in the KS test to choose from.
+     |     Default (30, 35, 40)
+   acceptance_threshold : float. Dataset keyword
+     | Threshold on the inter-quantile coefficient of dispersion of the
+     |     medoids above which the medoid of the class is not acceptable.
+     |     Default 0.5
+   nmedoids_min : int
+     | Minimum number of intermediate medoids to compute the final
+     |     result. Default 1
+   var_names : tupple
+     | The names of the features. Default ('dBZ', 'ZDR', 'KDP', 'RhoHV',
+     |     'H_ISO0')
+   hydro_names: tupple
+     | The name of the hydrometeor types. Default ('AG', 'CR', 'LR',
+     |     'RP', 'RN', 'VI', 'WS', 'MH', 'IH/HDG')
+   weight : tupple
+     | The weight given to each feature when comparing to the reference.
+     |     It is in the same order as var_names. Default (1., 1., 1., 1.,
+     |     0.75)
+   parallelized : bool
+     | If True the centroids search is going to be parallelized. Default
+     |     False
+   kmax_iter : int
+     | Maximum number of iterations of the k-medoids algorithm. Default
+     |     100
+   nsamples_small : int
+     | Maximum number before using the k-medoids CLARA algorithm. If this
+     |     number is exceeded the CLARA algorithm will be used. Default 40000
+   sampling_size_clara : int
+     | Number of samples used in each iteration of the k-medoids CLARA
+     |     algorithm. Default 10000
+   niter_clara : int
+     | Number of iterations performed by the k-medoids CLARA algorithm.
+     |     Default 5
+   keep_labeled_data : bool
+     | If True the labeled data is going to be kept for storage. Default
+     |     True
+   use_median : bool
+     | If True the intermediate centroids are computed as the median
+     |     of the observation variables and the final centroids are computed
+     |     as the median of the intermediate centroids. If false they are
+     |     computed using the kmedoids algorithm. Default false
+   allow_label_duplicates : bool
+     | If True allow to label multiple clusters with the same label.
+     |     Default True
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output centroids
+
+COLOCATED_GATES
+-----------------------------
+COLOCATED_GATES
+""""""""""""""""""""""""""""""
+description
+   Find colocated gates within two radars
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_colocated_gates>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types to use to check colocated gates (one for every radar)
+     |     Any datatype supported by pyrad and available in both radars is accepted.
+     |     If visibility filtering is desired, the fields
+     |     "visibility" or "visibility_polar" must be specified for both radars.
+   h_tol : float. Dataset keyword
+     | Tolerance in altitude difference between radar gates [m].
+     |     Default 100.
+   latlon_tol : float. Dataset keyword
+     | Tolerance in latitude and longitude position between radar gates
+     |     [deg]. Default 0.0005
+   vol_d_tol : float. Dataset keyword
+     | Tolerance in pulse volume diameter [m]. Default 100.
+   vismin : float. Dataset keyword
+     | Minimum visibility [percent]. Default None.
+   hmin : float. Dataset keyword
+     | Minimum altitude [m MSL]. Default None.
+   hmax : float. Dataset keyword
+     | Maximum altitude [m MSL]. Default None.
+   rmin : float. Dataset keyword
+     | Minimum range [m]. Default None.
+   rmax : float. Dataset keyword
+     | Maximum range [m]. Default None.
+   elmin : float. Dataset keyword
+     | Minimum elevation angle [deg]. Default None.
+   elmax : float. Dataset keyword
+     | Maximum elevation angle [deg]. Default None.
+   azrad1min : float. Dataset keyword
+     | Minimum azimuth angle [deg] for radar 1. Default None.
+   azrad1max : float. Dataset keyword
+     | Maximum azimuth angle [deg] for radar 1. Default None.
+   azrad2min : float. Dataset keyword
+     | Minimum azimuth angle [deg] for radar 2. Default None.
+   azrad2max : float. Dataset keyword
+     | Maximum azimuth angle [deg] for radar 2. Default None.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the field "colocated_gates"
+
+ICON_COORD
+-----------------------------
+ICON_COORD
+""""""""""""""""""""""""""""""
+description
+   Gets the icon indices corresponding to each icon coordinates
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_coord>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   iconpath : string. General keyword
+     | path where to store the look up table
+   model : string. Dataset keyword
+     | The icon model to use. Can be icon-1, icon-1e, icon-2, icon-7
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field
+     |     "icon_index"
+
+HZT_COORD
+""""""""""""""""""""""""""""""
+description
+   Gets the HZT indices corresponding to each HZT coordinates
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_hzt_coord>`_
+parameters
+   metranet_read_lib : str. Global keyword
+     | Type of METRANET reader library used to read the data.
+     |     Can be 'C' or 'python'
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   iconpath : string. General keyword
+     | path where to store the look up table
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "icon_index"
+
+ICON2RADAR
+-----------------------------
+ICON2RADAR
+""""""""""""""""""""""""""""""
+description
+   Gets icon data and put it in radar coordinates using look up tables
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_icon.html#process_icon_to_radar>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   icon_type : str. Dataset keyword
+     | name of the icon field to process. Default TEMP
+   icon_variables : list of strings. Dataset keyword
+     | Py-art name of the icon fields. Default temperature
+   icon_time_index_min, icon_time_index_max : int
+     | minimum and maximum indices of the icon data to retrieve. If a
+     |     value is provided only data corresponding to the time indices
+     |     within the interval will be used. If None all data will be used.
+     |     Default None
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields corresponding to icon_variables
+
+GRID
+-----------------------------
+RAW_GRID
+""""""""""""""""""""""""""""""
+description
+   Dummy function that returns the initial input data set
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_raw_grid>`_
+parameters
+   datatype : string. Dataset keyword
+     | arbitrary data type supported by pyrad and contained in the grid data
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output with field corresponding to datatype
+
+GECSX 
+""""""""""""""""""""""""""""""
+description
+   Computes ground clutter RCS, radar visibility and many others using the GECSX algorithmn translated from IDL into python
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_dem.html#process_gecsx>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | arbitrary data type supported by pyrad
+   
+     | 
+   range_discretization : float. Dataset keyword
+     | Range discretization used when computing the Cartesian visibility field
+     |     the larger the better but the slower the processing will be
+   az_discretization : float. Dataset keyword
+     | Azimuth discretization used when computing the Cartesian visibility
+     |     field, the larger the better but the slower the processing will be
+   ke : float. Dataset keyword
+     | Equivalent earth-radius factor used in the computation of the radar
+     |     beam refraction
+   atm_att : float. Dataset keyword
+     | One-way atmospheric refraction in db / km
+   mosotti_kw : float. Dataset keyword
+     | Clausius-Mosotti factor K, depends on material (water) and wavelength
+     |     for water = sqrt(0.93)
+   raster_oversampling : int. Dataset keyword
+     | The raster resolution of the DEM should be smaller than
+     |     the range resolution of the radar (defined by the pulse length).
+     |     If this is not the case, this keyword can be set to increase the
+     |     raster resolution. The values for the elevation, sigma naught,
+     |     visibility are repeated. The other values are recalculated.
+     |     Values for raster_oversampling:
+     |     0 or undefined: No oversampling is done
+     |     1: Oversampling is done. The factor N is automatically calculated
+     |     such that 2*dx/N < pulse length
+     |     2 or larger: Oversampling is done with this value as N
+   min_radar_elevation : float. Dataset keyword
+     | Minimum scanning elevation supported by the radar system. If provided
+     |     it will add the field min_rad_vis_height_above_ground_field to the output.
+     |     It contains the minimum visible height above ground  given the constraint
+     |     on minimum scanning elevation.
+   sigma0_method : string. Dataset keyword
+     | Which estimation method to use, either 'Gabella' or 'Delrieu'
+   clip : int. Dataset keyword
+     | If set to true, the provided DEM will be clipped to the extent
+     |     of the polar radar domain. Decreases computation speed a lot but
+     |     Cartesian output fields will be available only over radar domain
+
+returns
+   new_dataset : list of dict
+     |     list of dictionaries containing the polar data output and the
+     |     Cartesian data output in this order
+     |     The first dictionary (polar) contains the following fields:
+     |     "rcs_clutter", "dBm_clutter", "dBZ_clutter" and "visibility_polar"
+     |     The second dictionary (cart) contains the following fields:
+     |     "bent_terrain_altitude", "terrain_slope", "terrain_aspect",
+     |     "elevation_angle", "min_vis_elevation", "min_vis_altitude",
+     |     "incident_angle", "sigma_0", "effective_area"
+
+GRID
+""""""""""""""""""""""""""""""
+description
+   Puts the radar data in a regular grid
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   gridconfig : dictionary. Dataset keyword
+     | Dictionary containing some or all of this keywords:
+     |     xmin, xmax, ymin, ymax, zmin, zmax : floats
+     |         minimum and maximum horizontal distance from grid origin [km]
+     |         and minimum and maximum vertical distance from grid origin [m]
+     |         Defaults -40, 40, -40, 40, 0., 10000.
+     |     latmin, latmax, lonmin, lonmax : floats
+     |         minimum and maximum latitude and longitude [deg], if specified
+     |         xmin, xmax, ymin, ymax, latorig, lonorig will be ignored
+     |     hres, vres : floats
+     |         horizontal and vertical grid resolution [m]
+     |         Defaults 1000., 500.
+     |     latorig, lonorig, altorig : floats
+     |         latitude and longitude of grid origin [deg] and altitude of
+     |         grid origin [m MSL]
+     |         Defaults the latitude, longitude and altitude of the radar
+   wfunc : str. Dataset keyword
+     | the weighting function used to compute the weights of the radar gates close to a
+     |     grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST, GRID.
+     |     GRID will give a weight of 1 to all polar gates which centroids fall within the Cartesian grid cell, 0 otherwise
+     |     Default NEAREST
+   roif_func : str. Dataset keyword
+     | the function used to compute the region of interest.
+     |     Possible values: dist_beam, constant
+   roi : float. Dataset keyword
+     | the (minimum) radius of the region of interest in m. Default half
+     |     the largest resolution
+   beamwidth : float. Dataset keyword
+     | the radar antenna beamwidth [deg]. If None that of the key
+     |     radar_beam_width_h in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     a default 1 deg value will be used
+   beam_spacing : float. Dataset keyword
+     | the beam spacing, i.e. the ray angle resolution [deg]. If None,
+     |     that of the attribute ray_angle_res of the radar object will be
+     |     used. If the attribute is None a default 1 deg value will be used
+
+returns
+   new_dataset : dict
+     |     dictionary containing the gridded data with fields corresponding to
+     |     datatype
+
+GRID_FIELDS_DIFF
+""""""""""""""""""""""""""""""
+description
+   Computes grid field differences
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_fields_diff>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The two input data types to compare.
+     |     Can any two datatypes supported by pyrad
+
+returns
+   new_dataset : dict
+     |     dictionary containing a radar object containing the field differences
+
+GRID_MASK
+""""""""""""""""""""""""""""""
+description
+   Mask data. Puts True if data is within thresholds, False if it is not. Thresholds can be min, max or both min and max
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_mask>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data type, can be any datatype supported by pyrad
+   threshold_min : float or None
+     | Threshold used for the mask. Values below threshold are set to False.
+     |     Above threshold are set to True. Default None.
+   threshold_max : float or None
+     | Threshold used for the mask. Values above threshold are set to False.
+     |     Below threshold are set to True. Default None.
+   x_dir_ext, y_dir_ext : int
+     | Number of pixels by which to extend the mask on each side of the
+     |     west-east direction and south-north direction
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "mask"
+
+GRID_TEXTURE
+""""""""""""""""""""""""""""""
+description
+   Computes the 2D texture of a gridded field
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_texture>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data type, can be any datatype supported by pyrad
+   xwind, ywind : int
+     | The size of the local window in the x and y axis. Default 7
+   fill_value : float
+     | The value with which to fill masked data. Default np.NaN
+
+returns
+   new_dataset : dict
+     |     dictionary containing a radar object containing the field
+     |     "texture"
+
+NORMALIZE_LUMINOSITY
+""""""""""""""""""""""""""""""
+description
+   Normalize the data by the sinus of the sun elevation. The sun elevation is computed at the central pixel.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_normalize_luminosity>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data type, can be any datatype supported by pyrad
+
+returns
+   new_dataset : dict
+     |     dictionary containing the normalized field, the name
+     |     of the field is datatype_norm
+
+PIXEL_FILTER
+""""""""""""""""""""""""""""""
+description
+   Masks all pixels that are not of the class specified in keyword pixel_type
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_pixel_filter>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "mask", as well as
+     |     any datatypes supported by pyrad
+   pixel_type : int or list of ints
+     | The type of pixels to keep: 0 No data, 1 Below threshold, 2 Above
+     |     threshold. Default 2
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output datatypes masked
+
+VOL2GRID
+""""""""""""""""""""""""""""""
+description
+   Function to convert polar data into a Cartesian grid
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_vol_to_grid>`_
+parameters
+   xmin, xmax, ymin, ymax : float
+     | Horizontal limits of the grid [m from origin]. Default +-20000.
+   zmin, zmax : float
+     | vertical limits of the grid [masl]. Default 1000.
+   hres, vres : float
+     | horizontal and vertical resolution [m]. Default 1000.
+   lat0, lon0 : float
+     | Grid origin [deg]. The default will be the radar position
+   alt0 : float
+     | Grid origin altitude [masl]. Default is 0
+   wfunc : str
+     | Weighting function, available are NEAREST, BARNES, BARNES2 and CRESSMAN. Default NEAREST
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output
+
+DDA
+""""""""""""""""""""""""""""""
+description
+   Estimates horizontal wind speed and direction with a multi-doppler approach This method uses the python package pyDDA
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_Doppler.html#process_dda>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain
+     |     "V" or "Vc", and,
+     |     "dBuZ", "dBZ", or "dBZc"
+   
+     | 
+   gridconfig : dictionary. Dataset keyword
+     | Dictionary containing some or all of this keywords:
+     |     xmin, xmax, ymin, ymax, zmin, zmax : floats
+     |         minimum and maximum horizontal distance from grid origin [km]
+     |         and minimum and maximum vertical distance from grid origin [m]
+     |         Defaults -40, 40, -40, 40, 0., 10000.
+     |     latmin, latmax, lonmin, lonmax : floats
+     |         minimum and maximum latitude and longitude [deg], if specified
+     |         xmin, xmax, ymin, ymax will be ignored
+     |     hres, vres : floats
+     |         horizontal and vertical grid resolution [m]
+     |         Defaults 1000., 500.
+     |     latorig, lonorig, altorig : floats
+     |         latitude and longitude of grid origin [deg] and altitude of
+     |         grid origin [m MSL]
+     |         Defaults the latitude, longitude and altitude of the radar
+   wfunc : str. Dataset keyword
+     | the weighting function used to combine the radar gates close to a
+     |     grid point. Possible values BARNES, BARNES2, CRESSMAN, NEAREST
+     |     Default NEAREST
+   roif_func : str. Dataset keyword
+     | the function used to compute the region of interest.
+     |     Possible values: dist_beam, constant
+   roi : float. Dataset keyword
+     | the (minimum) radius of the region of interest in m. Default half
+     |     the largest resolution
+   beamwidth : float. Dataset keyword
+     | the radar antenna beamwidth [deg]. If None that of the key
+     |     radar_beam_width_h in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     a default 1 deg value will be used
+   beam_spacing : float. Dataset keyword
+     | the beam spacing, i.e. the ray angle resolution [deg]. If None,
+     |     that of the attribute ray_angle_res of the radar object will be
+     |     used. If the attribute is None a default 1 deg value will be used
+   signs : list of integers
+     | The sign of the velocity field for every radar object.
+     |     A value of 1 represents when
+     |     positive values velocities are towards the radar, -1 represents
+     |     when negative velocities are towards the radar.
+   Co : float
+     | Weight for cost function related to observed radial velocities.
+     |     Default: 1.
+   Cm : float
+     | Weight for cost function related to the mass continuity equation.
+     |     Default: 1500.
+   Cx: float
+     | Smoothing coefficient for x-direction
+   Cy: float
+     | Smoothing coefficient for y-direction
+   Cz: float
+     | Smoothing coefficient for z-direction
+   Cb: float
+     | Coefficient for sounding constraint
+   Cv: float
+     | Weight for cost function related to vertical vorticity equation.
+   Cmod: float
+     | Coefficient for model constraint
+   Cpoint: float
+     | Coefficient for point constraint
+   wind_tol: float
+     | Stop iterations after maximum change in winds is less than this
+     |     value.
+   frz : float
+     | The freezing level in meters. This is to tell PyDDA where to use
+     |     ice particle fall speeds in the wind retrieval verus liquid.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields
+     |         "wind_vel_h_u", "wind_vel_h_v" and "wind_vel_v"
+
+GRID_TIMEAVG
+-----------------------------
+GRID_TIME_STATS
+""""""""""""""""""""""""""""""
+description
+   computes the temporal statistics of a field
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_time_stats>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any datatype supported by pyrad
+   period : float. Dataset keyword
+     | the period to average [s]. If -1 the statistics are going to be
+     |     performed over the entire data. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   lin_trans: int. Dataset keyword
+     | If 1 apply linear transformation before averaging
+   use_nan : bool. Dataset keyword
+     | If true non valid data will be used
+   nan_value : float. Dataset keyword
+     | The value of the non valid data. Default 0
+   stat: string. Dataset keyword
+     | Statistic to compute: Can be mean, std, cov, min, max. Default
+     |     mean
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields corresponding to datatypes
+
+GRID_TIME_STATS2
+""""""""""""""""""""""""""""""
+description
+   computes temporal statistics of a field
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_time_stats2>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data type, can be any datatype supported by pyrad
+   period : float. Dataset keyword
+     | the period to average [s]. If -1 the statistics are going to be
+     |     performed over the entire data. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   stat: string. Dataset keyword
+     | Statistic to compute: Can be median, mode, percentileXX
+   use_nan : bool. Dataset keyword
+     | If true non valid data will be used
+   nan_value : float. Dataset keyword
+     | The value of the non valid data. Default 0
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields corresponding to
+     |     datatypes
+
+GRID_RAIN_ACCU
+""""""""""""""""""""""""""""""
+description
+   computes rainfall accumulation fields
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_rainfall_accumulation>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data type, can be any data type supported by pyrad
+     |     but typically RR is used
+   period : float. Dataset keyword
+     | the period to average [s]. If -1 the statistics are going to be
+     |     performed over the entire data. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   use_nan : bool. Dataset keyword
+     | If true non valid data will be used
+   nan_value : float. Dataset keyword
+     | The value of the non valid data. Default 0
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field corresponding to datatype
+
+INTERCOMP
+-----------------------------
+INTERCOMP
+""""""""""""""""""""""""""""""
+description
+   intercomparison between two radars at co-located gates. The variables compared must be of the same type.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types (one for every radar).
+     |     Any arbitrary datatype supported by pyrad and available
+     |     in both radar is accepted.
+   colocgatespath : string.
+     | base path to the file containing the coordinates of the co-located
+     |     gates
+   coloc_radars_name : string. Dataset keyword
+     | string identifying the radar names
+   rays_are_indexed : bool. Dataset keyword
+     | If True it is considered that the rays are indexed and that the
+     |     data can be selected simply looking at the ray number.
+     |     Default false
+   azi_tol : float. Dataset keyword
+     | azimuth tolerance between the two radars. Default 0.5 deg
+   ele_tol : float. Dataset keyword
+     | elevation tolerance between the two radars. Default 0.5 deg
+   rng_tol : float. Dataset keyword
+     | range tolerance between the two radars. Default 50 m
+   coloc_data_dir : string. Dataset keyword
+     | name of the directory containing the csv file with colocated data
+
+returns
+   new_dataset : dict
+     |     dictionary containing a dictionary with intercomparison data and the
+     |     key "final" which contains a boolean that is true when all volumes
+     |     have been processed
+
+INTERCOMP_FIELDS
+""""""""""""""""""""""""""""""
+description
+   Intercomparison between two radars fields at a given time. This functions extracts the data from both radars, assuming that their gates are all colocated. It does not do any time post-processing and only extracts the data at volume time.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_fields>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types for each radar,
+     |     Any datatype supported by pyrad and available in both radars is supported
+
+returns
+   new_dataset : dict
+     |     dictionary containing a dictionary with intercomparison data
+
+INTERCOMP_WITH_QC
+""""""""""""""""""""""""""""""
+description
+   Intercomparison between the time-averaged value of an arbitrary radar field for two radars (at co-located gates), including QC based on PhiDP and a time-averaging flag field. Expected dscfg["datatype"] content (for each radar): - one "main" datatype to be intercompared (ANY pyrad-supported datatype), - one PhiDP datatype: "PhiDP" or "PhiDPc", - one flag datatype: "time_avg_flag" Output: - in procstatus==1: intercomp_dict contains rad1_val / rad2_val (the main field), plus rad1_PhiDPavg/rad2_PhiDPavg and rad1_Flagavg/rad2_Flagavg (kept for QC/debug) - in procstatus==2: final intercomp_dict contains rad1_val / rad2_val only (after QC) Notes: - This function keeps using read_colocated_data_time_avg(...) in procstatus==2. That reader likely returns the "main field" column as the same slot previously called rad*_dBZ. Here we treat it generically as rad*_val.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_with_QC>`_
+parameters
+   
+     | 
+
+returns
+   
+
+ML
+-----------------------------
+ML_DETECTION
+""""""""""""""""""""""""""""""
+description
+   Detects the melting layer
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_melting_layer>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBZ" or "dBZc", and,
+     |     "ZDR" or "ZDRc", and,
+     |     "RhoHV" or "RhoHVc", and,
+     |     "TEMP" or "H_ISO0" (optional)
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ml"
+
+VPR
+-----------------------------
+VPR
+""""""""""""""""""""""""""""""
+description
+   Computes the vertical profile of reflectivity using the Meteo-France operational algorithm
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_vpr>`_
+parameters
+   datatype : string. Dataset keyword
+     | The input data type, must contain,
+     |     "dBZ" or "dBZc", and,
+     |     "H_ISO0" or "H_ISO0c" or "TEMP" or "TEMPc"
+   nvalid_min : int
+     | Minimum number of rays with data to consider the azimuthal average
+     |     valid. Default 20.
+   angle_min, angle_max : float
+     | Minimum and maximum elevation angles used to compute the ratios of
+     |     reflectivity. Default 0. and 4.
+   ml_thickness_min, ml_thickness_max, ml_thickness_step : float
+     | Minimum, maximum and step of the melting layer thickness of the
+     |      models to explore [m]. Default 200., 800. and 200.
+   iso0_max : float
+     | maximum iso0 altitude of the profile. Default 5000.
+   ml_top_diff_max, ml_top_step : float
+     | maximum difference +- between iso-0 and top of the melting layer
+     |     [m] of the models to explore. Step. Default 200. and 200.
+   ml_peak_min, ml_peak_max, ml_peak_step: float
+     | min, max and step of the value at the peak of the melting layer of
+     |     the models to explore. Default 1., 6. and 1.
+   dr_min, dr_max, dr_step : float
+     | min, max and step of the decreasing ratio above the melting layer.
+     |     Default -6., -1.5 and 1.5
+   dr_default : float
+     | default decreasing ratio to use if a proper model could not be
+     |     found. Default -4.5
+   dr_alt : float
+     | altitude above the melting layer top (m) where theoretical profile
+     |     needs to be defined to be able to compute DR. If the theoretical
+     |     profile is not defined up to the resulting altitude a default DR
+     |     is used. Default 800.
+   h_max : float
+     | maximum altitude [masl] where to compute the model profile.
+     |     Default 6000.
+   h_corr_max : float
+     | maximum altitude [masl] considered for the VPR correction
+   h_res : float
+     | resolution of the model profile (m). Default 1.
+   max_weight : float
+     | Maximum weight of the antenna pattern. Default 9.
+   rmin_obs, rmax_obs : float
+     | minimum and maximum range (m) of the observations that are
+     |     compared with the model. Default 5000. and 150000.
+   use_ml : bool
+     | If True the retrieved ML will be used to select the range of
+     |     variability the meltin layer top and thickness
+   vpr_memory_max : float
+     | The maximum time range to average reflectivity (min)
+   filter_vpr_memory_max : float
+     | The maximum time range where to look for previous VPR retrievals
+   ml_datatype : str
+     | Melting layer data type descriptor
+   z_datatype : str
+     | descriptor used get the linear reflectivity information
+   vpr_theo_datatype : str
+     | descriptor used to get the retrieved theoretical VPR
+   filter_params : bool
+     | If True the current theoretical VPR profile is averaged with the
+     |     past VPR profile by averaging the 4 parameters that define the
+     |     profile, otherwise the shape of the profiles is averaged. Default
+     |     false. Used only in non-spatialised VPR correction
+   weight_mem : float
+     | Weight given to past VPR when filtering the current VPR
+   spatialized : bool
+     | If True the VPR correction is spatialized
+   correct_iso0 : bool
+     | If True the iso0 field is corrected by a bias constant computed as
+     |     the difference between the retrieved melting layer top and the
+     |     average iso0 and areas with precipitation. Default True. Used only
+     |     in the spatialised VPR correction
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields "dBZc" and "VPRcorr"
+
+MONITORING
+-----------------------------
+GC_MONITORING
+""""""""""""""""""""""""""""""
+description
+   computes ground clutter monitoring statistics
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_gc_monitoring>`_
+parameters
+   excessgatespath : str. Config keyword
+     | The path to the gates in excess of quantile location
+   excessgates_fname : str. Dataset keyword
+     | The name of the gates in excess of quantile file
+   datatype : list of string. Dataset keyword
+     | The input data types, it must contain
+     |     "echoID" (Optional allows filter_prec),
+     |     as well as any other fields supported by pyrad
+   step : float. Dataset keyword
+     | The width of the histogram bin. Default is None. In that case the
+     |     default step in function get_histogram_bins is used
+   regular_grid : Boolean. Dataset keyword
+     | Whether the radar has a Boolean grid or not. Default False
+   val_min : Float. Dataset keyword
+     | Minimum value to consider that the gate has signal. Default None
+   filter_prec : str. Dataset keyword
+     | Give which type of volume should be filtered. None, no filtering;
+     |     keep_wet, keep wet volumes; keep_dry, keep dry volumes.
+   rmax_prec : float. Dataset keyword
+     | Maximum range to consider when looking for wet gates [m]
+   percent_prec_max : float. Dataset keyword
+     | Maxim percentage of wet gates to consider the volume dry
+
+returns
+   new_dataset : Radar
+     |     radar object containing histogram data with fields corresponding
+     |     to specified datatypes
+
+MONITORING
+""""""""""""""""""""""""""""""
+description
+   computes monitoring statistics
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_monitoring.html#process_monitoring>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | Arbitrary datatype supported by pyrad
+   step : float. Dataset keyword
+     | The width of the histogram bin. Default is None. In that case the
+     |     default step in function get_histogram_bins is used
+   max_rays : int. Dataset keyword
+     | The maximum number of rays per sweep used when computing the
+     |     histogram. If set above 0 the number of rays per sweep will be
+     |     checked and if above max_rays the last rays of the sweep will be
+     |     removed
+
+returns
+   new_dataset : Radar
+     |     radar object containing histogram data
+
+OCCURRENCE
+-----------------------------
+OCCURRENCE
+""""""""""""""""""""""""""""""
+description
+   computes the frequency of occurrence of data. It looks only for gates where data is present.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_occurrence>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, it must contain
+     |     "echoID" (Optional allows filter_prec),
+     |     as well as any other field supported by pyrad (one field only)
+   regular_grid : Boolean. Dataset keyword
+     | Whether the radar has a Boolean grid or not. Default False
+   rmin, rmax : float. Dataset keyword
+     | minimum and maximum ranges where the computation takes place. If
+     |     -1 the whole range is considered. Default is -1
+   val_min : Float. Dataset keyword
+     | Minimum value to consider that the gate has signal. Default None
+   filter_prec : str. Dataset keyword
+     | Give which type of volume should be filtered. None, no filtering;
+     |     keep_wet, keep wet volumes; keep_dry, keep dry volumes.
+   rmax_prec : float. Dataset keyword
+     | Maximum range to consider when looking for wet gates [m]
+   percent_prec_max : float. Dataset keyword
+     | Maxim percentage of wet gates to consider the volume dry
+
+returns
+   new_dataset : dict
+     |     radar object with fields
+     |     "occurence", "number_of_samples" and "frequency_of_occurrence"
+
+OCCURRENCE_PERIOD
+""""""""""""""""""""""""""""""
+description
+   computes the frequency of occurrence over a long period of time by adding together shorter periods
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_occurrence_period>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "occurence" and,
+     |     "nsamples"
+   regular_grid : Boolean. Dataset keyword
+     | Whether the radar has a Boolean grid or not. Default False
+   rmin, rmax : float. Dataset keyword
+     | minimum and maximum ranges where the computation takes place. If
+     |     -1 the whole range is considered. Default is -1
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output fields "occurence" and
+     |     "nsamples"
+
+TIMEAVG_STD
+""""""""""""""""""""""""""""""
+description
+   computes the average and standard deviation of data. It looks only for gates where data is present.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_time_avg_std>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, it must contain
+     |     "echoID" (Optional allows filter_prec),
+     |     "dBZ" or "dBZc" or "dBZv" or "dBZvc" or "dBuZ" or "dBuZc" (Optional, allows val_min)
+     |     as well as any other fields supported by pyrad
+   regular_grid : Boolean. Dataset keyword
+     | Whether the radar has a Boolean grid or not. Default False
+   rmin, rmax : float. Dataset keyword
+     | minimum and maximum ranges where the computation takes place. If
+     |     -1 the whole range is considered. Default is -1
+   val_min : Float. Dataset keyword
+     | Minimum reflectivity value to consider that the gate has signal.
+     |     Default None
+   filter_prec : str. Dataset keyword
+     | Give which type of volume should be filtered. None, no filtering;
+     |     keep_wet, keep wet volumes; keep_dry, keep dry volumes.
+   rmax_prec : float. Dataset keyword
+     | Maximum range to consider when looking for wet gates [m]
+   percent_prec_max : float. Dataset keyword
+     | Maxim percentage of wet gates to consider the volume dry
+   lin_trans : Boolean. Dataset keyword
+     | If True the data will be transformed into linear units. Default
+     |     False
+
+returns
+   new_dataset : dict
+     |     dictionary containing the average and standard deviation for every field
+     |     specified as datatype
+
+QVP
+-----------------------------
+EVP
+""""""""""""""""""""""""""""""
+description
+   Computes enhanced vertical profiles, by averaging over height levels PPI data.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_evp>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement,
+     |     can be any datatype supported by pyrad and available in the data
+   lat, lon : float
+     | latitude and longitude of the point of interest [deg]
+   latlon_tol : float
+     | tolerance in latitude and longitude in deg. Default 0.0005
+   delta_rng, delta_azi : float
+     | maximum range distance [m] and azimuth distance [degree] from the
+     |     central point of the evp containing data to average. Default 5000.
+     |     and 10.
+   hmax : float
+     | The maximum height to plot [m]. Default 10000.
+   hres : float
+     | The height resolution [m]. Default 250.
+   avg_type : str
+     | The type of averaging to perform. Can be either "mean" or "median"
+     |     Default "mean"
+   nvalid_min : int
+     | Minimum number of valid points to consider the data valid when
+     |     performing the averaging. Default 1
+   interp_kind : str
+     | type of interpolation when projecting to vertical grid: 'none',
+     |     or 'nearest', etc. Default 'none'.
+     |     'none' will select from all data points within the regular grid
+     |     height bin the closest to the center of the bin.
+     |     'nearest' will select the closest data point to the center of the
+     |     height bin regardless if it is within the height bin or not.
+     |     Data points can be masked values
+     |     If another type of interpolation is selected masked values will be
+     |     eliminated from the data points before the interpolation
+
+returns
+   new_dataset : dict
+     |     dictionary containing the EVP and a keyword stating whether the
+     |     processing has finished or not.
+     | Kaltenboeck R., Ryzhkov A. 2016: A freezing rain storm explored with a
+     | C-band polarimetric weather radar using the QVP methodology.
+     | Meteorologische Zeitschrift vol. 26 pp 207-222
+
+QVP
+""""""""""""""""""""""""""""""
+description
+   Computes quasi vertical profiles, by averaging over height levels PPI data.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_qvp>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement,
+     |     can be any datatype supported by pyrad and available in the data
+   angle : int or float
+     | If the radar object contains a PPI volume, the sweep number to
+     |     use, if it contains an RHI volume the elevation angle.
+     |     Default 0.
+   ang_tol : float
+     | If the radar object contains an RHI volume, the tolerance in the
+     |     elevation angle for the conversion into PPI
+   hmax : float
+     | The maximum height to plot [m]. Default 10000.
+   hres : float
+     | The height resolution [m]. Default 50
+   avg_type : str
+     | The type of averaging to perform. Can be either "mean" or "median"
+     |     Default "mean"
+   nvalid_min : int
+     | Minimum number of valid points to accept average. Default 30.
+   interp_kind : str
+     | type of interpolation when projecting to vertical grid: 'none',
+     |     or 'nearest', etc. Default 'none'
+     |     'none' will select from all data points within the regular grid
+     |     height bin the closest to the center of the bin.
+     |     'nearest' will select the closest data point to the center of the
+     |     height bin regardless if it is within the height bin or not.
+     |     Data points can be masked values
+     |     If another type of interpolation is selected masked values will be
+     |     eliminated from the data points before the interpolation
+
+returns
+   new_dataset : dict
+     |     dictionary containing the QVP and a keyword stating whether the
+     |     processing has finished or not.
+     | Ryzhkov A., Zhang P., Reeves H., Kumjian M., Tschallener T., Trömel S.,
+     | Simmer C. 2016: Quasi-Vertical Profiles: A New Way to Look at Polarimetric
+     | Radar Data. JTECH vol. 33 pp 551-562
+
+SVP
+""""""""""""""""""""""""""""""
+description
+   Computes slanted vertical profiles, by averaging over height levels PPI data.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_svp>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement,
+     |     can be any datatype supported by pyrad and available in the data
+   angle : int or float
+     | If the radar object contains a PPI volume, the sweep number to
+     |     use, if it contains an RHI volume the elevation angle.
+     |     Default 0.
+   ang_tol : float
+     | If the radar object contains an RHI volume, the tolerance in the
+     |     elevation angle for the conversion into PPI. Default 1.
+   lat, lon : float
+     | latitude and longitude of the point of interest [deg]
+   latlon_tol : float
+     | tolerance in latitude and longitude in deg. Default 0.0005
+   delta_rng, delta_azi : float
+     | maximum range distance [m] and azimuth distance [degree] from the
+     |     central point of the svp containing data to average. Default 5000.
+     |     and 10.
+   hmax : float
+     | The maximum height to plot [m]. Default 10000.
+   hres : float
+     | The height resolution [m]. Default 250.
+   avg_type : str
+     | The type of averaging to perform. Can be either "mean" or "median"
+     |     Default "mean"
+   nvalid_min : int
+     | Minimum number of valid points to consider the data valid when
+     |     performing the averaging. Default 1
+   interp_kind : str
+     | type of interpolation when projecting to vertical grid: 'none',
+     |     or 'nearest', etc. Default 'none'
+     |     'none' will select from all data points within the regular grid
+     |     height bin the closest to the center of the bin.
+     |     'nearest' will select the closest data point to the center of the
+     |     height bin regardless if it is within the height bin or not.
+     |     Data points can be masked values
+     |     If another type of interpolation is selected masked values will be
+     |     eliminated from the data points before the interpolation
+
+returns
+   new_dataset : dict
+     |     dictionary containing the svp and a keyword stating whether the
+     |     processing has finished or not.
+     | Bukovcic P., Zrnic D., Zhang G. 2017: Winter Precipitation Liquid-Ice
+     | Phase Transitions Revealed with Polarimetric Radar and 2DVD Observations
+     | in Central Oklahoma. JTECH vol. 56 pp 1345-1363
+
+TIME_HEIGHT
+""""""""""""""""""""""""""""""
+description
+   Produces time height radar objects at a point of interest defined by latitude and longitude. A time-height contains the evolution of the vertical structure of radar measurements above the location of interest.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_time_height>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement,
+     |     can be any datatype supported by pyrad and available in the data
+   lat, lon : float
+     | latitude and longitude of the point of interest [deg]
+   latlon_tol : float
+     | tolerance in latitude and longitude in deg. Default 0.0005
+   hmax : float
+     | The maximum height to plot [m]. Default 10000.
+   hres : float
+     | The height resolution [m]. Default 50
+   interp_kind : str
+     | type of interpolation when projecting to vertical grid: 'none',
+     |     or 'nearest', etc. Default 'none'
+     |     'none' will select from all data points within the regular grid
+     |     height bin the closest to the center of the bin.
+     |     'nearest' will select the closest data point to the center of the
+     |     height bin regardless if it is within the height bin or not.
+     |     Data points can be masked values
+     |     If another type of interpolation is selected masked values will be
+     |     eliminated from the data points before the interpolation
+
+returns
+   new_dataset : dict
+     |     dictionary containing the QVP and a keyword stating whether the
+     |     processing has finished or not.
+
+TIME_ALONG_COORD
+""""""""""""""""""""""""""""""
+description
+   Produces time series along a particular antenna coordinate
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_ts_along_coord>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the time series,
+     |     can be any datatype supported by pyrad and available in the data
+   mode : str
+     | coordinate to extract data along. Can be ALONG_AZI, ALONG_ELE or
+     |     ALONG_RNG
+   fixed_range, fixed_azimuth, fixed_elevation : float
+     | The fixed range [m], azimuth [deg] or elevation [deg] to extract.
+     |     In each mode two of these parameters have to be defined. If they
+     |     are not defined they default to 0.
+   ang_tol, rng_tol : float
+     | The angle tolerance [deg] and range tolerance [m] around the fixed
+     |     range or azimuth/elevation
+   value_start, value_stop : float
+     | The minimum and maximum value at which the data along a coordinate
+     |     start and stop
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and a keyword stating whether the
+     |     processing has finished or not.
+
+SPARSE_GRID
+-----------------------------
+ZDR_COLUMN
+""""""""""""""""""""""""""""""
+description
+   Detects ZDR columns
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_echoclass.html#process_zdr_column>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "ZDR" or "ZDRc", and,
+     |     "RhoHV" or "RhoHVc", and,
+     |     "TEMP" or "H_ISO0"
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "ZDR_col"
+
+SUN_HITS
+-----------------------------
+SUN_HITS
+""""""""""""""""""""""""""""""
+description
+   monitoring of the radar using sun hits
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_sun_hits>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBm", and,
+     |     "dBmv", and,
+     |     "ZDR", or "ZDRu", or "ZDRu"
+   delev_max : float. Dataset keyword
+     | maximum elevation distance from nominal radar elevation where to
+     |     look for a sun hit signal [deg]. Default 1.5
+   dazim_max : float. Dataset keyword
+     | maximum azimuth distance from nominal radar elevation where to
+     |     look for a sun hit signal [deg]. Default 1.5
+   elmin : float. Dataset keyword
+     | minimum radar elevation where to look for sun hits [deg].
+     |     Default 1.
+   attg : float. Dataset keyword
+     | gaseous attenuation. Default None
+   sun_position : string. Datset keyword
+     | The function to compute the sun position to use. Can be 'MF' or
+     |     'pysolar'
+   sun_hit_method : str. Dataset keyword
+     | Method used to estimate the power of the sun hit. Can be HS
+     |     (Hildebrand and Sekhon 1974) or Ivic (Ivic 2013)
+   rmin : float. Dataset keyword
+     | minimum range where to look for a sun hit signal [m]. Used in HS
+     |     method. Default 50000.
+   hmin : float. Dataset keyword
+     | minimum altitude where to look for a sun hit signal [m MSL].
+     |     Default 10000. The actual range from which a sun hit signal will
+     |     be search will be the minimum between rmin and the range from
+     |     which the altitude is higher than hmin. Used in HS method. Default
+     |     10000.
+   nbins_min : int. Dataset keyword.
+     | minimum number of range bins that have to contain signal to
+     |     consider the ray a potential sun hit. Default 20 for HS and 8000
+     |     for Ivic.
+   npulses_ray : int
+     | Default number of pulses used in the computation of the ray. If the
+     |     number of pulses is not in radar.instrument_parameters this will be
+     |     used instead. Used in Ivic method. Default 30
+   iterations: int
+     | number of iterations in step 7 of Ivic method. Default 10.
+   max_std_pwr : float. Dataset keyword
+     | maximum standard deviation of the signal power to consider the
+     |     data a sun hit [dB]. Default 2. Used in HS method
+   max_std_zdr : float. Dataset keyword
+     | maximum standard deviation of the ZDR to consider the
+     |     data a sun hit [dB]. Default 2.
+   az_width_co : float. Dataset keyword
+     | co-polar antenna azimuth width (convoluted with sun width) [deg].
+     |     Default None
+   el_width_co : float. Dataset keyword
+     | co-polar antenna elevation width (convoluted with sun width)
+     |     [deg]. Default None
+   az_width_cross : float. Dataset keyword
+     | cross-polar antenna azimuth width (convoluted with sun width)
+     |     [deg]. Default None
+   el_width_cross : float. Dataset keyword
+     | cross-polar antenna elevation width (convoluted with sun width)
+     |     [deg]. Default None
+   ndays : int. Dataset keyword
+     | number of days used in sun retrieval. Default 1
+   coeff_band : float. Dataset keyword
+     | multiplicate coefficient to transform pulse width into receiver
+     |     bandwidth
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     frequency dependent parameters will not be computed
+   beamwidth : float. Dataset keyword
+     | the antenna beamwidth [deg]. If None that of the keys
+     |     radar_beam_width_h or radar_beam_width_v in attribute
+     |     instrument_parameters of the radar object will be used. If the key
+     |     or the attribute are not present the beamwidth dependent
+     |     parameters will not be computed
+   pulse_width : float. Dataset keyword
+     | the pulse width [s]. If None that of the key
+     |     pulse_width in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the pulse width dependent parameters will not be computed
+   ray_angle_res : float. Dataset keyword
+     | the ray angle resolution [deg]. If None that of the key
+     |     ray_angle_res in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the ray angle resolution parameters will not be computed
+   AntennaGainH, AntennaGainV : float. Dataset keyword
+     | the horizontal (vertical) polarization antenna gain [dB].
+     |     If None that of the attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the ray angle resolution parameters will not be computed
+
+returns
+   sun_hits_dict : dict
+     |     dictionary containing a radar object, a sun_hits dict and a
+     |     sun_retrieval dictionary
+
+SUNSCAN
+""""""""""""""""""""""""""""""
+description
+   Processing of automatic sun scans for monitoring purposes of the radar system.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_calib.html#process_sunscan>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain
+     |     "dBm", and,
+     |     "dBmv", and,
+     |     "ZDR", or "ZDRu", or "ZDRu"
+   delev_max : float. Dataset keyword
+     | maximum elevation distance from nominal radar elevation where to
+     |     look for a sun hit signal [deg]. Default 1.5
+   dazim_max : float. Dataset keyword
+     | maximum azimuth distance from nominal radar elevation where to
+     |     look for a sun hit signal [deg]. Default 1.5
+   elmin : float. Dataset keyword
+     | minimum radar elevation where to look for sun hits [deg].
+     |     Default 1.
+   attg : float. Dataset keyword
+     | gaseous attenuation. Default None
+   sun_position : string. Datset keyword
+     | The function to compute the sun position to use. Can be 'MF' or
+     |     'pysolar'
+   sun_hit_method : str. Dataset keyword
+     | Method used to estimate the power of the sun hit. Should be PSR. HS
+     |     (Hildebrand and Sekhon 1974) or Ivic (Ivic 2013) are implemented
+     |     but not tested.
+   n_noise_bins : int. Dataset keyword
+     | Number of bins to use for noise estimation
+   noise_threshold : float. Dataset keyword
+     | Distance over the noise level in [dBm]
+   min_num_samples : int. Dataset keyword
+     | Minimal number of samples above the noise level
+   max_fit_stddev : float. Dataset keyword
+     | Maximal allowed standard deviation for a valid sun fit [dBm]
+   do_second_noise_est : string ('Yes' or 'No'). Dataset keyword
+     | Used to trigger a second noise estimation based on the first fit
+     |     Requires another dataset keyword: n_indfar_bins
+   n_indfar_bins : int. Dataset keyword
+     | Number of samples most remote from the sun center
+   az_width_co : float. Dataset keyword
+     | co-polar antenna azimuth width (convoluted with sun width) [deg].
+     |     Default None
+   el_width_co : float. Dataset keyword
+     | co-polar antenna elevation width (convoluted with sun width)
+     |     [deg]. Default None
+   az_width_cross : float. Dataset keyword
+     | cross-polar antenna azimuth width (convoluted with sun width)
+     |     [deg]. Default None
+   el_width_cross : float. Dataset keyword
+     | cross-polar antenna elevation width (convoluted with sun width)
+     |     [deg]. Default None
+   rmin : float. Dataset keyword
+     | minimum range where to look for a sun hit signal [m]. Used in HS
+     |     method. Default 50000.
+   hmin : float. Dataset keyword
+     | minimum altitude where to look for a sun hit signal [m MSL].
+     |     Default 10000. The actual range from which a sun hit signal will
+     |     be search will be the minimum between rmin and the range from
+     |     which the altitude is higher than hmin. Used in HS method. Default
+     |     10000.
+   nbins_min : int. Dataset keyword.
+     | minimum number of range bins that have to contain signal to
+     |     consider the ray a potential sun hit. Default 20 for HS and 8000
+     |     for Ivic.
+   npulses_ray : int
+     | Default number of pulses used in the computation of the ray. If the
+     |     number of pulses is not in radar.instrument_parameters this will be
+     |     used instead. Used in Ivic method. Default 30
+   flat_reg_wlen : int
+     | Length of the flat region window [m]. Used in Ivic method. Default
+     |     8000.
+   iterations: int
+     | number of iterations in step 7 of Ivic method. Default 10.
+   max_std_pwr : float. Dataset keyword
+     | maximum standard deviation of the signal power to consider the
+     |     data a sun hit [dB]. Default 2. Used in HS method
+   max_std_zdr : float. Dataset keyword
+     | maximum standard deviation of the ZDR to consider the
+     |     data a sun hit [dB]. Default 2.
+   ndays : int. Dataset keyword
+     | number of days used in sun retrieval. Default 1
+   coeff_band : float. Dataset keyword
+     | multiplicate coefficient to transform pulse width into receiver
+     |     bandwidth
+   frequency : float. Dataset keyword
+     | the radar frequency [Hz]. If None that of the key
+     |     frequency in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     frequency dependent parameters will not be computed
+   beamwidth : float. Dataset keyword
+     | the antenna beamwidth [deg]. If None that of the keys
+     |     radar_beam_width_h or radar_beam_width_v in attribute
+     |     instrument_parameters of the radar object will be used. If the key
+     |     or the attribute are not present the beamwidth dependent
+     |     parameters will not be computed
+   pulse_width : float. Dataset keyword
+     | the pulse width [s]. If None that of the key
+     |     pulse_width in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the pulse width dependent parameters will not be computed
+   ray_angle_res : float. Dataset keyword
+     | the ray angle resolution [deg]. If None that of the key
+     |     ray_angle_res in attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the ray angle resolution parameters will not be computed
+   AntennaGainH, AntennaGainV : float. Dataset keyword
+     | the horizontal (vertical) polarization antenna gain [dB].
+     |     If None that of the attribute instrument_parameters of the radar
+     |     object will be used. If the key or the attribute are not present
+     |     the ray angle resolution parameters will not be computed
+
+returns
+   sunscan_dataset : dict
+     |     dictionary containing a radar object, a sun_hits dict, a
+     |     sun_retrieval dictionary, field_name and timeinfo
+
+TIMEAVG
+-----------------------------
+FLAG_TIME_AVG
+""""""""""""""""""""""""""""""
+description
+   computes a flag field describing the conditions of the data used while averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter, and non-rain precipitation. It is a packed representation of 4 numbers into one large integer. Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter, and +1E9 for non-rain. Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor classification or temperature field to identify precipitation phase.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must be
+     |     "PhiDP" or "PhiDPc" (Optional, for PhiDP flagging), and,
+     |     "echoID" (Optional, for echoID flagging), and,
+     |     "hydro" (Optional, for no rain flagging), and,
+     |     "TEMP" (Optional, for solid precip flagging), and,
+     |     "H_ISO0" (Optional, also for solid precip flagging)
+   period : float. Dataset keyword
+     | the period to average [s]. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   phidpmax: float. Dataset keyword
+     | maximum PhiDP
+   beamwidth : float. Dataset keyword
+     | the antenna beamwidth [deg]. If None that of the keys
+     |     radar_beam_width_h or radar_beam_width_v in attribute
+     |     instrument_parameters of the radar object will be used. If the key
+     |     or the attribute are not present the beamwidth will be set to None
+
+returns
+   new_dataset : dict
+     |     dictionary containing the field "time_avg_flag"
+
+TIME_AVG
+""""""""""""""""""""""""""""""
+description
+   computes the temporal mean of a field
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | Arbitrary data type supported by pyrad and contained in the radar data
+   period : float. Dataset keyword
+     | the period to average [s]. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   lin_trans: int. Dataset keyword
+     | If 1 apply linear transformation before averaging
+
+returns
+   new_dataset : dict
+     |     dictionary containing the statistic computed on the input field, as well as
+     |     "nsamples"
+
+WEIGHTED_TIME_AVG
+""""""""""""""""""""""""""""""
+description
+   computes the temporal mean of a field weighted by the reflectivity
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_weighted_time_avg>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | Arbitrary data type supported by pyrad and contained in the radar data, as well as
+     |     "dBZ" or "dBZc" or "dBuZ" or "dBZv" or "dBZvc" or "dBuZv" (refl. weighting)
+   period : float. Dataset keyword
+     | the period to average [s]. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+
+returns
+   new_dataset : dict
+     |     dictionary containing the statistic computed on the input field
+
+TIME_STATS
+""""""""""""""""""""""""""""""
+description
+   computes the temporal statistics of a field
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | Arbitrary data type supported by pyrad and contained in the radar data
+   period : float. Dataset keyword
+     | the period to average [s]. If -1 the statistics are going to be
+     |     performed over the entire data. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   lin_trans: int. Dataset keyword
+     | If 1 apply linear transformation before averaging
+   use_nan : bool. Dataset keyword
+     | If true non valid data will be used
+   nan_value : float. Dataset keyword
+     | The value of the non valid data. Default 0
+   stat: string. Dataset keyword
+     | Statistic to compute: Can be mean, std, cov, min, max. Default
+     |     mean
+
+returns
+   new_dataset : dict
+     |     dictionary containing the statistic computed on the input field, as well as
+     |     "nsamples", as well as
+     |     "sum2" (sum-squared) if stat in (cov, std), as well as
+
+TIME_STATS2
+""""""""""""""""""""""""""""""
+description
+   computes the temporal mean of a field
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats2>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | Arbitrary data type supported by pyrad and contianed in the radar data
+   period : float. Dataset keyword
+     | the period to average [s]. If -1 the statistics are going to be
+     |     performed over the entire data. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   stat: string. Dataset keyword
+     | Statistic to compute: Can be median, mode, percentileXX
+   use_nan : bool. Dataset keyword
+     | If true non valid data will be used
+   nan_value : float. Dataset keyword
+     | The value of the non valid data. Default 0
+
+returns
+   new_dataset : dict
+     |     dictionary containing the statistic computed on the input field, as well as
+     |     "nsamples"
+
+RAIN_ACCU
+""""""""""""""""""""""""""""""
+description
+   Computes rainfall accumulation fields
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_retrieve.html#process_rainfall_accumulation>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, must contain,
+     |     "RR"
+   period : float. Dataset keyword
+     | the period to average [s]. If -1 the statistics are going to be
+     |     performed over the entire data. Default 3600.
+   start_average : float. Dataset keyword
+     | when to start the average [s from midnight UTC]. Default 0.
+   use_nan : bool. Dataset keyword
+     | If true non valid data will be used
+   nan_value : float. Dataset keyword
+     | The value of the non valid data. Default 0
+
+returns
+   new_dataset : dict
+     |     dictionary containing the output field "Raccu"
+
+TIMESERIES
+-----------------------------
+GRID_POINT_MEASUREMENT
+""""""""""""""""""""""""""""""
+description
+   Obtains the grid data at a point location.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_point>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   latlon : boolean. Dataset keyword
+     | if True position is obtained from latitude, longitude information,
+     |     otherwise position is obtained from grid index (iz, iy, ix).
+   lon : float. Dataset keyword
+     | the longitude [deg]. Use when latlon is True.
+   lat : float. Dataset keyword
+     | the latitude [deg]. Use when latlon is True.
+   alt : float. Dataset keyword
+     | altitude [m MSL]. Use when latlon is True.
+   iz, iy, ix : int. Dataset keyword
+     | The grid indices. Use when latlon is False
+   latlonTol : float. Dataset keyword
+     | latitude-longitude tolerance to determine which grid point to use
+     |     [deg]
+   altTol : float. Dataset keyword
+     | Altitude tolerance to determine which grid point to use [deg]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+GRID_MULTIPLE_POINTS
+""""""""""""""""""""""""""""""
+description
+   Obtains the grid data at a point location.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_grid.html#process_grid_multiple_points>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement
+   coord_fname : string
+     | File name containing the points coordinates
+   latlonTol : float. Dataset keyword
+     | latitude-longitude tolerance to determine which grid point to use
+     |     [deg]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+MULTIPLE_POINTS
+""""""""""""""""""""""""""""""
+description
+   Obtains the radar data at multiple points. The points are defined in a file
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_multiple_points>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement,
+     |     can be any datatype supported by pyrad and available in the data
+   truealt : boolean. Dataset keyword
+     | if True the user input altitude is used to determine the point of
+     |     interest.
+     |     if False use the altitude at a given radar elevation ele over the
+     |     point of interest. Default is False.
+   coord_fname : string
+     | File name containing the points coordinates
+   alt_points : float. Dataset keyword
+     | altitude [m MSL]. Use when latlon is True.
+   ele_points : float. Dataset keyword
+     | radar elevation [deg]. Use when latlon is False or when latlon is
+     |     True and truealt is False
+   AziTol : float. Dataset keyword
+     | azimuthal tolerance to determine which radar azimuth to use [deg]
+   EleTol : float. Dataset keyword
+     | elevation tolerance to determine which radar elevation to use [deg]
+   RngTol : float. Dataset keyword
+     | range tolerance to determine which radar bin to use [m]
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+POINT_MEASUREMENT
+""""""""""""""""""""""""""""""
+description
+   Obtains the radar data at a point location.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_point_measurement>`_
+parameters
+   datatype : string. Dataset keyword
+     | The data type where we want to extract the point measurement,
+     |     can be any datatype supported by pyrad and available in the data
+   agg_method : string. Dataset keyword
+     | Which aggregation method to use to combine data that is within the
+     |     tolerance in AziTol, EleTol and RngTol
+     |     'nearest' : will only get nearest point to prescribed lon/lat/alt or
+     |         ele/azi/rng
+     |     'nearest_valid' : will only get the nearest valid point to prescribed
+     |         lon/lat/alt or ele/azi/rng (ignore missing values)
+     |     'average' : will average (while ignore missing values), all values
+     |         that fall within the tolerance in AziTol, EleTol and RngTol
+     |     'none' : will not perform any averaging and will get all values that
+     |         fall within the tolerance in AziTol, EleTol and RngTol, each
+     |         with its individual timestamp
+     |     Default is 'nearest'
+   latlon : boolean. Dataset keyword
+     | if True position is obtained from latitude, longitude information,
+     |     otherwise position is obtained from antenna coordinates
+     |     (range, azimuth, elevation).
+   truealt : boolean. Dataset keyword
+     | if True the user input altitude is used to determine the point of
+     |     interest.
+     |     if False use the altitude at a given radar elevation ele over the
+     |     point of interest. Default is False.
+   lon : float. Dataset keyword
+     | the longitude [deg]. Use when latlon is True.
+   lat : float. Dataset keyword
+     | the latitude [deg]. Use when latlon is True.
+   alt : float. Dataset keyword
+     | altitude [m MSL]. Use when latlon is True and truealt is True
+   ele : float. Dataset keyword
+     | radar elevation [deg]. Use when latlon is False or when latlon is
+     |     True and truealt is False
+   azi : float. Dataset keyword
+     | radar azimuth [deg]. Use when latlon is False
+   rng : float. Dataset keyword
+     | range from radar [m]. Use when latlon is False
+   AziTol : float. Dataset keyword
+     | azimuthal tolerance to determine which radar azimuth to use [deg]
+   EleTol : float. Dataset keyword
+     | elevation tolerance to determine which radar elevation to use [deg]
+   RngTol : float. Dataset keyword
+     | range tolerance to determine which radar bin to use [m]
+   fill_value : float or None
+     | If not None masked values are going to be filled by this value
+
+returns
+   new_dataset : dict
+     |     dictionary containing the data and metadata at the point of interest
+
+TRAJ_ANTENNA_PATTERN
+""""""""""""""""""""""""""""""
+description
+   Process a new array of data volumes considering a plane trajectory. As result a timeseries with the values transposed for a given antenna pattern is created. The result is created when the LAST flag is set.
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_antenna_pattern>`_
+parameters
+   
+     | 
+
+returns
+   trajectory : Trajectory object
+     |     Object holding time series
+
+TRAJ_ATPLANE
+""""""""""""""""""""""""""""""
+description
+   Return time series according to trajectory
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_atplane>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any datatype supported by pyrad
+     |     and available in the radar data
+   data_is_log : dict. Dataset keyword
+     | Dictionary specifying for each field if it is in log (True) or
+     |     linear units (False). Default False
+   ang_tol : float. Dataset keyword
+     | Factor that multiplies the angle resolution. Used when determining
+     |     the neighbouring rays. Default 1.2
+   az_tol, el_tol : float
+     | azimuth and elevation tolerance (deg). Samples that have values
+     |     beyond this tolerance from the limits in azimuth and elevation of
+     |     the radar will be considered outside the sector. Default 3.
+   timeformat : str or None
+     | time format of the time series output file
+
+returns
+   trajectory : Trajectory object
+     |     Object holding time series
+
+TRAJ_LIGHTNING
+""""""""""""""""""""""""""""""
+description
+   Return time series according to lightning trajectory
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_traj_lightning>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any datatype supported by pyrad
+     |     and available in the radar data
+   data_is_log : dict. Dataset keyword
+     | Dictionary specifying for each field if it is in log (True) or
+     |     linear units (False). Default False
+   ang_tol : float. Dataset keyword
+     | Factor that multiplies the angle resolution. Used when determining
+     |     the neighbouring rays. Default 1.2
+   az_tol, el_tol : float
+     | azimuth and elevation tolerance (deg). Samples that have values
+     |     beyond this tolerance from the limits in azimuth and elevation of
+     |     the radar will be considered outside the sector. Default 3.
+
+returns
+   trajectory : Trajectory object
+     |     Object holding time series
+
+TRAJ_ONLY
+-----------------------------
+TRAJ
+""""""""""""""""""""""""""""""
+description
+   Return trajectory
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_traj.html#process_trajectory>`_
+parameters
+   datatype : list of string. Dataset keyword
+     | The input data types, can be any datatype supported by pyrad
+     |     and available in the radar data
+
+returns
+   new_dataset : Trajectory object
+     |     radar object
