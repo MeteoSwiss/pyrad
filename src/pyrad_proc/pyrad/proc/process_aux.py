@@ -214,7 +214,7 @@ def get_process_func(dataset_type, dsname):
             'INTERCOMP' format output:
                 'INTERCOMP': process_intercomp
                 'INTERCOMP_FIELDS': process_intercomp_fields
-                'INTERCOMP_WITH_QC': process_intercomp_with_qc
+                'INTERCOMP_WITH_QC': process_intercomp_with_QC
             'ML' format output:
                 'ML_DETECTION': process_melting_layer
             'VPR' format output:
