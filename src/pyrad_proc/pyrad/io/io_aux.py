@@ -3560,7 +3560,7 @@ def find_raw_icon_file(voltime, datatype, cfg, ind_rad=0):
         runtime = runtime0 - datetime.timedelta(hours=i * cfg["IconRunFreq"])
         runtimestr = runtime.strftime("%Y_%m_%d_%H")
         daydir = runtime.strftime("%Y-%m-%d")
-        datapath = cfg["iconpath"][ind_rad] + datatype + "/raw*/" + daydir + "/"
+        datapath = cfg["iconpath"][ind_rad] + datatype + "/" + daydir + "/"
         for model in ("icon-ch1-eps", "icon-ch2-eps"):
             if datatype == "TEMP":
                 search_name = (
