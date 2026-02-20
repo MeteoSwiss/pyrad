@@ -1224,14 +1224,15 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
         with open(fname, "r+") as csvfile:
             lock_file(csvfile)
 
-            # Read the CSV file, ignoring comment lines
             df = pd.read_csv(
                 csvfile,
                 comment="#",
-                parse_dates=["date"],
-                date_parser=lambda x: datetime.datetime.strptime(
-                    x, "%Y%m%d%H%M%S"
-                ).replace(tzinfo=datetime.timezone.utc),
+            )
+
+            df["date"] = pd.to_datetime(
+                df["date"],
+                format="%Y%m%d%H%M%S",
+                utc=True,
             )
 
             if sort_by_date:
@@ -1240,14 +1241,9 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
             df = df.drop_duplicates(subset="date", keep="last")
             unlock_file(csvfile)
 
-        # Extract date and NP values
-        date = (
-            df["date"].dt.tz_localize("UTC")
-            if df["date"].dt.tz is None
-            else df["date"].dt.tz_convert("UTC")
-        ).to_pydatetime()
-
+        # Extract dant and NP values
         np_t = df["NP"].to_numpy(dtype=int)
+        date = df["date"].dt.to_pydatetime().to_numpy()
 
         # Extract all quantile values dynamically
         quantile_data = {}
