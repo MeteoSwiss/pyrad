@@ -1676,14 +1676,15 @@
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
             <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
-            <span class="c1"># Read the CSV file, ignoring comment lines</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
                 <span class="n">csvfile</span><span class="p">,</span>
                 <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span>
-                <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span>
-                <span class="n">date_parser</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                    <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+                <span class="n">utc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">sort_by_date</span><span class="p">:</span>
@@ -1692,14 +1693,9 @@
             <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
             <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
-        <span class="c1"># Extract date and NP values</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">tz</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">tz_convert</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
-
+        <span class="c1"># Extract dant and NP values</span>
         <span class="n">np_t</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
         <span class="c1"># Extract all quantile values dynamically</span>
         <span class="n">quantile_data</span> <span class="o">=</span> <span class="p">{}</span>
