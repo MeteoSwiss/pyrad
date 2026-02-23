@@ -59,7 +59,7 @@ from pyrad import proc
 from ..io.config import read_config
 from ..io.default_config import DEFAULT_CONFIG
 from ..io.read_data_radar import get_data
-from ..io.write_data import write_to_s3
+from ..io.write_data import write_to_s3, write_csv_to_mysql
 from ..io.io_aux import get_datetime, get_file_list, get_scan_list
 from ..io.io_aux import get_dataset_fields, get_datatype_fields
 from ..io.io_aux import get_new_rainbow_file_name, get_fieldname_pyart
@@ -94,6 +94,17 @@ except KeyError:
         "In order to be able to write to an S3 bucket "
         + "you need to define the environment variables S3_KEY_WRITE and S3_SECRET_WRITE  \n"
         + "Saving to S3 disabled..."
+    )
+# Check mysql write possibility
+MYSQL_WRITE_POSSIBLE = False
+try:
+    MYSQL_PASSWORD = os.environ["MYSQL_PASSWORD"]
+    MYSQL_WRITE_POSSIBLE = True
+except KeyError:
+    warn(
+        "In order to be able to write to a mysql database "
+        + "you need to define the environment variables MYSQL_PASSWORD  \n"
+        + "Saving to mysql disabled..."
     )
 
 
@@ -1016,10 +1027,13 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
         filenames = prdfunc(dataset, prdcfg)
         if isinstance(filenames, str):  # convert to list if needed
             filenames = [filenames]
+        if filenames is None:
+            return False
         if (
             "s3BucketWrite" in prdcfg
             and "s3EndpointWrite" in prdcfg
-            and filenames is not None
+            and S3_WRITE_POSSIBLE
+            and prdcfg.get("s3write", True)
         ):  # copy to S3
             s3AccessPolicy = prdcfg.get("s3AccessPolicy", None)
             s3path = prdcfg.get("s3PathWrite", None)
@@ -1036,7 +1050,7 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
 
             for fname in filenames:
                 if (
-                    prdcfg["basepath"] in fname and S3_WRITE_POSSIBLE
+                    prdcfg["basepath"] in fname
                 ):  # only products saved to standard basepath
                     write_to_s3(
                         fname,
@@ -1051,6 +1065,27 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                         s3verify,
                         s3certificates,
                     )
+        if (
+            "MySQLhost" in prdcfg
+            and "MySQLuser" in prdcfg
+            and MYSQL_WRITE_POSSIBLE
+            and prdcfg.get("MySQLwrite", False)
+        ):  # write to mysql
+            MySQLport = prdcfg.get("MySQLport", 3306)
+            for fname in filenames:
+                if fname.endswith(".csv"):
+                    # generate table name
+                    table_name = prdname
+                    write_csv_to_mysql(
+                        prdcfg["MySQLhost"],
+                        MySQLport,
+                        prdcfg["MySQLdatabase"],
+                        prdcfg["MySQLuser"],
+                        MYSQL_PASSWORD,
+                        table_name,
+                        fname,
+                    )
+
         return False
     except Exception as inst:
         warn(str(inst))
@@ -1622,57 +1657,67 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     # config dict. Better: Make dataset config dict available to
     # the product generation.
     prdcfg = cfg[dataset]["products"][product]
-    prdcfg.update({"procname": cfg["name"]})
-    prdcfg.update({"lastStateFile": cfg["lastStateFile"]})
-    prdcfg.update({"basepath": cfg["saveimgbasepath"]})
-    prdcfg.update({"smnpath": cfg["smnpath"]})
-    prdcfg.update({"disdropath": cfg["disdropath"]})
-    prdcfg.update({"iconpath": cfg["iconpath"]})
-    prdcfg.update({"dempath": cfg["dempath"]})
-    prdcfg.update({"ScanPeriod": cfg["ScanPeriod"]})
-    prdcfg.update({"imgformat": cfg["imgformat"]})
-    prdcfg.update({"RadarName": cfg["RadarName"]})
 
-    if "s3EndpointWrite" in cfg:
-        prdcfg.update({"s3EndpointWrite": cfg["s3EndpointWrite"]})
-    if "s3BucketWrite" in cfg:
-        prdcfg.update({"s3BucketWrite": cfg["s3BucketWrite"]})
-    if "s3PathWrite" in cfg:
-        prdcfg.update({"s3PathWrite": cfg["s3PathWrite"]})
-    if "s3SplitExtensionWrite" in cfg:
-        prdcfg.update({"s3SplitExtensionWrite": cfg["s3SplitExtensionWrite"]})
-    if "s3AccessPolicy" in cfg:
-        prdcfg.update({"s3AccessPolicy": cfg["s3AccessPolicy"]})
-    if "s3Verify" in cfg:
-        prdcfg.update({"s3Verify": cfg["s3Verify"]})
-    if "s3Certificates" in cfg:
-        prdcfg.update({"s3Certificates": cfg["s3Certificates"]})
-    if "RadarBeamwidth" in cfg:
-        prdcfg.update({"RadarBeamwidth": cfg["RadarBeamwidth"]})
-    if "ppiImageConfig" in cfg:
-        prdcfg.update({"ppiImageConfig": cfg["ppiImageConfig"]})
-    if "ppiMapImageConfig" in cfg:
-        prdcfg.update({"ppiMapImageConfig": cfg["ppiMapImageConfig"]})
-    if "rhiImageConfig" in cfg:
-        prdcfg.update({"rhiImageConfig": cfg["rhiImageConfig"]})
-    if "xsecImageConfig" in cfg:
-        prdcfg.update({"xsecImageConfig": cfg["xsecImageConfig"]})
-    if "gridMapImageConfig" in cfg:
-        prdcfg.update({"gridMapImageConfig": cfg["gridMapImageConfig"]})
-    if "sunhitsImageConfig" in cfg:
-        prdcfg.update({"sunhitsImageConfig": cfg["sunhitsImageConfig"]})
-    if "spectraImageConfig" in cfg:
-        prdcfg.update({"spectraImageConfig": cfg["spectraImageConfig"]})
+    # required keys from top-level cfg (must exist)
+    required_top = (
+        "name",
+        "lastStateFile",
+        "saveimgbasepath",
+        "smnpath",
+        "disdropath",
+        "iconpath",
+        "dempath",
+        "ScanPeriod",
+        "imgformat",
+        "RadarName",
+    )
 
-    prdcfg.update({"dsname": dataset})
-    prdcfg.update({"dstype": cfg[dataset]["type"]})
-    prdcfg.update({"prdname": product})
-    prdcfg.update({"timeinfo": voltime})
-    prdcfg.update({"runinfo": runinfo})
+    rename_top = {
+        "name": "procname",
+        "saveimgbasepath": "basepath",
+    }
 
+    prdcfg.update({rename_top.get(k, k): cfg[k] for k in required_top})
+
+    # optional keys from top-level cfg (only if present)
+    optional_top = (
+        "s3EndpointWrite",
+        "s3BucketWrite",
+        "s3PathWrite",
+        "s3SplitExtensionWrite",
+        "s3AccessPolicy",
+        "s3Verify",
+        "s3Certificates",
+        "MySQLhost",
+        "MySQLport",
+        "MySQLdatabase",
+        "MySQLuser",
+        "RadarBeamwidth",
+        "ppiImageConfig",
+        "ppiMapImageConfig",
+        "rhiImageConfig",
+        "xsecImageConfig",
+        "gridMapImageConfig",
+        "sunhitsImageConfig",
+        "spectraImageConfig",
+    )
+
+    prdcfg.update({k: cfg[k] for k in optional_top if k in cfg})
+
+    # runtime / derived fields
+    prdcfg.update(
+        {
+            "dsname": dataset,
+            "dstype": cfg[dataset]["type"],
+            "prdname": product,
+            "timeinfo": voltime,
+            "runinfo": runinfo,
+        }
+    )
+
+    # optional dataset-level key
     if "dssavename" in cfg[dataset]:
-        prdcfg.update({"dssavename": cfg[dataset]["dssavename"]})
-
+        prdcfg["dssavename"] = cfg[dataset]["dssavename"]
     return prdcfg
 
 

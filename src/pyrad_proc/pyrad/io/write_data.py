@@ -8,6 +8,7 @@ Functions for writing pyrad output data
     :toctree: generated/
 
     write_to_s3
+    write_to_mysql
     write_vol_csv
     write_vol_kml
     write_centroids
@@ -54,6 +55,8 @@ from __future__ import print_function
 import glob
 import csv
 import os
+import re
+from importlib.util import find_spec
 
 from ..util import warn
 import smtplib
@@ -88,6 +91,21 @@ except ImportError:
         use_debug=False,
     )
     _BOTO3_AVAILABLE = False
+
+_SQLALCHEMY_AVAILABLE = find_spec("sqlalchemy") is not None
+_PYMYSQL_AVAILABLE = find_spec("pymysql") is not None
+_CRYPTO_AVAILABLE = find_spec("cryptography") is not None
+
+_MYSQL_AVAILABLE = _SQLALCHEMY_AVAILABLE and _PYMYSQL_AVAILABLE and _CRYPTO_AVAILABLE
+
+if not _MYSQL_AVAILABLE:
+    warn(
+        "sqlalchemy, pymysql and/or cryptography not installed, "
+        "no MySQL writing will be performed!"
+    )
+else:
+    from sqlalchemy import create_engine, text
+    from sqlalchemy.types import Integer, Float, String, DateTime, Boolean
 
 
 def write_to_s3(
@@ -185,6 +203,141 @@ def write_to_s3(
     s3copypath = f"https://{s3bucket}.{endpoint_raw}/{s3fname}"
     s3_client.upload_file(fname, s3bucket, s3fname, ExtraArgs=ExtraArgs)
     print(f"----- copying {fname} to {s3copypath}")
+
+
+def write_csv_to_mysql(
+    hostname: str,
+    port: int,
+    database: str,
+    user: str,
+    password: str,
+    table_name: str,
+    csv_file: str,
+    chunksize: int = 1000,
+):
+    """
+    Write a CSV file into a MySQL database table.
+
+    The function reads a CSV file into a pandas DataFrame, infers column
+    types (including automatic detection of datetime columns), creates
+    the table if it does not already exist, and inserts the data into
+    MySQL. Duplicate rows are ignored using ``INSERT IGNORE``. Duplicate
+    detection therefore requires an existing PRIMARY KEY or UNIQUE
+    constraint in the table.
+
+    Parameters
+    ----------
+    hostname : str
+        MySQL server hostname.
+    port : int
+        MySQL server port.
+    database : str
+        Name of the target database.
+    user : str
+        MySQL username.
+    password : str
+        MySQL password.
+    table_name : str
+        Name of the target table.
+    csv_file : str
+        Path to the CSV file to import.
+    chunksize : int, optional
+        Number of rows inserted per batch. Default is 1000.
+    """
+    if not _MYSQL_AVAILABLE:
+        warn(
+            "pymysql and/or sqlalchemy and/or cryptography not available, aborting writing to database"
+        )
+        return
+
+    # -----------------------------
+    # 1) Read CSV with inference
+    # -----------------------------
+    df = pd.read_csv(csv_file, comment="#")
+    df = df.replace({np.nan: None})
+    df = df.where(pd.notna(df), None)  # also converts NaT to None
+    df = df.replace({-9999: None})  # also converts -9999 to None
+
+    def sanitize_columns(cols):
+        out = []
+        for c in cols:
+            c2 = str(c).strip()
+            c2 = re.sub(r"\s+", "_", c2)
+            c2 = re.sub(r"[^0-9a-zA-Z_]", "_", c2)  # replace dots etc.
+            if re.match(r"^\d", c2):
+                c2 = f"c_{c2}"  # avoid leading digit
+            out.append(c2)
+        return out
+
+    df.columns = sanitize_columns(df.columns)
+
+    # Try automatic datetime detection
+    for col in df.columns:
+        try:
+            parsed = pd.to_datetime(df[col].astype(str), errors="raise")
+            # Only convert if most values are valid datetimes
+            if parsed.notna().sum() > 0.8 * len(df):
+                df[col] = parsed
+            break
+        except Exception:
+            pass
+
+    # -----------------------------
+    # 2) Map pandas dtypes → MySQL
+    # -----------------------------
+    def infer_sqlalchemy_type(series):
+        if pd.api.types.is_integer_dtype(series):
+            return Integer()
+        elif pd.api.types.is_float_dtype(series):
+            return Float()
+        elif pd.api.types.is_bool_dtype(series):
+            return Boolean()
+        elif pd.api.types.is_datetime64_any_dtype(series):
+            return DateTime()
+        else:
+            max_len = int(series.astype(str).str.len().max())
+            return String(max(10, min(max_len, 1000)))
+
+    dtype_mapping = {col: infer_sqlalchemy_type(df[col]) for col in df.columns}
+
+    # -----------------------------
+    # 3) Connect to MySQL
+    # -----------------------------
+    engine = create_engine(
+        f"mysql+pymysql://{user}:{password}@{hostname}:{port}/{database}",
+        echo=False,
+        future=True,
+    )
+
+    # -----------------------------
+    # 4) Create table if not exists
+    # -----------------------------
+    df.head(0).to_sql(
+        table_name,
+        engine,
+        if_exists="append",
+        index=False,
+        dtype=dtype_mapping,
+    )
+
+    # -----------------------------
+    # 5) Insert with INSERT IGNORE
+    # -----------------------------
+    columns = ", ".join(f"`{c}`" for c in df.columns)
+    placeholders = ", ".join([f":{c}" for c in df.columns])
+
+    insert_stmt = text(
+        f"INSERT IGNORE INTO `{table_name}` ({columns}) VALUES ({placeholders})"
+    )
+
+    with engine.begin() as conn:
+        for start in range(0, len(df), chunksize):
+            chunk = df.iloc[start : start + chunksize]
+            conn.execute(insert_stmt, chunk.to_dict(orient="records"))
+
+    print(
+        f"File {csv_file} successfully written to MySQL database {database} in table {table_name}"
+    )
 
 
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
