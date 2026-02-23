@@ -117,7 +117,6 @@ Table 2: Configuration parameters of the main configuration file
 
 
 .. admonition:: **Note on s3 and MySQL writing**
-   :class: orange-box
 
   Every pyrad product output (png or csv) can be written to a s3 bucket, provided that the keywords *s3EndpointWrite*, *s3BucketWrite* are provided in the main configuration file (plus optional keywords), and the variables **S3_KEY_WRITE** and **S3_SECRET_WRITE** (bucket key ID and secret) are available as environment variables during runtime. Note that the python library *boto3* has to be installed.
 
