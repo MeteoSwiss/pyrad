@@ -79,10 +79,10 @@ Table 2: Configuration parameters of the main configuration file
      - REQUIRED. Hostname or IP of the MySQL server. Use ``localhost`` when the database runs on the same machine.
    * - MySQLdatabase
      - STRING
-     - REQUIRED. Name of the MySQL database to connect to. The database must already exist.
+     - OPTIONAL. Name of the MySQL database to connect to. The database must already exist.
    * - MySQLuser
      - STRING
-     - REQUIRED. Username used to authenticate with the MySQL server. The user must have appropriate privileges on the selected database.
+     - OPTIONAL. Username used to authenticate with the MySQL server. The user must have appropriate privileges on the selected database.
    * - MySQLport
      - INTEGER
      - OPTIONAL. Port number of the MySQL server. Default is ``3306``. Use a different value (e.g. ``3307``) if the server is exposed on a custom port.
