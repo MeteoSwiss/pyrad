@@ -502,6 +502,22 @@ STRARR</p></td>
 <td><p>INT</p></td>
 <td><p>OPTIONAL. Path to SSL certificates, only needed if custom certificates are used.</p></td>
 </tr>
+<tr class="row-even"><td><p>MySQLhost</p></td>
+<td><p>STRING</p></td>
+<td><p>REQUIRED. Hostname or IP of the MySQL server. Use <code class="docutils literal notranslate"><span class="pre">localhost</span></code> when the database runs on the same machine.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MySQLdatabase</p></td>
+<td><p>STRING</p></td>
+<td><p>REQUIRED. Name of the MySQL database to connect to. The database must already exist.</p></td>
+</tr>
+<tr class="row-even"><td><p>MySQLuser</p></td>
+<td><p>STRING</p></td>
+<td><p>REQUIRED. Username used to authenticate with the MySQL server. The user must have appropriate privileges on the selected database.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MySQLport</p></td>
+<td><p>INTEGER</p></td>
+<td><p>OPTIONAL. Port number of the MySQL server. Default is <code class="docutils literal notranslate"><span class="pre">3306</span></code>. Use a different value (e.g. <code class="docutils literal notranslate"><span class="pre">3307</span></code>) if the server is exposed on a custom port.</p></td>
+</tr>
 <tr class="row-even"><td><p>loadbasepath</p></td>
 <td><p>STRING</p></td>
 <td><p>OPTIONAL. Base path of saved data. Defaults to <code class="docutils literal notranslate"><span class="pre">saveimgbasepath</span></code>.</p></td>
@@ -540,6 +556,13 @@ STRARR</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="admonition-note-on-s3-and-mysql-writing-class-orange-box admonition">
+<p class="admonition-title"><strong>Note on s3 and MySQL writing</strong>
+ :class: orange-box</p>
+<p>Every pyrad product output (png or csv) can be written to a s3 bucket, provided that the keywords <em>s3EndpointWrite</em>, <em>s3BucketWrite</em> are provided in the main configuration file (plus optional keywords), and the variables <strong>S3_KEY_WRITE</strong> and <strong>S3_SECRET_WRITE</strong> (bucket key ID and secret) are available as environment variables during runtime. Note that the python library <em>boto3</em> has to be installed.</p>
+<p>Every csv pyrad product output can be written to a MySQL database, provided that the keywords <em>MySQLhost</em>, <em>MySQLdatabase</em>, <em>MySQLuser</em> are provided in the main configuration file (plus optional keywords), and the variable <strong>MYSQL_PASSWORD</strong> is available as environment variable during runtime. Note that the python libraries <em>sqlalchemy</em> <em>cryptography</em> and <em>pymsql</em> have to to be installed.</p>
+<p>For every single pyrad product the two keywords <em>s3write</em> and <em>MySQLwrite</em> can be used to specify whether a given product should be written to s3/MySQL. By default <em>s3write</em> is True, meaning that all products will be written to s3 (if possible) and <em>MySQLwrite</em> is False, meaning that no product will be written to MySQL.</p>
 </div>
 </section>
 
