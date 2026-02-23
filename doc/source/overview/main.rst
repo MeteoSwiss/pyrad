@@ -74,6 +74,18 @@ Table 2: Configuration parameters of the main configuration file
    * - s3Certificates
      - INT
      - OPTIONAL. Path to SSL certificates, only needed if custom certificates are used.
+   * - MySQLhost
+     - STRING
+     - REQUIRED. Hostname or IP of the MySQL server. Use ``localhost`` when the database runs on the same machine.
+   * - MySQLdatabase
+     - STRING
+     - REQUIRED. Name of the MySQL database to connect to. The database must already exist.
+   * - MySQLuser
+     - STRING
+     - REQUIRED. Username used to authenticate with the MySQL server. The user must have appropriate privileges on the selected database.
+   * - MySQLport
+     - INTEGER
+     - OPTIONAL. Port number of the MySQL server. Default is ``3306``. Use a different value (e.g. ``3307``) if the server is exposed on a custom port.
    * - loadbasepath
      - STRING
      - OPTIONAL. Base path of saved data. Defaults to ``saveimgbasepath``.
@@ -101,3 +113,14 @@ Table 2: Configuration parameters of the main configuration file
    * - iconpath
      - STRING
      - OPTIONAL. Base directory of ICON (NWP model) data files.
+
+
+
+.. admonition:: **Note on s3 and MySQL writing**
+   :class: orange-box
+
+  Every pyrad product output (png or csv) can be written to a s3 bucket, provided that the keywords *s3EndpointWrite*, *s3BucketWrite* are provided in the main configuration file (plus optional keywords), and the variables **S3_KEY_WRITE** and **S3_SECRET_WRITE** (bucket key ID and secret) are available as environment variables during runtime. Note that the python library *boto3* has to be installed.
+
+  Every csv pyrad product output can be written to a MySQL database, provided that the keywords *MySQLhost*, *MySQLdatabase*, *MySQLuser* are provided in the main configuration file (plus optional keywords), and the variable **MYSQL_PASSWORD** is available as environment variable during runtime. Note that the python libraries *sqlalchemy* *cryptography* and *pymsql* have to to be installed.
+
+  For every single pyrad product the two keywords *s3write* and *MySQLwrite* can be used to specify whether a given product should be written to s3/MySQL. By default *s3write* is True, meaning that all products will be written to s3 (if possible) and *MySQLwrite* is False, meaning that no product will be written to MySQL.

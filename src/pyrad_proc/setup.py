@@ -188,4 +188,28 @@ if __name__ == "__main__":
         classifiers=CLASSIFIERS,
         version=VERSION,
         zip_safe=False,
+        extras_require={
+            "graph": [
+                "cartopy",
+                "shapely",
+                "geopandas",
+            ],
+            "s3": [
+                "boto3",
+            ],
+            "mysql": [
+                "pymysql",
+                "sqlalchemy",
+                "cryptography",
+            ],
+            "all": [
+                "cartopy",
+                "shapely",
+                "geopandas",
+                "boto3",
+                "pymysql",
+                "sqlalchemy",
+                "cryptography",
+            ],
+        },
     )
