@@ -28,7 +28,7 @@ from ..io.read_data_other import read_intercomp_scores_ts
 from ..io.write_data import write_colocated_gates, write_colocated_data
 from ..io.write_data import write_intercomp_scores_ts
 
-from ..graph.plots import plot_scatter
+from ..graph.plots import plot_scatter, plot_histogram
 from ..graph.plots_timeseries import plot_intercomp_scores_ts
 from ..graph import plot_colocated_gates
 
@@ -402,7 +402,6 @@ def generate_intercomp_products(dataset, prdcfg):
                 rad1_name=rad1_name,
                 rad2_name=rad2_name,
             )
-
         figtimeinfo = None
         titldate = (
             date_vec[0].strftime("%Y%m%d") + "-" + date_vec[-1].strftime("%Y%m%d")
@@ -460,7 +459,56 @@ def generate_intercomp_products(dataset, prdcfg):
 
         return figfname_list
 
-    warn(" Unsupported product type: " + prdcfg["type"])
+    elif prdcfg["type"] == "PLOT_HIST_TIME_OFFSETS":
+        if not dataset["final"]:
+            return None
+        times1 = dataset["intercomp_dict"]["rad1_time"]
+        times2 = dataset["intercomp_dict"]["rad2_time"]
+        rad1_name = dataset["intercomp_dict"]["rad1_name"]
+        rad2_name = dataset["intercomp_dict"]["rad2_name"]
+        offsets = (times1 - times2) / np.timedelta64(1, "s")
+        figtimeinfo = None
+        timeformat = None
+        titldate = (
+            times1[0].item().strftime("%Y%m%d")
+            + "-"
+            + times1[-1].item().strftime("%Y%m%d")
+        )
+        if "add_date_in_fname" in prdcfg:
+            if prdcfg["add_date_in_fname"]:
+                figtimeinfo = times1[0]
+                timeformat = "%Y"
+
+        savedir = get_save_dir(
+            prdcfg["basepath"],
+            prdcfg["procname"],
+            dssavedir,
+            prdcfg["prdname"],
+            timeinfo=None,
+        )
+
+        figfname_list = make_filename(
+            "hist_time_offsets",
+            prdcfg["dstype"],
+            prdcfg["voltype"],
+            prdcfg["imgformat"],
+            prdcfginfo=rad1_name + "-" + rad2_name,
+            timeinfo=figtimeinfo,
+            timeformat=timeformat,
+        )
+
+        for i, figfname in enumerate(figfname_list):
+            figfname_list[i] = savedir + figfname
+
+        bin_edges = np.arange(-60, 65, 5)
+        titl = "Time offsets (rad1-rad2)"
+        figfname_list = plot_histogram(bin_edges, offsets, figfname_list, titl=titl)
+
+        print("----- save to " + " ".join(figfname_list))
+        return figfname_list
+
+    else:
+        warn(" Unsupported product type: " + prdcfg["type"])
     return None
 
 
@@ -468,7 +516,7 @@ def generate_colocated_gates_products(dataset, prdcfg):
     """
     Generates colocated gates products. Accepted product types:
         'WRITE_COLOCATED_GATES': Writes the position of the co-located gates
-            in a csv file
+            in a csv file.
         'PLOT_COLOCATED_GATES': Plots the colocated gates over a geo-referenced map,
             as well as the coordinates of both radars. The plot performs a gridding and
             plots the number of cologates gates within every grid-cell as well as their

@@ -1097,7 +1097,6 @@ def make_filename(
         )
         fname = fname.replace("/", "-")
         fname_list.append(fname)
-
     return fname_list
 
 
@@ -3531,60 +3530,68 @@ def find_pyradicon_file(basepath, voltime, datatype, cfg, dataset):
 
 def find_raw_icon_file(voltime, datatype, cfg, ind_rad=0):
     """
-    Search a ICON file in netcdf format
+    Search for an ICON NetCDF file using a recursive glob.
+
+    The search is flexible and accepts arbitrary intermediate directories
+    before and after the datatype directory.
 
     Parameters
     ----------
-    voltime : datetime object
-        volume scan time
+    voltime : datetime.datetime
+        Volume scan time.
     datatype : str
-        type of ICON data to look for
-    cfg : dictionary of dictionaries
-        configuration info to figure out where the data is
-    ind_rad : int
-        radar index
+        Type of ICON data to look for, e.g. "TEMP" or "WIND".
+    cfg : dict
+        Configuration dictionary containing ICON settings.
+    ind_rad : int, optional
+        Radar index.
 
     Returns
     -------
-    fname : str
-        Name of ICON file if it exists. None otherwise
-
+    str or None
+        Path to the ICON file if found, otherwise None.
     """
+    suffix_map = {
+        "TEMP": "MDR_3D_m_000.nc",
+        "WIND": "MDR_3DWIND_m_000.nc",
+    }
+
+    if datatype not in suffix_map:
+        warn(f"Unable to get ICON {datatype}. Unknown variable")
+        return None
+
+    base_path = cfg["iconpath"][ind_rad]
+    run_freq = cfg["IconRunFreq"]
+    nruns_to_check = int(cfg["IconForecasted"] / run_freq)
+
     # initial run time to look for
-    runhour0 = int(voltime.hour / cfg["IconRunFreq"]) * cfg["IconRunFreq"]
-    runtime0 = voltime.replace(hour=runhour0, minute=0, second=0)
-    # look for icon file in raw
-    found = False
-    nruns_to_check = int(cfg["IconForecasted"] / cfg["IconRunFreq"])
+    runhour0 = int(voltime.hour / run_freq) * run_freq
+    runtime0 = voltime.replace(hour=runhour0, minute=0, second=0, microsecond=0)
+
     for i in range(nruns_to_check):
-        runtime = runtime0 - datetime.timedelta(hours=i * cfg["IconRunFreq"])
+        runtime = runtime0 - datetime.timedelta(hours=i * run_freq)
         runtimestr = runtime.strftime("%Y_%m_%d_%H")
-        daydir = runtime.strftime("%Y-%m-%d")
-        datapath = cfg["iconpath"][ind_rad] + datatype + "/" + daydir + "/"
+        suffix = suffix_map[datatype]
+
         for model in ("icon-ch1-eps", "icon-ch2-eps"):
-            if datatype == "TEMP":
-                search_name = (
-                    datapath + runtimestr + "_" + model + "_MDR_3D_m_000" + ".nc"
-                )
-            elif datatype == "WIND":
-                search_name = (
-                    datapath + runtimestr + "_" + model + "_MDR_3DWIND_m_000" + ".nc"
-                )
-            else:
-                warn("Unable to get ICON " + datatype + ". Unknown variable")
-            print("Looking for file: " + search_name)
-            fname = glob.glob(search_name)
-            if fname:
-                found = True
-                break
+            filename = f"{runtimestr}_{model}_{suffix}"
 
-        if found:
-            break
+            # Accept any directory structure before and after datatype
+            search_pattern = os.path.join(
+                base_path,
+                "**",
+                datatype,
+                "**",
+                filename,
+            )
 
-    if found:
-        return fname[0]
+            print(f"Looking for file: {search_pattern}")
+            matches = glob.glob(search_pattern, recursive=True)
 
-    warn("WARNING: Unable to get ICON " + datatype + " information")
+            if matches:
+                return matches[0]
+
+    warn(f"WARNING: Unable to get ICON {datatype} information")
     return None
 
 

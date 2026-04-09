@@ -3531,7 +3531,7 @@ def merge_scans_mxpol(basepath, scan_list, voltime, datatype_list, cfg, ind_rad=
 
 def merge_scans_icon(voltime, datatype_list, cfg, ind_rad=0):
     """
-    merge rainbow scans
+    merge icon scans
 
     Parameters
     ----------

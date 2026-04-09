@@ -9,8 +9,8 @@ functions to control the Pyrad data processing flow
 
     main
     main_rt
-    main_cosmo
-    main_cosmo_rt
+    main_icon
+    main_icon_rt
     main_gecsx
 """
 
@@ -47,15 +47,31 @@ ALLOW_USER_BREAK = False
 
 try:
     import dask
-    from dask.diagnostics import Profiler, ResourceProfiler, CacheProfiler
-    from dask.diagnostics import visualize
-    from distributed import Client
-    from bokeh.io import export_png
+    from dask.distributed import Client
 
     _DASK_AVAILABLE = True
 except ImportError:
-    warn("dask not available: The processing will not be parallelized", use_debug=False)
+    import pdb
+
+    pdb.set_trace()
+    warn(
+        "dask and/or dask.distributed not available: The processing cannot be parallelized",
+        use_debug=False,
+    )
     _DASK_AVAILABLE = False
+
+try:
+    from dask.diagnostics import Profiler, ResourceProfiler, CacheProfiler
+    from dask.diagnostics import visualize
+    from bokeh.io import export_png
+
+    _PROFILER_AVAILABLE = True
+except ImportError:
+    warn(
+        "dask.diagnostics and/or distributed and/or bokeh not available: No profiling of parallelization will be performed",
+        use_debug=False,
+    )
+    _PROFILER_AVAILABLE = False
 
 
 def main(
@@ -97,12 +113,13 @@ def main(
         (e.g. 'RUN57'). This string is added to product files.
     MULTIPROCESSING_DSET : Bool
         If true the generation of datasets at the same processing level will
-        be parallelized
+        be parallelized. This requires installation of dask.
     MULTIPROCESSING_PROD : Bool
         If true the generation of products from each dataset will be
-        parallelized
+        parallelized. This requires installation of dask.
     PROFILE_MULTIPROCESSING : Bool
-        If true and code parallelized the multiprocessing is profiled
+        If true and code parallelized the multiprocessing is profiled. This requires
+        installation of dask, distributed and bokeh libraries.
     USE_CHILD_PROCESS : Bool
         If true the reading and processing of the data will be performed by
         a child process controlled by dask. This is done to make sure all
@@ -131,6 +148,8 @@ def main(
         MULTIPROCESSING_PROD = False
         PROFILE_MULTIPROCESSING = False
         USE_CHILD_PROCESS = False
+    if not _PROFILER_AVAILABLE:
+        PROFILE_MULTIPROCESSING = False
 
     # check if multiprocessing profiling is necessary
     if not MULTIPROCESSING_DSET and not MULTIPROCESSING_PROD and not USE_CHILD_PROCESS:
@@ -250,6 +269,9 @@ def main(
                 )
                 try:
                     dscfg, traj = data_processing.compute()
+                    import pdb
+
+                    pdb.set_trace()
                     del data_processing
                     del radar_list
                     del dscfg_aux
@@ -282,7 +304,6 @@ def main(
                 MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
                 MULTIPROCESSING_PROD=MULTIPROCESSING_PROD,
             )
-
             # delete variables
             del radar_list
 
@@ -325,6 +346,9 @@ def main_rt(
     proc_period=60,
     proc_finish=None,
     hide_warnings=False,
+    MULTIPROCESSING_DSET=False,
+    MULTIPROCESSING_PROD=False,
+    USE_CHILD_PROCESS=False,
 ):
     """
     main flow control. Processes radar data in real time. The start and end
@@ -349,6 +373,16 @@ def main_rt(
         if set to true it will hide the warnings during the pyrad processing
         this is useful when logging the outputs to log files, as they can
         become very large
+    MULTIPROCESSING_DSET : Bool
+        If true the generation of datasets at the same processing level will
+        be parallelized. This requires installation of dask.
+    MULTIPROCESSING_PROD : Bool
+        If true the generation of products from each dataset will be
+        parallelized. This requires installation of dask.
+    USE_CHILD_PROCESS : Bool
+        If true the reading and processing of the data will be performed by
+        a child process controlled by dask. This is done to make sure all
+        memory used is released.
 
     Returns
     -------
@@ -369,11 +403,24 @@ def main_rt(
     if hide_warnings:
         warnings.filterwarnings("ignore")
     else:
-        # Define behaviour of warnings
-        warnings.simplefilter("always")  # always print matching warnings
-        # warnings.simplefilter('error')  # turn matching warnings into
-        # exceptions
-        warnings.formatwarning = _warning_format  # define format
+        warnings.simplefilter("always")
+        warnings.formatwarning = _warning_format
+
+    if ALLOW_USER_BREAK:
+        input_queue = _initialize_listener()
+
+    # Disable multiprocessing options if dask is not available
+    if not _DASK_AVAILABLE:
+        MULTIPROCESSING_DSET = False
+        MULTIPROCESSING_PROD = False
+        USE_CHILD_PROCESS = False
+
+    # If multiple modes are enabled, create a client so tasks can launch tasks
+    if (
+        int(MULTIPROCESSING_DSET) + int(MULTIPROCESSING_PROD) + int(USE_CHILD_PROCESS)
+        > 1
+    ):
+        Client()
 
     # The processing will be allowed to run for a limited period
     if proc_finish is not None:
@@ -384,9 +431,6 @@ def main_rt(
         # startime_proc = startime_proc.replace(hour=10)
 
         endtime_proc = startime_proc + timedelta(seconds=proc_finish)
-
-    if ALLOW_USER_BREAK:
-        input_queue = _initialize_listener()
 
     cfg_list = []
     datacfg_list = []
@@ -401,6 +445,7 @@ def main_rt(
             infostr = infostr_list[icfg]
         else:
             infostr = ""
+
         datacfg = _create_datacfg_dict(cfg)
 
         if infostr:
@@ -415,7 +460,7 @@ def main_rt(
         last_processed_list.append(last_processed)
 
         # get data types and levels
-        datatypesdescr_list = list()
+        datatypesdescr_list = []
         for i in range(1, cfg["NumRadars"] + 1):
             datatypesdescr_list.append(
                 _get_datatype_list(cfg, radarnr="RADAR" + "{:03d}".format(i))
@@ -433,7 +478,6 @@ def main_rt(
         datatypesdescr_list_list.append(datatypesdescr_list)
         dataset_levels_list.append(dataset_levels)
 
-        # remove variables from memory
         del cfg
         del datacfg
         del dscfg
@@ -447,7 +491,6 @@ def main_rt(
     end_proc = False
     while not end_proc:
         if ALLOW_USER_BREAK:
-            # check if user has requested exit
             try:
                 user_input = input_queue.get_nowait()
                 end_proc = user_input
@@ -462,31 +505,22 @@ def main_rt(
         #     year=endtime.year, month=endtime.month, day=endtime.day)
         # nowtime = nowtime.replace(hour=10)
 
-        # if processing end time exceeded finalize processing
-        if proc_finish is not None:
-            if nowtime >= endtime_proc:
-                end_proc = True
-                warn("Allowed processing time exceeded")
-                break
+        if proc_finish is not None and nowtime >= endtime_proc:
+            end_proc = True
+            warn("Allowed processing time exceeded")
+            break
 
-        # end time has been set and current time older than end time
-        # quit processing
-        if endtime is not None:
-            if nowtime > endtime:
-                end_proc = True
-                break
+        if endtime is not None and nowtime > endtime:
+            end_proc = True
+            break
 
-        # start time has been set. Check if current time has to be
-        # processed. If not sleep until next proc_period
-        if starttime is not None:
-            if nowtime < starttime:
-                time.sleep(proc_period)
-                continue
+        if starttime is not None and nowtime < starttime:
+            time.sleep(proc_period)
+            continue
 
         vol_processed = False
         for icfg, cfg in enumerate(cfg_list):
             if ALLOW_USER_BREAK:
-                # check if user has requested exit
                 try:
                     user_input = input_queue.get_nowait()
                     end_proc = user_input
@@ -500,6 +534,7 @@ def main_rt(
             datatypesdescr_list = datatypesdescr_list_list[icfg]
             dataset_levels = dataset_levels_list[icfg]
             last_processed = last_processed_list[icfg]
+
             if infostr_list is not None:
                 infostr = infostr_list[icfg]
             else:
@@ -518,18 +553,66 @@ def main_rt(
             print("\n- master file: " + os.path.basename(masterfile))
             master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
-            # get data of master radar
-            radar_list = _get_radars_data(
-                master_voltime,
-                datatypesdescr_list,
-                datacfg,
-                num_radars=datacfg["NumRadars"],
-            )
+            if USE_CHILD_PROCESS:
+                data_reading = dask.delayed(_get_radars_data)(
+                    master_voltime,
+                    datatypesdescr_list,
+                    datacfg,
+                    num_radars=datacfg["NumRadars"],
+                )
 
-            # process all data sets
-            dscfg, traj = _process_datasets(
-                dataset_levels, cfg, dscfg, radar_list, master_voltime, infostr=infostr
-            )
+                try:
+                    radar_list = data_reading.compute()
+                    del data_reading
+
+                    dscfg_aux = dask.delayed(dscfg)
+                    data_processing = dask.delayed(_process_datasets)(
+                        dataset_levels,
+                        cfg,
+                        dscfg_aux,
+                        radar_list,
+                        master_voltime,
+                        infostr=infostr,
+                        MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
+                        MULTIPROCESSING_PROD=MULTIPROCESSING_PROD,
+                    )
+
+                    try:
+                        dscfg, traj = data_processing.compute()
+                        del data_processing
+                        del dscfg_aux
+                        del radar_list
+
+                    except Exception as ee:
+                        warn(str(ee))
+                        traceback.print_exc()
+                        continue
+
+                except Exception as ee:
+                    warn(str(ee))
+                    traceback.print_exc()
+                    continue
+
+            else:
+                radar_list = _get_radars_data(
+                    master_voltime,
+                    datatypesdescr_list,
+                    datacfg,
+                    num_radars=datacfg["NumRadars"],
+                )
+
+                dscfg, traj = _process_datasets(
+                    dataset_levels,
+                    cfg,
+                    dscfg,
+                    radar_list,
+                    master_voltime,
+                    infostr=infostr,
+                    MULTIPROCESSING_DSET=MULTIPROCESSING_DSET,
+                    MULTIPROCESSING_PROD=MULTIPROCESSING_PROD,
+                )
+
+                del radar_list
 
             last_processed_list[icfg] = master_voltime
             write_last_state(master_voltime, cfg["lastStateFile"])
@@ -537,8 +620,6 @@ def main_rt(
 
             vol_processed = True
 
-            # remove variables from memory
-            del radar_list
             del cfg
             del datacfg
             del dscfg
@@ -559,19 +640,16 @@ def main_rt(
         if vol_processed:
             print("Processing time %s s\n" % proc_time)
 
-        # if processing end time exceeded finalize processing
-        if proc_finish is not None:
-            if nowtime_new >= endtime_proc:
-                end_proc = True
-                warn("Allowed processing time exceeded")
-                break
+        if proc_finish is not None and nowtime_new >= endtime_proc:
+            end_proc = True
+            warn("Allowed processing time exceeded")
+            break
 
         if proc_time < proc_period:
             time.sleep(proc_period - proc_time)
 
     # only do post processing if program properly terminated by user
     if end_proc:
-        # post-processing of the datasets
         print("\n\n- Post-processing datasets:")
         for icfg, cfg in enumerate(cfg_list):
             dscfg = dscfg_list[icfg]
@@ -580,11 +658,11 @@ def main_rt(
                 infostr = infostr_list[icfg]
             else:
                 infostr = ""
+
             dscfg, traj = _postprocess_datasets(
-                dataset_levels, cfg, dscfg, infostr=None
+                dataset_levels, cfg, dscfg, infostr=infostr
             )
 
-            # remove variables from memory
             del cfg
             del dscfg
             del dataset_levels
@@ -597,7 +675,7 @@ def main_rt(
     return end_proc
 
 
-def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
+def main_icon(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
     """
     Main flow control. Processes radar data off-line over a period of time
     given either by the user, a trajectory file, or determined by the last
@@ -692,7 +770,7 @@ def main_cosmo(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
     print("- This is the end my friend! See you soon!")
 
 
-def main_cosmo_rt(
+def main_icon_rt(
     cfgfile_list,
     starttime=None,
     endtime=None,

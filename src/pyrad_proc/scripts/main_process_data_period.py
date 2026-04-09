@@ -92,25 +92,32 @@ def main():
 
     parser.add_argument(
         "--MULTIPROCESSING_DSET",
-        type=int,
-        default=0,
-        help="If 1 the generation of the datasets at the "
-        "same processing level will be parallelized",
-    )
-    parser.add_argument(
-        "--MULTIPROCESSING_PROD",
-        type=int,
-        default=0,
-        help="If 1 the generation of the products of each "
-        "dataset will be parallelized",
-    )
-    parser.add_argument(
-        "--PROFILE_MULTIPROCESSING",
-        type=int,
-        default=0,
-        help="If 1 the multiprocessing is profiled",
+        action="store_true",
+        help=(
+            "Parallelize the generation of datasets at the same processing level "
+            "using dask"
+        ),
     )
 
+    parser.add_argument(
+        "--MULTIPROCESSING_PROD",
+        action="store_true",
+        help=("Parallelize the generation of products from each dataset using dask"),
+    )
+
+    parser.add_argument(
+        "--PROFILE_MULTIPROCESSING",
+        action="store_true",
+        help="Perform multiprocessing profiling",
+    )
+    parser.add_argument(
+        "--USE_CHILD_PROCESS",
+        action="store_true",
+        help=(
+            "Perform data reading and processing in a dask-controlled child "
+            "process to improve memory release"
+        ),
+    )
     parser.add_argument(
         "--postproc_cfgfile",
         type=str,
@@ -145,6 +152,8 @@ def main():
         print("Product generation will be parallelized")
     if args.PROFILE_MULTIPROCESSING:
         print("Parallel processing performance will be profiled")
+    if args.USE_CHILD_PROCESS:
+        print("Read and processe will be run in separate dask child processes")
 
     proc_startdate = datetime.datetime.strptime(args.startdate, "%Y%m%d").replace(
         tzinfo=datetime.timezone.utc
@@ -188,6 +197,7 @@ def main():
                 MULTIPROCESSING_DSET=args.MULTIPROCESSING_DSET,
                 MULTIPROCESSING_PROD=args.MULTIPROCESSING_PROD,
                 PROFILE_MULTIPROCESSING=args.PROFILE_MULTIPROCESSING,
+                USE_CHILD_PROCESS=args.USE_CHILD_PROCESS,
             )
             if args.postproc_cfgfile is not None:
                 pyrad_main(
@@ -198,6 +208,7 @@ def main():
                     MULTIPROCESSING_DSET=args.MULTIPROCESSING_DSET,
                     MULTIPROCESSING_PROD=args.MULTIPROCESSING_PROD,
                     PROFILE_MULTIPROCESSING=args.PROFILE_MULTIPROCESSING,
+                    USE_CHILD_PROCESS=args.USE_CHILD_PROCESS,
                 )
         except ValueError:
             print(ValueError)

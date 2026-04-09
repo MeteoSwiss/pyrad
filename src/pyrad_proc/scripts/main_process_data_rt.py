@@ -25,13 +25,16 @@ processing in [s]
 if proc_finish is not none it indicates the time the program is allowed to ran
 berfore forcing it to end
 
+Optional multiprocessing flags:
+    --MULTIPROCESSING_DSET
+    --MULTIPROCESSING_PROD
+    --USE_CHILD_PROCESS
 
 Example:
     python main_process_data_rt.py 'paradiso_fvj_vol.txt' \
 'paradiso_fvj_rhi.txt' --starttime '20140523000000' \
 --endtime '20140523001000' --cfgpath '$HOME/pyrad/config/processing/' \
---proc_period 60 --proc_finish 120
-
+--proc_period 60 --proc_finish 120 --MULTIPROCESSING_DSET
 """
 
 # Author: fvj
@@ -70,17 +73,13 @@ def main():
         "--starttime",
         type=str,
         default=None,
-        help=(
-            "starting time of the data to be processed. " + "Format "
-            "YYYYMMDDhhmmss"
-            ""
-        ),
+        help="starting time of the data to be processed. Format YYYYMMDDhhmmss",
     )
     parser.add_argument(
         "--endtime",
         type=str,
         default=None,
-        help="end time of the data to be processed. Format " "YYYYMMDDhhmmss" "",
+        help="end time of the data to be processed. Format YYYYMMDDhhmmss",
     )
     parser.add_argument(
         "--cfgpath",
@@ -110,6 +109,30 @@ def main():
         help="Disables warnings shown during pyrad processing",
     )
 
+    parser.add_argument(
+        "--MULTIPROCESSING_DSET",
+        action="store_true",
+        help=(
+            "Parallelize the generation of datasets at the same processing level "
+            "using dask"
+        ),
+    )
+
+    parser.add_argument(
+        "--MULTIPROCESSING_PROD",
+        action="store_true",
+        help=("Parallelize the generation of products from each dataset using dask"),
+    )
+
+    parser.add_argument(
+        "--USE_CHILD_PROCESS",
+        action="store_true",
+        help=(
+            "Perform data reading and processing in a dask-controlled child "
+            "process to improve memory release"
+        ),
+    )
+
     args = parser.parse_args()
 
     print(
@@ -123,20 +146,30 @@ def main():
     for ind, cfgfile in enumerate(args.cfgfiles):
         print("config file " + str(ind) + ": " + cfgfile)
         cfgfile_list.append(os.path.join(args.cfgpath, cfgfile))
+
     if args.starttime is not None:
         print("start time: " + args.starttime)
     else:
         print("start time not defined by user")
+
     if args.endtime is not None:
         print("end time: " + args.endtime)
     else:
         print("end time not defined by user")
+
+    if args.MULTIPROCESSING_DSET:
+        print("Dataset generation will be parallelized")
+    if args.MULTIPROCESSING_PROD:
+        print("Product generation will be parallelized")
+    if args.USE_CHILD_PROCESS:
+        print("Read and data processing will be run in separate dask child processes")
 
     proc_starttime = None
     if args.starttime is not None:
         proc_starttime = datetime.datetime.strptime(
             args.starttime, "%Y%m%d%H%M%S"
         ).replace(tzinfo=datetime.timezone.utc)
+
     proc_endtime = None
     if args.endtime is not None:
         proc_endtime = datetime.datetime.strptime(args.endtime, "%Y%m%d%H%M%S").replace(
@@ -153,11 +186,14 @@ def main():
                 proc_period=args.proc_period,
                 proc_finish=args.proc_finish,
                 hide_warnings=args.hide_warnings,
+                MULTIPROCESSING_DSET=args.MULTIPROCESSING_DSET,
+                MULTIPROCESSING_PROD=args.MULTIPROCESSING_PROD,
+                USE_CHILD_PROCESS=args.USE_CHILD_PROCESS,
             )
         except Exception:
             traceback.print_exc()
             if args.proc_finish is None:
-                warn("An exception occurred. " + "Restarting the real time processing")
+                warn("An exception occurred. Restarting the real time processing")
             else:
                 end_proc = True
 

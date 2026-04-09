@@ -15,6 +15,7 @@ Functions for echo classification and filtering
     process_hydro_mf_to_hydro
     process_echo_filter
     process_cdf
+    process_gatefilter
     process_filter_snr
     process_filter_vel_diff
     process_filter_visibility

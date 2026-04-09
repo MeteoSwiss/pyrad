@@ -23,8 +23,6 @@ Functions for reading data from other sensors
     read_lightning_traj
     read_lightning_all
     get_sensor_data
-    read_smn
-    read_smn2
     read_knmi
     read_coord_sensors
     read_disdro_scattering
@@ -36,12 +34,12 @@ Functions for reading data from other sensors
 """
 
 import os
-import gzip
 import glob
 import json
 import datetime
 import csv
 import pandas as pd
+import xarray as xr
 from ..util import warn
 from copy import deepcopy
 import re
@@ -49,6 +47,7 @@ from io import StringIO, BytesIO
 import requests
 import numpy as np
 from zipfile import ZipFile
+import warnings
 
 # Suppress only the InsecureRequestWarning
 import urllib3
@@ -1970,18 +1969,18 @@ def read_lightning_all(
         return None, None, None, None, None, None, None, None
 
 
-def get_sensor_data(date, datatype, cfg):
+def get_sensor_data(start_date, end_date, datatype, cfg):
     """
     Gets data from a point measurement sensor (rain gauge or disdrometer)
 
     Parameters
     ----------
-    date : datetime object
-        measurement date
-
+    start_date : datetime object
+        Start date from which to get sensor data
+    end_date : datetime object
+        End date from which to get sensor data
     datatype : str
         name of the data type to read
-
     cfg : dictionary
         dictionary containing sensor information
 
@@ -1991,46 +1990,9 @@ def get_sensor_data(date, datatype, cfg):
         date, value, type of sensor and measurement period
 
     """
-    if cfg["sensor"] == "rgage":
-        # Try several file formats
-        datapath1 = os.path.join(cfg["smnpath"], date.strftime("%Y%m"))
-        datapath2 = os.path.join(
-            cfg["smnpath"], date.strftime("%Y-%m-%d"), cfg["sensorid"]
-        )
-        datafile1 = os.path.join(
-            datapath1, date.strftime("%Y%m%d") + "_" + cfg["sensorid"] + ".csv*"
-        )
-        datafile2 = os.path.join(
-            datapath2, date.strftime("%Y%m%d") + "_" + cfg["sensorid"] + ".csv*"
-        )
-
-        files1 = glob.glob(datafile1)
-        files2 = glob.glob(datafile2)
-        if len(files1):
-            datafile = files1[0]
-        elif len(files2):
-            datafile = files2[0]
-        else:
-            warn(
-                f"Could not find any raingauge file with names {datafile1} or {datafile2}"
-            )
-        if datafile.endswith(".gz"):
-            with gzip.open(datafile, "rt") as f:
-                num_columns = len(next(f).strip().split(","))
-        else:
-            with open(datafile) as f:
-                num_columns = len(next(f).strip().split(","))
-
-        if num_columns == 3:
-            _, sensordate, sensorvalue = read_smn2(datafile)
-        else:
-            _, sensordate, _, _, _, sensorvalue, _, _ = read_smn(datafile)
-
-        if sensordate is None:
-            return None, None, None, None
-        label = "RG"
-        period = (sensordate[1] - sensordate[0]).total_seconds()
-    elif cfg["sensor"] == "rgage_knmi":
+    date = start_date
+    # Special case for knmi RG data
+    if cfg["sensor"] == "rgage_knmi":
         datapath = f"{cfg['smnpath']}{date.strftime('%Y')}/"
         datafile = f"kis_tor_{date.strftime('%Y%m')}.gz"
         df_rg = read_knmi(f"{datapath}{datafile}")
@@ -2049,167 +2011,91 @@ def get_sensor_data(date, datatype, cfg):
 
         label = "RG"
         period = (df_rg["time_stamp"][1] - df_rg["time_stamp"][0]).total_seconds()
-    elif cfg["sensor"] == "disdro":
-        if datatype in ("dBZ", "dBZc"):
-            sensor_datatype = "dBZ"
-        else:
-            sensor_datatype = datatype
-
-        datapath = (
-            cfg["disdropath"]
-            + cfg["sensorid"]
-            + "/scattering/"
-            + date.strftime("%Y")
-            + "/"
-            + date.strftime("%Y%m")
-            + "/"
-        )
-        datafile = (
-            date.strftime("%Y%m%d")
-            + "_"
-            + cfg["sensorid"]
-            + "_"
-            + cfg["location"]
-            + "_"
-            + str(cfg["freq"])
-            + "GHz_"
-            + sensor_datatype
-            + "_el"
-            + str(cfg["ele"])
-            + ".csv"
+    else:
+        date_str = date.strftime("%Y%m%d")
+        sid = cfg["sensorid"]
+        search_dir_tpl = cfg.get("dir_template", None)
+        varname = cfg["varname"]
+        isdisdro = "disdro" in cfg["sensor"]
+        basepath = cfg["disdropath"] if isdisdro else cfg["smnpath"]
+        if not basepath:
+            if isdisdro:
+                warn(
+                    "You need to specify disdropath in the main config file for comparison with disdrometers!"
+                )
+            else:
+                warn(
+                    "You need to specify smnpath in the main config file for comparison with raingauges!"
+                )
+            return None, None
+        # Narrow the search root if template is provided
+        search_root = _expand_search_dir(
+            basepath, search_dir_tpl, sensorid=sid, date=date
         )
 
-        sensordate, _, sensorvalue, _ = read_disdro(datapath + datafile)
+        # Flexible recursive search
+        patterns = [
+            os.path.join(search_root, "**", f"*{date_str}*.csv*"),
+            # NetCDF
+            os.path.join(search_root, "**", f"*{date_str}*.nc"),
+        ]
+
+        matches = []
+        for pat in patterns:
+            matches.extend(glob.iglob(pat, recursive=True))
+
+        # De-duplicate while keeping paths
+        matches = list(dict.fromkeys(matches))
+
+        if not matches:
+            warn(
+                f"Could not find any {cfg['sensor']} file with patterns: "
+                + " OR ".join(patterns)
+            )
+            return None, None, None, None
+
+        all_dates = []
+        all_values = []
+
+        for datafile in matches:
+            if ".csv" in datafile:
+                sensordate, sensorvalue = read_sensor_data(datafile, varname=varname)
+            elif ".nc" in datafile:
+                sensordate, sensorvalue = read_disdro_data_nc(datafile, varname=varname)
+
+            if sensordate is None or sensorvalue is None:
+                continue
+            all_dates.extend(sensordate)
+            all_values.extend(sensorvalue)
+
+        df = pd.DataFrame(
+            {
+                "time": pd.to_datetime(all_dates),
+                "value": all_values,
+            }
+        )
+
+        # Remove duplicate timestamps (keep latest file value if overlapping)
+        df = df.sort_values("time").drop_duplicates(subset="time", keep="last")
+        import pdb
+
+        pdb.set_trace()
+        sensordate = df["time"].dt.to_pydatetime()
+        sensorvalue = df["value"].to_numpy()
         if sensordate is None:
             return None, None, None, None
-        label = "Disdro"
+
+        label = "disdro" if isdisdro else "RG"
         period = (sensordate[1] - sensordate[0]).total_seconds()
-    elif cfg["sensor"] == "disdro_parsivel":
-        if datatype in ("dBZ", "dBZc"):
-            sensor_datatype = "dBZ"
-        else:
-            sensor_datatype = datatype
 
-        datapath = (
-            f'{cfg["disdropath"]}{cfg["sensorid"]}/Disdro-1min/'
-            f'{date.strftime("%Y")}/'
-        )
-        datafile = f'{date.strftime("%Y%m%d")}.csv'
-
-        df_disdro = read_disdro_parsivel(datapath + datafile)
-        sensordate = df_disdro["t_0"].values
-        if datatype in ("dBZ", "dBZc"):
-            substr = "Disdro_RadarRef_Q5"
-        else:
-            substr = "Disdro_Intensity_Q5"
-
-        sensorvalue = None
-        for col in df_disdro.columns:
-            if substr in col:
-                sensorvalue = df_disdro[col].values
-        if sensorvalue is None:
-            warn(f"No data in file {datapath}{datafile}")
-            return None, None, None, None
-
-        label = "Disdro"
-        period = (df_disdro["t_0"][1] - df_disdro["t_0"][0]).total_seconds()
-    else:
-        warn("Unknown sensor: " + cfg["sensor"])
-        return None, None, None, None
-
+    # Return only sensor date > tstart - sensor res and < tend + sensor_res
+    sensortres = (sensordate[1] - sensordate[0]).total_seconds()
+    mask = (sensordate <= end_date + datetime.timedelta(seconds=sensortres)) & (
+        sensordate >= start_date - datetime.timedelta(seconds=sensortres)
+    )
+    sensordate = sensordate[mask]
+    sensorvalue = sensorvalue[mask]
     return sensordate, sensorvalue, label, period
-
-
-def read_smn(fname):
-    """
-    Reads SwissMetNet data contained in a csv or gzipped csv file.
-
-    Parameters
-    ----------
-    fname : str
-        path of time series file
-
-    Returns
-    -------
-    smn_id, date, pressure, temp, rh, precip, wspeed, wdir : tuple
-        The read values
-    """
-    fill_value = 10000000.0
-
-    try:
-        # Use pandas to read the file (supports .gz files directly)
-        df = pd.read_csv(fname, compression="gzip" if fname.endswith(".gz") else None)
-
-        # Convert date strings to datetime objects
-        df["DateTime"] = pd.to_datetime(df["DateTime"], format="%Y%m%d%H%M%S")
-
-        # Identify columns by searching for keywords (handles cases like AirPressure:degC)
-        air_pressure_col = [col for col in df.columns if "AirPressure" in col][0]
-        temp_col = [col for col in df.columns if "2mTemperature" in col][0]
-        rh_col = [col for col in df.columns if "RH" in col][0]
-        precip_col = [col for col in df.columns if "Precipitation" in col][0]
-        wspeed_col = [col for col in df.columns if "Windspeed" in col][0]
-        wdir_col = [col for col in df.columns if "Winddirection" in col][0]
-
-        # Mask invalid data (fill_value)
-        pressure = np.ma.masked_values(
-            df[air_pressure_col].astype("float32"), fill_value
-        )
-        temp = np.ma.masked_values(df[temp_col].astype("float32"), fill_value)
-        rh = np.ma.masked_values(df[rh_col].astype("float32"), fill_value)
-        precip = np.ma.masked_values(df[precip_col].astype("float32"), fill_value)
-        wspeed = np.ma.masked_values(df[wspeed_col].astype("float32"), fill_value)
-        wdir = np.ma.masked_values(df[wdir_col].astype("float32"), fill_value)
-
-        # Convert precip from mm/10min to mm/h
-        precip *= 6.0
-
-        # Extract smn_id and date
-        smn_id = df["StationID"].astype("float32").values
-        date = df["DateTime"].tolist()
-
-        return smn_id, date, pressure, temp, rh, precip, wspeed, wdir
-
-    except Exception as e:
-        warn(f"Unable to read file {fname}: {e}")
-        return None, None, None, None, None, None, None, None
-
-
-def read_smn2(fname):
-    """
-    Reads SwissMetNet data contained in a csv file with format
-    station,time,value
-
-    Parameters
-    ----------
-    fname : str
-        path of time series file
-
-    Returns
-    -------
-    smn_id, date , value : tupple
-        The read values
-
-    """
-    try:
-        df = pd.read_csv(fname, sep=",", parse_dates=["DateTime"])
-        # Try to convert stationID to int
-        try:
-            df["StationID"] = pd.to_numeric(df["StationID"])
-        except ValueError:
-            pass
-        # Convert dates to python datetime
-        arr_date = np.array(df["DateTime"].dt.to_pydatetime())
-        df["DateTime"] = pd.Series(arr_date, dtype=object)
-        return (
-            np.array(df["StationID"]),
-            df["DateTime"].to_list(),
-            np.array(df["Value"]),
-        )
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
-        return None, None, None
 
 
 def read_knmi(fname, col_names=None):
@@ -2452,65 +2338,184 @@ def read_disdro_scattering(fname):
         )
 
 
-def read_disdro(fname):
+def read_sensor_data(fname, varname):
     """
-    Reads scattering parameters computed from disdrometer data contained in a
-    text file
+    Reads gauge or disdrometer data contained in a csv file
 
     Parameters
     ----------
     fname : str
-        path of time series file
+        Path of time series file
+
+    varname : str
+        Name of the variable column to read.
 
     Returns
     -------
-    date, preciptype, variable, scattering temperature: tuple
-        The read values
+    date, variable: tuple
+    """
+
+    try:
+        # --------------------------------------------------
+        # Read file with pandas
+        # --------------------------------------------------
+        df = pd.read_csv(fname, comment="#", encoding="utf-8", engine="python")
+
+        if df.empty:
+            warnings.warn(f"Empty file: {fname}")
+            return (None, None, None, None)
+
+        # --------------------------------------------------
+        # Auto-detect datetime column
+        # --------------------------------------------------
+        datetime_col = None
+        for col in df.columns:
+            try:
+                parsed = pd.to_datetime(
+                    df[col], errors="coerce", format="mixed", utc=True
+                )
+                if parsed.notna().sum() > 0 and parsed.notna().sum() == len(parsed):
+                    datetime_col = col
+                    df[col] = parsed
+                    break
+            except Exception:
+                continue
+
+        if datetime_col is None:
+            warnings.warn("Could not detect datetime column.")
+            return (None, None, None, None)
+
+        if varname not in df.columns:
+            warnings.warn(f"Column '{varname}' not found in {fname}")
+            return (None, None, None, None)
+
+        date = df[datetime_col].dt.to_pydatetime()
+        variable = df[varname].to_numpy()
+
+        # Convert to masked arrays (compatibility)
+        fill = get_fillvalue()
+
+        variable = np.ma.masked_values(variable, fill)
+        np.ma.set_fill_value(variable, fill)
+
+        return (date, variable)
+
+    except Exception as e:
+        warnings.warn(str(e))
+        warnings.warn("Unable to read file " + fname)
+        return (None, None)
+
+
+def read_disdro_data_nc(fname, varname):
+    """
+    Reads disdrometer data from a netCDF file as obtained through cloudnet (ACTRIS)
+
+    Parameters
+    ----------
+    fname : str
+        Path of time series file
+
+    varname : str
+        Name of the variable column to read.
+
+    Returns
+    -------
+    date, variable: tuple
+    """
+    """
+    Read a single variable from a NetCDF file and return:
+      - the variable values
+      - the associated time coordinate (as a 1D array)
+
+    The function:
+      1) opens the dataset
+      2) finds the variable
+      3) identifies which dimension is the time dimension by matching a dimension
+         present in the variable with a dataset coordinate (prefers "time" if present)
+      4) returns (time, values) as numpy arrays.
 
     """
-    try:
-        var = re.search("GHz_(.{,7})_el", fname).group(1)
-    except AttributeError:
-        # AAA, ZZZ not found in the original string
-        var = ""  # apply your error handling
-    try:
-        with open(fname, "r", newline="", encoding="utf-8", errors="ignore") as csvfile:
-            # first count the lines
-            reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith("#")), delimiter=","
+    with xr.open_dataset(fname, engine="netcdf4", decode_cf=True) as ds:
+        if varname not in ds.variables:
+            raise KeyError(
+                f"Variable '{varname}' not found. Available variables include: "
+                f"{list(ds.variables)[:30]}{'...' if len(ds.variables) > 30 else ''}"
             )
-            nrows = sum(1 for row in reader)
 
-            variable = np.ma.empty(nrows, dtype="float32")
-            scatt_temp = np.ma.empty(nrows, dtype="float32")
+        da = ds[varname]
 
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(
-                (row for row in csvfile if not row.startswith("#")), delimiter=","
+        if da.ndim == 0:
+            raise ValueError(
+                f"Variable '{varname}' has no dimensions (scalar). No associated time dimension."
             )
-            i = 0
-            date = []
-            preciptype = []
-            for row in reader:
-                date.append(
-                    datetime.datetime.strptime(
-                        row["date"], "%Y-%m-%d %H:%M:%S"
-                    ).replace(tzinfo=datetime.timezone.utc)
+
+        # Candidate dims of the variable
+        dims = list(da.dims)
+
+        # Prefer an explicit 'time' dim if present
+        time_dim = None
+        if "time" in dims:
+            time_dim = "time"
+        else:
+            # Otherwise: find a dim that has an associated coordinate variable.
+            # Prefer coords that look like time (name contains 'time', or units like 'since').
+            coord_candidates = []
+            for d in dims:
+                if d in ds.coords or d in ds.variables:
+                    coord_candidates.append(d)
+
+            if not coord_candidates:
+                raise ValueError(
+                    f"Could not find any coordinate among variable dims {dims}. "
+                    "No associated time coordinate found."
                 )
-                preciptype.append(row["Precip Code"])
-                variable[i] = float(row[var])
-                scatt_temp[i] = float(row["Scattering Temp [deg C]"])
-                i += 1
-            variable = np.ma.masked_values(variable, get_fillvalue())
-            np.ma.set_fill_value(variable, get_fillvalue())
-            csvfile.close()
 
-            return (date, preciptype, variable, scatt_temp)
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
-        return (None, None, None, None)
+            # Heuristic: choose the most time-like coordinate
+            def score_dim(d: str) -> int:
+                s = 0
+                name = d.lower()
+                if "time" in name:
+                    s += 10
+                # Check CF-style time units if not decoded
+                try:
+                    units = ds[d].attrs.get("units", "")
+                    if isinstance(units, str) and "since" in units.lower():
+                        s += 8
+                except Exception:
+                    pass
+                # Prefer 1D coords matching the dim
+                try:
+                    if ds[d].ndim == 1 and ds[d].dims == (d,):
+                        s += 3
+                except Exception:
+                    pass
+                return s
+
+            time_dim = max(coord_candidates, key=score_dim)
+
+        # Extract time coord
+        if time_dim in ds.coords:
+            t = ds.coords[time_dim]
+        else:
+            # sometimes the coordinate exists as a variable but not marked as coord
+            t = ds[time_dim]
+
+        # Ensure time is 1D along time_dim
+        if t.ndim != 1 or t.dims != (time_dim,):
+            # As a fallback, try to index it down to 1D if possible
+            t = t.squeeze()
+            if t.ndim != 1:
+                raise ValueError(
+                    f"Found time candidate '{time_dim}', but it is not a 1D coordinate. "
+                    f"Got dims={t.dims}, shape={t.shape}."
+                )
+
+        # Return numpy arrays
+        time = (
+            pd.to_datetime(t.values).tz_localize("UTC").to_pydatetime()
+        )  # make TZ aware
+        values = da.values
+    return time, values
 
 
 def read_disdro_parsivel(fname):
@@ -2943,3 +2948,28 @@ def _check_new_sounding(date1: datetime, date2: datetime) -> bool:
     date2_sounding_time = _closest_sounding_time(date2)
     # Check if the radiosounding times are different
     return date1_sounding_time != date2_sounding_time
+
+
+def _expand_search_dir(smnpath: str, tpl: str | None, *, sensorid: str, date) -> str:
+    """
+    Expand a directory template relative to smnpath.
+
+    Supports:
+      - {sensorid}
+      - strftime tokens like %Y%m%d
+      - also accepts "{%Y%m%d}" and turns it into "%Y%m%d"
+    """
+    if not tpl:
+        return smnpath
+
+    # Turn "{%Y%m%d}" into "%Y%m%d" (and similar)
+    tpl = re.sub(r"\{(%[^}]+)\}", r"\1", tpl)
+
+    # Expand date tokens
+    expanded = date.strftime(tpl)
+
+    # Expand {sensorid} (and potentially other .format placeholders later)
+    expanded = expanded.format(sensorid=sensorid)
+
+    # Allow absolute templates; otherwise treat as relative to smnpath
+    return expanded if os.path.isabs(expanded) else os.path.join(smnpath, expanded)

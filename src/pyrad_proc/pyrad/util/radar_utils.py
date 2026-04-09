@@ -574,7 +574,6 @@ def time_series_statistics(
         else df_out.index.tz_convert("UTC")
     ).to_pydatetime()
     val_out_vec = df_out.values.flatten()
-
     return t_out_vec, val_out_vec
 
 
@@ -1623,6 +1622,9 @@ def compute_quantiles_from_hist(bin_centers, hist, quantiles=None):
     np_t = np.ma.sum(hist)
     if np_t < 10:
         return quantiles, values
+
+    if isinstance(quantiles, list):
+        quantiles = np.array(quantiles)
 
     freq = hist / np_t
     rel_freq = np.ma.cumsum(freq)

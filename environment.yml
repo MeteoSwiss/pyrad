@@ -11,5 +11,4 @@ dependencies:
   - netcdf4
   - wradlib
   - cartopy
-  - pyrad_mch
   - pyart_mch
