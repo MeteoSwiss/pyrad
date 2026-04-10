@@ -2077,9 +2077,6 @@ def get_sensor_data(start_date, end_date, datatype, cfg):
 
         # Remove duplicate timestamps (keep latest file value if overlapping)
         df = df.sort_values("time").drop_duplicates(subset="time", keep="last")
-        import pdb
-
-        pdb.set_trace()
         sensordate = df["time"].dt.to_pydatetime()
         sensorvalue = df["value"].to_numpy()
         if sensordate is None:
@@ -2369,17 +2366,45 @@ def read_sensor_data(fname, varname):
         # Auto-detect datetime column
         # --------------------------------------------------
         datetime_col = None
-        for col in df.columns:
-            try:
-                parsed = pd.to_datetime(
-                    df[col], errors="coerce", format="mixed", utc=True
-                )
-                if parsed.notna().sum() > 0 and parsed.notna().sum() == len(parsed):
-                    datetime_col = col
-                    df[col] = parsed
-                    break
-            except Exception:
+
+        # Prefer columns whose name suggests date/time
+        candidate_cols = sorted(
+            df.columns,
+            key=lambda c: 0
+            if any(k in c.lower() for k in ["date", "time", "timestamp"])
+            else 1,
+        )
+
+        for col in candidate_cols:
+            s = df[col]
+
+            # Skip numeric columns unless the column name looks like datetime
+            if pd.api.types.is_numeric_dtype(s) and not any(
+                k in col.lower() for k in ["date", "time", "timestamp"]
+            ):
                 continue
+
+            # Try specific formats first
+            parsed = pd.to_datetime(
+                s,
+                errors="coerce",
+                format="%Y%m%d%H%M%S",  # matches 20250417000000
+                utc=True,
+            )
+
+            # Fallback to generic parsing if needed
+            if parsed.notna().sum() != len(s):
+                parsed = pd.to_datetime(s, errors="coerce", format="mixed", utc=True)
+
+            # Accept only if all values parsed
+            if parsed.notna().sum() == len(s):
+                # Reject columns that become a single repeated timestamp
+                if parsed.nunique() <= 1:
+                    continue
+
+                datetime_col = col
+                df[col] = parsed
+                break
 
         if datetime_col is None:
             warnings.warn("Could not detect datetime column.")
@@ -2388,7 +2413,6 @@ def read_sensor_data(fname, varname):
         if varname not in df.columns:
             warnings.warn(f"Column '{varname}' not found in {fname}")
             return (None, None, None, None)
-
         date = df[datetime_col].dt.to_pydatetime()
         variable = df[varname].to_numpy()
 
