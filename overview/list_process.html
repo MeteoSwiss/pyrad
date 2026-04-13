@@ -27,21 +27,21 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
     <script src="../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -51,6 +51,7 @@
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'overview/list_process';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,15 +59,19 @@
     <link rel="prev" title="Product configuration file" href="prod.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.1.2" />   
+  <meta name="docsearch:version" content="2.1.2" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+     
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
-
+  <body data-default-mode="light">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
@@ -98,7 +103,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -333,6 +338,7 @@
         <div class="sidebar-primary-item">
 <div id="searchbox"></div></div>
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -6916,17 +6922,6 @@
 </div>
 </div>
 </dd>
-<dt>colocgatespath<span class="classifier">string.</span></dt><dd><div class="line-block">
-<div class="line">base path to the file containing the coordinates of the co-located</div>
-<div class="line-block">
-<div class="line">gates</div>
-</div>
-</div>
-</dd>
-<dt>coloc_radars_name<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">string identifying the radar names</div>
-</div>
-</dd>
 <dt>rays_are_indexed<span class="classifier">bool. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">If True it is considered that the rays are indexed and that the</div>
 <div class="line-block">
@@ -6947,8 +6942,11 @@
 <div class="line">range tolerance between the two radars. Default 50 m</div>
 </div>
 </dd>
-<dt>coloc_data_dir<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
-<div class="line">name of the directory containing the csv file with colocated data</div>
+<dt>coloc_gates_file<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">name of the csv file containing the list of colocated data,</div>
+<div class="line-block">
+<div class="line">as generated with the WRITE_COLOCATED_GATES product.</div>
+</div>
 </div>
 </dd>
 </dl>
@@ -8368,7 +8366,7 @@
 <dt>description</dt><dd><blockquote>
 <div><p>computes a flag field describing the conditions of the data used while averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter, and non-rain precipitation. It is a packed representation of 4 numbers into one large integer. Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter, and +1E9 for non-rain. Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor classification or temperature field to identify precipitation phase.</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_avg_flag">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><div class="line-block">
@@ -8420,7 +8418,7 @@
 <dt>description</dt><dd><blockquote>
 <div><p>computes the temporal mean of a field</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_avg">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><div class="line-block">
@@ -8457,7 +8455,7 @@
 <dt>description</dt><dd><blockquote>
 <div><p>computes the temporal mean of a field weighted by the reflectivity</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_weighted_time_avg">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_weighted_time_avg">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><div class="line-block">
@@ -8492,7 +8490,7 @@
 <dt>description</dt><dd><blockquote>
 <div><p>computes the temporal statistics of a field</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_stats">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><div class="line-block">
@@ -8548,7 +8546,7 @@
 <dt>description</dt><dd><blockquote>
 <div><p>computes the temporal mean of a field</p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats2">[Source]</a></p>
+<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_stats2">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><div class="line-block">
@@ -8799,7 +8797,7 @@
 <h3>POINT_MEASUREMENT<a class="headerlink" href="#point-measurement" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><blockquote>
-<div><p>Obtains the radar data at a point location.</p>
+<div><p>Obtains the radar data at a point location. Multiple radars are supported only if latlon is True.</p>
 </div></blockquote>
 <p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_point_measurement">[Source]</a></p>
 </dd>
@@ -8807,7 +8805,9 @@
 <dt>datatype<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">The data type where we want to extract the point measurement,</div>
 <div class="line-block">
-<div class="line">can be any datatype supported by pyrad and available in the data</div>
+<div class="line">can be any datatype supported by pyrad and available in the data.</div>
+<div class="line">If multiple radars are provided, the datatype must be the same for all</div>
+<div class="line">of them.</div>
 </div>
 </div>
 </dd>
@@ -9115,8 +9115,8 @@
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vol">VOL</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attenuation">ATTENUATION</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#azi-avg">AZI_AVG</a></li>
@@ -9331,13 +9331,13 @@
   </nav></div>
 
   <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/overview/list_process.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/overview/list_process.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -9352,8 +9352,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -9377,7 +9377,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
 </p></div>
       
     </div>

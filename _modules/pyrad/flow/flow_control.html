@@ -26,21 +26,21 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -50,20 +50,25 @@
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/flow/flow_control';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.1.2" />   
+  <meta name="docsearch:version" content="2.1.2" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+     
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
-
+  <body data-default-mode="light">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
@@ -95,7 +100,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -390,8 +395,8 @@
 
 <span class="sd">    main</span>
 <span class="sd">    main_rt</span>
-<span class="sd">    main_cosmo</span>
-<span class="sd">    main_cosmo_rt</span>
+<span class="sd">    main_icon</span>
+<span class="sd">    main_icon_rt</span>
 <span class="sd">    main_gecsx</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -428,15 +433,28 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">dask.diagnostics</span><span class="w"> </span><span class="kn">import</span> <span class="n">Profiler</span><span class="p">,</span> <span class="n">ResourceProfiler</span><span class="p">,</span> <span class="n">CacheProfiler</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">dask.diagnostics</span><span class="w"> </span><span class="kn">import</span> <span class="n">visualize</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">bokeh.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">export_png</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dask.distributed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
 
     <span class="n">_DASK_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;dask not available: The processing will not be parallelized&quot;</span><span class="p">,</span> <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;dask and/or dask.distributed not available: The processing cannot be parallelized&quot;</span><span class="p">,</span>
+        <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">_DASK_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dask.diagnostics</span><span class="w"> </span><span class="kn">import</span> <span class="n">Profiler</span><span class="p">,</span> <span class="n">ResourceProfiler</span><span class="p">,</span> <span class="n">CacheProfiler</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dask.diagnostics</span><span class="w"> </span><span class="kn">import</span> <span class="n">visualize</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">bokeh.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">export_png</span>
+
+    <span class="n">_PROFILER_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;dask.diagnostics and/or distributed and/or bokeh not available: No profiling of parallelization will be performed&quot;</span><span class="p">,</span>
+        <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_PROFILER_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="main">
@@ -480,12 +498,13 @@
 <span class="sd">        (e.g. &#39;RUN57&#39;). This string is added to product files.</span>
 <span class="sd">    MULTIPROCESSING_DSET : Bool</span>
 <span class="sd">        If true the generation of datasets at the same processing level will</span>
-<span class="sd">        be parallelized</span>
+<span class="sd">        be parallelized. This requires installation of dask.</span>
 <span class="sd">    MULTIPROCESSING_PROD : Bool</span>
 <span class="sd">        If true the generation of products from each dataset will be</span>
-<span class="sd">        parallelized</span>
+<span class="sd">        parallelized. This requires installation of dask.</span>
 <span class="sd">    PROFILE_MULTIPROCESSING : Bool</span>
-<span class="sd">        If true and code parallelized the multiprocessing is profiled</span>
+<span class="sd">        If true and code parallelized the multiprocessing is profiled. This requires</span>
+<span class="sd">        installation of dask, distributed and bokeh libraries.</span>
 <span class="sd">    USE_CHILD_PROCESS : Bool</span>
 <span class="sd">        If true the reading and processing of the data will be performed by</span>
 <span class="sd">        a child process controlled by dask. This is done to make sure all</span>
@@ -514,6 +533,8 @@
         <span class="n">MULTIPROCESSING_PROD</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">PROFILE_MULTIPROCESSING</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">USE_CHILD_PROCESS</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_PROFILER_AVAILABLE</span><span class="p">:</span>
+        <span class="n">PROFILE_MULTIPROCESSING</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="c1"># check if multiprocessing profiling is necessary</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">MULTIPROCESSING_DSET</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">MULTIPROCESSING_PROD</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">USE_CHILD_PROCESS</span><span class="p">:</span>
@@ -665,7 +686,6 @@
                 <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">,</span>
                 <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">,</span>
             <span class="p">)</span>
-
             <span class="c1"># delete variables</span>
             <span class="k">del</span> <span class="n">radar_list</span>
 
@@ -711,6 +731,9 @@
     <span class="n">proc_period</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">proc_finish</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">hide_warnings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">USE_CHILD_PROCESS</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    main flow control. Processes radar data in real time. The start and end</span>
@@ -735,6 +758,16 @@
 <span class="sd">        if set to true it will hide the warnings during the pyrad processing</span>
 <span class="sd">        this is useful when logging the outputs to log files, as they can</span>
 <span class="sd">        become very large</span>
+<span class="sd">    MULTIPROCESSING_DSET : Bool</span>
+<span class="sd">        If true the generation of datasets at the same processing level will</span>
+<span class="sd">        be parallelized. This requires installation of dask.</span>
+<span class="sd">    MULTIPROCESSING_PROD : Bool</span>
+<span class="sd">        If true the generation of products from each dataset will be</span>
+<span class="sd">        parallelized. This requires installation of dask.</span>
+<span class="sd">    USE_CHILD_PROCESS : Bool</span>
+<span class="sd">        If true the reading and processing of the data will be performed by</span>
+<span class="sd">        a child process controlled by dask. This is done to make sure all</span>
+<span class="sd">        memory used is released.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -755,11 +788,24 @@
     <span class="k">if</span> <span class="n">hide_warnings</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Define behaviour of warnings</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>  <span class="c1"># always print matching warnings</span>
-        <span class="c1"># warnings.simplefilter(&#39;error&#39;)  # turn matching warnings into</span>
-        <span class="c1"># exceptions</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>  <span class="c1"># define format</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;always&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">formatwarning</span> <span class="o">=</span> <span class="n">_warning_format</span>
+
+    <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
+        <span class="n">input_queue</span> <span class="o">=</span> <span class="n">_initialize_listener</span><span class="p">()</span>
+
+    <span class="c1"># Disable multiprocessing options if dask is not available</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_DASK_AVAILABLE</span><span class="p">:</span>
+        <span class="n">MULTIPROCESSING_DSET</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">MULTIPROCESSING_PROD</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">USE_CHILD_PROCESS</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># If multiple modes are enabled, create a client so tasks can launch tasks</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">USE_CHILD_PROCESS</span><span class="p">)</span>
+        <span class="o">&gt;</span> <span class="mi">1</span>
+    <span class="p">):</span>
+        <span class="n">Client</span><span class="p">()</span>
 
     <span class="c1"># The processing will be allowed to run for a limited period</span>
     <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -770,9 +816,6 @@
         <span class="c1"># startime_proc = startime_proc.replace(hour=10)</span>
 
         <span class="n">endtime_proc</span> <span class="o">=</span> <span class="n">startime_proc</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">proc_finish</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
-        <span class="n">input_queue</span> <span class="o">=</span> <span class="n">_initialize_listener</span><span class="p">()</span>
 
     <span class="n">cfg_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">datacfg_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -787,6 +830,7 @@
             <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
         <span class="n">datacfg</span> <span class="o">=</span> <span class="n">_create_datacfg_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">infostr</span><span class="p">:</span>
@@ -801,7 +845,7 @@
         <span class="n">last_processed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last_processed</span><span class="p">)</span>
 
         <span class="c1"># get data types and levels</span>
-        <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;NumRadars&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">datatypesdescr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">_get_datatype_list</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">radarnr</span><span class="o">=</span><span class="s2">&quot;RADAR&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:03d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
@@ -819,7 +863,6 @@
         <span class="n">datatypesdescr_list_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datatypesdescr_list</span><span class="p">)</span>
         <span class="n">dataset_levels_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset_levels</span><span class="p">)</span>
 
-        <span class="c1"># remove variables from memory</span>
         <span class="k">del</span> <span class="n">cfg</span>
         <span class="k">del</span> <span class="n">datacfg</span>
         <span class="k">del</span> <span class="n">dscfg</span>
@@ -833,7 +876,6 @@
     <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">end_proc</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
-            <span class="c1"># check if user has requested exit</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
                 <span class="n">end_proc</span> <span class="o">=</span> <span class="n">user_input</span>
@@ -848,31 +890,22 @@
         <span class="c1">#     year=endtime.year, month=endtime.month, day=endtime.day)</span>
         <span class="c1"># nowtime = nowtime.replace(hour=10)</span>
 
-        <span class="c1"># if processing end time exceeded finalize processing</span>
-        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
-                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Allowed processing time exceeded&quot;</span><span class="p">)</span>
-                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">nowtime</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
+            <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Allowed processing time exceeded&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
 
-        <span class="c1"># end time has been set and current time older than end time</span>
-        <span class="c1"># quit processing</span>
-        <span class="k">if</span> <span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&gt;</span> <span class="n">endtime</span><span class="p">:</span>
-                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">endtime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">nowtime</span> <span class="o">&gt;</span> <span class="n">endtime</span><span class="p">:</span>
+            <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">break</span>
 
-        <span class="c1"># start time has been set. Check if current time has to be</span>
-        <span class="c1"># processed. If not sleep until next proc_period</span>
-        <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nowtime</span> <span class="o">&lt;</span> <span class="n">starttime</span><span class="p">:</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span><span class="p">)</span>
-                <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">nowtime</span> <span class="o">&lt;</span> <span class="n">starttime</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span><span class="p">)</span>
+            <span class="k">continue</span>
 
         <span class="n">vol_processed</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfg_list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">ALLOW_USER_BREAK</span><span class="p">:</span>
-                <span class="c1"># check if user has requested exit</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">user_input</span> <span class="o">=</span> <span class="n">input_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
                     <span class="n">end_proc</span> <span class="o">=</span> <span class="n">user_input</span>
@@ -886,6 +919,7 @@
             <span class="n">datatypesdescr_list</span> <span class="o">=</span> <span class="n">datatypesdescr_list_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
             <span class="n">dataset_levels</span> <span class="o">=</span> <span class="n">dataset_levels_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
             <span class="n">last_processed</span> <span class="o">=</span> <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
+
             <span class="k">if</span> <span class="n">infostr_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -904,18 +938,66 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- master file: &quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">masterfile</span><span class="p">))</span>
             <span class="n">master_voltime</span> <span class="o">=</span> <span class="n">get_datetime</span><span class="p">(</span><span class="n">masterfile</span><span class="p">,</span> <span class="n">masterdatatypedescr</span><span class="p">)</span>
 
-            <span class="c1"># get data of master radar</span>
-            <span class="n">radar_list</span> <span class="o">=</span> <span class="n">_get_radars_data</span><span class="p">(</span>
-                <span class="n">master_voltime</span><span class="p">,</span>
-                <span class="n">datatypesdescr_list</span><span class="p">,</span>
-                <span class="n">datacfg</span><span class="p">,</span>
-                <span class="n">num_radars</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s2">&quot;NumRadars&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">USE_CHILD_PROCESS</span><span class="p">:</span>
+                <span class="n">data_reading</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_get_radars_data</span><span class="p">)(</span>
+                    <span class="n">master_voltime</span><span class="p">,</span>
+                    <span class="n">datatypesdescr_list</span><span class="p">,</span>
+                    <span class="n">datacfg</span><span class="p">,</span>
+                    <span class="n">num_radars</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s2">&quot;NumRadars&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
 
-            <span class="c1"># process all data sets</span>
-            <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
-                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">radar_list</span><span class="p">,</span> <span class="n">master_voltime</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span>
-            <span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">radar_list</span> <span class="o">=</span> <span class="n">data_reading</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+                    <span class="k">del</span> <span class="n">data_reading</span>
+
+                    <span class="n">dscfg_aux</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">dscfg</span><span class="p">)</span>
+                    <span class="n">data_processing</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_process_datasets</span><span class="p">)(</span>
+                        <span class="n">dataset_levels</span><span class="p">,</span>
+                        <span class="n">cfg</span><span class="p">,</span>
+                        <span class="n">dscfg_aux</span><span class="p">,</span>
+                        <span class="n">radar_list</span><span class="p">,</span>
+                        <span class="n">master_voltime</span><span class="p">,</span>
+                        <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">,</span>
+                        <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">,</span>
+                        <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">data_processing</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+                        <span class="k">del</span> <span class="n">data_processing</span>
+                        <span class="k">del</span> <span class="n">dscfg_aux</span>
+                        <span class="k">del</span> <span class="n">radar_list</span>
+
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+                        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
+                        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+                        <span class="k">continue</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
+                    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+                    <span class="k">continue</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">radar_list</span> <span class="o">=</span> <span class="n">_get_radars_data</span><span class="p">(</span>
+                    <span class="n">master_voltime</span><span class="p">,</span>
+                    <span class="n">datatypesdescr_list</span><span class="p">,</span>
+                    <span class="n">datacfg</span><span class="p">,</span>
+                    <span class="n">num_radars</span><span class="o">=</span><span class="n">datacfg</span><span class="p">[</span><span class="s2">&quot;NumRadars&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+
+                <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>
+                    <span class="n">dataset_levels</span><span class="p">,</span>
+                    <span class="n">cfg</span><span class="p">,</span>
+                    <span class="n">dscfg</span><span class="p">,</span>
+                    <span class="n">radar_list</span><span class="p">,</span>
+                    <span class="n">master_voltime</span><span class="p">,</span>
+                    <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span><span class="p">,</span>
+                    <span class="n">MULTIPROCESSING_DSET</span><span class="o">=</span><span class="n">MULTIPROCESSING_DSET</span><span class="p">,</span>
+                    <span class="n">MULTIPROCESSING_PROD</span><span class="o">=</span><span class="n">MULTIPROCESSING_PROD</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">del</span> <span class="n">radar_list</span>
 
             <span class="n">last_processed_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span> <span class="o">=</span> <span class="n">master_voltime</span>
             <span class="n">write_last_state</span><span class="p">(</span><span class="n">master_voltime</span><span class="p">,</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;lastStateFile&quot;</span><span class="p">])</span>
@@ -923,8 +1005,6 @@
 
             <span class="n">vol_processed</span> <span class="o">=</span> <span class="kc">True</span>
 
-            <span class="c1"># remove variables from memory</span>
-            <span class="k">del</span> <span class="n">radar_list</span>
             <span class="k">del</span> <span class="n">cfg</span>
             <span class="k">del</span> <span class="n">datacfg</span>
             <span class="k">del</span> <span class="n">dscfg</span>
@@ -945,19 +1025,16 @@
         <span class="k">if</span> <span class="n">vol_processed</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing time </span><span class="si">%s</span><span class="s2"> s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">proc_time</span><span class="p">)</span>
 
-        <span class="c1"># if processing end time exceeded finalize processing</span>
-        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nowtime_new</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
-                <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Allowed processing time exceeded&quot;</span><span class="p">)</span>
-                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">proc_finish</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">nowtime_new</span> <span class="o">&gt;=</span> <span class="n">endtime_proc</span><span class="p">:</span>
+            <span class="n">end_proc</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Allowed processing time exceeded&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
 
         <span class="k">if</span> <span class="n">proc_time</span> <span class="o">&lt;</span> <span class="n">proc_period</span><span class="p">:</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">proc_period</span> <span class="o">-</span> <span class="n">proc_time</span><span class="p">)</span>
 
     <span class="c1"># only do post processing if program properly terminated by user</span>
     <span class="k">if</span> <span class="n">end_proc</span><span class="p">:</span>
-        <span class="c1"># post-processing of the datasets</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">- Post-processing datasets:&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">icfg</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cfg_list</span><span class="p">):</span>
             <span class="n">dscfg</span> <span class="o">=</span> <span class="n">dscfg_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
@@ -966,11 +1043,11 @@
                 <span class="n">infostr</span> <span class="o">=</span> <span class="n">infostr_list</span><span class="p">[</span><span class="n">icfg</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">infostr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
             <span class="n">dscfg</span><span class="p">,</span> <span class="n">traj</span> <span class="o">=</span> <span class="n">_postprocess_datasets</span><span class="p">(</span>
-                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="kc">None</span>
+                <span class="n">dataset_levels</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">dscfg</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="n">infostr</span>
             <span class="p">)</span>
 
-            <span class="c1"># remove variables from memory</span>
             <span class="k">del</span> <span class="n">cfg</span>
             <span class="k">del</span> <span class="n">dscfg</span>
             <span class="k">del</span> <span class="n">dataset_levels</span>
@@ -984,7 +1061,7 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main_cosmo</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trajfile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main_icon</span><span class="p">(</span><span class="n">cfgfile</span><span class="p">,</span> <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trajfile</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">infostr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Main flow control. Processes radar data off-line over a period of time</span>
 <span class="sd">    given either by the user, a trajectory file, or determined by the last</span>
@@ -1079,7 +1156,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- This is the end my friend! See you soon!&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">main_cosmo_rt</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main_icon_rt</span><span class="p">(</span>
     <span class="n">cfgfile_list</span><span class="p">,</span>
     <span class="n">starttime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">endtime</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1521,8 +1598,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1546,7 +1623,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
 </p></div>
       
     </div>

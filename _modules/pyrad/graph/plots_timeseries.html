@@ -26,21 +26,21 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -50,20 +50,25 @@
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/graph/plots_timeseries';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.1.2" />   
+  <meta name="docsearch:version" content="2.1.2" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+     
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
-
+  <body data-default-mode="light">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
@@ -95,7 +100,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -400,12 +405,14 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.dates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mdates</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
 <span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;Agg&quot;</span><span class="p">)</span>
 
@@ -422,7 +429,7 @@
     <span class="n">fname_list</span><span class="p">,</span>
     <span class="n">labelx</span><span class="o">=</span><span class="s2">&quot;Time [UTC]&quot;</span><span class="p">,</span>
     <span class="n">labely</span><span class="o">=</span><span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sensor&quot;</span><span class="p">],</span>
+    <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># &lt;- changed default</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Time Series&quot;</span><span class="p">,</span>
     <span class="n">period</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -434,74 +441,111 @@
     <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    plots a time series</span>
+<span class="sd">    Plot one or multiple time series.</span>
+
+<span class="sd">    Behavior</span>
+<span class="sd">    --------</span>
+<span class="sd">    - Legacy: if `data_list` is a list of 1D arrays (one per series), plot them.</span>
+<span class="sd">    - Multi-timeseries: if `data_list` is a list of lists/tuples, each inner list</span>
+<span class="sd">      represents a &quot;group&quot; (e.g., multiple radars) and all series in the group</span>
+<span class="sd">      are plotted as lines. If labels is None, defaults to RADAR001, RADAR002, ...</span>
+
+<span class="sd">      Examples:</span>
+<span class="sd">        data_list = [series1, series2]                 -&gt; 2 lines (legacy)</span>
+<span class="sd">        data_list = [[r1, r2, r3]]                     -&gt; 3 lines</span>
+<span class="sd">        data_list = [[r1, r2], [r1b, r2b]]             -&gt; 4 lines (all plotted)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    tvec : datetime object</span>
-<span class="sd">        time of the time series</span>
-<span class="sd">    data_list : list of float array</span>
-<span class="sd">        values of the time series</span>
+<span class="sd">    tvec : array-like of datetime</span>
+<span class="sd">        Time vector.</span>
+<span class="sd">    data_list : list</span>
+<span class="sd">        List of series (legacy) OR list of lists of series (multi-timeseries).</span>
 <span class="sd">    fname_list : list of str</span>
-<span class="sd">        list of names of the files where to store the plot</span>
-<span class="sd">    labelx : str</span>
-<span class="sd">        The label of the X axis</span>
-<span class="sd">    labely : str</span>
-<span class="sd">        The label of the Y axis</span>
-<span class="sd">    labels : array of str</span>
-<span class="sd">        The label of the legend</span>
-<span class="sd">    title : str</span>
-<span class="sd">        The figure title</span>
+<span class="sd">        Output filenames.</span>
+<span class="sd">    labels : list of str or None</span>
+<span class="sd">        Legend labels (one per plotted line). If None and multi-timeseries is</span>
+<span class="sd">        detected, defaults to RADAR001, RADAR002, ... up to number of lines.</span>
+<span class="sd">        If None in legacy mode, no legend is shown.</span>
 <span class="sd">    period : float</span>
-<span class="sd">        measurement period in seconds used to compute accumulation. If 0 no</span>
-<span class="sd">        accumulation is computed</span>
-<span class="sd">    timeformat : str</span>
-<span class="sd">        Specifies the tvec and time format on the x axis</span>
-<span class="sd">    colors : array of str</span>
-<span class="sd">        Specifies the colors of each line</span>
-<span class="sd">    linestyles : array of str</span>
-<span class="sd">        Specifies the line style of each line</span>
-<span class="sd">    markers: array of str</span>
-<span class="sd">        Specify the markers to be used for each line</span>
-<span class="sd">    ymin, ymax: float</span>
-<span class="sd">        Lower/Upper limit of y axis</span>
+<span class="sd">        Measurement period in seconds used to compute accumulation. If 0 no</span>
+<span class="sd">        accumulation is computed.</span>
+<span class="sd">    timeformat : str, optional</span>
+<span class="sd">        Datetime formatter string for x-axis.</span>
+<span class="sd">    colors, linestyles, markers : list, optional</span>
+<span class="sd">        Styling per plotted line (length must match number of plotted lines),</span>
+<span class="sd">        or None to use matplotlib defaults.</span>
+<span class="sd">    ymin, ymax : float, optional</span>
+<span class="sd">        Y-axis limits.</span>
 <span class="sd">    dpi : int</span>
-<span class="sd">        dots per inch</span>
+<span class="sd">        Figure DPI.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str</span>
-<span class="sd">        list of names of the created plots</span>
-
-<span class="sd">    History</span>
-<span class="sd">    --------</span>
-<span class="sd">    201?.??.?? -fvj- creation</span>
-<span class="sd">    2017.08.21 -jgr- modified margins and grid + minor graphical updates</span>
-<span class="sd">    2018.03.05 -jgr- added x-limit of x axis to avoid unwanted error messages</span>
-
+<span class="sd">        Output filenames.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tvec</span><span class="p">)</span>  <span class="c1"># convert  from pandas if needed</span>
+    <span class="n">tvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tvec</span><span class="p">)</span>  <span class="c1"># convert from pandas if needed</span>
+    <span class="k">if</span> <span class="n">tvec</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;tvec is empty&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ---- normalize data_list into a flat list of series ----</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_sequence_of_series</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="c1"># True if obj looks like a list/tuple of arrays (multi-timeseries group)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
+
+    <span class="n">multi_mode</span> <span class="o">=</span> <span class="n">_is_sequence_of_series</span><span class="p">(</span><span class="n">data_list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+        <span class="n">data_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">multi_mode</span><span class="p">:</span>
+        <span class="c1"># Flatten groups: [[a,b],[c]] -&gt; [a,b,c]</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">grp</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">:</span>
+            <span class="n">series</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">grp</span><span class="p">))</span>
+        <span class="n">data_series</span> <span class="o">=</span> <span class="n">series</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Legacy: [a,b,c] -&gt; [a,b,c]</span>
+        <span class="n">data_series</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data_list</span><span class="p">)</span>
+
+    <span class="n">n_lines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_series</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_lines</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;data_list contains no series&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ---- accumulation if requested ----</span>
     <span class="k">if</span> <span class="n">period</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_list</span><span class="p">):</span>
-            <span class="n">data</span> <span class="o">*=</span> <span class="n">period</span> <span class="o">/</span> <span class="mf">3600.0</span>
-            <span class="n">data_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_series</span><span class="p">):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="p">(</span><span class="n">period</span> <span class="o">/</span> <span class="mf">3600.0</span><span class="p">)</span>
+            <span class="n">data_series</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="c1"># ---- default labels ----</span>
+    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">multi_mode</span><span class="p">:</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;RADAR</span><span class="si">{</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_lines</span><span class="p">)]</span>
+
+    <span class="c1"># ---- validate style arrays ----</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_style</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">arr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
 
-    <span class="n">lab</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">col</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">lstyle</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="s2">&quot;o&quot;</span>
+    <span class="n">any_label</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_series</span><span class="p">):</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">lab</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">any_label</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_list</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lab</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">col</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">linestyles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">lstyle</span> <span class="o">=</span> <span class="n">linestyles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">markers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">marker</span> <span class="o">=</span> <span class="n">markers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">_get_style</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">lstyle</span> <span class="o">=</span> <span class="n">_get_style</span><span class="p">(</span><span class="n">linestyles</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">marker</span> <span class="o">=</span> <span class="n">_get_style</span><span class="p">(</span><span class="n">markers</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">)</span>
+
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tvec</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">lab</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">lstyle</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
@@ -509,19 +553,17 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labely</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">tvec</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tvec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-
-    <span class="c1"># Turn on the grid</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">timeformat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="n">timeformat</span><span class="p">))</span>
 
-    <span class="c1"># rotates and right aligns the x labels, and moves the bottom of the</span>
-    <span class="c1"># axes up to make room for them</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">()</span>
-
-    <span class="c1"># Make a tight layout</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Show legend only if we actually have labels</span>
+    <span class="k">if</span> <span class="n">any_label</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
@@ -534,90 +576,112 @@
 <div class="viewcode-block" id="plot_timeseries_comp">
 <a class="viewcode-back" href="../../../API/generated/pyrad.graph.plot_timeseries_comp.html#pyrad.graph.plot_timeseries_comp">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_timeseries_comp</span><span class="p">(</span>
-    <span class="n">date1</span><span class="p">,</span>
-    <span class="n">value1</span><span class="p">,</span>
-    <span class="n">date2</span><span class="p">,</span>
-    <span class="n">value2</span><span class="p">,</span>
+    <span class="n">dates</span><span class="p">,</span>
+    <span class="n">values</span><span class="p">,</span>
     <span class="n">fname_list</span><span class="p">,</span>
     <span class="n">labelx</span><span class="o">=</span><span class="s2">&quot;Time [UTC]&quot;</span><span class="p">,</span>
     <span class="n">labely</span><span class="o">=</span><span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-    <span class="n">label1</span><span class="o">=</span><span class="s2">&quot;Sensor 1&quot;</span><span class="p">,</span>
-    <span class="n">label2</span><span class="o">=</span><span class="s2">&quot;Sensor 2&quot;</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">titl</span><span class="o">=</span><span class="s2">&quot;Time Series Comparison&quot;</span><span class="p">,</span>
-    <span class="n">period1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">period2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">periods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+    <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">linestyles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">markers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    plots 2 time series in the same graph</span>
+<span class="sd">    Plot an arbitrary number of time series on the same axes.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    date1 : datetime object</span>
-<span class="sd">        time of the first time series</span>
-<span class="sd">    value1 : float array</span>
-<span class="sd">        values of the first time series</span>
-<span class="sd">    date2 : datetime object</span>
-<span class="sd">        time of the second time series</span>
-<span class="sd">    value2 : float array</span>
-<span class="sd">        values of the second time series</span>
+<span class="sd">    dates : sequence of array-like of datetime</span>
+<span class="sd">        One time vector per series.</span>
+<span class="sd">    values : sequence of array-like</span>
+<span class="sd">        One value vector per series (same length as corresponding dates entry).</span>
 <span class="sd">    fname_list : list of str</span>
-<span class="sd">        list of names of the files where to store the plot</span>
-<span class="sd">    labelx : str</span>
-<span class="sd">        The label of the X axis</span>
-<span class="sd">    labely : str</span>
-<span class="sd">        The label of the Y axis</span>
-<span class="sd">    label1, label2 : str</span>
-<span class="sd">        legend label for each time series</span>
+<span class="sd">        Output filenames.</span>
+<span class="sd">    labelx, labely : str</span>
+<span class="sd">        Axis labels.</span>
+<span class="sd">    labels : sequence of str or None, optional</span>
+<span class="sd">        Legend labels (one per series). If None, labels are &quot;Series 1&quot;, ...</span>
 <span class="sd">    titl : str</span>
-<span class="sd">        The figure title</span>
-<span class="sd">     period1, period2 : float</span>
-<span class="sd">        measurement period in seconds used to compute accumulation. If 0 no</span>
-<span class="sd">        accumulation is computed</span>
+<span class="sd">        Figure title.</span>
+<span class="sd">    periods : sequence of float or None, optional</span>
+<span class="sd">        Measurement period (seconds) per series used to compute accumulation.</span>
+<span class="sd">        If provided and periods[i] &gt; 0, series i is converted to accumulation:</span>
+<span class="sd">            cumsum(values[i] * periods[i] / 3600)</span>
+<span class="sd">        If None, no accumulation is applied.</span>
+<span class="sd">    ymin, ymax : float, optional</span>
+<span class="sd">        Y-axis limits.</span>
 <span class="sd">    dpi : int</span>
-<span class="sd">        dots per inch</span>
-<span class="sd">    ymin, ymax : float</span>
-<span class="sd">        The limits of the Y-axis. None will keep the default limit.</span>
+<span class="sd">        Figure DPI.</span>
+<span class="sd">    colors, linestyles, markers : sequence or None, optional</span>
+<span class="sd">        Style per series. If None, matplotlib defaults are used.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    fname_list : list of str</span>
-<span class="sd">        list of names of the created plots</span>
-
-<span class="sd">    History</span>
-<span class="sd">    --------</span>
-<span class="sd">    201?.??.?? -fvj- created</span>
-<span class="sd">    2017.08.21 -jgr- changed some graphical aspects</span>
-
+<span class="sd">        Output filenames.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">period1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">period2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="c1"># TODO: document this and check (sometimes artefacts)</span>
-        <span class="n">value1</span> <span class="o">*=</span> <span class="n">period1</span> <span class="o">/</span> <span class="mf">3600.0</span>
-        <span class="n">value1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">value1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dates and values must have the same length&quot;</span><span class="p">)</span>
 
-        <span class="n">value2</span> <span class="o">*=</span> <span class="n">period2</span> <span class="o">/</span> <span class="mf">3600.0</span>
-        <span class="n">value2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">value2</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No time series provided&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Series </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">periods</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">periods</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_style</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">arr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="c1"># Apply accumulation per-series if requested</span>
+    <span class="n">values_proc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">periods</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">periods</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="ow">and</span> <span class="n">p</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="mf">3600.0</span><span class="p">)</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">values_proc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">],</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date1</span><span class="p">,</span> <span class="n">value1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">date2</span><span class="p">,</span> <span class="n">value2</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label2</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Plot all series</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">_style</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">ls</span> <span class="o">=</span> <span class="n">_style</span><span class="p">(</span><span class="n">linestyles</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">)</span>
+        <span class="n">mk</span> <span class="o">=</span> <span class="n">_style</span><span class="p">(</span><span class="n">markers</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">dates</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">values_proc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">col</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="n">mk</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labelx</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">labely</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">titl</span><span class="p">)</span>
-
-    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">date2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">date2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
 
-    <span class="c1"># rotates and right aligns the x labels, and moves the bottom of the</span>
-    <span class="c1"># axes up to make room for them</span>
+    <span class="c1"># Set x-limits to the min/max over all series (robust)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dates</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">])</span>
+
     <span class="n">fig</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">()</span>
-
-    <span class="c1"># Make a tight layout</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
@@ -711,6 +775,12 @@
         <span class="n">has_np</span> <span class="o">=</span> <span class="n">np_t</span> <span class="o">&gt;</span> <span class="n">np_min</span>
         <span class="n">isvalid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">isvalid</span><span class="p">,</span> <span class="n">has_np</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">isvalid</span><span class="p">):</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;No valid row found in dataset (no row with num points &gt; minimum (</span><span class="si">{</span><span class="n">np_min</span><span class="si">}</span><span class="s2">))&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span>
+
     <span class="n">date_plt</span> <span class="o">=</span> <span class="n">date</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
     <span class="n">mean_dB_plt</span> <span class="o">=</span> <span class="n">geometric_mean_dB</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
     <span class="n">mean_dB_from_lin_plt</span> <span class="o">=</span> <span class="n">linear_mean_dB</span><span class="p">[</span><span class="n">isvalid</span><span class="p">]</span>
@@ -780,6 +850,194 @@
 
     <span class="k">return</span> <span class="n">fname_list</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_sensor_scores_timeseries</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span>
+    <span class="n">fname_list</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="p">,</span>
+    <span class="n">double_conditional_threshold</span><span class="p">,</span>
+    <span class="n">np_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">labelx</span><span class="o">=</span><span class="s2">&quot;Time [UTC]&quot;</span><span class="p">,</span>
+    <span class="n">labely</span><span class="o">=</span><span class="s2">&quot;Value&quot;</span><span class="p">,</span>
+    <span class="n">titl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dpi</span><span class="o">=</span><span class="mi">72</span><span class="p">,</span>
+    <span class="n">plot_until_year_end</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multi-radar capable time series plot of sensor scores in compact stacked subplots.</span>
+
+<span class="sd">    Behavior</span>
+<span class="sd">    --------</span>
+<span class="sd">    - Single-radar: metric columns are plain (e.g. &quot;RMSE&quot;, &quot;N&quot;, ...). One line per subplot.</span>
+<span class="sd">    - Multi-radar: metric columns have suffixes like &quot;_radar001&quot;, &quot;_radar002&quot;, ... (case-insensitive).</span>
+<span class="sd">      For each base metric (e.g. &quot;RMSE&quot;), all radar-specific columns are plotted as separate lines</span>
+<span class="sd">      on the same subplot, with a legend.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : pandas.DataFrame</span>
+<span class="sd">        Must contain column &quot;date&quot; (datetime64 or convertible). Other columns are metrics.</span>
+<span class="sd">        Multi-radar format example: &quot;RMSE_radar001&quot;, &quot;RMSE_radar002&quot;, ...</span>
+<span class="sd">    fname_list : list of str</span>
+<span class="sd">        Output filenames.</span>
+<span class="sd">    bounds : str</span>
+<span class="sd">        Bounds metadata (used only for title/annotation if desired).</span>
+<span class="sd">    double_conditional_threshold : float</span>
+<span class="sd">        Double conditional threshold metadata (used only for title/annotation if desired).</span>
+<span class="sd">    np_min : int, optional</span>
+<span class="sd">        Minimum number of points required to plot (based on finite &quot;date&quot; count).</span>
+<span class="sd">    labelx, labely : str</span>
+<span class="sd">        Axis labels (x label used; y label is per-subplot metric name).</span>
+<span class="sd">    titl : str, optional</span>
+<span class="sd">        Figure title.</span>
+<span class="sd">    dpi : int, optional</span>
+<span class="sd">        Figure DPI.</span>
+<span class="sd">    plot_until_year_end : bool, optional</span>
+<span class="sd">        If True, set xlim to end of the year (requires df[&quot;date&quot;] non-empty).</span>
+<span class="sd">    labels : dict or list or None, optional</span>
+<span class="sd">        Legend labels to use for radars.</span>
+<span class="sd">        - If dict: maps radar suffix (e.g. &quot;radar001&quot;) -&gt; label string.</span>
+<span class="sd">        - If list/tuple: labels in the order of detected radar suffixes (sorted).</span>
+<span class="sd">        - If None: legend labels default to the detected suffixes (e.g. &quot;RADAR001&quot;).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fname_list : list of str</span>
+<span class="sd">        Output filenames (same as input).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;date&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected a &#39;date&#39; column in df.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Ensure datetime</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">])</span>
+    <span class="c1"># Drop rows with invalid dates</span>
+    <span class="n">ok_date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[ns]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int64&quot;</span><span class="p">))</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ok_date</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np_min</span><span class="p">):</span>
+        <span class="c1"># Nothing to plot</span>
+        <span class="k">return</span> <span class="n">fname_list</span>
+
+    <span class="c1"># --- detect multi-radar metric columns ---</span>
+    <span class="c1"># Pattern: &lt;metric&gt;_&lt;suffix&gt;, where suffix like radar001 (case-insensitive)</span>
+    <span class="n">suffix_re</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^(?P&lt;base&gt;.+?)_(?P&lt;suf&gt;radar\d</span><span class="si">{3}</span><span class="s2">)$&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+
+    <span class="n">metric_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s2">&quot;date&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Group columns by base metric:</span>
+    <span class="c1"># base -&gt; list of (suffix, colname)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">metric_cols</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">suffix_re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;base&quot;</span><span class="p">)</span>
+            <span class="n">suf</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;suf&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="c1"># radar001</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">suf</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">groups</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">suf</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+
+    <span class="c1"># If every group only has one column and all suffixes are None -&gt; single-radar mode</span>
+    <span class="c1"># But mixed is allowed; we just plot what&#39;s there.</span>
+    <span class="n">base_metrics</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">base_metrics</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No metric columns found (expected columns besides &#39;date&#39;).&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Determine radar suffix ordering for legend</span>
+    <span class="n">detected_suffixes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="p">{</span><span class="n">suf</span> <span class="k">for</span> <span class="n">lst</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="p">(</span><span class="n">suf</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="n">suf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">is_multiradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">detected_suffixes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_legend_label_for_suffix</span><span class="p">(</span><span class="n">suf</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="c1"># suf is like &quot;radar001&quot;</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">suf</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>  <span class="c1"># RADAR001</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">suf</span><span class="p">,</span> <span class="n">suf</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">suf</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">suf</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="c1"># --- figure setup ---</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_metrics</span><span class="p">)</span>
+    <span class="n">fig_h</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">fig_h</span><span class="p">),</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">get_layout_engine</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">h_pad</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">72</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">72</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">axes</span><span class="p">]</span>
+
+    <span class="c1"># x-axis limits</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">plot_until_year_end</span><span class="p">:</span>
+        <span class="c1"># end of year based on first date</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">t0</span><span class="o">.</span><span class="n">year</span>
+        <span class="n">tend</span> <span class="o">=</span> <span class="n">t0</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">59</span><span class="p">)</span>
+        <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">tend</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xlim</span> <span class="o">=</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span>
+
+    <span class="c1"># --- plotting ---</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">base_metrics</span><span class="p">):</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="n">groups</span><span class="p">[</span><span class="n">base</span><span class="p">]</span>
+
+        <span class="c1"># Plot per radar line if multi, otherwise single line</span>
+        <span class="k">if</span> <span class="n">is_multiradar</span><span class="p">:</span>
+            <span class="c1"># Keep a stable order: by detected_suffixes first, then None-suffix at end</span>
+            <span class="c1"># Build map suf-&gt;col</span>
+            <span class="n">suf_to_col</span> <span class="o">=</span> <span class="p">{</span><span class="n">suf</span><span class="p">:</span> <span class="n">col</span> <span class="k">for</span> <span class="p">(</span><span class="n">suf</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="ow">in</span> <span class="n">series</span> <span class="k">if</span> <span class="n">suf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+            <span class="c1"># plot known suffixes</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">suf</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">detected_suffixes</span><span class="p">):</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="n">suf_to_col</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">suf</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span>
+                    <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
+                    <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+                    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">_legend_label_for_suffix</span><span class="p">(</span><span class="n">suf</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="c1"># plot any non-suffixed column if present (rare/mixed)</span>
+            <span class="k">for</span> <span class="n">suf</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">series</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">suf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># single radar: just plot the column(s) in this base group</span>
+            <span class="c1"># (usually exactly one)</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">series</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlim</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">is_multiradar</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">labelx</span><span class="p">)</span>
+
+    <span class="c1"># Title: if not provided, build something informative</span>
+    <span class="k">if</span> <span class="n">titl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">titl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Sensor scores (bounds=</span><span class="si">{</span><span class="n">bounds</span><span class="si">}</span><span class="s2">, dct=</span><span class="si">{</span><span class="n">double_conditional_threshold</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="k">if</span> <span class="n">titl</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">titl</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fname_list</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fname_list</span>
 
 
 <div class="viewcode-block" id="plot_intercomp_scores_ts">
@@ -1290,8 +1548,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1315,7 +1573,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
 </p></div>
       
     </div>

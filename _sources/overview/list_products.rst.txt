@@ -938,9 +938,9 @@ WRITE_COLOCATED_GATES
 """"""""""""""""""""""""""""""
 description
  | Writes the position of the co-located gates
- | in a csv file 
+ | in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L494>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L542>`_
 
 PLOT_COLOCATED_GATES
 """"""""""""""""""""""""""""""
@@ -951,7 +951,7 @@ description
  | average height. All other plotting parameters are obtained from the 
  | gridMapImageConfig structure of the loc file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L520>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L568>`_
 parameters
    grid_size: : *float*
        Size of the grid in degrees (lat/lon). If not provided, the grid size defined in gridMapImageConfig with lat_min, lon_min, lat_max, lon_max and lonstep, latstep will be used. All the products of the 'VOL' dataset group    
@@ -2042,143 +2042,114 @@ TIMEAVG
 
 TIMESERIES
 -----------------------------
-COMPARE_CUMULATIVE_POINT
+COMPARE_POINT_SENSOR
 """"""""""""""""""""""""""""""
 description
- | Plots in the same graph 2 time series of
- | data accumulation (tipically rainfall rate). One time series is 
- | a point measurement of radar data while the other is from a 
- | co-located instrument (rain gauge or disdrometer) 
+ | Plots and/or compares radar and co-located gauge (sensor)
+ | data at a point of interest. The product always writes a combined CSV file 
+ | containing both radar and sensor data. Optionally, the radar and sensor 
+ | time series can be time-averaged or time-accumulated to a user-defined 
+ | interval (if no interval is provided, native sampling is used). The plot 
+ | can be either a dual time series comparison or a scatter plot of radar vs 
+ | sensor. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L557>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L379>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
    vmin, : *vmax: float*
        The limits of the Y-axis. If none they will be obtained from the Py-ART config file. 
+   plot_type: : *str*
+       The type of plot to generate. Can be 'timeseries' (default) or 'scatter'. 
+   time_interval: : *int or None*
+       Time interval in seconds used to resample both radar and sensor series before comparison. If None, the native timestamps are used. 
+   agg_mode: : *str*
+       The aggregation method used when time_interval is set. Can be 'mean' (time-averaging) or 'sum' (time-accumulation). Default 'mean'. 
+   align: : *str*
+       How to align radar and sensor timestamps when producing paired values (used for CSV pairing and scatter plots). Can be 'nearest' (default) or 'inner'. 'inner' requires that the timestamps of the radar and gauge match perfectly. 
+   nearest_tol: : *int or None*
+       Maximum allowed time difference in seconds when align='nearest'. If None, no tolerance is applied (nearest_tol = infinity) 
    sensor: : *str*
-       The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro' or 'disdro_parsivel' 
+       The sensor type. Can be 'rgage', 'rgage_knmi' or 'disdro' 
    sensorid: : *str*
        The sensor ID. 
-   location: : *str*
-       A string identifying the location of the disdrometer 
-   freq: : *float*
-       The frequency used to retrieve the polarimetric variables of a disdrometer 
-   ele: : *float*
-       The elevation angle used to retrieve the polarimetric variables of a disdrometer 
-   ScanPeriod: : *float*
-       The scaning period of the radar in seconds. This parameter is defined in the 'loc' config file  
+   varname: : *str*
+       Name of the variable to use in the sensor files. It corresponds to the column you want to compare with your radar measurements. 
+   sensor_scaling: : *float*
+       Scaling factor for the sensor data. Use 6 for example to convert from mm for 10-min measurements to mm/hr (which is the radar reference). Default is 1 (no scaling) 
+   dir_template: : *str*
+       The directory template where to find the file. dir_template should be a directory template string (relative to rgpath/disdropath or absolute) that can contain {sensorid} and any strftime date format codes (e.g. %Y, %m, %d, %Y%m%d, optionally written as {%Y%m%d}), which will be expanded using the provided sensorid and date before performing the recursive search, for example "{%Y-%m-%d}/{sensorid}/" If not provided a potentially deep recursive search will be performed which can take some time.  
 
-COMPARE_POINT
+COMPARE_SCORES_SENSOR
 """"""""""""""""""""""""""""""
 description
- | Plots in the same graph 2 time series of
- | data . One time series is a point measurement of radar data while 
- | the other is from a co-located instrument (rain gauge or 
- | disdrometer) 
+ | Plots and/or compares radar and co-located gauge (sensor)
+ | data at a point of interest. The product always writes a combined CSV file 
+ | containing both radar and sensor data. Optionally, the radar and sensor 
+ | time series can be time-averaged or time-accumulated to a user-defined 
+ | interval (if no interval is provided, native sampling is used). The plot 
+ | can be either a dual time series comparison or a scatter plot of radar vs 
+ | sensor. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L437>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L732>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
    vmin, : *vmax: float*
        The limits of the Y-axis. If none they will be obtained from the Py-ART config file. 
+   plot_type: : *str*
+       The type of plot to generate. Can be 'timeseries' (default) or 'scatter'. 
+   time_interval: : *int or None*
+       Time interval in seconds used to resample both radar and sensor series before comparison. If None, the native timestamps are used. 
+   agg_mode: : *str*
+       The aggregation method used when time_interval is set. Can be 'mean' (time-averaging) or 'sum' (time-accumulation). Default 'mean'. 
+   align: : *str*
+       How to align radar and sensor timestamps when producing paired values (used for CSV pairing and scatter plots). Can be 'nearest' (default) or 'inner'. 'inner' requires that the timestamps of the radar and gauge match perfectly. 
+   nearest_tol: : *int or None*
+       Maximum allowed time difference in seconds when align='nearest'. If None, no tolerance is applied (nearest_tol = infinity) 
    sensor: : *str*
-       The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro' or 'disdro_parsivel' 
+       The sensor type. Can be 'rgage', 'rgage_knmi' or 'disdro' 
    sensorid: : *str*
        The sensor ID. 
-   location: : *str*
-       A string identifying the location of the disdrometer 
-   freq: : *float*
-       The frequency used to retrieve the polarimetric variables of a disdrometer 
-   ele: : *float*
-       The elevation angle used to retrieve the polarimetric variables of a disdrometer  
+   varname: : *str*
+       Name of the variable to use in the sensor files. It corresponds to the column you want to compare with your radar measurements. 
+   sensor_scaling: : *float*
+       Scaling factor for the sensor data. Use 6 for example to convert from mm for 10-min measurements to mm/hr (which is the radar reference). Default is 1 (no scaling) 
+   dir_template: : *str*
+       The directory template where to find the file. dir_template should be a directory template string (relative to rgpath/disdropath or absolute) that can contain {sensorid} and any strftime date format codes (e.g. %Y, %m, %d, %Y%m%d, optionally written as {%Y%m%d}), which will be expanded using the provided sensorid and date before performing the recursive search, for example "{%Y-%m-%d}/{sensorid}/" If not provided a potentially deep recursive search will be performed which can take some time.  
 
-COMPARE_TIME_AVG
-""""""""""""""""""""""""""""""
-description
- | Creates a scatter plot of average radar data
- | versus average sensor data. 
- |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L679>`_
-parameters
-   dpi: : *int*
-       The pixel density of the plot. Default 72 
-   sensor: : *str*
-       The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro' or 'disdro_parsivel' 
-   sensorid: : *str*
-       The sensor ID. 
-   location: : *str*
-       A string identifying the location of the disdrometer 
-   freq: : *float*
-       The frequency used to retrieve the polarimetric variables of a disdrometer 
-   ele: : *float*
-       The elevation angle used to retrieve the polarimetric variables of a disdrometer 
-   cum_time: : *float*
-       Data accumulation time [s]. Default 3600. 
-   base_time: : *float*
-       Starting moment of the accumulation [s from midnight]. Default 0.  
-
-PLOT_AND_WRITE
+PLOT_AND_WRITE_TRAJ
 """"""""""""""""""""""""""""""
 description
  | Writes and plots a trajectory time series.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L836>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1005>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
    ymin, : *ymax: float*
        The minimum and maximum value of the Y-axis. If none it will be obtained from the Py-ART config file.  
 
-PLOT_AND_WRITE_POINT
-""""""""""""""""""""""""""""""
-description
- | Plots and writes a time series of radar data
- | at a particular point 
- |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L237>`_
-parameters
-   dpi: : *int*
-       The pixel density of the plot. Default 72 
-   vmin, : *vmax: float*
-       The limits of the Y-axis. If none they will be obtained from the Py-ART config file.  
-
-PLOT_CUMULATIVE_POINT
-""""""""""""""""""""""""""""""
-description
- | Plots a time series of radar data
- | accumulation at a particular point. 
- |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L340>`_
-parameters
-   dpi: : *int*
-       The pixel density of the plot. Default 72 
-   vmin, : *vmax: float*
-       The limits of the Y-axis. If none they will be obtained from the Py-ART config file. 
-   ScanPeriod: : *float*
-       The scaning period of the radar in seconds. This parameter is defined in the 'loc' config file  
-
-PLOT_HIST
+PLOT_HIST_TRAJ
 """"""""""""""""""""""""""""""
 description
  | plots and writes a histogram of all the data gathered
  | during the trajectory processing 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L897>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1066>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
    step: : *float or None*
        The quantization step of the data. If None it will be obtained from the Py-ART config file  
 
-TRAJ_CAPPI_IMAGE
+CAPPI_IMAGE_TRAJ
 """"""""""""""""""""""""""""""
 description
  | Creates a CAPPI image with the trajectory position
  | overplot on it. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L943>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1112>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2197,7 +2168,7 @@ description
  | Writes a csv file containing data from
  | multiple points obtained from a radar object 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L214>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L228>`_
 
 TRAJ_ONLY
 -----------------------------

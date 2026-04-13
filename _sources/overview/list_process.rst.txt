@@ -3386,11 +3386,6 @@ parameters
      | The input data types (one for every radar).
      |     Any arbitrary datatype supported by pyrad and available
      |     in both radar is accepted.
-   colocgatespath : string.
-     | base path to the file containing the coordinates of the co-located
-     |     gates
-   coloc_radars_name : string. Dataset keyword
-     | string identifying the radar names
    rays_are_indexed : bool. Dataset keyword
      | If True it is considered that the rays are indexed and that the
      |     data can be selected simply looking at the ray number.
@@ -3401,8 +3396,9 @@ parameters
      | elevation tolerance between the two radars. Default 0.5 deg
    rng_tol : float. Dataset keyword
      | range tolerance between the two radars. Default 50 m
-   coloc_data_dir : string. Dataset keyword
-     | name of the directory containing the csv file with colocated data
+   coloc_gates_file : string. Dataset keyword
+     | name of the csv file containing the list of colocated data,
+     |     as generated with the WRITE_COLOCATED_GATES product.
 
 returns
    new_dataset : dict
@@ -4137,7 +4133,7 @@ FLAG_TIME_AVG
 """"""""""""""""""""""""""""""
 description
    computes a flag field describing the conditions of the data used while averaging. The flag is an integer that tracks up to 999 occurrences of the number of samples as well as of three conditions during data accumulation: 𝜙𝑑𝑝 exceeding a threshold (𝜙𝑑𝑝ₘₐₓ), clutter, and non-rain precipitation. It is a packed representation of 4 numbers into one large integer. Flags are encoded by adding +1 for nsamples, +1E3 for 𝜙𝑑𝑝ₘₐₓ exceedance, + 1E6 for clutter, and +1E9 for non-rain. Inputs include the 𝜙𝑑𝑝 field, a dynamic clutter map, and either a hydrometeor classification or temperature field to identify precipitation phase.
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg_flag>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_avg_flag>`_
 parameters
    datatype : list of string. Dataset keyword
      | The input data types, must be
@@ -4166,7 +4162,7 @@ TIME_AVG
 """"""""""""""""""""""""""""""
 description
    computes the temporal mean of a field
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_avg>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_avg>`_
 parameters
    datatype : list of string. Dataset keyword
      | Arbitrary data type supported by pyrad and contained in the radar data
@@ -4186,7 +4182,7 @@ WEIGHTED_TIME_AVG
 """"""""""""""""""""""""""""""
 description
    computes the temporal mean of a field weighted by the reflectivity
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_weighted_time_avg>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_weighted_time_avg>`_
 parameters
    datatype : list of string. Dataset keyword
      | Arbitrary data type supported by pyrad and contained in the radar data, as well as
@@ -4204,7 +4200,7 @@ TIME_STATS
 """"""""""""""""""""""""""""""
 description
    computes the temporal statistics of a field
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_stats>`_
 parameters
    datatype : list of string. Dataset keyword
      | Arbitrary data type supported by pyrad and contained in the radar data
@@ -4233,7 +4229,7 @@ TIME_STATS2
 """"""""""""""""""""""""""""""
 description
    computes the temporal mean of a field
- `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_time_stats2>`_
+ `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeavg.html#process_time_stats2>`_
 parameters
    datatype : list of string. Dataset keyword
      | Arbitrary data type supported by pyrad and contianed in the radar data
@@ -4361,12 +4357,14 @@ returns
 POINT_MEASUREMENT
 """"""""""""""""""""""""""""""
 description
-   Obtains the radar data at a point location.
+   Obtains the radar data at a point location. Multiple radars are supported only if latlon is True.
  `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_timeseries.html#process_point_measurement>`_
 parameters
    datatype : string. Dataset keyword
      | The data type where we want to extract the point measurement,
-     |     can be any datatype supported by pyrad and available in the data
+     |     can be any datatype supported by pyrad and available in the data.
+     |     If multiple radars are provided, the datatype must be the same for all
+     |     of them.
    agg_method : string. Dataset keyword
      | Which aggregation method to use to combine data that is within the
      |     tolerance in AziTol, EleTol and RngTol

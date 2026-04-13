@@ -82,8 +82,6 @@
     
     get_scan_files_to_merge_s3
     
-    get_sensor_data
-    
     get_trtfile_list
     
     grib2radar_data
@@ -184,9 +182,7 @@
     
     read_selfconsistency
     
-    read_smn
-    
-    read_smn2
+    read_sensor_data
     
     read_solar_flux
     

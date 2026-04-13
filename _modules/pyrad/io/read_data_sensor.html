@@ -26,21 +26,21 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -50,20 +50,25 @@
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyrad/io/read_data_sensor';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.1.2" />   
+  <meta name="docsearch:version" content="2.1.2" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+     
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
-
+  <body data-default-mode="light">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
@@ -95,7 +100,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -404,8 +409,6 @@
 <span class="sd">    read_lightning_traj</span>
 <span class="sd">    read_lightning_all</span>
 <span class="sd">    get_sensor_data</span>
-<span class="sd">    read_smn</span>
-<span class="sd">    read_smn2</span>
 <span class="sd">    read_knmi</span>
 <span class="sd">    read_coord_sensors</span>
 <span class="sd">    read_disdro_scattering</span>
@@ -417,12 +420,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">gzip</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
@@ -430,6 +433,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="c1"># Suppress only the InsecureRequestWarning</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">urllib3</span>
@@ -2396,20 +2400,18 @@
 
 
 
-<div class="viewcode-block" id="get_sensor_data">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.get_sensor_data.html#pyrad.io.get_sensor_data">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_sensor_data</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sensor_data</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">cfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets data from a point measurement sensor (rain gauge or disdrometer)</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    date : datetime object</span>
-<span class="sd">        measurement date</span>
-
+<span class="sd">    start_date : datetime object</span>
+<span class="sd">        Start date from which to get sensor data</span>
+<span class="sd">    end_date : datetime object</span>
+<span class="sd">        End date from which to get sensor data</span>
 <span class="sd">    datatype : str</span>
 <span class="sd">        name of the data type to read</span>
-
 <span class="sd">    cfg : dictionary</span>
 <span class="sd">        dictionary containing sensor information</span>
 
@@ -2419,46 +2421,9 @@
 <span class="sd">        date, value, type of sensor and measurement period</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;rgage&quot;</span><span class="p">:</span>
-        <span class="c1"># Try several file formats</span>
-        <span class="n">datapath1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;smnpath&quot;</span><span class="p">],</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">))</span>
-        <span class="n">datapath2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;smnpath&quot;</span><span class="p">],</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">datafile1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">datapath1</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span>
-        <span class="p">)</span>
-        <span class="n">datafile2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="n">datapath2</span><span class="p">,</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.csv*&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">files1</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafile1</span><span class="p">)</span>
-        <span class="n">files2</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafile2</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files1</span><span class="p">):</span>
-            <span class="n">datafile</span> <span class="o">=</span> <span class="n">files1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">files2</span><span class="p">):</span>
-            <span class="n">datafile</span> <span class="o">=</span> <span class="n">files2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Could not find any raingauge file with names </span><span class="si">{</span><span class="n">datafile1</span><span class="si">}</span><span class="s2"> or </span><span class="si">{</span><span class="n">datafile2</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">datafile</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">):</span>
-            <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">num_columns</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="n">num_columns</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">read_smn2</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sensorvalue</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">read_smn</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">sensordate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;RG&quot;</span>
-        <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensordate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sensordate</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;rgage_knmi&quot;</span><span class="p">:</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">start_date</span>
+    <span class="c1"># Special case for knmi RG data</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;rgage_knmi&quot;</span><span class="p">:</span>
         <span class="n">datapath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;smnpath&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/&quot;</span>
         <span class="n">datafile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;kis_tor_</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.gz&quot;</span>
         <span class="n">df_rg</span> <span class="o">=</span> <span class="n">read_knmi</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">datafile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2477,174 +2442,88 @@
 
         <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;RG&quot;</span>
         <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_rg</span><span class="p">[</span><span class="s2">&quot;time_stamp&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_rg</span><span class="p">[</span><span class="s2">&quot;time_stamp&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;disdro&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">):</span>
-            <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="s2">&quot;dBZ&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="n">datatype</span>
-
-        <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;disdropath&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;/scattering/&quot;</span>
-            <span class="o">+</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
-            <span class="o">+</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
-        <span class="p">)</span>
-        <span class="n">datafile</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
-            <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
-            <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span>
-            <span class="o">+</span> <span class="s2">&quot;_&quot;</span>
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">])</span>
-            <span class="o">+</span> <span class="s2">&quot;GHz_&quot;</span>
-            <span class="o">+</span> <span class="n">sensor_datatype</span>
-            <span class="o">+</span> <span class="s2">&quot;_el&quot;</span>
-            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;ele&quot;</span><span class="p">])</span>
-            <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">date_str</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sid</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span>
+        <span class="n">search_dir_tpl</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dir_template&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">varname</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;varname&quot;</span><span class="p">]</span>
+        <span class="n">isdisdro</span> <span class="o">=</span> <span class="s2">&quot;disdro&quot;</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span>
+        <span class="n">basepath</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;disdropath&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">isdisdro</span> <span class="k">else</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;smnpath&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">basepath</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">isdisdro</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;You need to specify disdropath in the main config file for comparison with disdrometers!&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;You need to specify smnpath in the main config file for comparison with raingauges!&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="c1"># Narrow the search root if template is provided</span>
+        <span class="n">search_root</span> <span class="o">=</span> <span class="n">_expand_search_dir</span><span class="p">(</span>
+            <span class="n">basepath</span><span class="p">,</span> <span class="n">search_dir_tpl</span><span class="p">,</span> <span class="n">sensorid</span><span class="o">=</span><span class="n">sid</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="n">date</span>
         <span class="p">)</span>
 
-        <span class="n">sensordate</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sensorvalue</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">read_disdro</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">datafile</span><span class="p">)</span>
+        <span class="c1"># Flexible recursive search</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">search_root</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2">*.csv*&quot;</span><span class="p">),</span>
+            <span class="c1"># NetCDF</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">search_root</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;*</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2">*.nc&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="n">matches</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">iglob</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="c1"># De-duplicate while keeping paths</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">matches</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Could not find any </span><span class="si">{</span><span class="n">cfg</span><span class="p">[</span><span class="s1">&#39;sensor&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> file with patterns: &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; OR &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="n">all_dates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">datafile</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;.csv&quot;</span> <span class="ow">in</span> <span class="n">datafile</span><span class="p">:</span>
+                <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">read_sensor_data</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;.nc&quot;</span> <span class="ow">in</span> <span class="n">datafile</span><span class="p">:</span>
+                <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">read_disdro_data_nc</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="n">varname</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">sensordate</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">sensorvalue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">all_dates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sensordate</span><span class="p">)</span>
+            <span class="n">all_values</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">sensorvalue</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">all_dates</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">all_values</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Remove duplicate timestamps (keep latest file value if overlapping)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
+        <span class="n">sensordate</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+        <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">sensordate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Disdro&quot;</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;disdro&quot;</span> <span class="k">if</span> <span class="n">isdisdro</span> <span class="k">else</span> <span class="s2">&quot;RG&quot;</span>
         <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensordate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sensordate</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;disdro_parsivel&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">):</span>
-            <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="s2">&quot;dBZ&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sensor_datatype</span> <span class="o">=</span> <span class="n">datatype</span>
 
-        <span class="n">datapath</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;disdropath&quot;</span><span class="p">]</span><span class="si">}{</span><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensorid&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">/Disdro-1min/&#39;</span>
-            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">/&#39;</span>
-        <span class="p">)</span>
-        <span class="n">datafile</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">.csv&#39;</span>
-
-        <span class="n">df_disdro</span> <span class="o">=</span> <span class="n">read_disdro_parsivel</span><span class="p">(</span><span class="n">datapath</span> <span class="o">+</span> <span class="n">datafile</span><span class="p">)</span>
-        <span class="n">sensordate</span> <span class="o">=</span> <span class="n">df_disdro</span><span class="p">[</span><span class="s2">&quot;t_0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-        <span class="k">if</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">):</span>
-            <span class="n">substr</span> <span class="o">=</span> <span class="s2">&quot;Disdro_RadarRef_Q5&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">substr</span> <span class="o">=</span> <span class="s2">&quot;Disdro_Intensity_Q5&quot;</span>
-
-        <span class="n">sensorvalue</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_disdro</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">substr</span> <span class="ow">in</span> <span class="n">col</span><span class="p">:</span>
-                <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">df_disdro</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-        <span class="k">if</span> <span class="n">sensorvalue</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No data in file </span><span class="si">{</span><span class="n">datapath</span><span class="si">}{</span><span class="n">datafile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-
-        <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Disdro&quot;</span>
-        <span class="n">period</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_disdro</span><span class="p">[</span><span class="s2">&quot;t_0&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_disdro</span><span class="p">[</span><span class="s2">&quot;t_0&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown sensor: &quot;</span> <span class="o">+</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-
-    <span class="k">return</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">period</span></div>
-
-
-
-<div class="viewcode-block" id="read_smn">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_smn.html#pyrad.io.read_smn">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_smn</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads SwissMetNet data contained in a csv or gzipped csv file.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        path of time series file</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    smn_id, date, pressure, temp, rh, precip, wspeed, wdir : tuple</span>
-<span class="sd">        The read values</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fill_value</span> <span class="o">=</span> <span class="mf">10000000.0</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># Use pandas to read the file (supports .gz files directly)</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;gzip&quot;</span> <span class="k">if</span> <span class="n">fname</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
-
-        <span class="c1"># Convert date strings to datetime objects</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Identify columns by searching for keywords (handles cases like AirPressure:degC)</span>
-        <span class="n">air_pressure_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;AirPressure&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">temp_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;2mTemperature&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">rh_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;RH&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">precip_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;Precipitation&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">wspeed_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;Windspeed&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">wdir_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s2">&quot;Winddirection&quot;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="c1"># Mask invalid data (fill_value)</span>
-        <span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span>
-            <span class="n">df</span><span class="p">[</span><span class="n">air_pressure_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span>
-        <span class="p">)</span>
-        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">temp_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">rh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">rh_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">precip</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">precip_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">wspeed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">wspeed_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-        <span class="n">wdir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">wdir_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">fill_value</span><span class="p">)</span>
-
-        <span class="c1"># Convert precip from mm/10min to mm/h</span>
-        <span class="n">precip</span> <span class="o">*=</span> <span class="mf">6.0</span>
-
-        <span class="c1"># Extract smn_id and date</span>
-        <span class="n">smn_id</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;StationID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">smn_id</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">rh</span><span class="p">,</span> <span class="n">precip</span><span class="p">,</span> <span class="n">wspeed</span><span class="p">,</span> <span class="n">wdir</span>
-
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to read file </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
-
-
-
-<div class="viewcode-block" id="read_smn2">
-<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_smn2.html#pyrad.io.read_smn2">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_smn2</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads SwissMetNet data contained in a csv file with format</span>
-<span class="sd">    station,time,value</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        path of time series file</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    smn_id, date , value : tupple</span>
-<span class="sd">        The read values</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">])</span>
-        <span class="c1"># Try to convert stationID to int</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;StationID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;StationID&quot;</span><span class="p">])</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="c1"># Convert dates to python datetime</span>
-        <span class="n">arr_date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">())</span>
-        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">arr_date</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;StationID&quot;</span><span class="p">]),</span>
-            <span class="n">df</span><span class="p">[</span><span class="s2">&quot;DateTime&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]),</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
-
+    <span class="c1"># Return only sensor date &gt; tstart - sensor res and &lt; tend + sensor_res</span>
+    <span class="n">sensortres</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensordate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sensordate</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">sensordate</span> <span class="o">&lt;=</span> <span class="n">end_date</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">sensortres</span><span class="p">))</span> <span class="o">&amp;</span> <span class="p">(</span>
+        <span class="n">sensordate</span> <span class="o">&gt;=</span> <span class="n">start_date</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">sensortres</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">sensordate</span> <span class="o">=</span> <span class="n">sensordate</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">sensorvalue</span> <span class="o">=</span> <span class="n">sensorvalue</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">sensordate</span><span class="p">,</span> <span class="n">sensorvalue</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">period</span>
 
 
 <div class="viewcode-block" id="read_knmi">
@@ -2896,65 +2775,214 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">read_disdro</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="read_sensor_data">
+<a class="viewcode-back" href="../../../API/generated/pyrad.io.read_sensor_data.html#pyrad.io.read_sensor_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_sensor_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reads scattering parameters computed from disdrometer data contained in a</span>
-<span class="sd">    text file</span>
+<span class="sd">    Reads gauge or disdrometer data contained in a csv file</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname : str</span>
-<span class="sd">        path of time series file</span>
+<span class="sd">        Path of time series file</span>
+
+<span class="sd">    varname : str</span>
+<span class="sd">        Name of the variable column to read.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    date, preciptype, variable, scattering temperature: tuple</span>
-<span class="sd">        The read values</span>
+<span class="sd">    date, variable: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="c1"># Read file with pandas</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;python&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Empty file: </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="c1"># Auto-detect datetime column</span>
+        <span class="c1"># --------------------------------------------------</span>
+        <span class="n">datetime_col</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Prefer columns whose name suggests date/time</span>
+        <span class="n">candidate_cols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">])</span>
+            <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">candidate_cols</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+            <span class="c1"># Skip numeric columns unless the column name looks like datetime</span>
+            <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_numeric_dtype</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">k</span> <span class="ow">in</span> <span class="n">col</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Try specific formats first</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+                <span class="n">s</span><span class="p">,</span>
+                <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>  <span class="c1"># matches 20250417000000</span>
+                <span class="n">utc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Fallback to generic parsing if needed</span>
+            <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="n">parsed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mixed&quot;</span><span class="p">,</span> <span class="n">utc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Accept only if all values parsed</span>
+            <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="c1"># Reject columns that become a single repeated timestamp</span>
+                <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">datetime_col</span> <span class="o">=</span> <span class="n">col</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">datetime_col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Could not detect datetime column.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">varname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Column &#39;</span><span class="si">{</span><span class="n">varname</span><span class="si">}</span><span class="s2">&#39; not found in </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">datetime_col</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+        <span class="n">variable</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="c1"># Convert to masked arrays (compatibility)</span>
+        <span class="n">fill</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+
+        <span class="n">variable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">fill</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">fill</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">variable</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_disdro_data_nc</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads disdrometer data from a netCDF file as obtained through cloudnet (ACTRIS)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        Path of time series file</span>
+
+<span class="sd">    varname : str</span>
+<span class="sd">        Name of the variable column to read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    date, variable: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read a single variable from a NetCDF file and return:</span>
+<span class="sd">      - the variable values</span>
+<span class="sd">      - the associated time coordinate (as a 1D array)</span>
+
+<span class="sd">    The function:</span>
+<span class="sd">      1) opens the dataset</span>
+<span class="sd">      2) finds the variable</span>
+<span class="sd">      3) identifies which dimension is the time dimension by matching a dimension</span>
+<span class="sd">         present in the variable with a dataset coordinate (prefers &quot;time&quot; if present)</span>
+<span class="sd">      4) returns (time, values) as numpy arrays.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">var</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;GHz_(.{,7})_el&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="c1"># AAA, ZZZ not found in the original string</span>
-        <span class="n">var</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># apply your error handling</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="c1"># first count the lines</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)),</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span>
+    <span class="k">with</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;netcdf4&quot;</span><span class="p">,</span> <span class="n">decode_cf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">varname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Variable &#39;</span><span class="si">{</span><span class="n">varname</span><span class="si">}</span><span class="s2">&#39; not found. Available variables include: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span><span class="si">}{</span><span class="s1">&#39;...&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-            <span class="n">nrows</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">)</span>
 
-            <span class="n">variable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-            <span class="n">scatt_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span>
 
-            <span class="c1"># now read the data</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csvfile</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)),</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span>
+        <span class="k">if</span> <span class="n">da</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Variable &#39;</span><span class="si">{</span><span class="n">varname</span><span class="si">}</span><span class="s2">&#39; has no dimensions (scalar). No associated time dimension.&quot;</span>
             <span class="p">)</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">date</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">preciptype</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-                <span class="n">date</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-                        <span class="n">row</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
-                    <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+        <span class="c1"># Candidate dims of the variable</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+        <span class="c1"># Prefer an explicit &#39;time&#39; dim if present</span>
+        <span class="n">time_dim</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">:</span>
+            <span class="n">time_dim</span> <span class="o">=</span> <span class="s2">&quot;time&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise: find a dim that has an associated coordinate variable.</span>
+            <span class="c1"># Prefer coords that look like time (name contains &#39;time&#39;, or units like &#39;since&#39;).</span>
+            <span class="n">coord_candidates</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">coords</span> <span class="ow">or</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+                    <span class="n">coord_candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">coord_candidates</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Could not find any coordinate among variable dims </span><span class="si">{</span><span class="n">dims</span><span class="si">}</span><span class="s2">. &quot;</span>
+                    <span class="s2">&quot;No associated time coordinate found.&quot;</span>
                 <span class="p">)</span>
-                <span class="n">preciptype</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Precip Code&quot;</span><span class="p">])</span>
-                <span class="n">variable</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">var</span><span class="p">])</span>
-                <span class="n">scatt_temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;Scattering Temp [deg C]&quot;</span><span class="p">])</span>
-                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">variable</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_values</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-            <span class="k">return</span> <span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="n">preciptype</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">scatt_temp</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">EnvironmentError</span> <span class="k">as</span> <span class="n">ee</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to read file &quot;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Heuristic: choose the most time-like coordinate</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">score_dim</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                    <span class="n">s</span> <span class="o">+=</span> <span class="mi">10</span>
+                <span class="c1"># Check CF-style time units if not decoded</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;since&quot;</span> <span class="ow">in</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                        <span class="n">s</span> <span class="o">+=</span> <span class="mi">8</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="c1"># Prefer 1D coords matching the dim</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ds</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ds</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span> <span class="o">==</span> <span class="p">(</span><span class="n">d</span><span class="p">,):</span>
+                        <span class="n">s</span> <span class="o">+=</span> <span class="mi">3</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">return</span> <span class="n">s</span>
+
+            <span class="n">time_dim</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">coord_candidates</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">score_dim</span><span class="p">)</span>
+
+        <span class="c1"># Extract time coord</span>
+        <span class="k">if</span> <span class="n">time_dim</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">time_dim</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># sometimes the coordinate exists as a variable but not marked as coord</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">time_dim</span><span class="p">]</span>
+
+        <span class="c1"># Ensure time is 1D along time_dim</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">t</span><span class="o">.</span><span class="n">dims</span> <span class="o">!=</span> <span class="p">(</span><span class="n">time_dim</span><span class="p">,):</span>
+            <span class="c1"># As a fallback, try to index it down to 1D if possible</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Found time candidate &#39;</span><span class="si">{</span><span class="n">time_dim</span><span class="si">}</span><span class="s2">&#39;, but it is not a 1D coordinate. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Got dims=</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">dims</span><span class="si">}</span><span class="s2">, shape=</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Return numpy arrays</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+        <span class="p">)</span>  <span class="c1"># make TZ aware</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">return</span> <span class="n">time</span><span class="p">,</span> <span class="n">values</span>
 
 
 <div class="viewcode-block" id="read_disdro_parsivel">
@@ -3402,6 +3430,31 @@
     <span class="n">date2_sounding_time</span> <span class="o">=</span> <span class="n">_closest_sounding_time</span><span class="p">(</span><span class="n">date2</span><span class="p">)</span>
     <span class="c1"># Check if the radiosounding times are different</span>
     <span class="k">return</span> <span class="n">date1_sounding_time</span> <span class="o">!=</span> <span class="n">date2_sounding_time</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_expand_search_dir</span><span class="p">(</span><span class="n">smnpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tpl</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">sensorid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Expand a directory template relative to smnpath.</span>
+
+<span class="sd">    Supports:</span>
+<span class="sd">      - {sensorid}</span>
+<span class="sd">      - strftime tokens like %Y%m%d</span>
+<span class="sd">      - also accepts &quot;{%Y%m%d}&quot; and turns it into &quot;%Y%m%d&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tpl</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">smnpath</span>
+
+    <span class="c1"># Turn &quot;{%Y%m%d}&quot; into &quot;%Y%m%d&quot; (and similar)</span>
+    <span class="n">tpl</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\{(%[^}]+)\}&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">tpl</span><span class="p">)</span>
+
+    <span class="c1"># Expand date tokens</span>
+    <span class="n">expanded</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tpl</span><span class="p">)</span>
+
+    <span class="c1"># Expand {sensorid} (and potentially other .format placeholders later)</span>
+    <span class="n">expanded</span> <span class="o">=</span> <span class="n">expanded</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sensorid</span><span class="o">=</span><span class="n">sensorid</span><span class="p">)</span>
+
+    <span class="c1"># Allow absolute templates; otherwise treat as relative to smnpath</span>
+    <span class="k">return</span> <span class="n">expanded</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">expanded</span><span class="p">)</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">smnpath</span><span class="p">,</span> <span class="n">expanded</span><span class="p">)</span>
 </pre></div>
 <div class="section ablog__blog_comments">
    
@@ -3434,8 +3487,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3459,7 +3512,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
 </p></div>
       
     </div>
