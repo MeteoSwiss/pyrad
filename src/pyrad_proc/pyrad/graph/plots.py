@@ -1715,13 +1715,24 @@ def plot_scatter_comp(
     if write_stats:
         for txt in ax.texts:
             txt.remove()
-        rmse = np.sqrt(np.nanmean((value1 - value2) ** 2))
-        bias = np.nanmean(value1 - value2)
+
+        # mask finite values
+        mask = np.isfinite(value1) & np.isfinite(value2)
+        v1 = value1[mask]
+        v2 = value2[mask]
+
+        rmse = np.sqrt(np.nanmean((v1 - v2) ** 2))
+        bias = np.nanmean(v1 - v2)
+
+        if v1.size > 1 and np.nanstd(v1) > 0 and np.nanstd(v2) > 0:
+            corr = np.corrcoef(v1, v2)[0, 1]
+        else:
+            corr = np.nan
 
         ax.text(
             0.01,
             0.98,
-            f"RMSE={rmse:2.2f}\n Bias (r-g)={bias:2.2f}",
+            f"RMSE={rmse:2.2f}\nBias={bias:2.2f}\nCorr={corr:2.2f}",
             horizontalalignment="left",
             verticalalignment="top",
             transform=ax.transAxes,

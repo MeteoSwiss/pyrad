@@ -44,6 +44,7 @@ Functions for reading auxiliary data
 import os
 import glob
 import datetime
+import re
 
 import pandas as pd
 import csv
@@ -1269,13 +1270,122 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
             if "linear_mean_dB" in df.columns
             else np.ma.masked
         )
-
         return date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB
 
     except Exception as e:
         warn(str(e))
         warn(f"Unable to read file {fname}")
         return None, None, None, None, None
+
+
+def read_sensor_scores_ts(fname):
+    """
+    Read a sensor scores timeseries file (comment header + CSV body).
+
+    Supports both mono-radar and multi-radar files written by
+    write_sensor_scores().
+
+    Parameters
+    ----------
+    fname : str or pathlib.Path
+        Path to the scores file.
+
+    Returns
+    -------
+    df : pandas.DataFrame
+        Parsed CSV body. Column 'date' is converted to datetime64
+        and sorted. Metric columns are preserved (including
+        *_radar### suffixes in multi-radar mode).
+
+    meta : dict
+        Metadata parsed from the comment header. Keys include:
+          - 'bounds' : str or None
+          - 'doublecond_thresh' : float or None
+          - 'radars' : list of str (upper-case radar IDs) or None
+          - 'scores' : list of metric names (without suffix)
+    """
+    header_lines = []
+    with open(fname, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("#"):
+                header_lines.append(line.strip())
+            else:
+                break
+
+    meta = {
+        "bounds": None,
+        "doublecond_thresh": None,
+        "radars": None,
+        "scores": None,
+    }
+
+    # Regex patterns
+    bounds_re = re.compile(r"^\#\s*Bounds:\s*(.*?)\.\s*$")
+    dct_re = re.compile(
+        r"^\#\s*Double conditional threshold:\s*(.*?)\.\s*$", re.IGNORECASE
+    )
+    radars_re = re.compile(r"^\#\s*Radars:\s*(.*?)\.\s*$", re.IGNORECASE)
+    scores_re = re.compile(r"^\#\s*Scores:\s*(.*?)\.\s*$", re.IGNORECASE)
+
+    for hl in header_lines:
+        m = bounds_re.match(hl)
+        if m:
+            meta["bounds"] = m.group(1).strip()
+            continue
+
+        m = dct_re.match(hl)
+        if m:
+            raw = m.group(1).strip()
+            raw_l = raw.lower()
+            if raw_l in ("-inf", "-infty", "-infinity"):
+                meta["doublecond_thresh"] = -np.inf
+            elif raw_l in ("inf", "+inf", "infty", "infinity", "+infinity"):
+                meta["doublecond_thresh"] = np.inf
+            elif raw_l in ("nan", "none", ""):
+                meta["doublecond_thresh"] = np.nan
+            else:
+                try:
+                    meta["doublecond_thresh"] = float(raw)
+                except ValueError:
+                    meta["doublecond_thresh"] = None
+            continue
+
+        m = radars_re.match(hl)
+        if m:
+            radars_str = m.group(1)
+            meta["radars"] = [r.strip().upper() for r in radars_str.split(",")]
+            continue
+
+        m = scores_re.match(hl)
+        if m:
+            scores_str = m.group(1)
+            meta["scores"] = [s.strip() for s in scores_str.split(",")]
+            continue
+
+    # -----------------------------
+    # Read CSV body
+    # -----------------------------
+    df = pd.read_csv(fname, comment="#")
+
+    if "date" not in df.columns:
+        raise ValueError("Expected a 'date' column in the file.")
+
+    # Strict parsing (avoid slow fallback warning)
+    df["date"] = pd.to_datetime(
+        df["date"].astype(str),
+        format="%Y%m%d%H%M%S",
+        errors="coerce",
+    )
+
+    df = df.dropna(subset=["date"]).sort_values("date").reset_index(drop=True)
+
+    # Convert numeric columns safely
+    for col in df.columns:
+        if col == "date":
+            continue
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    return df, meta
 
 
 def read_monitoring_ts_old(fname):

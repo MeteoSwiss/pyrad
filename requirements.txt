@@ -1,2 +1,4 @@
 numpy
 netCDF4
+wradlib
+cartopy

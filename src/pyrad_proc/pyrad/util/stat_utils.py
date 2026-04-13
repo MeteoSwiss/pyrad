@@ -15,6 +15,8 @@ Miscellaneous functions dealing with statistics
 import numpy as np
 import ast
 import operator as op
+from collections import OrderedDict
+from scipy.stats import energy_distance
 
 
 def quantiles_weighted(
@@ -60,6 +62,9 @@ def quantiles_weighted(
         Number of valid points in the computation of the statistics
 
     """
+
+    if isinstance(quantiles, list):
+        quantiles = np.array(quantiles)
 
     if weight_vector is not None:
         if weight_vector.size != values.shape[0]:
@@ -254,3 +259,204 @@ def parse_math_expression(expr):
         return eval_(parsed_expr, x)
 
     return parsed_function
+
+
+def perfscores(
+    est_data, ref_data, bounds=None, array=False, doublecond_thresh=0.1, linearize=False
+):
+    """
+    Computes a set of precipitation performance scores, on different data ranges.
+    The scores are
+        - scatter: 0.5 * (Qw84(x) - Qw16(x)), where Qw is a quantile weighted
+          by ref_data / sum(ref_data) and x is est_data / ref_data in dB scale
+        - RMSE: root mean  square error (linear error)
+        - bias:  (ME/mean(ref_data) + 1) in dB
+        - ED: the energy distance which is a measure of the distance between
+          two distributions (https://en.wikipedia.org/wiki/Energy_distance)
+
+    Parameters
+    ----------
+    est_data : ndarray
+        array of estimates (ex. precip from QPE)
+    ref_data : ndarray
+        array of reference (ex. precip from gauge)
+    bounds : list (optional)
+        list of bounds on ref_data for which to compute the error metrics,
+        by default all data will be used (unbounded), note that even if you
+        prescribe bounds the scores for the overall data will always be
+        added in the output
+    array: boolean (optional)
+        Whether or not to convert the output dict to a numpy array
+    doublecond_thresh: float
+        By default scores are computed with a double-conditional threshold.
+        Set this value to 0 to have unconditional scores.
+    linearize: boolean (optional)
+        Whether the input data should be linearized before computing the scores.
+        Default False.
+    Returns
+    -------
+    all_metrics : dict or ndarray
+        a dictionary containing all the scores, organized in the following way
+        all_metrics[bound][score]
+    """
+    all_metrics = OrderedDict()
+
+    valid = np.logical_and(est_data >= 0, ref_data >= 0)
+    est_data = est_data[valid > 0]
+    ref_data = ref_data[valid > 0]
+
+    est = est_data
+    ref = ref_data
+
+    all_metrics["all"] = _perfscores(est, ref)
+
+    if bounds is not None:
+        for i in range(len(bounds) - 1):
+            bound_str = "{:2.1f}-{:2.1f}".format(bounds[i], bounds[i + 1])
+            cond = np.logical_and(ref_data < bounds[i + 1], ref_data >= bounds[i])
+            if np.sum(cond) > 0:
+                est = est_data[cond]
+                ref = ref_data[cond]
+
+                all_metrics[bound_str] = _perfscores(est, ref, linearize)
+
+    if array:
+        arr = []
+        for k in all_metrics:
+            arr.append(list(all_metrics[k].values()))
+        arr = np.array(arr)
+        all_metrics = np.array(arr)
+
+    return all_metrics
+
+
+def _perfscores(est_data, ref_data, doublecond_thresh=-np.inf, linearize=False):
+    """
+    Robust performance scores.
+    If any computation fails, the corresponding metric is set to np.nan.
+    If something catastrophic happens, all metrics are np.nan.
+
+    Notes
+    -----
+    - if linearize is True, the input data will first be linearized before computing the scores
+    """
+    # Ensure arrays
+    est_data = np.asarray(est_data)
+    ref_data = np.asarray(ref_data)
+
+    # Template output with NaNs
+    metrics = {
+        "RMSE": np.nan,
+        "scatter": np.nan,
+        "logBias": np.nan,
+        "ED": np.nan,
+        "corr": np.nan,
+        "NP": 0,
+        "NP_all": int(ref_data.size),
+        "est_mean": np.nan,
+        "ref_mean": np.nan,
+        "est_std": np.nan,
+        "ref_std": np.nan,
+    }
+
+    try:
+        # Optional linearization
+        if linearize:
+            est_data_lin = 10.0 ** (0.1 * est_data.astype(float))
+            ref_data_lin = 10.0 ** (0.1 * ref_data.astype(float))
+        else:
+            est_data_lin = est_data.astype(float)
+            ref_data_lin = ref_data.astype(float)
+
+        # Basic sanity
+        if est_data.shape != ref_data.shape:
+            return metrics
+
+        # Build condition mask
+        doublecond = (ref_data > doublecond_thresh) & (est_data > doublecond_thresh)
+        metrics["NP"] = int(np.count_nonzero(doublecond))
+
+        if metrics["NP"] == 0:
+            return metrics
+
+        est_dc = est_data_lin[doublecond]
+        ref_dc = ref_data_lin[doublecond]
+
+        # RMSE
+        try:
+            metrics["RMSE"] = float(np.sqrt(np.nanmean((est_dc - ref_dc) ** 2)))
+        except Exception:
+            metrics["RMSE"] = np.nan
+
+        # Means/stds
+        try:
+            metrics["est_mean"] = float(np.nanmean(est_dc))
+        except Exception:
+            metrics["est_mean"] = np.nan
+
+        try:
+            metrics["ref_mean"] = float(np.nanmean(ref_dc))
+        except Exception:
+            metrics["ref_mean"] = np.nan
+
+        try:
+            metrics["est_std"] = float(np.nanstd(est_dc))
+        except Exception:
+            metrics["est_std"] = np.nan
+
+        try:
+            metrics["ref_std"] = float(np.nanstd(ref_dc))
+        except Exception:
+            metrics["ref_std"] = np.nan
+
+        # Pearson correlation
+        try:
+            good_corr = np.isfinite(est_dc) & np.isfinite(ref_dc)
+            if np.count_nonzero(good_corr) >= 2:
+                x = est_dc[good_corr]
+                y = ref_dc[good_corr]
+                if np.nanstd(x) > 0 and np.nanstd(y) > 0:
+                    metrics["corr"] = float(np.corrcoef(x, y)[0, 1])
+        except Exception:
+            metrics["corr"] = np.nan
+
+        # Scatter from weighted quantiles of dB error
+        try:
+            ratio = est_dc / ref_dc
+            good_ratio = (
+                np.isfinite(ratio) & (ratio > 0) & np.isfinite(ref_dc) & (ref_dc > 0)
+            )
+            if np.any(good_ratio):
+                db_err = 10.0 * np.log10(ratio[good_ratio])
+                w = ref_dc[good_ratio]
+                wsum = np.nansum(w)
+                if np.isfinite(wsum) and wsum > 0:
+                    weights = w / wsum
+                    _, q, _ = quantiles_weighted(db_err, weights, [0.16, 0.84])
+                    metrics["scatter"] = float(0.5 * (q[1] - q[0]))
+        except Exception:
+            metrics["scatter"] = np.nan
+
+        # logBias
+        try:
+            s_est = np.nansum(est_dc)
+            s_ref = np.nansum(ref_dc)
+            if np.isfinite(s_est) and np.isfinite(s_ref) and s_est > 0 and s_ref > 0:
+                metrics["logBias"] = float(10.0 * np.log10(s_est / s_ref))
+        except Exception:
+            metrics["logBias"] = np.nan
+
+        # Energy distance on original variables
+        try:
+            finite = np.isfinite(est_data) & np.isfinite(ref_data)
+            e_fin = est_data[finite]
+            r_fin = ref_data[finite]
+            if e_fin.size > 0:
+                metrics["ED"] = float(energy_distance(e_fin, r_fin))
+        except Exception:
+            metrics["ED"] = np.nan
+
+        return metrics
+
+    except Exception:
+        return metrics

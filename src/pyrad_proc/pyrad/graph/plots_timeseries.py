@@ -19,12 +19,14 @@ Functions to plot Pyrad datasets
 import pyart
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-from ..util import warn
+import re
 
 import numpy as np
 import datetime
 
 import matplotlib as mpl
+
+from ..util import warn
 
 mpl.use("Agg")
 
@@ -39,7 +41,7 @@ def plot_timeseries(
     fname_list,
     labelx="Time [UTC]",
     labely="Value",
-    labels=["Sensor"],
+    labels=None,  # <- changed default
     title="Time Series",
     period=0,
     timeformat=None,
@@ -51,74 +53,111 @@ def plot_timeseries(
     dpi=72,
 ):
     """
-    plots a time series
+    Plot one or multiple time series.
+
+    Behavior
+    --------
+    - Legacy: if `data_list` is a list of 1D arrays (one per series), plot them.
+    - Multi-timeseries: if `data_list` is a list of lists/tuples, each inner list
+      represents a "group" (e.g., multiple radars) and all series in the group
+      are plotted as lines. If labels is None, defaults to RADAR001, RADAR002, ...
+
+      Examples:
+        data_list = [series1, series2]                 -> 2 lines (legacy)
+        data_list = [[r1, r2, r3]]                     -> 3 lines
+        data_list = [[r1, r2], [r1b, r2b]]             -> 4 lines (all plotted)
 
     Parameters
     ----------
-    tvec : datetime object
-        time of the time series
-    data_list : list of float array
-        values of the time series
+    tvec : array-like of datetime
+        Time vector.
+    data_list : list
+        List of series (legacy) OR list of lists of series (multi-timeseries).
     fname_list : list of str
-        list of names of the files where to store the plot
-    labelx : str
-        The label of the X axis
-    labely : str
-        The label of the Y axis
-    labels : array of str
-        The label of the legend
-    title : str
-        The figure title
+        Output filenames.
+    labels : list of str or None
+        Legend labels (one per plotted line). If None and multi-timeseries is
+        detected, defaults to RADAR001, RADAR002, ... up to number of lines.
+        If None in legacy mode, no legend is shown.
     period : float
-        measurement period in seconds used to compute accumulation. If 0 no
-        accumulation is computed
-    timeformat : str
-        Specifies the tvec and time format on the x axis
-    colors : array of str
-        Specifies the colors of each line
-    linestyles : array of str
-        Specifies the line style of each line
-    markers: array of str
-        Specify the markers to be used for each line
-    ymin, ymax: float
-        Lower/Upper limit of y axis
+        Measurement period in seconds used to compute accumulation. If 0 no
+        accumulation is computed.
+    timeformat : str, optional
+        Datetime formatter string for x-axis.
+    colors, linestyles, markers : list, optional
+        Styling per plotted line (length must match number of plotted lines),
+        or None to use matplotlib defaults.
+    ymin, ymax : float, optional
+        Y-axis limits.
     dpi : int
-        dots per inch
+        Figure DPI.
 
     Returns
     -------
     fname_list : list of str
-        list of names of the created plots
-
-    History
-    --------
-    201?.??.?? -fvj- creation
-    2017.08.21 -jgr- modified margins and grid + minor graphical updates
-    2018.03.05 -jgr- added x-limit of x axis to avoid unwanted error messages
-
+        Output filenames.
     """
-    tvec = np.array(tvec)  # convert  from pandas if needed
+    tvec = np.array(tvec)  # convert from pandas if needed
+    if tvec.size == 0:
+        raise ValueError("tvec is empty")
+
+    # ---- normalize data_list into a flat list of series ----
+    def _is_sequence_of_series(obj):
+        # True if obj looks like a list/tuple of arrays (multi-timeseries group)
+        if not isinstance(obj, (list, tuple)):
+            return False
+        if len(obj) == 0:
+            return False
+        return isinstance(obj[0], (list, tuple, np.ndarray))
+
+    multi_mode = _is_sequence_of_series(data_list) and isinstance(
+        data_list[0], (list, tuple)
+    )
+    if multi_mode:
+        # Flatten groups: [[a,b],[c]] -> [a,b,c]
+        series = []
+        for grp in data_list:
+            series.extend(list(grp))
+        data_series = series
+    else:
+        # Legacy: [a,b,c] -> [a,b,c]
+        data_series = list(data_list)
+
+    n_lines = len(data_series)
+    if n_lines == 0:
+        raise ValueError("data_list contains no series")
+
+    # ---- accumulation if requested ----
     if period > 0:
-        for i, data in enumerate(data_list):
-            data *= period / 3600.0
-            data_list[i] = np.ma.cumsum(data)
+        for i, data in enumerate(data_series):
+            d = np.asanyarray(data)
+            d = d * (period / 3600.0)
+            data_series[i] = np.ma.cumsum(d)
+
+    # ---- default labels ----
+    if labels is None and multi_mode:
+        labels = [f"RADAR{idx+1:03d}" for idx in range(n_lines)]
+
+    # ---- validate style arrays ----
+    def _get_style(arr, i, default):
+        if arr is None:
+            return default
+        if i >= len(arr):
+            return default
+        return arr[i]
 
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
 
-    lab = None
-    col = None
-    lstyle = "--"
-    marker = "o"
+    any_label = False
+    for i, data in enumerate(data_series):
+        lab = labels[i] if labels is not None and i < len(labels) else None
+        if lab is not None:
+            any_label = True
 
-    for i, data in enumerate(data_list):
-        if labels is not None:
-            lab = labels[i]
-        if colors is not None:
-            col = colors[i]
-        if linestyles is not None:
-            lstyle = linestyles[i]
-        if markers is not None:
-            marker = markers[i]
+        col = _get_style(colors, i, None)
+        lstyle = _get_style(linestyles, i, "--")
+        marker = _get_style(markers, i, "o")
+
         ax.plot(tvec, data, label=lab, color=col, linestyle=lstyle, marker=marker)
 
     ax.set_title(title)
@@ -126,19 +165,17 @@ def plot_timeseries(
     ax.set_ylabel(labely)
     ax.set_ylim(bottom=ymin, top=ymax)
     ax.set_xlim([tvec[0], tvec[-1]])
-
-    # Turn on the grid
-    ax.grid()
+    ax.grid(True)
 
     if timeformat is not None:
         ax.xaxis.set_major_formatter(mdates.DateFormatter(timeformat))
 
-    # rotates and right aligns the x labels, and moves the bottom of the
-    # axes up to make room for them
     fig.autofmt_xdate()
-
-    # Make a tight layout
     fig.tight_layout()
+
+    # Show legend only if we actually have labels
+    if any_label:
+        ax.legend(loc="best")
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
@@ -148,90 +185,112 @@ def plot_timeseries(
 
 
 def plot_timeseries_comp(
-    date1,
-    value1,
-    date2,
-    value2,
+    dates,
+    values,
     fname_list,
     labelx="Time [UTC]",
     labely="Value",
-    label1="Sensor 1",
-    label2="Sensor 2",
+    labels=None,
     titl="Time Series Comparison",
-    period1=0,
-    period2=0,
+    periods=None,
     ymin=None,
     ymax=None,
     dpi=72,
+    colors=None,
+    linestyles=None,
+    markers=None,
 ):
     """
-    plots 2 time series in the same graph
+    Plot an arbitrary number of time series on the same axes.
 
     Parameters
     ----------
-    date1 : datetime object
-        time of the first time series
-    value1 : float array
-        values of the first time series
-    date2 : datetime object
-        time of the second time series
-    value2 : float array
-        values of the second time series
+    dates : sequence of array-like of datetime
+        One time vector per series.
+    values : sequence of array-like
+        One value vector per series (same length as corresponding dates entry).
     fname_list : list of str
-        list of names of the files where to store the plot
-    labelx : str
-        The label of the X axis
-    labely : str
-        The label of the Y axis
-    label1, label2 : str
-        legend label for each time series
+        Output filenames.
+    labelx, labely : str
+        Axis labels.
+    labels : sequence of str or None, optional
+        Legend labels (one per series). If None, labels are "Series 1", ...
     titl : str
-        The figure title
-     period1, period2 : float
-        measurement period in seconds used to compute accumulation. If 0 no
-        accumulation is computed
+        Figure title.
+    periods : sequence of float or None, optional
+        Measurement period (seconds) per series used to compute accumulation.
+        If provided and periods[i] > 0, series i is converted to accumulation:
+            cumsum(values[i] * periods[i] / 3600)
+        If None, no accumulation is applied.
+    ymin, ymax : float, optional
+        Y-axis limits.
     dpi : int
-        dots per inch
-    ymin, ymax : float
-        The limits of the Y-axis. None will keep the default limit.
+        Figure DPI.
+    colors, linestyles, markers : sequence or None, optional
+        Style per series. If None, matplotlib defaults are used.
 
     Returns
     -------
     fname_list : list of str
-        list of names of the created plots
-
-    History
-    --------
-    201?.??.?? -fvj- created
-    2017.08.21 -jgr- changed some graphical aspects
-
+        Output filenames.
     """
-    if (period1 > 0) and (period2 > 0):
-        # TODO: document this and check (sometimes artefacts)
-        value1 *= period1 / 3600.0
-        value1 = np.ma.cumsum(value1)
+    if len(dates) != len(values):
+        raise ValueError("dates and values must have the same length")
 
-        value2 *= period2 / 3600.0
-        value2 = np.ma.cumsum(value2)
+    n = len(dates)
+    if n == 0:
+        raise ValueError("No time series provided")
+
+    if labels is None:
+        labels = [f"Series {i+1}" for i in range(n)]
+    if periods is None:
+        periods = [0] * n
+
+    def _style(arr, i, default):
+        if arr is None or i >= len(arr):
+            return default
+        return arr[i]
+
+    # Apply accumulation per-series if requested
+    values_proc = []
+    for i, v in enumerate(values):
+        v = np.asanyarray(v)
+        p = periods[i] if periods is not None else 0
+        if p and p > 0:
+            v = v * (p / 3600.0)
+            v = np.ma.cumsum(v)
+        values_proc.append(v)
 
     fig, ax = plt.subplots(figsize=[10, 6.5], dpi=dpi)
-    ax.plot(date1, value1, "b", label=label1, linestyle="--", marker="o")
-    ax.plot(date2, value2, "r", label=label2, linestyle="--", marker="s")
+
+    # Plot all series
+    for i in range(n):
+        col = _style(colors, i, None)
+        ls = _style(linestyles, i, "--")
+        mk = _style(markers, i, "o")
+        ax.plot(
+            dates[i],
+            values_proc[i],
+            label=labels[i],
+            color=col,
+            linestyle=ls,
+            marker=mk,
+        )
+
     ax.legend(loc="best")
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
-
-    ax.grid()
+    ax.grid(True)
 
     ax.set_ylim(bottom=ymin, top=ymax)
-    ax.set_xlim([date2[0], date2[-1]])
 
-    # rotates and right aligns the x labels, and moves the bottom of the
-    # axes up to make room for them
+    # Set x-limits to the min/max over all series (robust)
+    x0 = min(np.min(d) for d in dates if len(d) > 0)
+    x1 = max(np.max(d) for d in dates if len(d) > 0)
+    ax.set_xlim([x0, x1])
+
     fig.autofmt_xdate()
-
-    # Make a tight layout
     fig.tight_layout()
 
     for fname in fname_list:
@@ -322,6 +381,12 @@ def plot_monitoring_ts(
         has_np = np_t > np_min
         isvalid = np.logical_and(isvalid, has_np)
 
+    if not np.any(isvalid):
+        warn(
+            f"No valid row found in dataset (no row with num points > minimum ({np_min}))"
+        )
+        return
+
     date_plt = date[isvalid]
     mean_dB_plt = geometric_mean_dB[isvalid]
     mean_dB_from_lin_plt = linear_mean_dB[isvalid]
@@ -385,6 +450,194 @@ def plot_monitoring_ts(
     plt.tight_layout()
 
     # Save figure
+    for fname in fname_list:
+        fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+    plt.close(fig)
+
+    return fname_list
+
+
+def plot_sensor_scores_timeseries(
+    df,
+    fname_list,
+    bounds,
+    double_conditional_threshold,
+    np_min=0,
+    labelx="Time [UTC]",
+    labely="Value",
+    titl=None,
+    dpi=72,
+    plot_until_year_end=False,
+    labels=None,
+):
+    """
+    Multi-radar capable time series plot of sensor scores in compact stacked subplots.
+
+    Behavior
+    --------
+    - Single-radar: metric columns are plain (e.g. "RMSE", "N", ...). One line per subplot.
+    - Multi-radar: metric columns have suffixes like "_radar001", "_radar002", ... (case-insensitive).
+      For each base metric (e.g. "RMSE"), all radar-specific columns are plotted as separate lines
+      on the same subplot, with a legend.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Must contain column "date" (datetime64 or convertible). Other columns are metrics.
+        Multi-radar format example: "RMSE_radar001", "RMSE_radar002", ...
+    fname_list : list of str
+        Output filenames.
+    bounds : str
+        Bounds metadata (used only for title/annotation if desired).
+    double_conditional_threshold : float
+        Double conditional threshold metadata (used only for title/annotation if desired).
+    np_min : int, optional
+        Minimum number of points required to plot (based on finite "date" count).
+    labelx, labely : str
+        Axis labels (x label used; y label is per-subplot metric name).
+    titl : str, optional
+        Figure title.
+    dpi : int, optional
+        Figure DPI.
+    plot_until_year_end : bool, optional
+        If True, set xlim to end of the year (requires df["date"] non-empty).
+    labels : dict or list or None, optional
+        Legend labels to use for radars.
+        - If dict: maps radar suffix (e.g. "radar001") -> label string.
+        - If list/tuple: labels in the order of detected radar suffixes (sorted).
+        - If None: legend labels default to the detected suffixes (e.g. "RADAR001").
+
+    Returns
+    -------
+    fname_list : list of str
+        Output filenames (same as input).
+    """
+    if "date" not in df.columns:
+        raise ValueError("Expected a 'date' column in df.")
+
+    # Ensure datetime
+    df = df.copy()
+    df["date"] = np.array(df["date"])
+    # Drop rows with invalid dates
+    ok_date = np.isfinite(df["date"].astype("datetime64[ns]").astype("int64"))
+    df = df.loc[ok_date].sort_values("date")
+
+    if df.empty or len(df) < max(1, np_min):
+        # Nothing to plot
+        return fname_list
+
+    # --- detect multi-radar metric columns ---
+    # Pattern: <metric>_<suffix>, where suffix like radar001 (case-insensitive)
+    suffix_re = re.compile(r"^(?P<base>.+?)_(?P<suf>radar\d{3})$", re.IGNORECASE)
+
+    metric_cols = [c for c in df.columns if c != "date"]
+
+    # Group columns by base metric:
+    # base -> list of (suffix, colname)
+    groups = {}
+    for c in metric_cols:
+        m = suffix_re.match(c)
+        if m:
+            base = m.group("base")
+            suf = m.group("suf").lower()  # radar001
+        else:
+            base = c
+            suf = None
+        groups.setdefault(base, []).append((suf, c))
+
+    # If every group only has one column and all suffixes are None -> single-radar mode
+    # But mixed is allowed; we just plot what's there.
+    base_metrics = list(groups.keys())
+    if not base_metrics:
+        raise ValueError("No metric columns found (expected columns besides 'date').")
+
+    # Determine radar suffix ordering for legend
+    detected_suffixes = sorted(
+        {suf for lst in groups.values() for (suf, _) in lst if suf is not None}
+    )
+    is_multiradar = len(detected_suffixes) > 0
+
+    def _legend_label_for_suffix(suf, idx):
+        # suf is like "radar001"
+        if labels is None:
+            return suf.upper()  # RADAR001
+        if isinstance(labels, dict):
+            return labels.get(suf, suf.upper())
+        if isinstance(labels, (list, tuple)):
+            if idx < len(labels):
+                return labels[idx]
+            return suf.upper()
+        return suf.upper()
+
+    # --- figure setup ---
+    n = len(base_metrics)
+    fig_h = max(3.0, 2.0 * n)
+    fig, axes = plt.subplots(
+        nrows=n, ncols=1, sharex=True, figsize=(10, fig_h), constrained_layout=True
+    )
+    fig.get_layout_engine().set(h_pad=2 / 72, w_pad=2 / 72, hspace=0.0, wspace=0.0)
+
+    if n == 1:
+        axes = [axes]
+
+    # x-axis limits
+    t0 = df["date"].iloc[0]
+    t1 = df["date"].iloc[-1]
+    if plot_until_year_end:
+        # end of year based on first date
+        year = t0.year
+        tend = t0.__class__(year, 12, 31, 23, 59, 59)
+        xlim = (t0, tend)
+    else:
+        xlim = (t0, t1)
+
+    # --- plotting ---
+    for ax, base in zip(axes, base_metrics):
+        series = groups[base]
+
+        # Plot per radar line if multi, otherwise single line
+        if is_multiradar:
+            # Keep a stable order: by detected_suffixes first, then None-suffix at end
+            # Build map suf->col
+            suf_to_col = {suf: col for (suf, col) in series if suf is not None}
+            # plot known suffixes
+            for j, suf in enumerate(detected_suffixes):
+                col = suf_to_col.get(suf, None)
+                if col is None:
+                    continue
+                ax.plot(
+                    df["date"],
+                    df[col],
+                    marker="o",
+                    linewidth=1,
+                    label=_legend_label_for_suffix(suf, j),
+                )
+            # plot any non-suffixed column if present (rare/mixed)
+            for suf, col in series:
+                if suf is None:
+                    ax.plot(df["date"], df[col], marker="o", linewidth=1, label=col)
+        else:
+            # single radar: just plot the column(s) in this base group
+            # (usually exactly one)
+            for _, col in series:
+                ax.plot(df["date"], df[col], marker="o", linewidth=1)
+
+        ax.set_ylabel(base, rotation=0, ha="right", va="center")
+        ax.grid(True, alpha=0.3)
+        ax.tick_params(axis="both", which="major", labelsize=9)
+        ax.set_xlim(xlim)
+
+        if is_multiradar:
+            ax.legend(loc="best", fontsize=9)
+
+    axes[-1].set_xlabel(labelx)
+
+    # Title: if not provided, build something informative
+    if titl is None:
+        titl = f"Sensor scores (bounds={bounds}, dct={double_conditional_threshold})"
+    if titl:
+        fig.suptitle(titl)
+
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
     plt.close(fig)

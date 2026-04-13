@@ -11,131 +11,145 @@ Functions for obtaining Pyrad products from a time series datasets
 
 """
 
-from copy import deepcopy
-from ..util import warn
-
+import matplotlib.pyplot as plt
+import pandas as pd
 import numpy as np
 from netCDF4 import num2date
+import pyart
+
+from ..util import warn
 
 from ..io.io_aux import get_save_dir, make_filename, get_fieldname_pyart
 from ..io.io_aux import generate_field_name_str
 
 from ..io.read_data_sensor import get_sensor_data
-from ..io.read_data_other import read_timeseries
+from ..io.read_data_other import read_sensor_scores_ts
 
-from ..io.write_data import write_ts_polar_data, write_ts_cum
+from ..io.write_data import write_ts_polar_data
 from ..io.write_data import write_ts_grid_data, write_multiple_points
-from ..io.write_data import write_multiple_points_grid
+from ..io.write_data import write_multiple_points_grid, write_sensor_scores
 
-from ..graph.plots_timeseries import plot_timeseries, plot_timeseries_comp
+from ..graph.plots_timeseries import (
+    plot_timeseries,
+    plot_timeseries_comp,
+    plot_sensor_scores_timeseries,
+)
 from ..graph.plots_vol import plot_cappi, plot_traj
 from ..graph.plots import plot_scatter_comp
 
 from ..util.radar_utils import rainfall_accumulation
+from ..util.stat_utils import perfscores
+
+# Matplotlib color cycler
+mpl_colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
 
 def generate_timeseries_products(dataset, prdcfg):
     """
     Generates time series products. Accepted product types:
-        'COMPARE_CUMULATIVE_POINT': Plots in the same graph 2 time series of
-            data accumulation (tipically rainfall rate). One time series is
-            a point measurement of radar data while the other is from a
-            co-located instrument (rain gauge or disdrometer)
-            User defined parameters:
-                dpi: int
-                    The pixel density of the plot. Default 72
-                vmin, vmax: float
-                    The limits of the Y-axis. If none they will be obtained
-                    from the Py-ART config file.
-                sensor: str
-                    The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro'
-                    or 'disdro_parsivel'
-                sensorid: str
-                    The sensor ID.
-                location: str
-                    A string identifying the location of the disdrometer
-                freq: float
-                    The frequency used to retrieve the polarimetric variables
-                    of a disdrometer
-                ele: float
-                    The elevation angle used to retrieve the polarimetric
-                    variables of a disdrometer
-                ScanPeriod: float
-                    The scaning period of the radar in seconds. This parameter
-                    is defined in the 'loc' config file
-        'COMPARE_POINT': Plots in the same graph 2 time series of
-            data . One time series is a point measurement of radar data while
-            the other is from a co-located instrument (rain gauge or
-            disdrometer)
-            User defined parameters:
-                dpi: int
-                    The pixel density of the plot. Default 72
-                vmin, vmax: float
-                    The limits of the Y-axis. If none they will be obtained
-                    from the Py-ART config file.
-                sensor: str
-                    The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro'
-                    or 'disdro_parsivel'
-                sensorid: str
-                    The sensor ID.
-                location: str
-                    A string identifying the location of the disdrometer
-                freq: float
-                    The frequency used to retrieve the polarimetric variables
-                    of a disdrometer
-                ele: float
-                    The elevation angle used to retrieve the polarimetric
-                    variables of a disdrometer
-        'COMPARE_TIME_AVG': Creates a scatter plot of average radar data
-            versus average sensor data.
-            User defined parameters:
-                dpi: int
-                    The pixel density of the plot. Default 72
-                sensor: str
-                    The sensor type. Can be 'rgage', 'rgage_knmi', 'disdro'
-                    or 'disdro_parsivel'
-                sensorid: str
-                    The sensor ID.
-                location: str
-                    A string identifying the location of the disdrometer
-                freq: float
-                    The frequency used to retrieve the polarimetric variables
-                    of a disdrometer
-                ele: float
-                    The elevation angle used to retrieve the polarimetric
-                    variables of a disdrometer
-                cum_time: float
-                    Data accumulation time [s]. Default 3600.
-                base_time: float
-                    Starting moment of the accumulation [s from midnight].
-                    Default 0.
-        'PLOT_AND_WRITE': Writes and plots a trajectory time series.
+
+    'COMPARE_POINT_SENSOR': Plots and/or compares radar and co-located gauge (sensor)
+        data at a point of interest. The product always writes a combined CSV file
+        containing both radar and sensor data. Optionally, the radar and sensor
+        time series can be time-averaged or time-accumulated to a user-defined
+        interval (if no interval is provided, native sampling is used). The plot
+        can be either a dual time series comparison or a scatter plot of radar vs
+        sensor.
+        User defined parameters:
+            dpi: int
+                The pixel density of the plot. Default 72
+            vmin, vmax: float
+                The limits of the Y-axis. If none they will be obtained
+                from the Py-ART config file.
+            plot_type: str
+                The type of plot to generate. Can be 'timeseries' (default) or
+                'scatter'.
+            time_interval: int or None
+                Time interval in seconds used to resample both radar and sensor
+                series before comparison. If None, the native timestamps are used.
+            agg_mode: str
+                The aggregation method used when time_interval is set. Can be
+                'mean' (time-averaging) or 'sum' (time-accumulation). Default
+                'mean'.
+            align: str
+                How to align radar and sensor timestamps when producing paired
+                values (used for CSV pairing and scatter plots). Can be 'nearest'
+                (default) or 'inner'. 'inner' requires that the timestamps of the
+                radar and gauge match perfectly.
+            nearest_tol: int or None
+                Maximum allowed time difference in seconds when align='nearest'.
+                If None, no tolerance is applied (nearest_tol = infinity)
+            sensor: str
+                The sensor type. Can be 'rgage', 'rgage_knmi' or 'disdro'
+            sensorid: str
+                The sensor ID.
+            varname: str
+                Name of the variable to use in the sensor files. It corresponds to the column you want to
+                compare with your radar measurements.
+            sensor_scaling: float
+                Scaling factor for the sensor data. Use 6 for example to convert from mm for 10-min measurements
+                to mm/hr (which is the radar reference). Default is 1 (no scaling)
+            dir_template: str
+                The directory template where to find the file. dir_template should be a directory template string
+                (relative to rgpath/disdropath or absolute) that can contain {sensorid} and any strftime date format codes
+                (e.g. %Y, %m, %d, %Y%m%d, optionally written as {%Y%m%d}), which will be expanded using the provided sensorid
+                and date before performing the recursive search, for example "{%Y-%m-%d}/{sensorid}/"
+                If not provided a potentially deep recursive search will be performed which can take some time.
+    'COMPARE_SCORES_SENSOR': Plots and/or compares radar and co-located gauge (sensor)
+        data at a point of interest. The product always writes a combined CSV file
+        containing both radar and sensor data. Optionally, the radar and sensor
+        time series can be time-averaged or time-accumulated to a user-defined
+        interval (if no interval is provided, native sampling is used). The plot
+        can be either a dual time series comparison or a scatter plot of radar vs
+        sensor.
+        User defined parameters:
+            dpi: int
+                The pixel density of the plot. Default 72
+            vmin, vmax: float
+                The limits of the Y-axis. If none they will be obtained
+                from the Py-ART config file.
+            plot_type: str
+                The type of plot to generate. Can be 'timeseries' (default) or
+                'scatter'.
+            time_interval: int or None
+                Time interval in seconds used to resample both radar and sensor
+                series before comparison. If None, the native timestamps are used.
+            agg_mode: str
+                The aggregation method used when time_interval is set. Can be
+                'mean' (time-averaging) or 'sum' (time-accumulation). Default
+                'mean'.
+            align: str
+                How to align radar and sensor timestamps when producing paired
+                values (used for CSV pairing and scatter plots). Can be 'nearest'
+                (default) or 'inner'. 'inner' requires that the timestamps of the
+                radar and gauge match perfectly.
+            nearest_tol: int or None
+                Maximum allowed time difference in seconds when align='nearest'.
+                If None, no tolerance is applied (nearest_tol = infinity)
+            sensor: str
+                The sensor type. Can be 'rgage', 'rgage_knmi' or 'disdro'
+            sensorid: str
+                The sensor ID.
+            varname: str
+                Name of the variable to use in the sensor files. It corresponds to the column you want to
+                compare with your radar measurements.
+            sensor_scaling: float
+                Scaling factor for the sensor data. Use 6 for example to convert from mm for 10-min measurements
+                to mm/hr (which is the radar reference). Default is 1 (no scaling)
+            dir_template: str
+                The directory template where to find the file. dir_template should be a directory template string
+                (relative to rgpath/disdropath or absolute) that can contain {sensorid} and any strftime date format codes
+                (e.g. %Y, %m, %d, %Y%m%d, optionally written as {%Y%m%d}), which will be expanded using the provided sensorid
+                and date before performing the recursive search, for example "{%Y-%m-%d}/{sensorid}/"
+                If not provided a potentially deep recursive search will be performed which can take some time.
+        'PLOT_AND_WRITE_TRAJ': Writes and plots a trajectory time series.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
                 ymin, ymax: float
                     The minimum and maximum value of the Y-axis. If none it
                     will be obtained from the Py-ART config file.
-        'PLOT_AND_WRITE_POINT': Plots and writes a time series of radar data
-            at a particular point
-            User defined parameters:
-                dpi: int
-                    The pixel density of the plot. Default 72
-                vmin, vmax: float
-                    The limits of the Y-axis. If none they will be obtained
-                    from the Py-ART config file.
-        'PLOT_CUMULATIVE_POINT': Plots a time series of radar data
-            accumulation at a particular point.
-            User defined parameters:
-                dpi: int
-                    The pixel density of the plot. Default 72
-                vmin, vmax: float
-                    The limits of the Y-axis. If none they will be obtained
-                    from the Py-ART config file.
-                ScanPeriod: float
-                    The scaning period of the radar in seconds. This parameter
-                    is defined in the 'loc' config file
-        'PLOT_HIST': plots and writes a histogram of all the data gathered
+        'PLOT_HIST_TRAJ': plots and writes a histogram of all the data gathered
             during the trajectory processing
             User defined parameters:
                 voltype: str
@@ -143,7 +157,7 @@ def generate_timeseries_products(dataset, prdcfg):
                 step: float or None
                     The quantization step of the data. If None it will be
                     obtained from the Py-ART config file
-        'TRAJ_CAPPI_IMAGE': Creates a CAPPI image with the trajectory position
+        'CAPPI_IMAGE_TRAJ': Creates a CAPPI image with the trajectory position
             overplot on it.
             User defined parameters:
                 voltype: str
@@ -234,24 +248,39 @@ def generate_timeseries_products(dataset, prdcfg):
 
         return csvfname
 
-    if prdcfg["type"] == "PLOT_AND_WRITE_POINT":
+    if prdcfg["type"] == "POINT_TS":
         set_time_info = prdcfg.get("set_time_info", True)
-        if "antenna_coordinates_az_el_r" in dataset:
-            az = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][0])
-            el = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][1])
-            r = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][2])
-            gateinfo = "az" + az + "r" + r + "el" + el
+
+        if prdcfg.get("do_only_final", True) and not dataset["final"]:
+            return None
+
+        # ---- multi-radar keys ----
+        radar_keys = sorted(
+            [k for k in dataset.keys() if isinstance(k, str) and k.startswith("RADAR")]
+        )
+        if not radar_keys:
+            warn("Unable to plot time series. No radar entries in dataset")
+            return None
+
+        # Reference radar for metadata/filenames
+        ds0 = dataset[radar_keys[0]]
+
+        # Gate info (use reference radar)
+        is_single_radar = len(prdcfg["RadarName"]) == 1
+        has_antenna = "antenna_coordinates_az_el_r" in ds0
+
+        if has_antenna and is_single_radar:
+            az, el, r = ds0["antenna_coordinates_az_el_r"]
+            gateinfo = f"az{az:.1f}r{r:.1f}el{el:.1f}"
         else:
-            lon = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][0])
-            lat = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][1])
-            alt = "{:.1f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][2])
-            gateinfo = "lon" + lon + "lat" + lat + "alt" + alt
+            lon, lat, alt = ds0["point_coordinates_WGS84_lon_lat_alt"]
+            gateinfo = f"lon{lon:.3f}lat{lat:.3f}alt{alt:.1f}"
 
         timeformat = None
         timeinfo = None
         if set_time_info:
             timeformat = "%Y%m%d"
-            timeinfo = dataset["ref_time"]
+            timeinfo = ds0.get("ref_time", None)
 
         savedir = get_save_dir(
             prdcfg["basepath"],
@@ -261,39 +290,55 @@ def generate_timeseries_products(dataset, prdcfg):
             timeinfo=timeinfo,
         )
 
+        # One CSV for all radars
         csvfname = make_filename(
             "ts",
             prdcfg["dstype"],
-            dataset["datatype"],
+            ds0["datatype"],
             ["csv"],
             prdcfginfo=gateinfo,
             timeinfo=timeinfo,
             timeformat=timeformat,
         )[0]
-
         csvfname = savedir + csvfname
 
-        if not dataset["final"]:
-            if "antenna_coordinates_az_el_r" in dataset:
-                write_ts_polar_data(dataset, csvfname)
-            else:
-                write_ts_grid_data(dataset, csvfname)
-            print("saved CSV file: " + csvfname)
+        if "antenna_coordinates_az_el_r" in ds0:
+            write_ts_polar_data(dataset, csvfname)  # multi-radar supported
+        else:
+            write_ts_grid_data(dataset, csvfname)  # multi-radar supported
+        print("saved CSV file: " + csvfname)
 
         dpi = prdcfg.get("dpi", 72)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
-        plot_only_final = prdcfg.get("plot_only_final", False)
+        do_only_final = prdcfg.get("do_only_final", True)
 
-        if plot_only_final and not dataset["final"]:
-            return None
-        if not plot_only_final and dataset["final"]:
+        # ---- time vector from dataset  ----
+        date = ds0.get("time", None)
+        if date is None or len(date) == 0:
+            warn("Unable to plot time series. No valid time vector")
             return None
 
-        date, value = read_timeseries(csvfname)
-        if date is None:
-            warn("Unable to plot time series. No valid data")
-            return None
+        # ---- per-radar series from dataset ----
+        series_list = []
+        for radarnr in radar_keys:
+            v = dataset[radarnr].get("value", None)
+            if v is None:
+                series_list.append(np.full(len(date), np.nan))
+                continue
+
+            # masked -> nan
+            if np.ma.isMaskedArray(v):
+                v = v.filled(np.nan)
+            else:
+                try:
+                    v = np.array(
+                        [np.nan if x is np.ma.masked else x for x in v], dtype=float
+                    )
+                except Exception:
+                    v = np.asarray(v)
+
+            series_list.append(v)
 
         timeinfo_fig = None
         if set_time_info:
@@ -302,31 +347,25 @@ def generate_timeseries_products(dataset, prdcfg):
         figfname_list = make_filename(
             "ts",
             prdcfg["dstype"],
-            dataset["datatype"],
+            ds0["datatype"],
             prdcfg["imgformat"],
             prdcfginfo=gateinfo,
             timeinfo=timeinfo_fig,
             timeformat=timeformat,
         )
+        figfname_list = [savedir + fn for fn in figfname_list]
 
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
-
-        if "antenna_coordinates_az_el_r" in dataset:
-            label1 = "Radar (az, el, r): (" + az + ", " + el + ", " + r + ")"
-        else:
-            label1 = "Grid (lon, lat, alt): (" + lon + ", " + lat + ", " + alt + ")"
         titl = "Time Series " + date[0].strftime("%Y-%m-%d")
+        labely = generate_field_name_str(ds0["datatype"])
 
-        labely = generate_field_name_str(dataset["datatype"])
-
+        # Multi-series plot: pass list-of-lists so each inner list becomes multiple lines
         plot_timeseries(
             date,
-            [value],
+            [series_list],
             figfname_list,
             labelx="Time UTC",
             labely=labely,
-            labels=[label1],
+            labels=prdcfg["RadarName"],
             title=titl,
             dpi=dpi,
             ymin=vmin,
@@ -337,503 +376,633 @@ def generate_timeseries_products(dataset, prdcfg):
         figfname_list.append(csvfname)
         return figfname_list
 
-    if prdcfg["type"] == "PLOT_CUMULATIVE_POINT":
+    if prdcfg["type"] == "COMPARE_POINT_SENSOR":
+        # -------------------------
+        # 0) common options / guards
+        # -------------------------
         dpi = prdcfg.get("dpi", 72)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
-        plot_only_final = prdcfg.get("plot_only_final", False)
+        do_only_final = prdcfg.get("do_only_final", True)
         set_time_info = prdcfg.get("set_time_info", True)
 
-        if plot_only_final and not dataset["final"]:
-            return None
-        if not plot_only_final and dataset["final"]:
+        plot_type = prdcfg.get("plot_type", "timeseries")  # "timeseries" or "scatter"
+        time_interval = prdcfg.get("time_interval", None)  # seconds or None
+        base_time = prdcfg.get("base_time", 0)  # seconds
+        agg_mode = prdcfg.get("agg_mode", "mean")  # "mean" or "sum"
+        sensor_scaling = prdcfg.get("sensor_scaling", 1)
+        align = prdcfg.get("align", "nearest")  # "nearest" or "inner"
+        nearest_tol = prdcfg.get("nearest_tol", None)  # seconds or None
+        sensor_id = prdcfg.get("sensorid", "")  # sensor ID
+
+        radar_keys = sorted(
+            [k for k in dataset.keys() if isinstance(k, str) and k.startswith("RADAR")]
+        )
+        if not radar_keys:
+            warn("COMPARE_POINT_SENSOR: no RADAR### keys found in dataset")
             return None
 
-        if "antenna_coordinates_az_el_r" in dataset:
-            az = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][0])
-            el = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][1])
-            r = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][2])
-            gateinfo = "az" + az + "r" + r + "el" + el
+        ds0 = dataset[radar_keys[0]]
+        if do_only_final and not dataset["final"]:
+            return None
+
+        if plot_type == "scatter":
+            warn(
+                "COMPARE_POINT_SENSOR: plot_type='scatter' is not supported for multi-radar case"
+            )
+            return None
+
+        # -------------------------
+        # 1) point / gateinfo (use reference radar)
+        # -------------------------
+        is_single_radar = len(prdcfg["RadarName"]) == 1
+        has_antenna = "antenna_coordinates_az_el_r" in ds0
+
+        if has_antenna and is_single_radar:
+            az, el, r = ds0["antenna_coordinates_az_el_r"]
+            gateinfo = f"az{az:.1f}r{r:.1f}el{el:.1f}"
+            label_radar_base = f"Radar (az, el, r): ({az:.1f}, {el:.1f}, {r:.1f})"
         else:
-            lon = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][0])
-            lat = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][1])
-            alt = "{:.1f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][2])
-            gateinfo = "lon" + lon + "lat" + lat + "alt" + alt
+            lon, lat, alt = ds0["point_coordinates_WGS84_lon_lat_alt"]
+            gateinfo = f"lon{lon:.3f}lat{lat:.3f}alt{alt:.1f}"
+            prefix = "Radar" if has_antenna else "Grid"
+            label_radar_base = (
+                f"{prefix} (lon, lat, alt): ({lon:.3f}, {lat:.3f}, {alt:.1f})"
+            )
 
         timeformat = None
         timeinfo = None
         if set_time_info:
             timeformat = "%Y%m%d"
-            timeinfo = dataset["ref_time"]
+            timeinfo = ds0.get("ref_time", None)
 
         savedir = get_save_dir(
             prdcfg["basepath"],
             prdcfg["procname"],
             dssavedir,
-            prdcfg["prdid"],
+            prdsavedir,
             timeinfo=timeinfo,
         )
 
-        csvfname = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            ["csv"],
-            prdcfginfo=gateinfo,
-            timeinfo=timeinfo,
-            timeformat=timeformat,
-        )[0]
-
-        csvfname = savedir + csvfname
-
-        date, value = read_timeseries(csvfname)
-
-        if date is None:
-            warn("Unable to plot accumulation time series. No valid data")
-            return None
-
-        timeinfo_fig = None
-        if set_time_info:
-            timeinfo_fig = date[0]
-
-        figfname_list = make_filename(
-            "ts_cum",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            prdcfg["imgformat"],
-            prdcfginfo=gateinfo,
-            timeinfo=timeinfo_fig,
-            timeformat=timeformat,
-        )
-
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
-
-        if "antenna_coordinates_az_el_r" in dataset:
-            label1 = "Radar (az, el, r): (" + az + ", " + el + ", " + r + ")"
-        else:
-            label1 = "Grid (lon, lat, alt): (" + lon + ", " + lat + ", " + alt + ")"
-        titl = "Time Series Acc. " + date[0].strftime("%Y-%m-%d")
-
-        labely = "Radar estimated rainfall accumulation (mm)"
-
-        plot_timeseries(
-            date,
-            [value],
-            figfname_list,
-            labelx="Time UTC",
-            labely=labely,
-            labels=[label1],
-            title=titl,
-            period=prdcfg["ScanPeriod"] * 60.0,
-            ymin=vmin,
-            ymax=vmax,
-            dpi=dpi,
-        )
-        print("----- save to " + " ".join(figfname_list))
-
-        return figfname_list
-
-    if prdcfg["type"] == "COMPARE_POINT":
-        dpi = prdcfg.get("dpi", 72)
-        vmin = prdcfg.get("vmin", None)
-        vmax = prdcfg.get("vmax", None)
-        plot_only_final = prdcfg.get("plot_only_final", False)
-        set_time_info = prdcfg.get("set_time_info", True)
-
-        if plot_only_final and not dataset["final"]:
-            return None
-        if not plot_only_final and dataset["final"]:
-            return None
-
-        if "antenna_coordinates_az_el_r" in dataset:
-            az = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][0])
-            el = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][1])
-            r = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][2])
-            gateinfo = "az" + az + "r" + r + "el" + el
-        else:
-            lon = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][0])
-            lat = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][1])
-            alt = "{:.1f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][2])
-            gateinfo = "lon" + lon + "lat" + lat + "alt" + alt
-
-        timeformat = None
-        timeinfo = None
-        if set_time_info:
-            timeformat = "%Y%m%d"
-            timeinfo = dataset["ref_time"]
-
-        savedir_ts = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdid"],
-            timeinfo=timeinfo,
-        )
-
-        csvfname = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            ["csv"],
-            prdcfginfo=gateinfo,
-            timeinfo=timeinfo,
-            timeformat=timeformat,
-        )[0]
-
-        csvfname = savedir_ts + csvfname
-
-        radardate, radarvalue = read_timeseries(csvfname)
-        if radardate is None:
-            warn(
-                "Unable to plot sensor comparison at point of interest. "
-                + "No valid radar data"
-            )
+        # -------------------------
+        # 2) build sensor dataframe once
+        # -------------------------
+        # Use last available radar time as query anchor (from reference radar)
+        rad0_date = ds0.get("time", None)
+        if rad0_date is None or len(rad0_date) == 0:
+            warn("COMPARE_POINT_SENSOR: reference radar has no date vector")
             return None
 
         sensordate, sensorvalue, sensortype, _ = get_sensor_data(
-            radardate[0], dataset["datatype"], prdcfg
+            rad0_date[0], rad0_date[-1], ds0["datatype"], prdcfg
         )
+
         if sensordate is None:
-            warn(
-                "Unable to plot sensor comparison at point of interest. "
-                + "No valid sensor data"
-            )
+            warn("Unable to compare at POI. No valid sensor data")
             return None
 
-        timeinfo_fig = None
-        if set_time_info:
-            timeinfo_fig = radardate[0]
+        label_sensor = f"{sensortype} {sensor_id}"
+        labely = generate_field_name_str(ds0["datatype"])
 
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdsavedir,
-            timeinfo=timeinfo_fig,
+        df_s = (
+            pd.DataFrame(
+                {
+                    "date": pd.to_datetime(sensordate, errors="coerce", format="mixed"),
+                    "sensor": np.asarray(sensorvalue, dtype=float)
+                    * float(sensor_scaling),
+                }
+            )
+            .dropna(subset=["date"])
+            .sort_values("date")
         )
 
-        figfname_list = make_filename(
-            "ts_comp",
+        if df_s.empty:
+            warn("Sensor dataframe empty after cleaning")
+            return None
+
+        # optional resampling/accumulation on sensor
+        if time_interval is not None:
+            t_out_vec, val_out_vec, np_vec = rainfall_accumulation(
+                df_s["date"].to_numpy(),
+                df_s["sensor"].to_numpy(),
+                time_interval,
+                base_time,
+            )
+            df_s = pd.DataFrame(
+                {
+                    "date": pd.to_datetime(t_out_vec, errors="coerce", format="mixed"),
+                    "sensor": val_out_vec,
+                    "n_agg_pts_sensor": np_vec,
+                }
+            )
+
+        df_s = df_s.dropna(subset=["date"]).sort_values("date").reset_index(drop=True)
+
+        # -------------------------
+        # 3) build combined dataframe (sensor axis) + collect series for plotting
+        # -------------------------
+        df_out = df_s[["date", "sensor"]].copy()
+
+        # for plotting (keep original/resampled series per radar + sensor)
+        plot_dates = [
+            pd.to_datetime(df_s["date"], errors="coerce", format="mixed").to_list()
+        ]
+        plot_values = [df_s["sensor"].to_numpy()]
+        plot_labels = [label_sensor]
+
+        # merge_asof tolerance
+        tol = None
+        if nearest_tol is not None:
+            tol = pd.Timedelta(seconds=float(nearest_tol))
+
+        for radarnr in radar_keys:
+            ds = dataset[radarnr]
+
+            radarvalue = ds.get("value", None)
+            radardate = ds.get("time", None)  # as requested
+            if radarvalue is None or radardate is None:
+                warn(f"{radarnr}: missing date/value -> column will be NaN")
+                df_out[f"radar_{radarnr.lower()}"] = np.nan
+                continue
+
+            # masked -> nan
+            if np.ma.isMaskedArray(radarvalue):
+                radarvalue = radarvalue.filled(np.nan)
+            else:
+                try:
+                    radarvalue = [
+                        np.nan if x is np.ma.masked else x for x in radarvalue
+                    ]
+                except Exception:
+                    radarvalue = np.asarray(radarvalue)
+
+            df_r = (
+                pd.DataFrame(
+                    {
+                        "date": pd.to_datetime(
+                            radardate, errors="coerce", format="mixed"
+                        ),
+                        "radar": np.asarray(radarvalue, dtype=float),
+                    }
+                )
+                .dropna(subset=["date"])
+                .sort_values("date")
+            )
+
+            if df_r.empty:
+                warn(f"{radarnr}: radar dataframe empty -> column will be NaN")
+                df_out[f"radar_{radarnr.lower()}"] = np.nan
+                continue
+
+            # optional resampling/accumulation on radar
+            if time_interval is not None:
+                t_out_vec, val_out_vec, np_vec = rainfall_accumulation(
+                    df_r["date"].to_numpy(),
+                    df_r["radar"].to_numpy(),
+                    time_interval,
+                    base_time,
+                )
+                df_r = pd.DataFrame(
+                    {
+                        "date": pd.to_datetime(
+                            t_out_vec, errors="coerce", format="mixed"
+                        ),
+                        "radar": val_out_vec,
+                        "n_agg_pts": np_vec,
+                    }
+                )
+
+            df_r = (
+                df_r.dropna(subset=["date"]).sort_values("date").reset_index(drop=True)
+            )
+
+            # align radar to sensor dates (sensor-axis table)
+            if align == "inner":
+                # exact timestamp match; keep sensor axis and place NaN where no match
+                df_tmp = pd.merge(df_out[["date"]], df_r, on="date", how="left")
+            else:
+                df_tmp = pd.merge_asof(
+                    df_out[["date"]].sort_values("date"),
+                    df_r.sort_values("date"),
+                    on="date",
+                    direction="nearest",
+                    tolerance=tol,
+                )
+
+            df_out[f"radar_{radarnr.lower()}"] = df_tmp["radar"].to_numpy()
+
+            # Collect for plotting: radar series itself (not the aligned-to-sensor version)
+            plot_dates.append(
+                pd.to_datetime(df_r["date"], errors="coerce", format="mixed").to_list()
+            )
+            plot_values.append(df_r["radar"].to_numpy())
+
+        # Replace NaN
+        df_out.fillna(pyart.config.get_fillvalue(), inplace=True)
+        # Update plot labels
+        plot_labels.extend(prdcfg["RadarName"])
+
+        # -------------------------
+        # 4) write one combined CSV
+        # -------------------------
+        csv_tag = "ts_comp"
+        if time_interval is not None:
+            csv_tag = f"{int(time_interval)}s_{agg_mode}_ts_comp"
+
+        timeinfo_csv = rad0_date[-1] if set_time_info else None
+
+        comp_csvfname = make_filename(
+            csv_tag,
             prdcfg["dstype"],
-            dataset["datatype"],
+            ds0["datatype"],
+            ["csv"],
+            prdcfginfo=gateinfo,
+            timeinfo=timeinfo_csv,
+            timeformat=timeformat,
+        )[0]
+        comp_csvfname = savedir + comp_csvfname
+
+        header = (
+            "# Weather radar/sensor comparison timeseries data file\n"
+            '# Comment lines are preceded by "#"\n'
+            "# Description: \n"
+            "# Time series of radar and sensor data over a fixed location.\n"
+            f"# Location: {label_radar_base}\n"
+            f"# {sensortype}: {sensor_id}\n"
+            f"# Time aggregation period (s): {time_interval}\n"
+            f"# Time aggregation method: {agg_mode}\n"
+            f"# Sensor/Radar timestamp alignment method: {align}\n"
+            f"# Sensor/Radar timestamp alignment tolerance (s): {nearest_tol}\n"
+            f"# Data: {generate_field_name_str(ds0.get('datatype'))}\n"
+            f"# Fill Value: {pyart.config.get_fillvalue()}\n"
+            f"# Start: {rad0_date[0].strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+            "#\n"
+        )
+        with open(comp_csvfname, "w", encoding="utf-8", newline="") as f:
+            f.write(header)
+            df_out.to_csv(f, index=False)
+
+        print("saved radar+sensor CSV file (all radars): " + comp_csvfname)
+
+        # -------------------------
+        # 5) plot one figure (sensor + all radars)
+        # -------------------------
+        timeinfo_fig = timeinfo_csv
+
+        fig_tag = "ts_comp" if plot_type == "timeseries" else "scatter_comp"
+        if time_interval is not None:
+            fig_tag = f"{int(time_interval)}s_{agg_mode}_" + fig_tag
+
+        figfname_list = make_filename(
+            fig_tag,
+            prdcfg["dstype"],
+            ds0["datatype"],
             prdcfg["imgformat"],
             prdcfginfo=gateinfo,
             timeinfo=timeinfo_fig,
             timeformat=timeformat,
         )
+        figfname_list = [savedir + f for f in figfname_list]
 
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
+        if plot_type == "scatter":
+            # x = sensor, y = radar
+            x = plot_values[0]
+            y = plot_values[1]
+            ok = np.isfinite(x) & np.isfinite(y)
+            x = x[ok]
+            y = y[ok]
+            if x.size == 0:
+                warn("No matched radar/sensor pairs to plot scatter")
+                return None
 
-        if "antenna_coordinates_az_el_r" in dataset:
-            label1 = "Radar (az, el, r): (" + az + ", " + el + ", " + r + ")"
+            labelx = f"{label_sensor} ({labely})" if labely else label_sensor
+            labely2 = f"{label_radar_base} ({labely})" if labely else label_radar_base
+
+            titl = "Radar vs Gauge"
+            if time_interval is not None:
+                titl += f" ({int(time_interval)}s {agg_mode})"
+            titl += " " + pd.to_datetime(
+                df_out["date"].iloc[0], errors="coerce", format="mixed"
+            ).strftime("%Y-%m-%d")
+
+            plot_scatter_comp(
+                x,
+                y,
+                figfname_list,
+                labelx=labelx,
+                labely=labely2,
+                titl=titl,
+                axis="equal",
+                dpi=dpi,
+            )
+
         else:
-            label1 = "Grid (lon, lat, alt): (" + lon + ", " + lat + ", " + alt + ")"
-        label2 = sensortype + " " + prdcfg["sensorid"]
-        titl = "Time Series Comp. " + radardate[0].strftime("%Y-%m-%d")
-        labely = generate_field_name_str(dataset["datatype"])
+            # timeseries comparison
+            # Use the existing compare plot helper (expects separate arrays)
+            titl = f"Time Series comparison with {sensortype} sensor {sensor_id}"
+            if time_interval is not None:
+                titl += f" ({int(time_interval)}s {agg_mode})"
+            titl += " " + pd.to_datetime(
+                df_s["date"].iloc[0], format="mixed", errors="coerce"
+            ).strftime("%Y-%m-%d")
 
-        plot_timeseries_comp(
-            radardate,
-            radarvalue,
-            sensordate,
-            sensorvalue,
-            figfname_list,
-            labelx="Time UTC",
-            labely=labely,
-            label1=label1,
-            label2=label2,
-            titl=titl,
-            ymin=vmin,
-            ymax=vmax,
-            dpi=dpi,
-        )
+            colors = ["#000000"] + [mpl_colors[i] for i in range(len(plot_dates))]
+            linestyles = ["--"] + ["-"] * len(plot_dates)
+            plot_timeseries_comp(
+                plot_dates,
+                plot_values,
+                figfname_list,
+                labelx="Time UTC",
+                labely=labely,
+                labels=plot_labels,  # sensor + RADAR001.. lines
+                titl=titl,
+                ymin=vmin,
+                ymax=vmax,
+                dpi=dpi,
+                colors=colors,
+                linestyles=linestyles,
+            )
+
         print("----- save to " + " ".join(figfname_list))
 
-        figfname_list.append(csvfname)
+        # Return outputs
+        figfname_list.append(comp_csvfname)
         return figfname_list
 
-    if prdcfg["type"] == "COMPARE_CUMULATIVE_POINT":
+    if prdcfg["type"] == "COMPARE_SCORES_SENSOR":
         dpi = prdcfg.get("dpi", 72)
-        vmin = prdcfg.get("vmin", None)
-        vmax = prdcfg.get("vmax", None)
-        plot_only_final = prdcfg.get("plot_only_final", False)
+        bounds = prdcfg.get("bounds", None)
         set_time_info = prdcfg.get("set_time_info", True)
+        time_interval = prdcfg.get("time_interval", None)  # seconds or None
+        base_time = prdcfg.get("base_time", 0)  # seconds
+        agg_mode = prdcfg.get("agg_mode", "mean")  # "mean" or "sum"
+        sensor_scaling = prdcfg.get("sensor_scaling", 1)
+        align = prdcfg.get("align", "nearest")  # "nearest" or "inner"
+        nearest_tol = prdcfg.get("nearest_tol", None)  # seconds or None
+        doublecond = prdcfg.get("double_conditional_threshold", -np.inf)
+        selected_scores = prdcfg.get("scores", ["RMSE", "corr"])
+        linearize = prdcfg.get("linearize", False)
 
-        if plot_only_final and not dataset["final"]:
-            return None
-        if not plot_only_final and dataset["final"]:
+        if not dataset["final"]:
             return None
 
-        if "antenna_coordinates_az_el_r" in dataset:
-            az = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][0])
-            el = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][1])
-            r = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][2])
+        radar_keys = sorted(
+            [k for k in dataset.keys() if isinstance(k, str) and k.startswith("RADAR")]
+        )
+        # Reference radar for metadata/filenames
+        ds0 = dataset[radar_keys[0]]
+
+        # -------------------------
+        # 1) point / gateinfo (use reference radar)
+        # -------------------------
+        if (
+            "antenna_coordinates_az_el_r" in ds0 and len(prdcfg["RadarName"]) == 1
+        ):  # Single radar case
+            az = "{:.1f}".format(ds0["antenna_coordinates_az_el_r"][0])
+            el = "{:.1f}".format(ds0["antenna_coordinates_az_el_r"][1])
+            r = "{:.1f}".format(ds0["antenna_coordinates_az_el_r"][2])
             gateinfo = "az" + az + "r" + r + "el" + el
         else:
-            lon = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][0])
-            lat = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][1])
-            alt = "{:.1f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][2])
+            lon = "{:.3f}".format(ds0["point_coordinates_WGS84_lon_lat_alt"][0])
+            lat = "{:.3f}".format(ds0["point_coordinates_WGS84_lon_lat_alt"][1])
+            alt = "{:.1f}".format(ds0["point_coordinates_WGS84_lon_lat_alt"][2])
             gateinfo = "lon" + lon + "lat" + lat + "alt" + alt
 
+        # -------------------------
+        # 2) load sensor data ONCE (anchor on latest time from reference radar)
+        # -------------------------
+        rad0_date = ds0.get("time", None)  # or ds0.get("time", None)
+        if rad0_date is None or len(rad0_date) == 0:
+            warn("COMPARE_SCORES_SENSOR: reference radar has no date vector")
+            return None
+
+        sensordate, sensorvalue, sensortype, _ = get_sensor_data(
+            rad0_date[0],
+            rad0_date[-1],
+            ds0["datatype"],
+            prdcfg,
+        )
+        if sensordate is None:
+            warn("Unable to compare at POI. No valid sensor data")
+            return None
+
+        label_sensor = f"{sensortype} {prdcfg.get('sensorid','')}"
+
+        # Sensor dataframe
+        df_s = (
+            pd.DataFrame(
+                {
+                    "date": pd.to_datetime(sensordate, errors="coerce", format="mixed"),
+                    "sensor": np.asarray(sensorvalue, dtype=float)
+                    * float(sensor_scaling),
+                }
+            )
+            .dropna(subset=["date"])
+            .sort_values("date")
+        )
+
+        if df_s.empty:
+            warn("Sensor dataframe empty after cleaning")
+            return None
+
+        # Optional aggregation on sensor
+        if time_interval is not None:
+            t_out_vec, val_out_vec, np_vec = rainfall_accumulation(
+                df_s["date"].to_numpy(),
+                df_s["sensor"].to_numpy(),
+                time_interval,
+                base_time,
+            )
+            df_s = pd.DataFrame(
+                {
+                    "date": pd.to_datetime(t_out_vec, errors="coerce", format="mixed"),
+                    "sensor": val_out_vec,
+                    "n_agg_pts": np_vec,
+                }
+            ).sort_values("date")
+
+        # -------------------------
+        # 3) per-radar: build radar df, optionally aggregate, align, compute scores
+        # -------------------------
+        tol = None
+        if nearest_tol is not None:
+            tol = pd.Timedelta(seconds=float(nearest_tol))
+
+        # This is what we will feed to write_sensor_scores in multi-radar mode
+        # scores_out[radarnr][bounds][metric] = scalar OR length-1 array
+        scores_out = {}
+
+        # Use last radar time across radars for file naming (most recent)
+        last_times = []
+
+        for radarnr in radar_keys:
+            ds = dataset[radarnr]
+
+            radarvalue = ds.get("value", None)
+            radardate = ds.get("time", None)
+
+            if radarvalue is None or radardate is None or len(radardate) == 0:
+                warn(f"{radarnr}: missing date/value -> skipping")
+                continue
+
+            last_times.append(radardate[-1])
+
+            # masked -> nan
+            if np.ma.isMaskedArray(radarvalue):
+                radarvalue = radarvalue.filled(np.nan)
+            else:
+                try:
+                    radarvalue = [
+                        np.nan if x is np.ma.masked else x for x in radarvalue
+                    ]
+                except Exception:
+                    radarvalue = np.asarray(radarvalue)
+
+            df_r = (
+                pd.DataFrame(
+                    {
+                        "date": pd.to_datetime(
+                            radardate, errors="coerce", format="mixed"
+                        ),
+                        "radar": np.asarray(radarvalue, dtype=float),
+                    }
+                )
+                .dropna(subset=["date"])
+                .sort_values("date")
+            )
+
+            if df_r.empty:
+                warn(f"{radarnr}: radar dataframe empty after cleaning -> skipping")
+                continue
+
+            # Optional aggregation on radar
+            if time_interval is not None:
+                t_out_vec, val_out_vec, np_vec = rainfall_accumulation(
+                    df_r["date"].to_numpy(),
+                    df_r["radar"].to_numpy(),
+                    time_interval,
+                    base_time,
+                )
+                df_r = pd.DataFrame(
+                    {
+                        "date": pd.to_datetime(
+                            t_out_vec, errors="coerce", format="mixed"
+                        ),
+                        "radar": val_out_vec,
+                        "n_agg_pts": np_vec,
+                    }
+                ).sort_values("date")
+
+            # Align
+            if align == "inner":
+                df = pd.merge(df_r, df_s, on="date", how="inner")
+            else:
+                df = pd.merge_asof(
+                    df_r.sort_values("date"),
+                    df_s.sort_values("date"),
+                    on="date",
+                    direction="nearest",
+                    tolerance=tol,
+                )
+
+            df = df.sort_values("date").reset_index(drop=True)
+
+            # Compute scores
+            all_scores = perfscores(
+                df["radar"].to_numpy(),
+                df["sensor"].to_numpy(),
+                doublecond_thresh=doublecond,
+                bounds=bounds,
+                linearize=linearize,
+            )
+
+            # keep user-selected + NP (as in your original)
+            scores_out[radarnr] = {}
+            for b in all_scores:
+                keep = selected_scores + ["NP"]
+                scores_out[radarnr][b] = {
+                    k: all_scores[b][k] for k in keep if k in all_scores[b]
+                }
+
+        if not scores_out:
+            warn("COMPARE_SCORES_SENSOR: no radar produced valid scores")
+            return None
+
+        # -------------------------
+        # 4) write single scores CSV (multi-radar)
+        # -------------------------
+        csvtimeinfo_path = None
+        csvtimeinfo_file = None
         timeformat = None
-        timeinfo = None
-        if set_time_info:
-            timeformat = "%Y%m%d"
-            timeinfo = dataset["ref_time"]
-
-        savedir_ts = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdid"],
-            timeinfo=timeinfo,
-        )
-
-        csvfname = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            ["csv"],
-            prdcfginfo=gateinfo,
-            timeinfo=timeinfo,
-            timeformat=timeformat,
-        )[0]
-
-        csvfname = savedir_ts + csvfname
-
-        radardate, radarvalue = read_timeseries(csvfname)
-        if radardate is None:
-            warn(
-                "Unable to plot sensor comparison at point of interest. "
-                + "No valid radar data"
-            )
-            return None
-
-        sensordate, sensorvalue, sensortype, period2 = get_sensor_data(
-            radardate[0], dataset["datatype"], prdcfg
-        )
-        if sensordate is None:
-            warn(
-                "Unable to plot sensor comparison at point of interest. "
-                + "No valid sensor data"
-            )
-            return None
-
-        timeinfo_fig = None
-        if set_time_info:
-            timeinfo_fig = radardate[0]
+        if prdcfg.get("add_date_in_fname", False):
+            csvtimeinfo_file = ds0.get("timeinfo", None)
+            timeformat = "%Y"
 
         savedir = get_save_dir(
             prdcfg["basepath"],
             prdcfg["procname"],
             dssavedir,
-            prdsavedir,
-            timeinfo=timeinfo_fig,
+            prdcfg["prdname"],
+            timeinfo=csvtimeinfo_path,
         )
 
-        figfname_list = make_filename(
-            "ts_cumcomp",
+        filenames = make_filename(
+            "ts_scores",
             prdcfg["dstype"],
-            dataset["datatype"],
-            prdcfg["imgformat"],
-            prdcfginfo=gateinfo,
-            timeinfo=timeinfo_fig,
+            ds0["datatype"],
+            ext_list=["csv"] + prdcfg["imgformat"],
+            timeinfo=csvtimeinfo_file,
             timeformat=timeformat,
+            runinfo=prdcfg["runinfo"],
         )
+        csvfname = savedir + filenames[0]
+        figfname_list = [savedir + f for f in filenames[1:]]
 
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
+        # choose one start_time for the score entry (use reference radar last time by default)
+        # if you want "now", use dataset["timeinfo"] or similar
+        start_time_for_row = max(last_times) if last_times else rad0_date[-1]
 
-        if "antenna_coordinates_az_el_r" in dataset:
-            label1 = "Radar (az, el, r): (" + az + ", " + el + ", " + r + ")"
-        else:
-            label1 = "Grid (lon, lat, alt): (" + lon + ", " + lat + ", " + alt + ")"
-        label2 = sensortype + " " + prdcfg["sensorid"]
-        titl = "Time Series Acc. Comp. " + radardate[0].strftime("%Y-%m-%d")
-        labely = "Rainfall accumulation (mm)"
-
-        plot_timeseries_comp(
-            radardate,
-            radarvalue,
-            sensordate,
-            sensorvalue,
-            figfname_list,
-            labelx="Time UTC",
-            labely=labely,
-            label1=label1,
-            label2=label2,
-            titl=titl,
-            period1=prdcfg["ScanPeriod"] * 60.0,
-            period2=period2,
-            ymin=vmin,
-            ymax=vmax,
-            dpi=dpi,
+        write_sensor_scores(
+            start_time_for_row,
+            scores_out,
+            doublecond,
+            ds0["datatype"],
+            csvfname,
+            rewrite=False,
         )
-        print("----- save to " + " ".join(figfname_list))
-
-        figfname_list.append(csvfname)
-        return figfname_list
-
-    if prdcfg["type"] == "COMPARE_TIME_AVG":
-        dpi = prdcfg.get("dpi", 72)
-        plot_only_final = prdcfg.get("plot_only_final", False)
-
-        if plot_only_final and not dataset["final"]:
-            return None
-        if not plot_only_final and dataset["final"]:
-            return None
-
-        if "antenna_coordinates_az_el_r" in dataset:
-            az = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][0])
-            el = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][1])
-            r = "{:.1f}".format(dataset["antenna_coordinates_az_el_r"][2])
-            gateinfo = "az" + az + "r" + r + "el" + el
-        else:
-            lon = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][0])
-            lat = "{:.3f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][1])
-            alt = "{:.1f}".format(dataset["point_coordinates_WGS84_lon_lat_alt"][2])
-            gateinfo = "lon" + lon + "lat" + lat + "alt" + alt
-
-        savedir_ts = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdid"],
-            timeinfo=dataset["time"],
-        )
-
-        csvfname = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            ["csv"],
-            prdcfginfo=gateinfo,
-            timeinfo=dataset["time"],
-            timeformat="%Y%m%d",
-        )[0]
-
-        radardate, radarvalue = read_timeseries(savedir_ts + csvfname)
-        if radardate is None:
-            warn(
-                "Unable to compared time averaged data at POI. " + "No valid radar data"
-            )
-            return None
-
-        sensordate, sensorvalue, sensortype, period2 = get_sensor_data(
-            radardate[0], dataset["datatype"], prdcfg
-        )
-        if sensordate is None:
-            warn(
-                "Unable to compared time averaged data at POI. "
-                + "No valid sensor data"
-            )
-            return None
-
-        cum_time = prdcfg.get("cum_time", 3600)
-        base_time = prdcfg.get("base_time", 0)
-
-        sensordate_cum, sensorvalue_cum, np_sensor_cum = rainfall_accumulation(
-            sensordate,
-            sensorvalue,
-            cum_time=cum_time,
-            base_time=base_time,
-            dropnan=False,
-        )
-
-        radardate_cum, radarvalue_cum, np_radar_cum = rainfall_accumulation(
-            radardate, radarvalue, cum_time=cum_time, base_time=base_time, dropnan=False
-        )
-
-        # find common time stamps
-        ind = np.where(np.isin(radardate_cum, sensordate_cum))[0]
-        if ind.size == 0:
-            warn("No sensor data for radar data time stamps")
-        radardate_cum2 = radardate_cum[ind]
-        radarvalue_cum2 = radarvalue_cum[ind]
-        np_radar_cum2 = np_radar_cum[ind]
-
-        ind = np.where(np.isin(sensordate_cum, radardate_cum2))[0]
-        sensorvalue_cum2 = sensorvalue_cum[ind]
-        np_sensor_cum2 = np_sensor_cum[ind]
-
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdsavedir,
-            timeinfo=radardate[0],
-        )
-
-        csvfname = make_filename(
-            str(cum_time) + "s_acc_ts_comp",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            ["csv"],
-            prdcfginfo=gateinfo,
-            timeinfo=radardate[0],
-            timeformat="%Y%m%d",
-        )[0]
-
-        csvfname = savedir + csvfname
-
-        new_dataset = deepcopy(dataset)
-        new_dataset.update(
-            {
-                "time": radardate_cum2,
-                "sensor_value": sensorvalue_cum2,
-                "np_sensor": np_sensor_cum2,
-                "radar_value": radarvalue_cum2,
-                "np_radar": np_radar_cum2,
-                "cum_time": cum_time,
-            }
-        )
-        new_dataset.update(prdcfg)
-
-        write_ts_cum(new_dataset, csvfname)
-
         print("saved CSV file: " + csvfname)
 
-        figfname_list = make_filename(
-            str(cum_time) + "s_acc_ts_comp",
-            prdcfg["dstype"],
-            dataset["datatype"],
-            prdcfg["imgformat"],
-            prdcfginfo=gateinfo,
-            timeinfo=radardate[0],
-            timeformat="%Y%m%d",
+        # -------------------------
+        # 5) reread scores timeseries + plot
+        # -------------------------
+        scores_ts, meta = read_sensor_scores_ts(csvfname)
+
+        titldate = (
+            scores_ts["date"].iloc[0].strftime("%Y%m%d")
+            + "-"
+            + scores_ts["date"].iloc[-1].strftime("%Y%m%d")
+        )
+        titl = (
+            f"{prdcfg['runinfo']} Sensor scores {titldate}\n"
+            f"Bounds = {meta['bounds']}, Double conditional threshold = {meta['doublecond_thresh']}"
         )
 
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
-
-        labelx = sensortype + " " + prdcfg["sensorid"] + " (mm)"
-        if "antenna_coordinates_az_el_r" in dataset:
-            labely = "Radar (az, el, r): (" + az + ", " + el + ", " + r + ") (mm)"
-        else:
-            labely = (
-                "Radar (lon, lat, alt): (" + lon + ", " + lat + ", " + alt + ") (mm)"
-            )
-        titl = str(cum_time) + "s Acc. Comp. " + radardate_cum[0].strftime("%Y-%m-%d")
-
-        plot_scatter_comp(
-            sensorvalue_cum2,
-            radarvalue_cum2,
+        # Multi-radar plot: this function now plots all *_radar### metrics as separate lines
+        plot_sensor_scores_timeseries(
+            scores_ts,
             figfname_list,
-            labelx=labelx,
-            labely=labely,
+            meta["bounds"],
+            meta["doublecond_thresh"],
             titl=titl,
-            axis="equal",
             dpi=dpi,
+            labels=prdcfg["RadarName"],
         )
-
         print("----- save to " + " ".join(figfname_list))
-        figfname_list.append(csvfname)
-        return figfname_list
+
+        return [csvfname] + figfname_list
 
     # ================================================================
-    if prdcfg["type"] == "PLOT_AND_WRITE":
+    if prdcfg["type"] == "PLOT_AND_WRITE_TRAJ":
         if not dataset["final"]:
             return None
 
@@ -894,7 +1063,7 @@ def generate_timeseries_products(dataset, prdcfg):
         figfname_list.append(csvfname)
         return figfname_list
 
-    if prdcfg["type"] == "PLOT_HIST":
+    if prdcfg["type"] == "PLOT_HIST_TRAJ":
         if not dataset["final"]:
             return None
 
@@ -940,7 +1109,7 @@ def generate_timeseries_products(dataset, prdcfg):
 
         return figfname_list
 
-    if prdcfg["type"] == "TRAJ_CAPPI_IMAGE":
+    if prdcfg["type"] == "CAPPI_IMAGE_TRAJ":
         if dataset["final"]:
             return None
 
@@ -1018,6 +1187,6 @@ def generate_timeseries_products(dataset, prdcfg):
 
         return figfname_list
 
-    # ================================================================
-    warn(" Unsupported product type: " + prdcfg["type"])
+    else:
+        warn(" Unsupported product type: " + prdcfg["type"])
     return None

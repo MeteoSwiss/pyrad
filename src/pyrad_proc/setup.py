@@ -189,11 +189,7 @@ if __name__ == "__main__":
         version=VERSION,
         zip_safe=False,
         extras_require={
-            "graph": [
-                "cartopy",
-                "shapely",
-                "geopandas",
-            ],
+            "graph": ["cartopy", "shapely", "geopandas", "gdal", "pyproj"],
             "s3": [
                 "boto3",
             ],
@@ -210,6 +206,7 @@ if __name__ == "__main__":
                 "pymysql",
                 "sqlalchemy",
                 "cryptography",
+                "gdal",
             ],
         },
     )

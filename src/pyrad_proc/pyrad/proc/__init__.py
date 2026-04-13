@@ -344,9 +344,11 @@ from .process_calib import process_gc_monitoring, process_sun_hits  # noqa
 from .process_calib import process_time_avg_std  # noqa
 from .process_calib import process_sunscan  # noqa
 
-from .process_intercomp import process_time_avg, process_weighted_time_avg  # noqa
-from .process_intercomp import process_time_avg_flag, process_time_stats  # noqa
-from .process_intercomp import process_colocated_gates, process_time_stats2  # noqa
+from .process_timeavg import process_time_avg, process_weighted_time_avg  # noqa
+from .process_timeavg import process_time_avg_flag, process_time_stats  # noqa
+from .process_timeavg import process_time_stats2  # noqa
+
+from .process_intercomp import process_colocated_gates  # noqa
 from .process_intercomp import process_intercomp, process_intercomp_with_QC  # noqa
 from .process_intercomp import process_fields_diff, process_intercomp_fields  # noqa
 

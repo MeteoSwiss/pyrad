@@ -104,8 +104,7 @@ if not _MYSQL_AVAILABLE:
         "no MySQL writing will be performed!"
     )
 else:
-    from sqlalchemy import create_engine, text
-    from sqlalchemy.types import Integer, Float, String, DateTime, Boolean
+    pass
 
 
 def write_to_s3(
@@ -218,12 +217,17 @@ def write_csv_to_mysql(
     """
     Write a CSV file into a MySQL database table.
 
-    The function reads a CSV file into a pandas DataFrame, infers column
-    types (including automatic detection of datetime columns), creates
-    the table if it does not already exist, and inserts the data into
-    MySQL. Duplicate rows are ignored using ``INSERT IGNORE``. Duplicate
-    detection therefore requires an existing PRIMARY KEY or UNIQUE
-    constraint in the table.
+    Behavior
+    --------
+    - The CSV is read into a pandas DataFrame.
+    - Column names are sanitized for MySQL compatibility.
+    - All likely datetime columns are auto-detected and converted.
+    - If at least one datetime column is found, the first detected datetime
+      column is used as the "date column". Only rows whose date value is not
+      already present in the database are inserted.
+    - If no datetime column is found, only rows that are not exact duplicates
+      of existing rows (across all columns) are inserted.
+    - The table is created automatically if it does not already exist.
 
     Parameters
     ----------
@@ -250,40 +254,57 @@ def write_csv_to_mysql(
         )
         return
 
+    import re
+    import hashlib
+    import pandas as pd
+    from sqlalchemy import create_engine, text
+    from sqlalchemy.types import Integer, Float, Boolean, DateTime, String
+
     # -----------------------------
     # 1) Read CSV with inference
     # -----------------------------
     df = pd.read_csv(csv_file, comment="#")
-    df = df.replace({np.nan: None})
-    df = df.where(pd.notna(df), None)  # also converts NaT to None
-    df = df.replace({-9999: None})  # also converts -9999 to None
+    df = df.replace({-9999: None})
+    df = df.where(pd.notna(df), None)  # converts NaN/NaT to None
 
     def sanitize_columns(cols):
         out = []
+        seen = set()
         for c in cols:
             c2 = str(c).strip()
             c2 = re.sub(r"\s+", "_", c2)
-            c2 = re.sub(r"[^0-9a-zA-Z_]", "_", c2)  # replace dots etc.
+            c2 = re.sub(r"[^0-9a-zA-Z_]", "_", c2)
             if re.match(r"^\d", c2):
-                c2 = f"c_{c2}"  # avoid leading digit
+                c2 = f"c_{c2}"
+            base = c2
+            i = 1
+            while c2 in seen:
+                c2 = f"{base}_{i}"
+                i += 1
+            seen.add(c2)
             out.append(c2)
         return out
 
     df.columns = sanitize_columns(df.columns)
 
-    # Try automatic datetime detection
+    # -----------------------------
+    # 2) Auto-detect datetime columns
+    # -----------------------------
+    datetime_cols = []
     for col in df.columns:
         try:
-            parsed = pd.to_datetime(df[col].astype(str), errors="raise")
-            # Only convert if most values are valid datetimes
-            if parsed.notna().sum() > 0.8 * len(df):
+            parsed = pd.to_datetime(df[col], errors="coerce")
+            valid_ratio = parsed.notna().sum() / len(df) if len(df) > 0 else 0
+            if valid_ratio > 0.8:
                 df[col] = parsed
-            break
+                datetime_cols.append(col)
         except Exception:
             pass
 
+    date_col = datetime_cols[0] if datetime_cols else None
+
     # -----------------------------
-    # 2) Map pandas dtypes → MySQL
+    # 3) Map pandas dtypes → MySQL
     # -----------------------------
     def infer_sqlalchemy_type(series):
         if pd.api.types.is_integer_dtype(series):
@@ -295,13 +316,16 @@ def write_csv_to_mysql(
         elif pd.api.types.is_datetime64_any_dtype(series):
             return DateTime()
         else:
-            max_len = int(series.astype(str).str.len().max())
+            non_null = series.dropna()
+            if len(non_null) == 0:
+                return String(255)
+            max_len = int(non_null.astype(str).str.len().max())
             return String(max(10, min(max_len, 1000)))
 
     dtype_mapping = {col: infer_sqlalchemy_type(df[col]) for col in df.columns}
 
     # -----------------------------
-    # 3) Connect to MySQL
+    # 4) Connect to MySQL
     # -----------------------------
     engine = create_engine(
         f"mysql+pymysql://{user}:{password}@{hostname}:{port}/{database}",
@@ -310,7 +334,7 @@ def write_csv_to_mysql(
     )
 
     # -----------------------------
-    # 4) Create table if not exists
+    # 5) Create table if not exists
     # -----------------------------
     df.head(0).to_sql(
         table_name,
@@ -321,13 +345,76 @@ def write_csv_to_mysql(
     )
 
     # -----------------------------
-    # 5) Insert with INSERT IGNORE
+    # 6) Remove duplicates inside input dataframe itself
+    # -----------------------------
+    if date_col is not None:
+        df = df.drop_duplicates(subset=[date_col], keep="last")
+    else:
+        df = df.drop_duplicates(keep="last")
+
+    # -----------------------------
+    # 7) Filter rows already present in DB
+    # -----------------------------
+    with engine.begin() as conn:
+        if date_col is not None:
+            # Fetch existing date values from DB
+            existing_dates_df = pd.read_sql(
+                text(f"SELECT `{date_col}` FROM `{table_name}`"),
+                conn,
+            )
+
+            if not existing_dates_df.empty:
+                existing_dates = pd.to_datetime(
+                    existing_dates_df[date_col], errors="coerce"
+                )
+                df = df[~df[date_col].isin(existing_dates)]
+
+        else:
+            # No date column found:
+            # compare whole rows against existing DB content
+            existing_df = pd.read_sql(
+                text(f"SELECT * FROM `{table_name}`"),
+                conn,
+            )
+
+            if not existing_df.empty:
+                # Align columns just in case
+                existing_df = existing_df[df.columns.tolist()]
+
+                def normalize_value(v):
+                    if pd.isna(v) or v is None:
+                        return ""
+                    if isinstance(v, pd.Timestamp):
+                        return v.isoformat()
+                    return str(v)
+
+                def row_hash(row):
+                    joined = "\x1f".join(normalize_value(v) for v in row)
+                    return hashlib.sha256(joined.encode("utf-8")).hexdigest()
+
+                existing_hashes = set(existing_df.apply(row_hash, axis=1).tolist())
+                new_hashes = df.apply(row_hash, axis=1)
+
+                df = df.loc[~new_hashes.isin(existing_hashes)].copy()
+
+    # Nothing left to insert
+    if df.empty:
+        print(
+            f"No new rows to insert into {database}.{table_name} from file {csv_file}"
+        )
+        return
+
+    # Convert pandas NaT/NaN again after filtering
+    df = df.where(pd.notna(df), None)
+
+    # -----------------------------
+    # 8) Insert remaining rows
     # -----------------------------
     columns = ", ".join(f"`{c}`" for c in df.columns)
-    placeholders = ", ".join([f":{c}" for c in df.columns])
+    placeholders = ", ".join(f":{c}" for c in df.columns)
 
     insert_stmt = text(
-        f"INSERT IGNORE INTO `{table_name}` ({columns}) VALUES ({placeholders})"
+        f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
     )
 
     with engine.begin() as conn:
@@ -335,9 +422,16 @@ def write_csv_to_mysql(
             chunk = df.iloc[start : start + chunksize]
             conn.execute(insert_stmt, chunk.to_dict(orient="records"))
 
-    print(
-        f"File {csv_file} successfully written to MySQL database {database} in table {table_name}"
-    )
+    if date_col is not None:
+        print(
+            f"File {csv_file} successfully written to MySQL database {database} "
+            f"in table {table_name}. Uniqueness was checked using date column '{date_col}'."
+        )
+    else:
+        print(
+            f"File {csv_file} successfully written to MySQL database {database} "
+            f"in table {table_name}. No date column was found, so full-row duplicates were skipped."
+        )
 
 
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
@@ -2155,184 +2249,381 @@ def write_multiple_points_grid(dataset, fname):
 
 def write_ts_polar_data(dataset, fname):
     """
-    writes time series of data
+    Write time series data to CSV with a comment header.
+
+    Single-radar mode
+    -----------------
+    dataset is a dict for one radar.
+    Output columns: ["date", "az", "el", "r", "value"]
+
+    Multi-radar mode
+    ---------------
+    dataset is a dict with keys RADAR001, RADAR002, ...
+    Output columns: ["date", "lon", "lat", "alt", "value_RADAR001", "value_RADAR002", ...]
+    Values are stored in wide format (one row per timestamp).
 
     Parameters
     ----------
     dataset : dict
-        dictionary containing the time series parameters
-
+        Single-radar dataset dict OR multi-radar dict keyed by RADAR###
     fname : str
-        file name where to store the data
+        File path to write/append to
 
     Returns
     -------
     fname : str
-        the name of the file where data has written
-
+        Output filename
     """
-    filelist = glob.glob(fname)
-    nsamples = len(dataset["used_antenna_coordinates_az_el_r"][0])
-    if not filelist:
-        with open(fname, "w", newline="") as csvfile:
-            if nsamples > 1:
-                start_time = dataset["time"][0]
-            else:
-                start_time = dataset["time"]
-            csvfile.write("# Weather radar timeseries data file\n")
-            csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write("# Description: \n")
-            csvfile.write(
-                "# Time series of a weather radar data over a " + "fixed location.\n"
-            )
-            csvfile.write(
-                "# Location [lon, lat, alt]: "
-                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
-                + "\n"
-            )
-            csvfile.write(
-                "# Nominal antenna coordinates used [az, el, r]: "
-                + str(dataset["antenna_coordinates_az_el_r"])
-                + "\n"
-            )
-            csvfile.write(
-                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
-            )
-            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
-            csvfile.write(
-                "# Start: " + start_time.strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
-            )
-            csvfile.write("#\n")
 
-            fieldnames = ["date", "az", "el", "r", "value"]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writeheader()
+    def _is_multiradar(ds):
+        return isinstance(ds, dict) and any(
+            isinstance(k, str) and re.match(r"^RADAR\d{3}$", k) for k in ds.keys()
+        )
 
-            if nsamples == 1:
-                writer.writerow(
-                    {
-                        "date": dataset["time"],
-                        "az": dataset["used_antenna_coordinates_az_el_r"][0][0],
-                        "el": dataset["used_antenna_coordinates_az_el_r"][1][0],
-                        "r": dataset["used_antenna_coordinates_az_el_r"][2][0],
-                        "value": dataset["value"],
-                    }
-                )
-            else:
-                for i in range(nsamples):
-                    writer.writerow(
-                        {
-                            "date": dataset["time"][i],
-                            "az": dataset["used_antenna_coordinates_az_el_r"][0][i],
-                            "el": dataset["used_antenna_coordinates_az_el_r"][1][i],
-                            "r": dataset["used_antenna_coordinates_az_el_r"][2][i],
-                            "value": dataset["value"][i],
-                        }
-                    )
-            csvfile.close()
+    def _to_dt_series(t):
+        if isinstance(t, (list, tuple, np.ndarray, pd.Series)):
+            return pd.to_datetime(pd.Series(t))
+        return pd.to_datetime(pd.Series([t]))
+
+    def _to_1d_values(v, n, fillvalue=np.nan):
+        # Convert scalars/lists/masked -> 1D float array length n
+        if np.ma.isMaskedArray(v):
+            v = v.filled(fillvalue)
+        if isinstance(v, (list, tuple, np.ndarray, pd.Series)):
+            arr = np.asarray(v)
+        else:
+            arr = np.asarray([v])
+
+        if arr.size == 1 and n > 1:
+            arr = np.repeat(arr, n)
+
+        # If it's an object array with masked scalars, convert those to NaN
+        if arr.dtype == object:
+            arr = np.array(
+                [fillvalue if x is np.ma.masked else x for x in arr], dtype=float
+            )
+
+        return arr.reshape(-1)
+
+    file_exists = os.path.exists(fname)
+    file_empty = file_exists and (os.path.getsize(fname) == 0)
+    multiradar = _is_multiradar(dataset)
+
+    # ----------------------------
+    # Build dataframe + header
+    # ----------------------------
+    if not multiradar:
+        # ---- single radar (legacy) ----
+        t = _to_dt_series(dataset["time"])
+        n = len(t)
+
+        used = dataset["used_antenna_coordinates_az_el_r"]
+        az = np.asarray(used[0]).reshape(-1)
+        el = np.asarray(used[1]).reshape(-1)
+        rr = np.asarray(used[2]).reshape(-1)
+
+        if az.size == 1 and n > 1:
+            az = np.repeat(az, n)
+        if el.size == 1 and n > 1:
+            el = np.repeat(el, n)
+        if rr.size == 1 and n > 1:
+            rr = np.repeat(rr, n)
+
+        val = _to_1d_values(dataset["value"], n, get_fillvalue())
+
+        df = pd.DataFrame(
+            {
+                "date": t.dt.strftime("%Y%m%d%H%M%S"),
+                "az": az[:n],
+                "el": el[:n],
+                "r": rr[:n],
+                "value": val[:n],
+            }
+        )
+
+        start_time = t.iloc[0].to_pydatetime()
+
+        header = (
+            "# Weather radar timeseries data file\n"
+            '# Comment lines are preceded by "#"\n'
+            "# Description: \n"
+            "# Time series of a weather radar data over a fixed location.\n"
+            f"# Location [lon, lat, alt]: {dataset.get('point_coordinates_WGS84_lon_lat_alt')}\n"
+            f"# Nominal antenna coordinates used [az, el, r]: {dataset.get('antenna_coordinates_az_el_r')}\n"
+            f"# Data: {generate_field_name_str(dataset.get('datatype'))}\n"
+            f"# Fill Value: {get_fillvalue()}\n"
+            f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+            "#\n"
+        )
+
+        col_order = ["date", "az", "el", "r", "value"]
+
     else:
-        with open(fname, "a", newline="") as csvfile:
-            fieldnames = ["date", "az", "el", "r", "value"]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            if nsamples == 1:
-                writer.writerow(
-                    {
-                        "date": dataset["time"],
-                        "az": dataset["used_antenna_coordinates_az_el_r"][0][0],
-                        "el": dataset["used_antenna_coordinates_az_el_r"][1][0],
-                        "r": dataset["used_antenna_coordinates_az_el_r"][2][0],
-                        "value": dataset["value"],
-                    }
-                )
-            else:
-                for i in range(nsamples):
-                    writer.writerow(
-                        {
-                            "date": dataset["time"][i],
-                            "az": dataset["used_antenna_coordinates_az_el_r"][0][i],
-                            "el": dataset["used_antenna_coordinates_az_el_r"][1][i],
-                            "r": dataset["used_antenna_coordinates_az_el_r"][2][i],
-                            "value": dataset["value"][i],
-                        }
-                    )
-            csvfile.close()
+        # ---- multi radar (wide format) ----
+        radar_keys = sorted(
+            [
+                k
+                for k in dataset.keys()
+                if isinstance(k, str) and re.match(r"^RADAR\d{3}$", k)
+            ]
+        )
+        if not radar_keys:
+            raise ValueError("Multi-radar dataset detected but no RADAR### keys found")
+
+        # Use first radar for time axis and shared coords in the table
+        ds0 = dataset[radar_keys[0]]
+        t = _to_dt_series(ds0["time"])
+        n = len(t)
+        start_time = t.iloc[0].to_pydatetime()
+
+        # Coordinates: keep lon/lat/alt columns (take from reference radar)
+        lon0, lat0, alt0 = ds0["point_coordinates_WGS84_lon_lat_alt"]
+
+        df = pd.DataFrame(
+            {
+                "date": t.dt.strftime("%Y%m%d%H%M%S"),
+                "lon": float(lon0),
+                "lat": float(lat0),
+                "alt": float(alt0),
+            }
+        )
+
+        # Add one value column per radar
+        for rk in radar_keys:
+            ds = dataset[rk]
+            # If times differ per radar, you need an outer join; here we assume same times.
+            val = _to_1d_values(ds["value"], n)
+            df[f"value_{rk.lower()}"] = val[:n]
+
+        # Header listing coords/antenna per radar
+        coord_lines = []
+        ant_lines = []
+        for rk in radar_keys:
+            ds = dataset[rk]
+            coord_lines.append(
+                f"# {rk} Location [lon, lat, alt]: {ds.get('point_coordinates_WGS84_lon_lat_alt')}"
+            )
+            ant_lines.append(
+                f"# {rk} Nominal antenna coordinates used [az, el, r]: {ds.get('antenna_coordinates_az_el_r')}"
+            )
+
+        header = (
+            "# Weather radar timeseries data file (multi-radar)\n"
+            '# Comment lines are preceded by "#"\n'
+            "# Description: \n"
+            "# Time series of weather radar data over a fixed location (multiple radars).\n"
+            + "\n".join(coord_lines)
+            + "\n"
+            + "\n".join(ant_lines)
+            + "\n"
+            f"# Data: {generate_field_name_str(ds0.get('datatype'))}\n"
+            f"# Fill Value: {get_fillvalue()}\n"
+            f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+            "#\n"
+        )
+
+        # Column order
+        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
+        col_order = ["date", "lon", "lat", "alt"] + value_cols
+
+    df = df[col_order]
+
+    write_header = (not file_exists) or file_empty
+    mode = "a" if (file_exists and not write_header) else "w"
+
+    with open(fname, mode, encoding="utf-8", newline="") as f:
+        if write_header:
+            f.write(header)
+            df.to_csv(f, index=False)
+        else:
+            df.to_csv(f, index=False, header=False)
 
     return fname
 
 
 def write_ts_grid_data(dataset, fname):
     """
-    writes time series of data
+    Write gridded-data time series to CSV with a comment header.
+
+    Single-radar mode
+    -----------------
+    dataset is a dict for one series point.
+    Output columns: ["date", "lon", "lat", "alt", "value"]
+
+    Multi-radar mode
+    ---------------
+    dataset is a dict with keys RADAR001, RADAR002, ...
+    Output columns: ["date", "lon", "lat", "alt", "value_radar001", "value_radar002", ...]
+    Values are stored in wide format (one row per timestamp).
 
     Parameters
     ----------
     dataset : dict
-        dictionary containing the time series parameters
-
+        Single dataset dict OR multi-radar dict keyed by RADAR###
     fname : str
-        file name where to store the data
+        File path to write/append to
 
     Returns
     -------
     fname : str
-        the name of the file where data has written
-
+        Output filename
     """
-    filelist = glob.glob(fname)
-    if not filelist:
-        with open(fname, "w", newline="") as csvfile:
-            csvfile.write("# Gridded data timeseries data file\n")
-            csvfile.write('# Comment lines are preceded by "#"\n')
-            csvfile.write("# Description: \n")
-            csvfile.write(
-                "# Time series of a gridded data over a " + "fixed location.\n"
-            )
-            csvfile.write(
-                "# Nominal location [lon, lat, alt]: "
-                + str(dataset["point_coordinates_WGS84_lon_lat_alt"])
-                + "\n"
-            )
-            csvfile.write(
-                "# Grid points used [iz, iy, ix]: "
-                + str(dataset["grid_points_iz_iy_ix"])
-                + "\n"
-            )
-            csvfile.write(
-                "# Data: " + generate_field_name_str(dataset["datatype"]) + "\n"
-            )
-            csvfile.write("# Fill Value: " + str(get_fillvalue()) + "\n")
-            csvfile.write(
-                "# Start: " + dataset["time"].strftime("%Y-%m-%d %H:%M:%S UTC") + "\n"
-            )
-            csvfile.write("#\n")
 
-            fieldnames = ["date", "lon", "lat", "alt", "value"]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writeheader()
-            writer.writerow(
-                {
-                    "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
-                    "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
-                    "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
-                    "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
-                    "value": dataset["value"],
-                }
+    def _is_multiradar(ds):
+        return isinstance(ds, dict) and any(
+            isinstance(k, str) and re.match(r"^RADAR\d{3}$", k) for k in ds.keys()
+        )
+
+    def _to_dt_series(t):
+        if isinstance(t, (list, tuple, np.ndarray, pd.Series)):
+            return pd.to_datetime(pd.Series(t))
+        return pd.to_datetime(pd.Series([t]))
+
+    def _to_1d_values(v, n):
+        if np.ma.isMaskedArray(v):
+            v = v.filled(np.nan)
+        if isinstance(v, (list, tuple, np.ndarray, pd.Series)):
+            arr = np.asarray(v)
+        else:
+            arr = np.asarray([v])
+
+        if arr.size == 1 and n > 1:
+            arr = np.repeat(arr, n)
+
+        if arr.dtype == object:
+            arr = np.array(
+                [np.nan if x is np.ma.masked else x for x in arr], dtype=float
             )
-            csvfile.close()
+
+        return arr.reshape(-1)
+
+    file_exists = os.path.exists(fname)
+    file_empty = file_exists and (os.path.getsize(fname) == 0)
+    multiradar = _is_multiradar(dataset)
+
+    if not multiradar:
+        # ---- single radar (legacy-ish) ----
+        # dataset["time"] may be scalar or vector; grid writer historically wrote one row,
+        # but we support vectors too (like the polar writer).
+        t = _to_dt_series(dataset["time"])
+        n = len(t)
+
+        # Used coordinates can be scalars
+        used = dataset["used_coordinates_WGS84_lon_lat_alt"]
+        lon = float(used[0])
+        lat = float(used[1])
+        alt = float(used[2])
+
+        val = _to_1d_values(dataset["value"], n)
+
+        df = pd.DataFrame(
+            {
+                "date": t.dt.strftime("%Y%m%d%H%M%S"),
+                "lon": lon,
+                "lat": lat,
+                "alt": alt,
+                "value": val[:n],
+            }
+        )
+
+        start_time = t.iloc[0].to_pydatetime()
+
+        header = (
+            "# Gridded data timeseries data file\n"
+            '# Comment lines are preceded by "#"\n'
+            "# Description: \n"
+            "# Time series of a gridded data over a fixed location.\n"
+            f"# Nominal location [lon, lat, alt]: {dataset.get('point_coordinates_WGS84_lon_lat_alt')}\n"
+            f"# Grid points used [iz, iy, ix]: {dataset.get('grid_points_iz_iy_ix')}\n"
+            f"# Data: {generate_field_name_str(dataset.get('datatype'))}\n"
+            f"# Fill Value: {get_fillvalue()}\n"
+            f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+            "#\n"
+        )
+
+        col_order = ["date", "lon", "lat", "alt", "value"]
+
     else:
-        with open(fname, "a", newline="") as csvfile:
-            fieldnames = ["date", "lon", "lat", "alt", "value"]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writerow(
-                {
-                    "date": dataset["time"].strftime("%Y-%m-%d %H:%M:%S.%f"),
-                    "lon": dataset["used_coordinates_WGS84_lon_lat_alt"][0],
-                    "lat": dataset["used_coordinates_WGS84_lon_lat_alt"][1],
-                    "alt": dataset["used_coordinates_WGS84_lon_lat_alt"][2],
-                    "value": dataset["value"],
-                }
+        # ---- multi radar (wide format) ----
+        radar_keys = sorted(
+            [
+                k
+                for k in dataset.keys()
+                if isinstance(k, str) and re.match(r"^RADAR\d{3}$", k)
+            ]
+        )
+        if not radar_keys:
+            raise ValueError("Multi-radar dataset detected but no RADAR### keys found")
+
+        ds0 = dataset[radar_keys[0]]
+        t = _to_dt_series(ds0["time"])
+        n = len(t)
+        start_time = t.iloc[0].to_pydatetime()
+
+        # Take lon/lat/alt columns from reference radar (if they differ, you should revisit format)
+        used0 = ds0["used_coordinates_WGS84_lon_lat_alt"]
+        lon0 = float(used0[0])
+        lat0 = float(used0[1])
+        alt0 = float(used0[2])
+
+        df = pd.DataFrame(
+            {
+                "date": t.dt.strftime("%Y%m%d%H%M%S"),
+                "lon": lon0,
+                "lat": lat0,
+                "alt": alt0,
+            }
+        )
+
+        for rk in radar_keys:
+            ds = dataset[rk]
+            val = _to_1d_values(ds["value"], n)
+            df[f"value_{rk.lower()}"] = val[:n]
+
+        # Header: include per-radar nominal location and grid points if present
+        loc_lines = []
+        gp_lines = []
+        for rk in radar_keys:
+            ds = dataset[rk]
+            loc_lines.append(
+                f"# {rk} Nominal location [lon, lat, alt]: {ds.get('point_coordinates_WGS84_lon_lat_alt')}"
             )
-            csvfile.close()
+            if "grid_points_iz_iy_ix" in ds:
+                gp_lines.append(
+                    f"# {rk} Grid points used [iz, iy, ix]: {ds.get('grid_points_iz_iy_ix')}"
+                )
+
+        header = (
+            "# Gridded data timeseries data file (multi-radar)\n"
+            '# Comment lines are preceded by "#"\n'
+            "# Description: \n"
+            "# Time series of gridded data over a fixed location (multiple radars).\n"
+            + "\n".join(loc_lines)
+            + "\n"
+            + ("\n".join(gp_lines) + "\n" if gp_lines else "")
+            + f"# Data: {generate_field_name_str(ds0.get('datatype'))}\n"
+            + f"# Fill Value: {get_fillvalue()}\n"
+            + f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+            + "#\n"
+        )
+
+        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
+        col_order = ["date", "lon", "lat", "alt"] + value_cols
+
+    df = df[col_order]
+    # Remove duplicates on time
+    df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+
+    # Write / append
+    write_header = (not file_exists) or file_empty
+    mode = "a" if (file_exists and not write_header) else "w"
+
+    with open(fname, mode, encoding="utf-8", newline="") as f:
+        if write_header:
+            f.write(header)
+            df.to_csv(f, index=False)
+        else:
+            df.to_csv(f, index=False, header=False)
 
     return fname
 
@@ -2641,6 +2932,197 @@ def write_monitoring_ts(
             f.write("\n".join(header) + "\n")
             combined_df.to_csv(f, index=False)
         unlock_file(f)
+    return fname
+
+
+def write_sensor_scores(
+    start_time,
+    scores,
+    double_conditional_threshold,
+    datatype,
+    fname,
+    rewrite=False,
+):
+    """
+    Write sensor intercomparison scores to a CSV-with-comment-header file.
+
+    Legacy (mono-radar) mode
+    ------------------------
+    `scores` is a dict keyed by bounds, e.g.:
+        scores = {"all": {"RMSE": [...], "N": [...]}}
+
+    Multi-radar mode
+    ----------------
+    `scores` is a dict keyed by radar IDs (RADAR001/radar001/...), each mapping to
+    a mono-radar `scores` dict keyed by bounds, e.g.:
+        scores = {
+          "RADAR001": {"all": {"RMSE": [...], "N": [...]}},
+          "RADAR002": {"all": {"RMSE": [...], "N": [...]}},
+        }
+
+    In multi-radar mode, output columns are suffixed with _radar###, e.g.:
+        RMSE_radar001, N_radar001, RMSE_radar002, ...
+
+    Duplicates are removed by "date" (keep last).
+    """
+    # ----------------------------
+    # helpers
+    # ----------------------------
+    radar_key_re = re.compile(r"^radar\d{3}$", re.IGNORECASE)
+
+    def _is_multiradar_scores(sc):
+        if not isinstance(sc, dict) or not sc:
+            return False
+        keys = [k for k in sc.keys() if isinstance(k, str)]
+        return any(radar_key_re.match(k) for k in keys)
+
+    def _normalize_radarkey(k):
+        # "RADAR001" -> "radar001"
+        return k.lower()
+
+    def _as_1d_array(x, n):
+        # Accept scalar or list/array; return array length n (repeat scalars)
+        arr = np.asarray(x)
+        if arr.size == 1 and n > 1:
+            arr = np.repeat(arr, n)
+        return arr
+
+    # ----------------------------
+    # time vector
+    # ----------------------------
+    nvalues = np.size(start_time)
+    start_time_aux = (
+        np.asarray([start_time]) if nvalues == 1 else np.asarray(start_time)
+    )
+    date_str = [t.strftime("%Y%m%d%H%M%S") for t in start_time_aux]
+    n = len(date_str)
+
+    # ----------------------------
+    # build dataframe
+    # ----------------------------
+    data = {"date": date_str}
+
+    multiradar = _is_multiradar_scores(scores)
+
+    if not multiradar:
+        # ---- legacy: scores[bounds][metric] ----
+        bounds = list(scores.keys())[0]
+        metric_dict = scores[bounds]
+        for k, v in metric_dict.items():
+            data[k] = _as_1d_array(v, n)
+        df = pd.DataFrame(data)
+
+        score_names = list(metric_dict.keys())
+        bounds_line = bounds
+        radar_list_for_header = None
+
+    else:
+        # ---- multi-radar: scores[radar][bounds][metric] ----
+        radar_keys = sorted(
+            [k for k in scores.keys() if isinstance(k, str) and radar_key_re.match(k)]
+        )
+        if not radar_keys:
+            raise ValueError("Multi-radar scores detected but no RADAR### keys found")
+
+        # assume same bounds across radars; take from first
+        bounds = list(scores[radar_keys[0]].keys())[0]
+
+        # collect all metrics across radars (union)
+        metrics_all = set()
+        for rk in radar_keys:
+            metrics_all.update(scores[rk][bounds].keys())
+        metrics_all = sorted(metrics_all)
+
+        # fill columns metric_radar###
+        for rk in radar_keys:
+            rk_norm = _normalize_radarkey(rk)  # radar001
+            md = scores[rk].get(bounds, {})
+            for met in metrics_all:
+                col = f"{met}_{rk_norm}"
+                if met in md:
+                    data[col] = _as_1d_array(md[met], n)
+                else:
+                    data[col] = np.full(n, np.nan)
+
+        df = pd.DataFrame(data)
+
+        score_names = metrics_all
+        bounds_line = bounds
+        radar_list_for_header = [rk.upper() for rk in radar_keys]
+
+    # enforce date as string for stable dedup/sort
+    df["date"] = df["date"].astype(str)
+
+    # ----------------------------
+    # write / merge-dedup
+    # ----------------------------
+    file_exists = os.path.exists(fname)
+
+    # Build header text (written only when creating or rewrite)
+    header = (
+        "# Weather radar validation scores with sensors data file\n"
+        '# Comment lines are preceded by "#"\n'
+        "# Description: \n"
+        "# Time series of sensor intercomparison scores.\n"
+        f"# Scores: {', '.join(map(str, score_names))}.\n"
+        f"# Bounds: {bounds_line}.\n"
+        + (
+            f"# Radars: {', '.join(radar_list_for_header)}.\n"
+            if radar_list_for_header
+            else ""
+        )
+        + f"# Double conditional threshold: {double_conditional_threshold}.\n"
+        + f"# Data: {generate_field_name_str(datatype)}\n"
+        + f"# Fill Value: {get_fillvalue()}\n"
+        + f"# Start: {start_time_aux[0].strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+        + "#\n"
+    )
+
+    with open(
+        fname,
+        "r+" if file_exists and not rewrite else "w",
+        encoding="utf-8",
+        newline="",
+    ) as f:
+        lock_file(f)
+        try:
+            if rewrite or not file_exists:
+                f.seek(0)
+                f.truncate(0)
+                f.write(header)
+                df.to_csv(f, index=False)
+            else:
+                # Read existing header lines
+                f.seek(0)
+                old_header_lines = [
+                    line.rstrip("\n") for line in f if line.startswith("#")
+                ]
+
+                # Read existing data
+                f.seek(0)
+                existing_df = pd.read_csv(f, comment="#")
+                if "date" in existing_df.columns:
+                    existing_df["date"] = existing_df["date"].astype(str)
+
+                # Align columns: union to avoid dropping new radar columns
+                combined_df = pd.concat(
+                    [existing_df, df], ignore_index=True, sort=False
+                )
+
+                # Dedup by date (keep last written)
+                combined_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+                combined_df.sort_values(by="date", inplace=True)
+
+                # Rewrite file with preserved header (or new header if missing)
+                f.seek(0)
+                f.truncate(0)
+                if old_header_lines:
+                    f.write("\n".join(old_header_lines) + "\n")
+                else:
+                    f.write(header)
+                combined_df.to_csv(f, index=False)
+        finally:
+            unlock_file(f)
     return fname
 
 

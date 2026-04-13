@@ -1410,7 +1410,6 @@ def process_rainrate(procstatus, dscfg, radar_list=None):
 
     if procstatus != 1:
         return None, None
-
     if "RR_METHOD" not in dscfg:
         raise Exception(
             "ERROR: Undefined parameter 'RR_METHOD' for dataset '%s'" % dscfg["dsname"]

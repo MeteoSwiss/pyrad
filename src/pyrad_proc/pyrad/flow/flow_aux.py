@@ -74,7 +74,7 @@ from ..prod.product_aux import get_prodgen_func
 try:
     import dask
 except ImportError:
-    warn("dask not available: The processing will not be parallelized", use_debug=False)
+    dask = None
 
 PROFILE_LEVEL = 0
 
@@ -491,8 +491,7 @@ def _process_datasets(
                 )
 
             try:
-                jobs = dask.compute(*jobs)
-
+                jobs = dask.compute(*jobs, scheduler="threads")
                 # add new dataset to radar object if necessary
                 # update dataset config dictionary
                 for i, (new_dataset, ind_rad, dsname, dscfg_aux) in enumerate(jobs):
@@ -975,8 +974,7 @@ def _generate_dataset(
                         )
                     )
 
-                dask.compute(*jobs)
-
+                dask.compute(*jobs, scheduler="threads")
             else:
                 for product in dscfg["products"]:
                     _generate_prod(
@@ -1049,6 +1047,8 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                 s3splitext = False
 
             for fname in filenames:
+                if not os.path.exists(fname):  # For safety
+                    continue
                 if (
                     prdcfg["basepath"] in fname
                 ):  # only products saved to standard basepath
@@ -1132,7 +1132,6 @@ def _create_cfg_dict(cfgfile):
     except Exception as inst:
         warn(str(inst))
         sys.exit(1)
-
     # check for mandatory config parameters
     param_must = ["name", "configpath", "saveimgbasepath", "dataSetList"]
     for param in param_must:
@@ -1610,7 +1609,8 @@ def _create_dscfg_dict(cfg, dataset):
 
     # indicates the dataset has been initialized and aux data is available
     dscfg.update({"initialized": False})
-    dscfg.update({"global_data": None})
+    # Persistent data holder
+    dscfg.update({"global_data": {}})
 
     # Convert the following strings to string arrays
     strarr_list = ["datatype", "FIELDS_TO_REMOVE"]
@@ -1657,7 +1657,6 @@ def _create_prdcfg_dict(cfg, dataset, product, voltime, runinfo=None):
     # config dict. Better: Make dataset config dict available to
     # the product generation.
     prdcfg = cfg[dataset]["products"][product]
-
     # required keys from top-level cfg (must exist)
     required_top = (
         "name",

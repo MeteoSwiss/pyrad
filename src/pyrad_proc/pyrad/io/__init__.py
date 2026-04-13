@@ -75,11 +75,10 @@ Reading other data
     read_monitoring_ts
     read_intercomp_scores_ts
     get_sensor_data
-    read_smn
-    read_smn2
     read_coord_sensors
     read_disdro_scattering
     read_disdro_parsivel
+    read_sensor_data
     read_knmi
     read_sun_hits
     read_sun_hits_multiple_days
@@ -244,7 +243,6 @@ from .read_data_other import read_vpr_theo_parameters  # noqa
 from .read_data_other import read_mch_xml_vad  # noqa
 
 from .read_data_sensor import read_lightning, read_lightning_traj  # noqa
-from .read_data_sensor import get_sensor_data, read_smn, read_smn2  # noqa
 from .read_data_sensor import read_disdro_scattering, read_trt_data  # noqa
 from .read_data_sensor import read_trt_traj_data, read_lightning_all  # noqa
 from .read_data_sensor import read_trt_scores, read_trt_cell_lightning  # noqa
@@ -252,7 +250,11 @@ from .read_data_sensor import read_meteorage, read_trt_info_all, read_trt_info  
 from .read_data_sensor import read_thundertracking_info, read_windmills_data  # noqa
 from .read_data_sensor import read_trt_info2, read_trt_info_all2  # noqa
 from .read_data_sensor import read_trt_thundertracking_traj_data  # noqa
-from .read_data_sensor import read_coord_sensors, read_disdro_parsivel  # noqa
+from .read_data_sensor import (  # noqa
+    read_coord_sensors,  # noqa
+    read_disdro_parsivel,  # noqa
+    read_sensor_data,  # noqa
+)  # noqa
 from .read_data_sensor import read_knmi  # noqa
 from .read_data_sensor import (  # noqa
     retrieve_radiosounding_wyoming,  # noqa

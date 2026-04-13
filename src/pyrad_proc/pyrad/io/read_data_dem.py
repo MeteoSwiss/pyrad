@@ -33,7 +33,7 @@ except ImportError:
         _GDAL_AVAILABLE = True
     except ImportError:
         _GDAL_AVAILABLE = False
-
+        warn("GDAL is unavailable, you will not be able to read DEM data...")
 import pyart
 from pyart.config import get_metadata
 from .read_data_icon import _put_radar_in_swiss_coord
