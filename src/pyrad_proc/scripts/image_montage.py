@@ -212,10 +212,6 @@ def create_composite(
 
 def main():
     args = parse_args()
-    print(args)
-    import pdb
-
-    pdb.set_trace()
     image_groups = collect_images(args.patterns, split_by_date=args.split_by_date)
 
     if not image_groups:

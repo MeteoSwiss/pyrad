@@ -51,9 +51,6 @@ try:
 
     _DASK_AVAILABLE = True
 except ImportError:
-    import pdb
-
-    pdb.set_trace()
     warn(
         "dask and/or dask.distributed not available: The processing cannot be parallelized",
         use_debug=False,
@@ -269,9 +266,6 @@ def main(
                 )
                 try:
                     dscfg, traj = data_processing.compute()
-                    import pdb
-
-                    pdb.set_trace()
                     del data_processing
                     del radar_list
                     del dscfg_aux
