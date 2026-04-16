@@ -1052,19 +1052,23 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                 if (
                     prdcfg["basepath"] in fname
                 ):  # only products saved to standard basepath
-                    write_to_s3(
-                        fname,
-                        prdcfg["basepath"],
-                        prdcfg["s3EndpointWrite"],
-                        prdcfg["s3BucketWrite"],
-                        S3_KEY_WRITE,
-                        S3_SECRET_WRITE,
-                        s3path,
-                        s3AccessPolicy,
-                        s3splitext,
-                        s3verify,
-                        s3certificates,
-                    )
+                    try:
+                        write_to_s3(
+                            fname,
+                            prdcfg["basepath"],
+                            prdcfg["s3EndpointWrite"],
+                            prdcfg["s3BucketWrite"],
+                            S3_KEY_WRITE,
+                            S3_SECRET_WRITE,
+                            s3path,
+                            s3AccessPolicy,
+                            s3splitext,
+                            s3verify,
+                            s3certificates,
+                        )
+
+                    except Exception as err:
+                        warn(f"Could not upload file {fname} due to error {err}")
         if (
             "MySQLhost" in prdcfg
             and "MySQLuser" in prdcfg

@@ -73,6 +73,7 @@ from cmweather.cm import cmap_d
 
 from .io_aux import generate_field_name_str
 from .flock_utils import lock_file, unlock_file
+from ..util.date_utils import detect_datetime_columns
 
 try:
     import simplekml
@@ -290,17 +291,8 @@ def write_csv_to_mysql(
     # -----------------------------
     # 2) Auto-detect datetime columns
     # -----------------------------
-    datetime_cols = []
-    for col in df.columns:
-        try:
-            parsed = pd.to_datetime(df[col], errors="coerce")
-            valid_ratio = parsed.notna().sum() / len(df) if len(df) > 0 else 0
-            if valid_ratio > 0.8:
-                df[col] = parsed
-                datetime_cols.append(col)
-        except Exception:
-            pass
 
+    datetime_cols = detect_datetime_columns(df)
     date_col = datetime_cols[0] if datetime_cols else None
 
     # -----------------------------
