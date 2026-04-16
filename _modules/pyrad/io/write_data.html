@@ -459,6 +459,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_field_name_str</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.flock_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">lock_file</span><span class="p">,</span> <span class="n">unlock_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.date_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_datetime_columns</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">simplekml</span>
@@ -676,17 +677,8 @@
     <span class="c1"># -----------------------------</span>
     <span class="c1"># 2) Auto-detect datetime columns</span>
     <span class="c1"># -----------------------------</span>
-    <span class="n">datetime_cols</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">parsed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
-            <span class="n">valid_ratio</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
-            <span class="k">if</span> <span class="n">valid_ratio</span> <span class="o">&gt;</span> <span class="mf">0.8</span><span class="p">:</span>
-                <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed</span>
-                <span class="n">datetime_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">pass</span>
 
+    <span class="n">datetime_cols</span> <span class="o">=</span> <span class="n">detect_datetime_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="n">date_col</span> <span class="o">=</span> <span class="n">datetime_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">datetime_cols</span> <span class="k">else</span> <span class="kc">None</span>
 
     <span class="c1"># -----------------------------</span>
