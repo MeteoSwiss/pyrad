@@ -54,7 +54,7 @@ __asm__(".symver memcpy,memcpy@GLIBC_2.2.5");
 #define MAXFNAMELEN 1024
 #define CPIBUFSIZE 4096
 
-#define SPACESPERITEM 40
+#define SPACESPERITEM 30
 #define VERSIONSTRLEN 50
 
 /* Defines for threshold calculation: */
@@ -90,7 +90,8 @@ __asm__(".symver memcpy,memcpy@GLIBC_2.2.5");
 #define MIN_SAMPLES 30             /* Minimal number of tx pulses in CPI for noise calculation */
 #define MIN_HISTBINS 20            /* Minimal number of histogram bins used for noise calculation */
 #define DX         (XMAX/NHISTOGRAM) /* Histogram resolution */
-#define MIN_RBIN  200              /* Start range bin for histogram */
+#define MIN_RBIN  200              /* Start range bin for histogram (if possible) */
+#define MIN_RBIN_FACTOR 0.8        /* If radial has less than MIN_RBIN range bins, histogram will start at MIN_RBIN_FACTOR  * nranges instead */
 
 static struct psr_stat {
   unsigned long items;
@@ -186,7 +187,7 @@ static int writePsrCompress(int fd, unsigned char *buf, int len)
 static int writeZeros(int fd, int num)
 {
   if (num < 0) {
-    fprintf(stderr, "%s ERROR: Negativ number of zeros to write\r\n", __func__);
+    fprintf(stderr, "%s ERROR: Negative number of zeros to write\r\n", __func__);
     return -1;
   }
   zerocnt += num;
@@ -249,379 +250,390 @@ static void usage(void)
  */
 int main( int argc, char* argv[] )
 {
-  int opt;
-  char *psrfile;
-  FILE *fh;
-  struct stat file_stat;
+    int opt;
+    char *psrfile;
+    FILE *fh;
+    struct stat file_stat;
 
-  float val_threshold_sqr;
-  int outfile_set = 0;
-  char outfile[MAXFNAMELEN];
-  int fout;
-  struct psr_file *psrin;
-  int k;
-  int fnamelen;
-  long headerlen;
-  long nitems;
-  int nspaces;
-  struct itemIndex *itemInfo;
-  char itemstr[SPACESPERITEM];
-  char versionstring[VERSIONSTRLEN];
-  long item_type_red = htobe32(ITEM_TYPE_ID_RED);
+    float val_threshold_sqr;
+    int outfile_set = 0;
+    char outfile[MAXFNAMELEN];
+    int fout;
+    struct psr_file *psrin;
+    int k;
+    int fnamelen;
+    long headerlen;
+    long nitems;
+    int nspaces;
+    struct itemIndex *itemInfo;
+    char itemstr[SPACESPERITEM];
+    char versionstring[VERSIONSTRLEN];
+    long item_type_red = htobe32(ITEM_TYPE_ID_RED);
 
-  /* init statistic */
-  memset(&psr_stat, 0, sizeof(psr_stat));
-  zerocnt = 0;
+    /* init statistic */
+    memset(&psr_stat, 0, sizeof(psr_stat));
+    zerocnt = 0;
 
-  /* Get options */
-  while ( (opt = getopt(argc, argv, "ht:o:")) != -1) {
-    switch(opt) {
-    case 'o':
-      strncpy(outfile, optarg, MAXFNAMELEN);
-      outfile_set = 1;
-      break;
-    case 'h':
-    default:
-      usage();
-      exit(EXIT_SUCCESS);
+    /* Get options */
+    while ( (opt = getopt(argc, argv, "ht:o:")) != -1) {
+        switch(opt) {
+            case 'o':
+                strncpy(outfile, optarg, MAXFNAMELEN);
+                outfile_set = 1;
+                break;
+            case 'h':
+            default:
+                usage();
+                exit(EXIT_SUCCESS);
+        }
     }
-  }
 
-  if (optind >= argc) {
-    fprintf(stderr, "ERROR: %s: Not enough parameters\r\n\r\n", argv[0]);
-    usage();
-    exit(EXIT_FAILURE);
-  }
-  psrfile = (char *)argv[optind];
+    if (optind >= argc) {
+        fprintf(stderr, "ERROR: %s: Not enough parameters\r\n\r\n", argv[0]);
+        usage();
+        exit(EXIT_FAILURE);
+    }
+    psrfile = (char *)argv[optind];
 
-  /* Check file extension */
-  fnamelen = strlen(psrfile);
-  if (strcmp(psrfile+fnamelen-sizeof(PSRFILE_EXTENSION)+1, PSRFILE_EXTENSION) != 0) {
-    fprintf(stderr, "WARNING: Unexpected extension of psr-file '%s'\r\n", psrfile);
-  }
+    /* Check file extension */
+    fnamelen = strlen(psrfile);
+    if (strcmp(psrfile+fnamelen-sizeof(PSRFILE_EXTENSION)+1, PSRFILE_EXTENSION) != 0) {
+        fprintf(stderr, "WARNING: Unexpected extension of psr-file '%s'\r\n", psrfile);
+    }
 
-  /* Check if input file exist, read file size */
-  fh = fopen(psrfile, "r");
-  if (fh == NULL) {
-    fprintf(stderr, "ERROR open file '%s': %s\r\n", psrfile, strerror(errno));
-    exit(EXIT_FAILURE);
-  }
-  if (fstat(fileno(fh), &file_stat) < 0) {
-    fprintf(stderr, "ERROR reading stat from file '%s': %s\r\n", psrfile, strerror(errno));
+    /* Check if input file exist, read file size */
+    fh = fopen(psrfile, "r");
+    if (fh == NULL) {
+        fprintf(stderr, "ERROR open file '%s': %s\r\n", psrfile, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    if (fstat(fileno(fh), &file_stat) < 0) {
+        fprintf(stderr, "ERROR reading stat from file '%s': %s\r\n", psrfile, strerror(errno));
+        fclose(fh);
+        exit(EXIT_FAILURE);
+    }
+    psr_stat.psrfile_size = file_stat.st_size;
     fclose(fh);
-    exit(EXIT_FAILURE);
-  }
-  psr_stat.psrfile_size = file_stat.st_size;
-  fclose(fh);
 
-  printf("=== Reducing \'%s\'\r\n", psrfile);
+    printf("=== Reducing \'%s\'\r\n", psrfile);
 
-  /* Make out name, if not set */
-  if (outfile_set == 0)
-    snprintf(outfile, MAXFNAMELEN, "%s%s", psrfile, PSRCOMPFILE_EXTENSION);
+    /* Make out name, if not set */
+    if (outfile_set == 0)
+        snprintf(outfile, MAXFNAMELEN, "%s%s", psrfile, PSRCOMPFILE_EXTENSION);
 
-  /* Check if out file alread exists */
-  if (access(outfile, F_OK) == 0) {
-    fprintf(stderr, "ERROR: Output file '%s' already exists. Abort!\r\n", outfile);
-    exit(EXIT_FAILURE);
-  }
+    /* Check if out file alread exists */
+    if (access(outfile, F_OK) == 0) {
+        fprintf(stderr, "ERROR: Output file '%s' already exists. Abort!\r\n", outfile);
+        exit(EXIT_FAILURE);
+    }
 
-  /* Make out file */
-  fout = open(outfile, O_WRONLY | O_CREAT,
-	      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-  if (fout < 0) {
-    fprintf(stderr, "ERROR: Could not create file \'%s\'\r\n", outfile);
-    exit(EXIT_FAILURE);
-  }
-  if (flock(fout, LOCK_EX) < 0) {
-    fprintf(stderr, "ERROR: Cannot lock file \'%s\'\r\n", outfile);
-    close(fout);
-    exit(EXIT_FAILURE);
-  }
-  printf("--- Writing to \'%s\'\r\n", outfile);
+    /* Make out file */
+    fout = open(outfile, O_WRONLY | O_CREAT,
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+    if (fout < 0) {
+        fprintf(stderr, "ERROR: Could not create file \'%s\'\r\n", outfile);
+        exit(EXIT_FAILURE);
+    }
+    if (flock(fout, LOCK_EX) < 0) {
+        fprintf(stderr, "ERROR: Cannot lock file \'%s\'\r\n", outfile);
+        close(fout);
+        exit(EXIT_FAILURE);
+    }
+    printf("--- Writing to \'%s\'\r\n", outfile);
 
-  /* Open source file */
-  if (psr_openFile(psrfile) < 0) {
-    fprintf(stderr, "ERROR opening input file \'%s\'\r\n", psrfile);
-    close(fout);
-    exit(EXIT_FAILURE);
-  }
-  psrin = psr_getFileStruct();
-  nitems = psrin->header.itemtypepsr;
-  headerlen = psrin->header.headerlen;
+    /* Open source file */
+    if (psr_openFile(psrfile) < 0) {
+        fprintf(stderr, "ERROR opening input file \'%s\'\r\n", psrfile);
+        close(fout);
+        exit(EXIT_FAILURE);
+    }
+    psrin = psr_getFileStruct();
+    nitems = psrin->header.itemtypepsr;
+    headerlen = psrin->header.headerlen;
 
-  /* Copy file header */
-  if (writePsrCompress(fout, psrin->filebase, headerlen) < 0) {
-    fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-    close(fout);
-    psr_cleanup();
-    exit(EXIT_FAILURE);
-  }
-  /* reserve space to write an index table for the items */
-  nspaces = nitems*SPACESPERITEM;
-  itemInfo = malloc(nitems*sizeof(struct itemIndex));
-  if (!itemInfo) {
-    fprintf(stderr, "Malloc ERROR\r\n");
-    close(fout);
-    psr_cleanup();
-    exit(EXIT_FAILURE);
-  }
-  if (fmemset(fout, ' ', nspaces) < 0) {
-    fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-    close(fout);
-    psr_cleanup();
-    free(itemInfo);
-    exit(EXIT_FAILURE);
-  }
-  if (psrin->header.bodyoffset - headerlen - nspaces < 0) {
-    fprintf(stderr, "ERROR not enough space for item table\r\n");
-    close(fout);
-    psr_cleanup();
-    free(itemInfo);
-    exit(EXIT_FAILURE);
-  }
-  if (writeZeros(fout, psrin->header.bodyoffset - headerlen - nspaces) < 0) {
-    fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-    close(fout);
-    psr_cleanup();
-    free(itemInfo);
-    exit(EXIT_FAILURE);
-  }
-  //if (writePsrCompress(fout, psrin->filebase, psrin->header.bodyoffset) < 0) {
-  //  fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-  //  close(fout);
-  //  psr_cleanup();
-  //  exit(EXIT_FAILURE);
-  //}
+    /* Copy file header */
+    if (writePsrCompress(fout, psrin->filebase, headerlen) < 0) {
+        fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+        close(fout);
+        psr_cleanup();
+        exit(EXIT_FAILURE);
+    }
+    /* reserve space to write an index table for the items */
 
-  /* Copy PCI after PCI */
-  {
-    int l;
-    void *pitem;
-    struct item_header item;
-    unsigned long nvals;
-    float re, im;
-    float psqr;
-    void *writePtr;
-    unsigned char zero[] = {0, 0, 0, 0, 0, 0, 0, 0};
+    nspaces = nitems*SPACESPERITEM;
+    itemInfo = malloc(nitems*sizeof(struct itemIndex));
+    if (!itemInfo) {
+        fprintf(stderr, "Malloc ERROR\r\n");
+        close(fout);
+        psr_cleanup();
+        exit(EXIT_FAILURE);
+    }
+    if (fmemset(fout, ' ', nspaces) < 0) {
+        fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+        close(fout);
+        psr_cleanup();
+        free(itemInfo);
+        exit(EXIT_FAILURE);
+    }
+    if (psrin->header.bodyoffset < (unsigned long)(headerlen + nspaces)) {
+        fprintf(stderr, "ERROR not enough space for item table\r\n");
+        close(fout);
+        psr_cleanup();
+        free(itemInfo);
+        exit(EXIT_FAILURE);
+    }
+    if (writeZeros(fout, psrin->header.bodyoffset - headerlen - nspaces) < 0) {
+        fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+        close(fout);
+        psr_cleanup();
+        free(itemInfo);
+        exit(EXIT_FAILURE);
+    }
+    //if (writePsrCompress(fout, psrin->filebase, psrin->header.bodyoffset) < 0) {
+    //  fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+    //  close(fout);
+    //  psr_cleanup();
+    //  exit(EXIT_FAILURE);
+    //}
+
+    /* Copy PCI after PCI */
+    {
+        int l;
+        void *pitem;
+        struct item_header item;
+        unsigned long nvals;
+        float re, im;
+        float psqr;
+        void *writePtr;
+        unsigned char zero[] = {0, 0, 0, 0, 0, 0, 0, 0};
 #if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
-    uint32_t tmpul;
+        uint32_t tmpul;
 #endif
-    /* Variable for histogram */
-    int doNoise;
-    unsigned long hist[NHISTOGRAM];
-    int hind;
-    double xvec[NHISTOGRAM];
-    double sum;
-    double sumsq;
-    unsigned long htotal;
-    double sum_old;
-    unsigned long htotal_old;
-    int ll;
-    long npulses;
-    long nrbins;
-    void *ptr;
-    double noise;
-    long startsample;
-    int noise_found;
+        /* Variable for histogram */
+        int doNoise;
+        unsigned long hist[NHISTOGRAM];
+        int hind;
+        double xvec[NHISTOGRAM];
+        double sum;
+        double sumsq;
+        unsigned long htotal;
+        double sum_old;
+        unsigned long htotal_old;
+        int ll;
+        int min_rbin;
+        long npulses;
+        long nrbins;
+        void *ptr;
+        double noise;
+        long startsample;
+        int noise_found;
+        int nranges;
 
-    /* Init xvec for noise calculation */
-    for (ll=0; ll<NHISTOGRAM; ll++) {
-      xvec[ll] = ll*DX + DX/2;
-    }
+        const float inv_DX = 1.0f / DX;
 
-    pitem = psrin->base;
-    k=0;
-    while(k < nitems) {
-      /* Get item info */
-      item.type   = be32toh(*((uint32_t *)pitem));
-      item.length = be64toh(*((uint64_t *)(pitem+ITEM_LENGTH_OFFSET)));
+        /* Init xvec for noise calculation */
+        for (ll=0; ll<NHISTOGRAM; ll++) {
+            xvec[ll] = ll*DX + DX/2;
+        }
 
-      if (item.type != ITEM_TYPE_ID) {
-	fprintf(stderr, "ERROR: Unexpected item type: 0x%lx\r\n", item.type);
-	pitem += item.length;
-	continue;
-      }
+        min_rbin = MIN_RBIN; /* use default */
+        pitem = psrin->base;
+        k=0;
+        while(k < nitems) {
+            /* Get item info */
+            item.type   = be32toh(*((uint32_t *)pitem));
+            item.length = be64toh(*((uint64_t *)(pitem+ITEM_LENGTH_OFFSET)));
 
-      /* Flush previous zeros */
-      if (writePsrFlush(fout) < 0) {
-	fprintf(stderr, "ERROR write : %s\r\n", strerror(errno));
-	close(fout);
-	psr_cleanup();
-	free(itemInfo);
-	exit(EXIT_FAILURE);
-      }
+            if (item.type != ITEM_TYPE_ID) {
+                fprintf(stderr, "ERROR: Unexpected item type: 0x%lx\r\n", item.type);
+                pitem += item.length;
+                continue;
+            }
 
-      /* File item info struct */
-      itemInfo[k].offset = lseek(fout, 0, SEEK_CUR);
-      itemInfo[k].length = item.length;
+            /* Flush previous zeros */
+            if (writePsrFlush(fout) < 0) {
+                fprintf(stderr, "ERROR write : %s\r\n", strerror(errno));
+                close(fout);
+                psr_cleanup();
+                free(itemInfo);
+                exit(EXIT_FAILURE);
+            }
 
-      if (writePsrCompress(fout, (unsigned char *)&item_type_red, ITEM_LENGTH_OFFSET) < 0) {
-      	fprintf(stderr, "ERROR writing item header %d to file : %s\r\n", k, strerror(errno));
-      	close(fout);
-      	psr_cleanup();
-      	free(itemInfo);
-      	exit(EXIT_FAILURE);
-      }
-      /* Write Item struct and PCI struct */
-      if (writePsrCompress(fout, pitem+ITEM_LENGTH_OFFSET, ITEM_HEADER_OFFSET - ITEM_LENGTH_OFFSET + CPI_HEADER_LEN) < 0) {
-	fprintf(stderr, "ERROR writing item header %d to file : %s\r\n", k, strerror(errno));
-	close(fout);
-	psr_cleanup();
-	free(itemInfo);
-	exit(EXIT_FAILURE);
-      }
+            /* File item info struct */
+            itemInfo[k].offset = lseek(fout, 0, SEEK_CUR);
+            itemInfo[k].length = item.length;
 
-      pitem += ITEM_HEADER_OFFSET;
-      /* Get number of tx pulses and number of range gates for noise calculation */
-      ptr = &npulses;
-      *(unsigned long *)ptr = le32toh(*((unsigned long *)(pitem + CPI_NUM_TXPULSES_OFFSET))) & 0xffffffff;
-      ptr = &nrbins;
-      *(unsigned long *)ptr = le32toh(*((unsigned long *)(pitem + CPI_NUM_RANGEGATES_OFFSET))) & 0xffffffff;
-      pitem += CPI_HEADER_LEN;
+            if (writePsrCompress(fout, (unsigned char *)&item_type_red, ITEM_LENGTH_OFFSET) < 0) {
+                fprintf(stderr, "ERROR writing item header %d to file : %s\r\n", k, strerror(errno));
+                close(fout);
+                psr_cleanup();
+                free(itemInfo);
+                exit(EXIT_FAILURE);
+            }
+            /* Write Item struct and PCI struct */
+            if (writePsrCompress(fout, pitem+ITEM_LENGTH_OFFSET, ITEM_HEADER_OFFSET - ITEM_LENGTH_OFFSET + CPI_HEADER_LEN) < 0) {
+                fprintf(stderr, "ERROR writing item header %d to file : %s\r\n", k, strerror(errno));
+                close(fout);
+                psr_cleanup();
+                free(itemInfo);
+                exit(EXIT_FAILURE);
+            }
 
-      /* Write data of pci */
-      if  (((item.length - CPI_HEADER_LEN ) % 8) != 0) {
-	fprintf(stderr, "ERROR Unexpected item %d len (not a multiple of 4)\r\n", k);
-	close(fout);
-	psr_cleanup();
-	free(itemInfo);
-	exit(EXIT_FAILURE);
-      }
-      nvals = (item.length - CPI_HEADER_LEN) >> 3;
+            pitem += ITEM_HEADER_OFFSET;
+            /* Get number of tx pulses and number of range gates for noise calculation */
+            ptr = &npulses;
+            *(unsigned long *)ptr = le32toh(*((unsigned long *)(pitem + CPI_NUM_TXPULSES_OFFSET))) & 0xffffffff;
+            ptr = &nrbins;
+            *(unsigned long *)ptr = le32toh(*((unsigned long *)(pitem + CPI_NUM_RANGEGATES_OFFSET))) & 0xffffffff;
+            pitem += CPI_HEADER_LEN;
 
-      /* Do noise calculation only if the minimum number of tx pulses is exceeded */
-      if (npulses >= MIN_SAMPLES) {
-        doNoise = 1;
-        startsample = npulses*MIN_RBIN;
-        memset(hist, 0, sizeof(hist));
-      } else {
-        doNoise = 0;
-        startsample = 0;
-      }
+            /* Write data of pci */
+            if  (((item.length - CPI_HEADER_LEN ) % 8) != 0) {
+                fprintf(stderr, "ERROR Unexpected item %d len (not a multiple of 4)\r\n", k);
+                close(fout);
+                psr_cleanup();
+                free(itemInfo);
+                exit(EXIT_FAILURE);
+            }
+            nvals = (item.length - CPI_HEADER_LEN) >> 3;
+            nranges = (nvals / npulses);
+            if (nranges < min_rbin){
+                /* Instead of a fixed value we take 80% of nranges */
+                min_rbin = MIN_RBIN_FACTOR * nranges;
+            }
+            /* Do noise calculation only if the minimum number of tx pulses is exceeded */
+            if (npulses >= MIN_SAMPLES) {
+                doNoise = 1;
+                startsample = npulses*min_rbin;
+                memset(hist, 0, sizeof(hist));
+            } else {
+                doNoise = 0;
+                startsample = 0;
+            }
 
-      /* Calculate threshold according to the number of pulses: */
-      val_threshold_sqr = PTHRESHOLD / npulses;
+            /* Calculate threshold according to the number of pulses: */
+            val_threshold_sqr = PTHRESHOLD / npulses;
 
-      for (l=0;l<nvals;l++) {
+            for (l=0;l<nvals;l++) {
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-	memcpy(&re, pitem, FLOATSIZE);
-	memcpy(&im, pitem+FLOATSIZE, FLOATSIZE);
+                memcpy(&re, pitem, FLOATSIZE);
+                memcpy(&im, pitem+FLOATSIZE, FLOATSIZE);
 #else
-	tmpul = le32toh(*((uint32_t *)(pitem)));
-	memcpy(&re, &tmpul, FLOATSIZE);
-	tmpul = le32toh(*((uint32_t *)(pitem+FLOATSIZE)));
-  	memcpy(&im, &tmpul, FLOATSIZE);
+                tmpul = le32toh(*((uint32_t *)(pitem)));
+                memcpy(&re, &tmpul, FLOATSIZE);
+                tmpul = le32toh(*((uint32_t *)(pitem+FLOATSIZE)));
+                memcpy(&im, &tmpul, FLOATSIZE);
 #endif
 
-        psqr = re*re + im*im;
-	if (psqr < val_threshold_sqr) {
-	  writePtr = &zero;
-	  psr_stat.nvals_zero++;
-	}
-	else {
-	  writePtr = pitem;
-	}
+                psqr = re*re + im*im;
+                if (psqr < val_threshold_sqr) {
+                    writePtr = &zero;
+                    psr_stat.nvals_zero++;
+                }
+                else {
+                    writePtr = pitem;
+                }
 
-	psr_stat.nvals++;
-	pitem += COMPLEXSIZE;
+                psr_stat.nvals++;
+                pitem += COMPLEXSIZE;
 
-	if (writePsrCompress(fout, writePtr,  COMPLEXSIZE) < 0) {
-	  fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-	  close(fout);
-	  psr_cleanup();
-	  free(itemInfo);
-	  exit(EXIT_FAILURE);
-	}
+                if (writePsrCompress(fout, writePtr,  COMPLEXSIZE) < 0) {
+                    fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+                    close(fout);
+                    psr_cleanup();
+                    free(itemInfo);
+                    exit(EXIT_FAILURE);
+                }
 
-        /* Add value to histogram: Ignore too large samples */
-        if (doNoise && (l >= startsample) && (psqr < XMAX)) {
-          hind = (int)floorf(psqr/DX);
-          hist[hind]++;
-        }
-      } /* << end loop spectrum samples */
+                /* Add value to histogram: Ignore too large samples */
+                if (doNoise && (l >= startsample) && (psqr < XMAX)) {
+                    hind = (int)(psqr * inv_DX);
+                    hist[hind]++;
+                }
+            } /* << end loop spectrum samples */
 
-      /* Calculate mean noise from histogram */
-      if (doNoise) {
-        htotal = hist[0];
-        sum   = xvec[0] * hist[0];
-        sumsq = xvec[0]*xvec[0] * hist[0];
-        noise_found = 0;
-        for (ll=1; ll<NHISTOGRAM; ll++) {
-          sum_old = sum;
-          htotal_old = htotal;
-          sum    += xvec[ll] * hist[ll];
-          sumsq  += xvec[ll]*xvec[ll] * hist[ll];
-          htotal += hist[ll];
-          if ((ll > MIN_HISTBINS) && (htotal*sumsq >= 2.*sum*sum)) {
-            /* std > mean => higher values are not noise anymore! */
-            noise = sum_old/htotal_old;
-            noise_found = 1;
-            break;
-          }
-        }
-        if (!noise_found) {
-          noise = sum/htotal;
-        }
-        itemInfo[k].noise = noise;
-      } else {
-        itemInfo[k].noise = 0.0;
-      }
+            /* Calculate mean noise from histogram */
+            if (doNoise) {
+                htotal = hist[0];
+                sum   = xvec[0] * hist[0];
 
-      k++;
-    } /* << end loop over items */
-  psr_stat.items = k;
-  }
+                sumsq = xvec[0]*xvec[0] * hist[0];
+                noise_found = 0;
+                for (ll=1; ll<NHISTOGRAM; ll++) {
+                    sum_old = sum;
+                    htotal_old = htotal;
+                    sum    += xvec[ll] * hist[ll];
+                    sumsq  += xvec[ll]*xvec[ll] * hist[ll];
+                    htotal += hist[ll];
+                    if ((ll > MIN_HISTBINS) && (htotal*sumsq >= 2.*sum*sum)) {
+                        /* std > mean => higher values are not noise anymore! */
+                        noise = sum_old/htotal_old;
+                        noise_found = 1;
+                        break;
+                    }
+                }
+                if (!noise_found) {
+                    noise = sum/htotal;
+                }
+                itemInfo[k].noise = noise;
+            } else {
+                itemInfo[k].noise = 0.0;
+            }
 
-  /* Write last zeros */
-  if (writePsrFlush(fout) < 0) {
-    fprintf(stderr, "ERROR writing last zeros to '%s': %s\r\n", outfile, strerror(errno));
-  }
-
-  /* Write item info */
-  lseek(fout, headerlen, SEEK_SET);
-  snprintf(versionstring, VERSIONSTRLEN, "%s\n", PSR_REDUCED_STR_VERSION);
-  if (write(fout, versionstring, strlen(versionstring)) < 0) {
-    fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-  }
-  for (k=0; k<psr_stat.items; k++) {
-    snprintf(itemstr, SPACESPERITEM, "i%d of=%lx l=%lx n=%.6g\n",
-	     k, itemInfo[k].offset, itemInfo[k].length, itemInfo[k].noise);
-    if (write(fout, itemstr, strlen(itemstr)) < 0) {
-      fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
-      break;
+            k++;
+        } /* << end loop over items */
+        psr_stat.items = k;
     }
-  }
 
-  /* Read file size */
-  if (fstat(fout, &file_stat) < 0) {
-    fprintf(stderr, "ERROR reading stat from file '%s': %s\r\n", outfile, strerror(errno));
+    /* Write last zeros */
+    if (writePsrFlush(fout) < 0) {
+        fprintf(stderr, "ERROR writing last zeros to '%s': %s\r\n", outfile, strerror(errno));
+    }
+
+    /* Write item info */
+    lseek(fout, headerlen, SEEK_SET);
+    snprintf(versionstring, VERSIONSTRLEN, "%s\n", PSR_REDUCED_STR_VERSION);
+    if (write(fout, versionstring, strlen(versionstring)) < 0) {
+        fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+    }
+    for (k=0; k<psr_stat.items; k++) {
+        snprintf(itemstr, SPACESPERITEM, "%lx %lx %.2g\n",
+         itemInfo[k].offset, itemInfo[k].length, itemInfo[k].noise);
+        if (write(fout, itemstr, strlen(itemstr)) < 0) {
+            fprintf(stderr, "ERROR writing to file : %s\r\n", strerror(errno));
+            break;
+        }
+    }
+
+    /* Read file size */
+    if (fstat(fout, &file_stat) < 0) {
+        fprintf(stderr, "ERROR reading stat from file '%s': %s\r\n", outfile, strerror(errno));
+        close(fout);
+        psr_cleanup();
+        free(itemInfo);
+        exit(EXIT_FAILURE);
+    }
+    psr_stat.reduced_size = file_stat.st_size;
+
     close(fout);
     psr_cleanup();
+
+    /* Print statistics: */
+    printf("File sizes:\r\n  orig    : %10ld B\r\n  reduced : %10ld B (%2.1f%%)\r\n",
+        psr_stat.psrfile_size, psr_stat.reduced_size,
+        (float)psr_stat.reduced_size*100/(float)psr_stat.psrfile_size );
+    printf("Complex values:\r\n  total       : %10ld\r\n  set to zero : %10ld (%2.1f%%)\r\n",
+        psr_stat.nvals, psr_stat.nvals_zero,
+        (float)psr_stat.nvals_zero*100/(float)psr_stat.nvals);
+    // printf("Items       : %ld\r\n", psr_stat.items);
+    printf("Number of successive zero bytes:\r\n");
+    printf(  "   1     : %ld\r\n", psr_stat.zeros_one);
+    for (k=0; k<4;k++) {
+        printf("  %2d bit : %ld\r\n", (k+1)*7, psr_stat.zeros_group[k]);
+    }
+
     free(itemInfo);
-    exit(EXIT_FAILURE);
-  }
-  psr_stat.reduced_size = file_stat.st_size;
-
-  close(fout);
-  psr_cleanup();
-
-  /* Print statistics: */
-  printf("File sizes:\r\n  orig    : %10ld B\r\n  reduced : %10ld B (%2.1f%%)\r\n",
-	 psr_stat.psrfile_size, psr_stat.reduced_size,
-	 (float)psr_stat.reduced_size*100/(float)psr_stat.psrfile_size );
-  printf("Complex values:\r\n  total       : %10ld\r\n  set to zero : %10ld (%2.1f%%)\r\n",
-	 psr_stat.nvals, psr_stat.nvals_zero,
-	 (float)psr_stat.nvals_zero*100/(float)psr_stat.nvals);
-  // printf("Items       : %ld\r\n", psr_stat.items);
-  printf("Number of successive zero bytes:\r\n");
-  printf(  "   1     : %ld\r\n", psr_stat.zeros_one);
-  for (k=0; k<4;k++) {
-    printf("  %2d bit : %ld\r\n", (k+1)*7, psr_stat.zeros_group[k]);
-  }
-
-  free(itemInfo);
-  exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 
 #ifdef __cplusplus

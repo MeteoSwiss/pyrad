@@ -289,7 +289,7 @@ float rainbow_getNoisePowerZv(char *fname, int slicenum)
 int rainbow_getRadarConstanth(char *fname, int slicenum, float *radarconstants, int len)
 {
   int k;
-  
+
   if (readFileHeader(fname) < 0) {
     return -1;
   }
@@ -297,9 +297,9 @@ int rainbow_getRadarConstanth(char *fname, int slicenum, float *radarconstants, 
     printf("%s:%s: ERROR: Slice \'%d\' does not exist\r\n", __FILE__, __func__, slicenum);
     return -1;
   }
-  
-  for (k=0; k<len; k++) {	
-    radarconstants[k] = p_slice[slicenum].radconsth[k];	
+
+  for (k=0; k<len; k++) {
+    radarconstants[k] = p_slice[slicenum].radconsth[k];
   }
   return 0;
 }
@@ -317,7 +317,7 @@ int rainbow_getRadarConstanth(char *fname, int slicenum, float *radarconstants, 
 int rainbow_getRadarConstantv(char *fname, int slicenum, float *radarconstants, int len)
 {
   int k;
-  
+
   if (readFileHeader(fname) < 0) {
     return -1;
   }
@@ -1111,7 +1111,7 @@ static int readFileHeader(char *fname) {
 	//char begin_slice = 0;
 	//char end_slice = 0;
 	int i;
-	unsigned short int blobid = 0;	
+	unsigned short int blobid = 0;
 	//struct params_sensor p_sensor;
 
 	/* Read file header if not yet read */
@@ -1395,28 +1395,28 @@ static int readFileHeader(char *fname) {
 		if (NULL != strstr(line, "<rspdphradconst>"))
 		{
 			return_value(line, tmp_str);
-			
+
 			i=0;
 			tmp_str2=strtok(tmp_str, " ");
-			p_slice[slice].radconsth[i]= (float) atof(tmp_str2);			
+			p_slice[slice].radconsth[i]= (float) atof(tmp_str2);
 			while (tmp_str2 != NULL)
-			{				
+			{
 				// printf("radar constant h: %f \r\n", p_slice[slice].radconsth[i]);
 				// printf("i=%d \r\n", i);
 				i++;
-				tmp_str2=strtok(NULL, " ");				
-				if (tmp_str2 != NULL) p_slice[slice].radconsth[i]= (float) atof(tmp_str2);				
+				tmp_str2=strtok(NULL, " ");
+				if (tmp_str2 != NULL) p_slice[slice].radconsth[i]= (float) atof(tmp_str2);
 			}
 		}
 		if (NULL != strstr(line, "<rspdpvradconst>"))
 		{
 			return_value(line, tmp_str);
-			
+
 			i=0;
 			tmp_str2=strtok(tmp_str, " ");
-			p_slice[slice].radconstv[i]= (float) atof(tmp_str2);			
+			p_slice[slice].radconstv[i]= (float) atof(tmp_str2);
 			while (tmp_str2 != NULL)
-			{	
+			{
 				// printf("radar constant v: %f \r\n", p_slice[slice].radconstv[i]);
 				// printf("i=%d \r\n", i);
 				i++;
@@ -1433,15 +1433,15 @@ static int readFileHeader(char *fname) {
 
 		if (NULL != strstr(line, "<slicedata "))
 		{
-			strcpy(tmp_str, "time");
+			strcpy(tmp_str, " time");
 			return_info(line, tmp_str, tmp_str);
 			strncpy(p_slice[slice].time, tmp_str, SLICE_TIME_LEN);
 
-			strcpy(tmp_str, "date");
+			strcpy(tmp_str, "\" date");
 			return_info(line, tmp_str, tmp_str);
 			strncpy(p_slice[slice].date, tmp_str, SLICE_DATE_LEN);
 		}
-		
+
 
 
 		if (NULL != strstr(line, "<rayinfo "))

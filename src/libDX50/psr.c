@@ -939,66 +939,66 @@ extern "C" {
     return 0;
   }
 
-    /*
-    * ========================================================================================
-    * ----------------------- PSR data -------------------------------------------------------
-    * ========================================================================================
-    */
+  /*
+   * ========================================================================================
+   * ----------------------- PSR data -------------------------------------------------------
+   * ========================================================================================
+   */
 
-    /**
-    * Get power spectrum
-    *
-    * @param fname  Name of psr file
-    * @param item   Item number (starting with 0)
-    * @param rangegate Range gate selction (starting with 0)
-    * @param complex Pointer to complex power spectrum to save
-    *
-    * @return 0 on success, -1 otherwise
-    */
-    long psr_getPowerSpectrum(char *fname, int item, int rangegate, float *complex)
-    {
-        void *pcpi;
-        void *psrdata;
-        long nrgates = -1;
-        long ntxpulses = -1;
+  /**
+   * Get power spectrum
+   *
+   * @param fname  Name of psr file
+   * @param item   Item number (starting with 0)
+   * @param rangegate Range gate selction (starting with 0)
+   * @param complex Pointer to complex power spectrum to save
+   *
+   * @return 0 on success, -1 otherwise
+   */
+  long psr_getPowerSpectrum(char *fname, int item, int rangegate, float *complex)
+  {
+    void *pcpi;
+    void *psrdata;
+    long nrgates = -1;
+    long ntxpulses = -1;
 
-        if (psr_openFile(fname) < 0)
-        return -1;
+    if (psr_openFile(fname) < 0)
+      return -1;
 
-        if (item >= psrfile.header.itemtypepsr) {
-            fprintf(stderr, "%s:%s(): WARNING: Itemnumber too large (%d must be smaller than %ld)\r\n",
-                    __FILE__, __func__, item, psrfile.header.itemtypepsr);
-            return -1;
-        }
+    if (item >= psrfile.header.itemtypepsr) {
+      fprintf(stderr, "%s:%s(): WARNING: Itemnumber too large (%d must be smaller than %ld)\r\n",
+              __FILE__, __func__, item, psrfile.header.itemtypepsr);
+      return -1;
+    }
 
-        pcpi = getCpiBase(&psrfile, item);
+    pcpi = getCpiBase(&psrfile, item);
 
-        getValueFromCpiHeader(&psrfile, item, CPI_NUM_RANGEGATES_OFFSET, &nrgates);
-        if (rangegate >= nrgates) {
-            fprintf(stderr, "%s:%s(): WARNING: Rangenumer too large (%d must be smaller than %ld)\r\n",
-                    __FILE__, __func__, rangegate, nrgates);
-            return -1;
-        }
-        getValueFromCpiHeader(&psrfile, item, CPI_NUM_TXPULSES_OFFSET, &ntxpulses);
+    getValueFromCpiHeader(&psrfile, item, CPI_NUM_RANGEGATES_OFFSET, &nrgates);
+    if (rangegate >= nrgates) {
+      fprintf(stderr, "%s:%s(): WARNING: Rangenumber too large (%d must be smaller than %ld)\r\n",
+              __FILE__, __func__, rangegate, nrgates);
+      return -1;
+    }
+    getValueFromCpiHeader(&psrfile, item, CPI_NUM_TXPULSES_OFFSET, &ntxpulses);
 
-        psrdata = pcpi + CPI_HEADER_LEN + rangegate*ntxpulses*COMPLEXSIZE;
+    psrdata = pcpi + CPI_HEADER_LEN + rangegate*ntxpulses*COMPLEXSIZE;
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-        memcpy(complex, psrdata, ntxpulses*COMPLEXSIZE);
+    memcpy(complex, psrdata, ntxpulses*COMPLEXSIZE);
 #elif __BYTE_ORDER__ ==  __ORDER_BIG_ENDIAN__
-        {
-            int k;
-            void *ptr = (void *)complex;
-            for (k=0; k<ntxpulses*2; k++) {
-                *((uint32_t *)(ptr+k*FLOATSIZE)) = le32toh(*((uint32_t *)(psrdata+k*FLOATSIZE))) & 0xffffffff;
-            }
-        }
+    {
+      int k;
+      void *ptr = (void *)complex;
+      for (k=0; k<ntxpulses*2; k++) {
+        *((uint32_t *)(ptr+k*FLOATSIZE)) = le32toh(*((uint32_t *)(psrdata+k*FLOATSIZE))) & 0xffffffff;
+      }
+    }
 #else
 #error "Endianness undefined!"
 #endif
 
-        return 0;
-    }
+    return 0;
+  }
 
   /*
    * ========================================================================================
@@ -1407,63 +1407,107 @@ extern "C" {
    * @return 0 on success, -1 other wise
    */
   static int readItemTable(struct psr_file *ptr, FILE *fh)
-  {
-    long nitems;
-    char line[MAXLINESIZE];
-    int k;
-    int ret;
-    int num;
-    long offset;
-    long len;
-    float noise;
+{
+  long nitems;
+  char line[MAXLINESIZE];
+  int k;
+  int num;
+  int ret;
+  unsigned long offset;
+  unsigned long len;
+  float noise;
 
-    nitems = ptr->header.itemtypepsr;
-    ptr->item_table = malloc(nitems*sizeof(struct psr_item_table_entry));
+  nitems = ptr->header.itemtypepsr;
+  ptr->item_table = malloc(nitems * sizeof(struct psr_item_table_entry));
+  if (ptr->item_table == NULL) {
+    fprintf(stderr, "%s:%s(): ERROR: malloc failed\r\n",
+            __FILE__, __func__);
+    return -1;
+  }
 
-    if (fseek(fh, ptr->header.headerlen, SEEK_SET) < 0) {
-      fprintf(stderr, "%s:%s(): ERROR: fseek: %s\r\n",
-              __FILE__, __func__, strerror(errno));
-      free(ptr->item_table);
-      ptr->item_table = NULL;
-      return -1;
-    }
-    if (fgets(line, MAXLINESIZE, fh) == NULL) { /* read dummy line */
-      fprintf(stderr, "%s:%s(): ERROR reading first line of item table\r\n",
+  if (fseek(fh, ptr->header.headerlen, SEEK_SET) < 0) {
+    fprintf(stderr, "%s:%s(): ERROR: fseek: %s\r\n",
+            __FILE__, __func__, strerror(errno));
+    free(ptr->item_table);
+    ptr->item_table = NULL;
+    return -1;
+  }
+
+  if (fgets(line, MAXLINESIZE, fh) == NULL) { /* read dummy line */
+    fprintf(stderr, "%s:%s(): ERROR reading first line of item table\r\n",
+            __FILE__, __func__);
+    free(ptr->item_table);
+    ptr->item_table = NULL;
+    return -1;
+  }
+
+  for (k = 0; k < nitems; k++) {
+    if (fgets(line, MAXLINESIZE, fh) == NULL) {
+      fprintf(stderr, "%s:%s(): ERROR reading item table\r\n",
               __FILE__, __func__);
       free(ptr->item_table);
       ptr->item_table = NULL;
       return -1;
     }
-    for (k=0; k<nitems; k++) {
-      if (fgets(line, MAXLINESIZE, fh) == NULL) {
-        fprintf(stderr, "%s:%s(): ERROR reading item table\r\n",
-                __FILE__, __func__);
-        free(ptr->item_table);
-        ptr->item_table = NULL;
-        return -1;
-      }
-      if (sscanf(line,"i%d of=%lx l=%lx n=%g", &num, &offset, &len, &noise) != 4) {
-        noise = 0.0;
-        ret = sscanf(line,"i%d of=0x%lx len=0x%lx", &num, &offset, &len);
+
+    num = k;          /* default for compact format */
+    noise = 0.0f;
+    ret = 0;
+
+    /* Old format with noise */
+    ret = sscanf(line, "i%d of=%lx l=%lx n=%g", &num, &offset, &len, &noise);
+    if (ret != 4) {
+      noise = 0.0f;
+
+      /* Old format without noise, alternate spelling */
+      ret = sscanf(line, "i%d of=0x%lx len=0x%lx", &num, &offset, &len);
+      if (ret != 3) {
+        /* Old format without noise, short spelling */
+        ret = sscanf(line, "i%d of=%lx l=%lx", &num, &offset, &len);
         if (ret != 3) {
-          if ( (k == nitems-1) && (ret==0)) {
-            fprintf(stderr, "%s:%s(): WARNING: Item table format error\r\n",
-                    __FILE__, __func__);
-            continue;
+          /* New compact format: offset len noise */
+          ret = sscanf(line, "%lx %lx %g", &offset, &len, &noise);
+          if (ret == 3) {
+            num = k;
+          } else {
+            noise = 0.0f;
+
+            /* New compact format without noise: offset len */
+            ret = sscanf(line, "%lx %lx", &offset, &len);
+            if (ret == 2) {
+              num = k;
+            } else {
+              if ((k == nitems - 1) && (line[0] == '\0' || line[0] == '\n')) {
+                fprintf(stderr, "%s:%s(): WARNING: Item table format error\r\n",
+                        __FILE__, __func__);
+                continue;
+              }
+              fprintf(stderr, "%s:%s(): ERROR: cannot parse item table line: %s",
+                      __FILE__, __func__, line);
+              free(ptr->item_table);
+              ptr->item_table = NULL;
+              return -1;
+            }
           }
-          fprintf(stderr, "%s:%s(): ERROR sscanf: %s\r\n",
-                  __FILE__, __func__, strerror(errno));
-          free(ptr->item_table);
-          ptr->item_table = NULL;
-          return -1;
         }
       }
-      ptr->item_table[num].offset = offset;
-      ptr->item_table[num].uncompressed_len = len;
-      ptr->item_table[num].noise = noise;
     }
-    return 0;
+
+    if (num < 0 || num >= nitems) {
+      fprintf(stderr, "%s:%s(): ERROR: item index out of range: %d\r\n",
+              __FILE__, __func__, num);
+      free(ptr->item_table);
+      ptr->item_table = NULL;
+      return -1;
+    }
+
+    ptr->item_table[num].offset = offset;
+    ptr->item_table[num].uncompressed_len = len;
+    ptr->item_table[num].noise = noise;
   }
+
+  return 0;
+}
 
   /**
    * Read a value from all cpi headers for uncompressed files
