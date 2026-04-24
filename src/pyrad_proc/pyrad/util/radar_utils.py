@@ -930,6 +930,164 @@ def find_ray_index(ele_vec, azi_vec, ele, azi, ele_tol=0.0, azi_tol=0.0, nearest
     return ind_ray[ind_min]
 
 
+def _angular_diff_deg(a, b):
+    """Smallest absolute angular difference in degrees."""
+    d = np.abs(a - b)
+    return np.minimum(d, 360.0 - d)
+
+
+def _build_ray_tree(ele_vec, azi_vec, ele_tol, azi_tol):
+    """
+    Build a KD-tree in normalized (ele, azi) space so that a unit ball
+    corresponds to the rectangular tolerance test approximately.
+    """
+    pts = np.column_stack((ele_vec / ele_tol, azi_vec / azi_tol))
+    tree = scipy.spatial.cKDTree(pts)
+    return tree
+
+
+def _query_ray_index(tree, ele_vec, azi_vec, ele, azi, ele_tol, azi_tol, nearest="azi"):
+    """
+    Find candidate rays using KD-tree, then apply exact rectangular tolerance
+    and the same tie-breaking logic as the original function.
+    """
+    query_pt = np.array([ele / ele_tol, azi / azi_tol])
+
+    # Radius sqrt(2) covers the rectangle in normalized coordinates.
+    cand = tree.query_ball_point(query_pt, r=np.sqrt(2.0))
+    if not cand:
+        return None
+
+    cand = np.asarray(cand, dtype=int)
+
+    # Exact tolerance filter
+    ele_ok = np.abs(ele_vec[cand] - ele) <= ele_tol
+    azi_ok = _angular_diff_deg(azi_vec[cand], azi) <= azi_tol
+    cand = cand[ele_ok & azi_ok]
+
+    if cand.size == 0:
+        return None
+    if cand.size == 1:
+        return int(cand[0])
+
+    if nearest == "azi":
+        return int(cand[np.argmin(_angular_diff_deg(azi_vec[cand], azi))])
+    else:
+        return int(cand[np.argmin(np.abs(ele_vec[cand] - ele))])
+
+
+def _find_rng_indices_sorted(rng_vec, rngs, rng_tol=0.0):
+    """
+    Vectorized nearest-neighbor lookup on a sorted range vector.
+    Returns indices and a validity mask.
+    """
+    rng_vec = np.asarray(rng_vec)
+    rngs = np.asarray(rngs)
+
+    pos = np.searchsorted(rng_vec, rngs)
+
+    left = np.clip(pos - 1, 0, len(rng_vec) - 1)
+    right = np.clip(pos, 0, len(rng_vec) - 1)
+
+    dleft = np.abs(rng_vec[left] - rngs)
+    dright = np.abs(rng_vec[right] - rngs)
+
+    use_right = dright < dleft
+    idx = np.where(use_right, right, left)
+    dist = np.where(use_right, dright, dleft)
+
+    valid = dist <= rng_tol
+    return idx, valid
+
+
+def find_colocated_indexes_fast(
+    radar1,
+    radar2,
+    rad1_ele,
+    rad1_azi,
+    rad1_rng,
+    rad2_ele,
+    rad2_azi,
+    rad2_rng,
+    ele_tol=0.5,
+    azi_tol=0.5,
+    rng_tol=50.0,
+    nearest="azi",
+):
+    """
+    Faster version of find_colocated_indexes.
+    """
+    rad1_ele = np.asarray(rad1_ele)
+    rad1_azi = np.asarray(rad1_azi)
+    rad1_rng = np.asarray(rad1_rng)
+    rad2_ele = np.asarray(rad2_ele)
+    rad2_azi = np.asarray(rad2_azi)
+    rad2_rng = np.asarray(rad2_rng)
+
+    ngates = len(rad1_ele)
+
+    ele1 = np.asarray(radar1.elevation["data"])
+    azi1 = np.asarray(radar1.azimuth["data"])
+    rng1 = np.asarray(radar1.range["data"])
+
+    ele2 = np.asarray(radar2.elevation["data"])
+    azi2 = np.asarray(radar2.azimuth["data"])
+    rng2 = np.asarray(radar2.range["data"])
+
+    # Precompute fast range lookup for all points
+    ind_rng_rad1, ok_rng1 = _find_rng_indices_sorted(rng1, rad1_rng, rng_tol=rng_tol)
+    ind_rng_rad2, ok_rng2 = _find_rng_indices_sorted(rng2, rad2_rng, rng_tol=rng_tol)
+
+    # Build KD-trees once
+    tree1 = _build_ray_tree(ele1, azi1, ele_tol, azi_tol)
+    tree2 = _build_ray_tree(ele2, azi2, ele_tol, azi_tol)
+
+    ind_ray_rad1 = np.empty(ngates, dtype=np.int64)
+    ind_ray_rad2 = np.empty(ngates, dtype=np.int64)
+    valid = np.zeros(ngates, dtype=bool)
+
+    for i in range(ngates):
+        if not ok_rng1[i] or not ok_rng2[i]:
+            continue
+
+        ir1 = _query_ray_index(
+            tree1,
+            ele1,
+            azi1,
+            rad1_ele[i],
+            rad1_azi[i],
+            ele_tol,
+            azi_tol,
+            nearest=nearest,
+        )
+        if ir1 is None:
+            continue
+
+        ir2 = _query_ray_index(
+            tree2,
+            ele2,
+            azi2,
+            rad2_ele[i],
+            rad2_azi[i],
+            ele_tol,
+            azi_tol,
+            nearest=nearest,
+        )
+        if ir2 is None:
+            continue
+
+        ind_ray_rad1[i] = ir1
+        ind_ray_rad2[i] = ir2
+        valid[i] = True
+
+    return (
+        ind_ray_rad1[valid],
+        ind_rng_rad1[valid],
+        ind_ray_rad2[valid],
+        ind_rng_rad2[valid],
+    )
+
+
 def find_rng_index(rng_vec, rng, rng_tol=0.0):
     """
     Find the range index corresponding to a particular range
@@ -1822,6 +1980,7 @@ def compute_2d_stats(
     vmax=None,
     transform=None,
     cap_limits=False,
+    double_conditional_threshold=None,
 ):
     """
     computes a 2D histogram and statistics of the data
@@ -1847,6 +2006,9 @@ def compute_2d_stats(
     cap_limits: bool
         If true, all values larger than vmax or smaller than vmin will be discarded from the
         scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin
+    double_conditional_threshold: float
+        If set a double conditional threshold will be applied in the computation of the scores,
+        e.g. only samples where both radars have measured a value > threshold will be used.
 
     Returns
     -------
@@ -1878,6 +2040,12 @@ def compute_2d_stats(
         field1 = transform(field1)
         field2 = transform(field2)
 
+    if double_conditional_threshold:
+        mask = np.logical_and(
+            field1 > double_conditional_threshold, field2 > double_conditional_threshold
+        )
+        field1 = field1[mask]
+        field2 = field2[mask]
     hist_2d, bin_edges1, bin_edges2 = compute_2d_hist(
         field1,
         field2,

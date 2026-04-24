@@ -1274,7 +1274,6 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
 
     ind_rmin = np.where(radar.range["data"] > rmin)[0][0]
     ind_rmax = np.where(radar.range["data"] < rmax)[0][-1]
-
     rhohv_rain = pyart.correct.est_rhohv_rain(
         radar,
         ind_rmin=ind_rmin,
@@ -1290,7 +1289,6 @@ def process_rhohv_rain(procstatus, dscfg, radar_list=None):
         refl_field=refl_field,
         temp_ref=temp_ref,
     )
-
     # prepare for exit
     new_dataset = {"radar_out": deepcopy(radar)}
     new_dataset["radar_out"].fields = dict()
@@ -1626,6 +1624,10 @@ def process_zdr_snow(procstatus, dscfg, radar_list=None):
             snr_field = "signal_to_noise_ratio_hh"
         if datatype == "SNRv":
             snr_field = "signal_to_noise_ratio_vv"
+        if datatype == "SNR":
+            snr_field = "signal_to_noise_ratio"
+        if datatype == "SNRu":
+            snr_field = "unfiltered_signal_to_noise_ratio_vv"
         if datatype == "hydro":
             hydro_field = "radar_echo_classification"
 

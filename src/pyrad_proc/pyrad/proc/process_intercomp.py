@@ -30,7 +30,7 @@ from ..io.read_data_other import read_colocated_gates, read_colocated_data
 from ..io.read_data_other import read_colocated_data_with_QC
 
 from ..util.radar_utils import get_range_bins_to_avg
-from ..util.radar_utils import find_colocated_indexes
+from ..util.radar_utils import find_colocated_indexes_fast
 
 
 def process_colocated_gates(procstatus, dscfg, radar_list=None):
@@ -422,7 +422,7 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
                 rad1_rng_ind,
                 rad2_ray_ind,
                 rad2_rng_ind,
-            ) = find_colocated_indexes(
+            ) = find_colocated_indexes_fast(
                 radar1,
                 radar2,
                 dscfg["global_data"]["rad1_ele"],
@@ -617,24 +617,70 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
 
 def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
     """
-    Intercomparison between the time-averaged value of an arbitrary radar field
-    for two radars (at co-located gates), including QC based on PhiDP and a
-    time-averaging flag field.
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing
+    dscfg : dictionary of dictionaries
+        data set configuration. Accepted Configuration Keywords::
 
-    Expected dscfg["datatype"] content (for each radar):
-      - one "main" datatype to be intercompared (ANY pyrad-supported datatype),
-      - one PhiDP datatype: "PhiDP" or "PhiDPc",
-      - one flag datatype: "time_avg_flag"
+        datatype : list of string. Dataset keyword
+            The input data types, must contain
+            - one "main" datatype to be intercompared (ANY pyrad-supported datatype),
+            - "PhiDP" or "PhiDPc"
+            - "time_avg_flag"
+            for the two radars
+        colocgatespath : string.
+            base path to the file containing the coordinates of the co-located
+            gates
+        coloc_data_dir : string. Dataset keyword
+            name of the directory containing the csv file with colocated data
+        coloc_radars_name : string. Dataset keyword
+            string identifying the radar names
+        rays_are_indexed : bool. Dataset keyword
+            If True it is considered that the rays are indexed and that the
+            data can be selected simply looking at the ray number.
+            Default false
+        azi_tol : float. Dataset keyword
+            azimuth tolerance between the two radars. Default 0.5 deg
+        ele_tol : float. Dataset keyword
+            elevation tolerance between the two radars. Default 0.5 deg
+        rng_tol : float. Dataset keyword
+            range tolerance between the two radars. Default 50 m
+        average_range_gates: list of int. Dataset keyword
+            Number of consecutive range gates to average for every radar. If not
+            provided it will average the highest resolution radar to match the resolution
+            of the lowest resolution radar. If both radars have similar resolutions, it will
+            not do any averaging.
+        clt_max : float. Dataset keyword
+            maximum fraction  of samples that can be clutter contaminated.
+            Default 1. i.e. all
+        phi_excess_max : float. Dataset keyword
+            maximum fraction of samples that can have excess instantaneous
+            PhiDP. Excess phidp is computed in the FLAG_TIME_AVG dataset, it corresponds to
+            an exceedance of a threshold in PhiDP at the native time resolution of the data
+            (no averaging). The excess phidp value corresponds to the parameter phidpmax used in the
+            FLAG_TIME_AVG dataset used as input. Default 1. i.e. all
+        non_rain_max : float. Dataset keyword
+            maximum fraction of samples that can be no rain. Default 1. i.e. all
+        phi_avg_max : float. Dataset keyword
+            maximum average (hourly) PhiDP in degrees allowed. This conditions differs from
+            phi_excess_max, because it concerns only average values and is defined in degrees
+            and not in percentage of samples. Default is infinite, i.e. any
 
-    Output:
-      - in procstatus==1: intercomp_dict contains rad1_val / rad2_val (the main field),
-        plus rad1_PhiDPavg/rad2_PhiDPavg and rad1_Flagavg/rad2_Flagavg (kept for QC/debug)
-      - in procstatus==2: final intercomp_dict contains rad1_val / rad2_val only (after QC)
+    radar_list : list of Radar objects
+        Optional. list of radar objects
 
-    Notes:
-      - This function keeps using read_colocated_data_time_avg(...) in procstatus==2.
-        That reader likely returns the "main field" column as the same slot previously
-        called rad*_dBZ. Here we treat it generically as rad*_val.
+    Returns
+    -------
+    new_dataset : dict
+        dictionary containing a dictionary with intercomparison data and the
+        key "final" which contains a boolean that is true when all volumes
+        have been processed
+    ind_rad : int
+        radar index
+
     """
     if procstatus == 0:
         savedir = dscfg["colocgatespath"] + dscfg["coloc_radars_name"] + "/"
@@ -818,11 +864,20 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             "rad1_name": dscfg["global_data"]["rad1_name"],
             "rad2_name": dscfg["global_data"]["rad2_name"],
         }
-
-        # determine if radar data has to be averaged
-        avg_rad1, avg_rad2, avg_rad_lim = get_range_bins_to_avg(
-            radar1.range["data"], radar2.range["data"]
-        )
+        average_range_gates = dscfg.get("average_range_gates", None)
+        if average_range_gates:
+            avg_rad1 = average_range_gates[0] > 1
+            avg_rad2 = average_range_gates[1] > 1
+            nbins = int(average_range_gates[0])
+            avg_rad_lim1 = [-int(nbins / 2) - 1, int(nbins / 2)]
+            nbins = int(average_range_gates[1])
+            avg_rad_lim2 = [-int(nbins / 2) - 1, int(nbins / 2)]
+        else:
+            # determine if radar data has to be averaged
+            avg_rad1, avg_rad2, avg_rad_lim1 = get_range_bins_to_avg(
+                radar1.range["data"], radar2.range["data"]
+            )
+            avg_rad_lim2 = avg_rad_lim1
 
         # rays are indexed to regular grid
         rays_are_indexed = dscfg.get("rays_are_indexed", False)
@@ -836,7 +891,7 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
                 rad1_rng_ind,
                 rad2_ray_ind,
                 rad2_rng_ind,
-            ) = find_colocated_indexes(
+            ) = find_colocated_indexes_fast(
                 radar1,
                 radar2,
                 dscfg["global_data"]["rad1_ele"],
@@ -886,15 +941,15 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
 
             for i in range(ngates_valid):
-                if rad1_rng_ind[i] + avg_rad_lim[1] >= radar1.ngates:
+                if rad1_rng_ind[i] + avg_rad_lim1[1] >= radar1.ngates:
                     continue
-                if rad1_rng_ind[i] + avg_rad_lim[0] < 0:
+                if rad1_rng_ind[i] + avg_rad_lim1[0] < 0:
                     continue
 
                 ind_rng = list(
                     range(
-                        rad1_rng_ind[i] + avg_rad_lim[0],
-                        rad1_rng_ind[i] + avg_rad_lim[1] + 1,
+                        rad1_rng_ind[i] + avg_rad_lim1[0],
+                        rad1_rng_ind[i] + avg_rad_lim1[1] + 1,
                     )
                 )
 
@@ -943,15 +998,15 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             is_valid_avg = np.zeros(ngates_valid, dtype=bool)
 
             for i in range(ngates_valid):
-                if rad2_rng_ind[i] + avg_rad_lim[1] >= radar2.ngates:
+                if rad2_rng_ind[i] + avg_rad_lim2[1] >= radar2.ngates:
                     continue
-                if rad2_rng_ind[i] + avg_rad_lim[0] < 0:
+                if rad2_rng_ind[i] + avg_rad_lim2[0] < 0:
                     continue
 
                 ind_rng = list(
                     range(
-                        rad2_rng_ind[i] + avg_rad_lim[0],
-                        rad2_rng_ind[i] + avg_rad_lim[1] + 1,
+                        rad2_rng_ind[i] + avg_rad_lim2[0],
+                        rad2_rng_ind[i] + avg_rad_lim2[1] + 1,
                     )
                 )
 
@@ -1139,7 +1194,6 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
                 )
             )
         )[0]
-
         intercomp_dict = {
             "rad1_name": dscfg["global_data"]["rad1_name"],
             "rad1_time": rad1_time[ind_val],

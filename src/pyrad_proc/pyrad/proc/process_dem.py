@@ -296,9 +296,9 @@ def process_gecsx(procstatus, dscfg, radar_list=None):
         radar = pyart.testing.make_empty_ppi_radar(
             len(ranges), len(azimuths), len(elevations)
         )
-        radar.latitude["data"] = np.array(dscfg["RadarPosition"]["latitude"])
-        radar.longitude["data"] = np.array(dscfg["RadarPosition"]["longitude"])
-        radar.altitude["data"] = np.array(dscfg["RadarPosition"]["altitude"])
+        radar.latitude["data"] = np.array(dscfg["latitude"])
+        radar.longitude["data"] = np.array(dscfg["longitude"])
+        radar.altitude["data"] = np.array(dscfg["altitude"])
         radar.azimuth["data"] = np.array(list(azimuths) * len(elevations))
         radar.range["data"] = ranges
         radar.fixed_angle["data"] = np.array(elevations)

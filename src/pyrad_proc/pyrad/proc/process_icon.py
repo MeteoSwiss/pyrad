@@ -100,7 +100,6 @@ def process_icon(procstatus, dscfg, radar_list=None):
 
     keep_in_memory = dscfg.get("keep_in_memory", 0)
     regular_grid = dscfg.get("regular_grid", 0)
-
     icon_type = dscfg.get("icon_type", "TEMP")
     if icon_type == "TEMP":
         field_names = ["temperature"]
@@ -214,7 +213,6 @@ def process_icon(procstatus, dscfg, radar_list=None):
     for field in icon_fields:
         for field_name in field:
             new_dataset["radar_out"].add_field(field_name, field[field_name])
-
     return new_dataset, ind_rad
 
 
@@ -696,7 +694,6 @@ def process_icon_lookup_table(procstatus, dscfg, radar_list=None):
                 warn(str(ee))
                 warn("Unable to add icon " + field_name + " field to radar object")
                 return None, None
-
     return new_dataset, ind_rad
 
 
@@ -986,7 +983,6 @@ def process_icon_to_radar(procstatus, dscfg, radar_list=None):
                 radar_out.add_field(field_name, field[field_name])
 
         icon_radars.append({"ind_rad": ind_rad, "radar_out": radar_out, "dticon": dtc})
-
     return icon_radars, ind_rad
 
 

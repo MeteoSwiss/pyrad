@@ -45,7 +45,6 @@ Functions for writing pyrad output data
     write_intercomp_scores_ts
     write_colocated_gates
     write_colocated_data
-    write_colocated_data_with_QC
     write_sun_hits
     write_sun_retrieval
 
@@ -3424,7 +3423,8 @@ def write_colocated_gates(coloc_gates, fname):
 def write_colocated_data(coloc_data, fname):
     """
     Writes the time averaged data of gates colocated with two radars, if QC metadata
-    is available, it will be written as well.
+    is available, it will be written as well. If the file already exists new records will be
+    appended if they are not already present (based on rad1_time and rad2_time columns)
 
     Parameters
     ----------
@@ -3440,6 +3440,7 @@ def write_colocated_data(coloc_data, fname):
     """
 
     file_exists = bool(glob.glob(fname))
+
     dataset_dict = {
         "rad1_time": pd.to_datetime(coloc_data["rad1_time"]).strftime("%Y%m%d%H%M%S"),
         "rad1_ray_ind": coloc_data["rad1_ray_ind"],
@@ -3457,16 +3458,39 @@ def write_colocated_data(coloc_data, fname):
         "rad2_val": coloc_data["rad2_val"],
     }
 
-    if "rad1_PhiDPavg" in coloc_data:  # QC data available
+    if "rad1_PhiDPavg" in coloc_data:
         dataset_dict["rad1_PhiDPavg"] = coloc_data["rad1_PhiDPavg"]
         dataset_dict["rad1_Flagavg"] = coloc_data["rad1_Flagavg"]
         dataset_dict["rad2_PhiDPavg"] = coloc_data["rad2_PhiDPavg"]
         dataset_dict["rad2_Flagavg"] = coloc_data["rad2_Flagavg"]
 
-    # Build dataframe
     df = pd.DataFrame(dataset_dict)
 
-    # Write file
+    # ---------------------------
+    # REMOVE DUPLICATES ON APPEND
+    # ---------------------------
+    if file_exists:
+        # Read only needed columns (fast)
+        df_existing = pd.read_csv(
+            fname, comment="#", usecols=["rad1_time", "rad2_time"]
+        )
+
+        # Build set of existing pairs
+        existing_pairs = set(zip(df_existing.rad1_time, df_existing.rad2_time))
+
+        # Filter new data
+        mask = [
+            (r1, r2) not in existing_pairs for r1, r2 in zip(df.rad1_time, df.rad2_time)
+        ]
+        df = df[mask]
+
+        # If nothing new → exit early
+        if df.empty:
+            return fname
+
+    # ---------------------------
+    # WRITE FILE
+    # ---------------------------
     if not file_exists:
         with open(fname, "w") as f:
             f.write("# Colocated radar gates data file\n")
@@ -3475,6 +3499,7 @@ def write_colocated_data(coloc_data, fname):
         df.to_csv(fname, mode="a", index=False)
     else:
         df.to_csv(fname, mode="a", index=False, header=False)
+
     return fname
 
 

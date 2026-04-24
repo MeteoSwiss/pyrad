@@ -53,7 +53,8 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             tolerance in AziTol, EleTol and RngTol
             'nearest' : will only get nearest point to prescribed lon/lat/alt or
                 ele/azi/rng
-            'nearest_valid' : will only get the nearest valid point to prescribed
+            'nearest_valid' : will only get the nearest valid point, within
+                tolerance AziTol, EleTol and RngTol to prescribed
                 lon/lat/alt or ele/azi/rng (ignore missing values)
             'average' : will average (while ignore missing values), all values
                 that fall within the tolerance in AziTol, EleTol and RngTol

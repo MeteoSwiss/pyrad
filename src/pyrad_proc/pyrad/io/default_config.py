@@ -27,7 +27,7 @@ _defaults_loc = {
         "ymin": -50,
         "ymax": 50,
     },
-    "ppiMapImageConfig": {"xsize": 10, "ysize": 10, "dpi": 72},
+    "ppiMapImageConfig": {"xsize": 10, "ysize": 10, "dpi": 72, "mapres": "10m"},
     "rhiImageConfig": {
         "xsize": 10,
         "ysize": 5,
@@ -46,7 +46,7 @@ _defaults_loc = {
         "ymin": 0,
         "ymax": 12,
     },
-    "gridMapImageConfig": {"xsize": 10, "ysize": 10, "dpi": 72},
+    "gridMapImageConfig": {"xsize": 10, "ysize": 10, "dpi": 72, "mapres": "10m"},
     "sunhitsImageConfig": {
         "xsize": 10,
         "ysize": 5,

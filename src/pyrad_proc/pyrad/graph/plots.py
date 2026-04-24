@@ -30,6 +30,8 @@ from ..util.radar_utils import compute_quantiles_from_hist
 from .plots_aux import get_colobar_label, get_field_name, get_norm
 import pyart
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
+import matplotlib.ticker as ticker
 from ..util import warn
 
 import numpy as np
@@ -536,6 +538,8 @@ def plot_scatter(
     cmap=None,
     vmin=None,
     vmax=None,
+    min_cnt=0,
+    bins_transform="linear",
 ):
     """
     2D histogram
@@ -569,7 +573,11 @@ def plot_scatter(
         Minimum value of the 2D histogram.
     vmax: float
         Maximum value of the 2D histogram.
-
+    min_cnt: int
+        Minimum number of counts in the 2D histogram
+    bins__transform: str
+        Either "linear" or "log". Specifies whether the counts in the colorbar of the scatter-plots
+        are in linear or in log scale. Default is "linear"
     Returns
     -------
     fname_list : list of str
@@ -598,9 +606,24 @@ def plot_scatter(
         cmap = pyart.config.get_field_colormap(field_name1)
 
     X, Y = np.meshgrid(bin_edges1, bin_edges2)
-    cax = ax.pcolormesh(
-        X, Y, np.ma.transpose(hist_2d), cmap=cmap, vmin=0.0, vmax=np.max(hist_2d)
-    )
+
+    if bins_transform == "log":
+        cax = ax.pcolormesh(
+            X,
+            Y,
+            np.ma.transpose(hist_2d),
+            cmap=cmap,
+            norm=LogNorm(vmin=max(min_cnt, 1), vmax=np.max(hist_2d)),
+        )
+    else:
+        cax = ax.pcolormesh(
+            X,
+            Y,
+            np.ma.transpose(hist_2d),
+            cmap=cmap,
+            vmin=min_cnt,
+            vmax=np.max(hist_2d),
+        )
 
     step1 = bin_edges1[1] - bin_edges1[0]
     bin_centers1 = bin_edges1[0:-1] + step1 / 2.0
@@ -628,6 +651,17 @@ def plot_scatter(
 
     cb = fig.colorbar(cax)
     cb.set_label(label)
+
+    if bins_transform == "log":
+        cb.locator = ticker.LogLocator(base=10)
+        formatter = ticker.FuncFormatter(lambda x, _: f"{x:g}")
+        cb.formatter = formatter
+        cb.ax.yaxis.set_minor_formatter(formatter)
+        cb.minorticks_on()
+        cb.update_ticks()
+        # Optional styling for subtle minors
+        cb.ax.tick_params(which="major", length=6, width=1.0)
+        cb.ax.tick_params(which="minor", length=3, width=0.6, color="0.5")
 
     if metadata is not None:
         ax.text(
@@ -1623,11 +1657,10 @@ def plot_selfconsistency_instrument2(
 
 
 def plot_scatter_comp(
-    value1,
-    value2,
+    values,
     fname_list,
     labelx="Sensor 1",
-    labely="Sensor 2",
+    labely=None,
     titl="Scatter",
     axis=None,
     metadata=None,
@@ -1635,116 +1668,188 @@ def plot_scatter_comp(
     ax=None,
     fig=None,
     save_fig=True,
-    point_format="bx",
+    labels=None,
     write_stats=True,
+    alpha=0.5,
+    markersize=20,
 ):
     """
-    plots the scatter between two time series
+    Plot scatter comparisons of multiple arrays against the first array.
 
     Parameters
     ----------
-    value1 : float array
-        values of the first time series
-    value2 : float array
-        values of the second time series
+    values : list of array-like
+        List of arrays. The first array is used as x, and all others are
+        plotted against it as y.
     fname_list : list of str
-        list of names of the files where to store the plot
+        List of names of the files where to store the plot.
     labelx : str
-        The label of the X axis
-    labely : str
-        The label of the Y axis
+        Label of the X axis.
+    labely : str or None
+        Label of the Y axis. If None, defaults to "Estimated values".
     titl : str
-        The figure title
+        Figure title.
     axis : str
-        type of axis
-    metadata : string
-        a string containing metadata
+        Type of axis. If "equal", enforce equal axis limits and draw 1:1 line.
+    metadata : str
+        A string containing metadata.
     dpi : int
-        dots per inch
+        Dots per inch.
     fig : Figure
-        Figure to add the colorbar to. If none a new figure will be created
+        Figure to plot on. If None, a new figure will be created.
     ax : Axis
-        Axis to plot on. if fig is None a new axis will be created
+        Axis to plot on. If fig is None, a new axis will be created.
     save_fig : bool
-        if true save the figure if false it does not close the plot and
-        returns the handle to the figure
-    point_format : str
-        format of the scatter point
+        If True save the figure. If False, return figure and axis handles.
+    labels : list of str or None
+        Labels for arrays 2..N. Length must be len(values)-1 if provided.
     write_stats : bool
-        If set to True will write the RMSE and bias on the plot. Default is true.
+        If True, write stats for each series on the plot.
+    alpha : float
+        Transparency of scatter points.
+    markersize : float
+        Scatter marker size.
 
     Returns
     -------
     fname_list : list of str
-        list of names of the created plots
-
+        List of names of the created plots, if save_fig is True.
+    or
+    (fig, ax) : tuple
+        Figure and axis handles, if save_fig is False.
     """
-    max_value = np.ma.max([np.max(value1), np.max(value2)])
 
-    if fig is None:
-        fig, ax = plt.subplots(figsize=[7, 7], dpi=dpi)
+    if values is None or len(values) < 2:
+        raise ValueError("values must be a list with at least 2 arrays")
 
-        ax.plot(value1, value2, point_format)
-        ax.set_xlabel(labelx)
-        ax.set_ylabel(labely)
-        ax.set_title(titl)
+    values = [np.asanyarray(v) for v in values]
 
-        if axis == "equal":
-            ax.axis([0, max_value, 0, max_value])
-            ax.plot([0, max_value], [0, max_value], "k--")
-            ax.set(adjustable="box", aspect="equal")
-
-        if metadata is not None:
-            ax.text(
-                0.05,
-                0.95,
-                metadata,
-                horizontalalignment="left",
-                verticalalignment="top",
-                transform=ax.transAxes,
+    npoints = len(values[0])
+    for i, v in enumerate(values):
+        if len(v) != npoints:
+            raise ValueError(
+                f"All arrays must have the same length. "
+                f"Array 0 has length {npoints}, array {i} has length {len(v)}."
             )
 
-        # turn on the grid
-        ax.grid()
-        # Make a tight layout
-        fig.tight_layout()
+    x = values[0]
+
+    if labels is None:
+        labels = [f"Series {i}" for i in range(2, len(values) + 1)]
+    elif len(labels) != len(values) - 1:
+        raise ValueError("labels must have length len(values)-1")
+
+    if labely is None:
+        labely = "Estimated values"
+
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=[7, 7], dpi=dpi)
+
+    # Remove old stat texts only, keep metadata if present
+    old_texts = list(ax.texts)
+    for txt in old_texts:
+        txt.remove()
+
+    # Nice color cycle from matplotlib default
+    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+    markers = ["o", "s", "^", "D", "v", "P", "X", "<", ">"]
+
+    all_valid = []
+
+    for i, y in enumerate(values[1:]):
+        mask = np.isfinite(x) & np.isfinite(y)
+        xv = x[mask]
+        yv = y[mask]
+        all_valid.append((xv, yv))
+
+        color = colors[i % len(colors)]
+        marker = markers[i % len(markers)]
+
+        ax.scatter(
+            xv,
+            yv,
+            s=markersize,
+            alpha=alpha,
+            color=color,
+            marker=marker,
+            edgecolors="none",
+            label=labels[i],
+        )
+
+    ax.set_xlabel(labelx)
+    ax.set_ylabel(labely)
+    ax.set_title(titl)
+
+    # Determine common axis range from all valid data
+    all_data = []
+    for xv, yv in all_valid:
+        if xv.size > 0:
+            all_data.append(xv)
+        if yv.size > 0:
+            all_data.append(yv)
+
+    if len(all_data) > 0:
+        data_min = min(np.nanmin(a) for a in all_data)
+        data_max = max(np.nanmax(a) for a in all_data)
     else:
-        ax.autoscale(False)
-        ax.plot(value1, value2, point_format)
+        data_min, data_max = 0.0, 1.0
 
-    if write_stats:
-        for txt in ax.texts:
-            txt.remove()
+    if axis == "equal":
+        ax.axis([data_min, data_max, data_min, data_max])
+        ax.plot([data_min, data_max], [data_min, data_max], "k--", linewidth=1)
+        ax.set(adjustable="box", aspect="equal")
 
-        # mask finite values
-        mask = np.isfinite(value1) & np.isfinite(value2)
-        v1 = value1[mask]
-        v2 = value2[mask]
-
-        rmse = np.sqrt(np.nanmean((v1 - v2) ** 2))
-        bias = np.nanmean(v1 - v2)
-
-        if v1.size > 1 and np.nanstd(v1) > 0 and np.nanstd(v2) > 0:
-            corr = np.corrcoef(v1, v2)[0, 1]
-        else:
-            corr = np.nan
-
+    if metadata is not None:
         ax.text(
-            0.01,
-            0.98,
-            f"RMSE={rmse:2.2f}\nBias={bias:2.2f}\nCorr={corr:2.2f}",
+            0.05,
+            0.95,
+            metadata,
             horizontalalignment="left",
             verticalalignment="top",
             transform=ax.transAxes,
         )
 
+    if write_stats:
+        stats_lines = []
+        for i, (xv, yv) in enumerate(all_valid):
+            if xv.size == 0:
+                rmse = np.nan
+                bias = np.nan
+                corr = np.nan
+            else:
+                rmse = np.sqrt(np.nanmean((xv - yv) ** 2))
+                bias = np.nanmean(yv - xv)
+                if xv.size > 1 and np.nanstd(xv) > 0 and np.nanstd(yv) > 0:
+                    corr = np.corrcoef(xv, yv)[0, 1]
+                else:
+                    corr = np.nan
+
+            stats_lines.append(
+                f"{labels[i]}: RMSE={rmse:.2f}, Bias={bias:.2f}, Corr={corr:.2f}"
+            )
+
+        ax.text(
+            0.01,
+            0.98,
+            "\n".join(stats_lines),
+            horizontalalignment="left",
+            verticalalignment="top",
+            transform=ax.transAxes,
+            fontsize=9,
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.7, edgecolor="none"),
+        )
+
+    ax.grid()
+    ax.legend(loc="best")
+    fig.tight_layout()
+
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
-
         return fname_list
-    return (fig, ax)
+
+    return fig, ax
 
 
 def plot_sun_hits(field, field_name, fname_list, prdcfg):

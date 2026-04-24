@@ -855,10 +855,11 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
                 " {} and radar RADAR{:03d}"
             )
             warn(str1.format(master_voltime.strftime("%Y-%m-%d %H:%M:%S"), i + 1))
+            radar = None
             radar_list.append(None)
         elif nfiles_ref == 1:
             voltime_ref = get_datetime(filelist_ref[0], datatypedescr_ref)
-            radar_list.append(get_data(voltime_ref, datatypesdescr_list[i], datacfg))
+            radar = get_data(voltime_ref, datatypesdescr_list[i], datacfg)
         else:
             voltime_ref_list = []
             for j in range(nfiles_ref):
@@ -866,7 +867,34 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
                     get_datetime(filelist_ref[j], datatypedescr_ref)
                 )
             voltime_ref = min(voltime_ref_list, key=lambda x: abs(x - master_voltime))
-            radar_list.append(get_data(voltime_ref, datatypesdescr_list[i], datacfg))
+            radar = get_data(voltime_ref, datatypesdescr_list[i], datacfg)
+        radar_list.append(radar)
+    # Override radar location metadata if provided in the location config file
+    for key in ("latitude", "longitude", "altitude"):
+        if key not in datacfg:
+            continue
+
+        values = datacfg[key]
+
+        if num_radars == 1:
+            warn(f"Overriding attribute {key} with value {float(values)}")
+            radar_list[0].__dict__[key]["data"] = np.array([float(values)])
+            continue
+
+        if len(values) != num_radars:
+            warn(
+                f"WARNING: '{key}' provided in config has length {len(values)}, "
+                f"but num_radars is {num_radars}. Ignoring override."
+            )
+            continue
+
+        for i, radar in enumerate(radar_list):
+            if radar is not None:
+                warn(
+                    f"Overriding attribute {key} on radar {i} with value {float(values[i])}"
+                )
+                radar.__dict__[key]["data"] = np.array([float(values[i])])
+
     return radar_list
 
 
@@ -1291,15 +1319,6 @@ def _create_cfg_dict(cfgfile):
             if not os.path.isabs(cfg[fname]):
                 cfg[fname] = os.path.join(cfg["configpath"], cfg[fname])
 
-    # if specified in config, convert coordinates to arrays
-    if "RadarPosition" in cfg:
-        fltarr_list = ["latitude", "longitude", "altitude"]
-        for param in fltarr_list:
-            if param not in cfg["RadarPosition"]:
-                continue
-            if isinstance(cfg["RadarPosition"][param], float):
-                cfg["RadarPosition"][param] = [cfg["RadarPosition"][param]]
-
     # keyword to force the use of MF scale in ODIM data
     if "MFScale" not in cfg:
         cfg.update({"MFScale": 0})
@@ -1486,10 +1505,6 @@ def _create_datacfg_dict(cfg):
     datacfg.update({"cpi": cfg.get("cpi", "low_prf")})
     datacfg.update({"ang_tol": cfg.get("ang_tol", 0.5)})
 
-    # Radar position
-    if "RadarPosition" in cfg:
-        datacfg.update({"RadarPosition": cfg["RadarPosition"]})
-
     # Instrument parameters
     if "frequency" in cfg:
         datacfg.update({"frequency": cfg["frequency"]})
@@ -1567,7 +1582,6 @@ def _create_dscfg_dict(cfg, dataset):
 
     """
     dscfg = cfg[dataset]
-
     # Path related parameters
     dscfg.update({"configpath": cfg["configpath"]})
     dscfg.update({"basepath": cfg["saveimgbasepath"]})

@@ -63,7 +63,7 @@ def generate_timeseries_products(dataset, prdcfg):
                 from the Py-ART config file.
             plot_type: str
                 The type of plot to generate. Can be 'timeseries' (default) or
-                'scatter'.
+                'scatter'. Scatter-plots also show the RMSE and bias.
             time_interval: int or None
                 Time interval in seconds used to resample both radar and sensor
                 series before comparison. If None, the native timestamps are used.
@@ -95,22 +95,26 @@ def generate_timeseries_products(dataset, prdcfg):
                 (e.g. %Y, %m, %d, %Y%m%d, optionally written as {%Y%m%d}), which will be expanded using the provided sensorid
                 and date before performing the recursive search, for example "{%Y-%m-%d}/{sensorid}/"
                 If not provided a potentially deep recursive search will be performed which can take some time.
-    'COMPARE_SCORES_SENSOR': Plots and/or compares radar and co-located gauge (sensor)
-        data at a point of interest. The product always writes a combined CSV file
-        containing both radar and sensor data. Optionally, the radar and sensor
-        time series can be time-averaged or time-accumulated to a user-defined
-        interval (if no interval is provided, native sampling is used). The plot
-        can be either a dual time series comparison or a scatter plot of radar vs
-        sensor.
+    'COMPARE_SCORES_SENSOR': Computes performance scores using sensor data as a reference and radar
+        data as the estimate.  It will generate a csv file containing the daily scores for one or multiple radars (if present)
+        as well as update a plot of the time series of performance scores over time.
         User defined parameters:
-            dpi: int
-                The pixel density of the plot. Default 72
-            vmin, vmax: float
-                The limits of the Y-axis. If none they will be obtained
-                from the Py-ART config file.
-            plot_type: str
-                The type of plot to generate. Can be 'timeseries' (default) or
-                'scatter'.
+            scores: list of str
+                Which scores to compute, currently the following are supported:
+                - corr (pearson correlation)
+                - RMSE (root mean square error)
+                - logBias (bias in log scale)
+                - scatter (see https://doi.org/10.1256/qj.05.190)
+                Default is RMSE and corr
+            bounds: list of float
+                If set will compute the scores in the specified bounds based on the sensor value.
+                e.g. 0,1,10 will compute the scores in the [0,1] and [1,10] will be computed separately
+                and will be written to the csv file.
+                If not provided no bounds will be used
+            double_conditional_threshold: float
+                Optionally a double conditional threshold can be applied in the computation of the scores
+                e.g. only points where both the estimate and the reference exceed this threshold will be used
+                in the score computation
             time_interval: int or None
                 Time interval in seconds used to resample both radar and sensor
                 series before comparison. If None, the native timestamps are used.
@@ -406,12 +410,6 @@ def generate_timeseries_products(dataset, prdcfg):
         if do_only_final and not dataset["final"]:
             return None
 
-        if plot_type == "scatter":
-            warn(
-                "COMPARE_POINT_SENSOR: plot_type='scatter' is not supported for multi-radar case"
-            )
-            return None
-
         # -------------------------
         # 1) point / gateinfo (use reference radar)
         # -------------------------
@@ -591,11 +589,13 @@ def generate_timeseries_products(dataset, prdcfg):
 
             df_out[f"radar_{radarnr.lower()}"] = df_tmp["radar"].to_numpy()
 
-            # Collect for plotting: radar series itself (not the aligned-to-sensor version)
+            # Collect for plotting
             plot_dates.append(
-                pd.to_datetime(df_r["date"], errors="coerce", format="mixed").to_list()
+                pd.to_datetime(
+                    df_out["date"], errors="coerce", format="mixed"
+                ).to_list()
             )
-            plot_values.append(df_r["radar"].to_numpy())
+            plot_values.append(df_tmp["radar"].to_numpy())
 
         # Replace NaN
         df_out.fillna(pyart.config.get_fillvalue(), inplace=True)
@@ -665,20 +665,32 @@ def generate_timeseries_products(dataset, prdcfg):
         figfname_list = [savedir + f for f in figfname_list]
 
         if plot_type == "scatter":
-            # x = sensor, y = radar
             x = plot_values[0]
-            y = plot_values[1]
-            ok = np.isfinite(x) & np.isfinite(y)
+            ys = plot_values[1:]
+
+            if len(ys) == 0:
+                warn("No radar series available to plot scatter")
+                return None
+
+            # Keep only valid x
+            ok = np.isfinite(x)
             x = x[ok]
-            y = y[ok]
-            if x.size == 0:
+            ys = [y[ok] for y in ys]
+
+            # Keep only series with valid pairs
+            ys_valid = []
+            for y in ys:
+                if np.any(np.isfinite(x) & np.isfinite(y)):
+                    ys_valid.append(y)
+
+            if x.size == 0 or len(ys_valid) == 0:
                 warn("No matched radar/sensor pairs to plot scatter")
                 return None
 
             labelx = f"{label_sensor} ({labely})" if labely else label_sensor
-            labely2 = f"{label_radar_base} ({labely})" if labely else label_radar_base
+            labely2 = f"{label_radar_base}\n({labely})" if labely else label_radar_base
 
-            titl = "Radar vs Gauge"
+            titl = "Radar vs Sensor"
             if time_interval is not None:
                 titl += f" ({int(time_interval)}s {agg_mode})"
             titl += " " + pd.to_datetime(
@@ -686,11 +698,11 @@ def generate_timeseries_products(dataset, prdcfg):
             ).strftime("%Y-%m-%d")
 
             plot_scatter_comp(
-                x,
-                y,
+                [x] + ys_valid,
                 figfname_list,
                 labelx=labelx,
                 labely=labely2,
+                labels=plot_labels[1:],
                 titl=titl,
                 axis="equal",
                 dpi=dpi,
@@ -732,7 +744,6 @@ def generate_timeseries_products(dataset, prdcfg):
     if prdcfg["type"] == "COMPARE_SCORES_SENSOR":
         dpi = prdcfg.get("dpi", 72)
         bounds = prdcfg.get("bounds", None)
-        set_time_info = prdcfg.get("set_time_info", True)
         time_interval = prdcfg.get("time_interval", None)  # seconds or None
         base_time = prdcfg.get("base_time", 0)  # seconds
         agg_mode = prdcfg.get("agg_mode", "mean")  # "mean" or "sum"

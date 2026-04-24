@@ -1031,7 +1031,15 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="", gather_plots=T
         "lrxh",
     ]
 
-    GECSX_OPTIONAL = ["attg", "AzimTol", "mosotti_factor", "refcorr", "RadarPosition"]
+    GECSX_OPTIONAL = [
+        "attg",
+        "AzimTol",
+        "mosotti_factor",
+        "refcorr",
+        "altitude",
+        "latitude",
+        "longitude",
+    ]
 
     print(
         "- PYRAD version: {} (compiled {} by {})".format(
@@ -1124,25 +1132,15 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="", gather_plots=T
         for k in GECSX_OPTIONAL:
             if k in datacfg.keys():
                 dset[k] = datacfg[k]
-
         if len(radar_list) == 0:
-            valid_radarpos = False
-            if "RadarPosition" in dset:
-                if (
-                    "latitude" in dset["RadarPosition"]
-                    and "longitude" in dset["RadarPosition"]
-                    and "altitude" in dset["RadarPosition"]
-                ):
-                    valid_radarpos = True
-            if not valid_radarpos:
+            if not ("latitude" in dset and "longitude" in dset and "altitude" in dset):
                 raise ValueError(
-                    "When no radar data is provided, the structure "
-                    '"RadarPosition" with field "altitude", "latitude" '
-                    'and "longitude" must be provided in the loc file'
+                    "When no radar data is provided, the keys 'altitude', latitude' and 'longitude' must be provided in the loc file"
                 )
-            for k in dset["RadarPosition"].keys():
-                if not isinstance(dset["RadarPosition"][k], list):
-                    dset["RadarPosition"][k] = [dset["RadarPosition"][k]]
+
+            for key in ["longitude", "latitude", "altitude"]:
+                if not isinstance(dset[key], list):
+                    dset[key] = [dset[key]]
 
     # process all data sets
     dscfg, _ = _process_datasets(

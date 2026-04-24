@@ -4892,7 +4892,6 @@ def merge_fields_pyrad(
 
     """
     fdatetime = voltime.strftime("%Y%m%d%H%M%S")
-
     radar = None
     for i, dataset in enumerate(dataset_list):
         datapath = (
@@ -4946,7 +4945,6 @@ def merge_fields_pyrad(
 
     if radar is None:
         return radar
-
     return pyart.util.subset_radar(
         radar,
         radar.fields.keys(),

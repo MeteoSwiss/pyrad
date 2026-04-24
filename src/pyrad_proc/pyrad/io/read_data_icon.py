@@ -294,7 +294,6 @@ def read_icon_data(fname, field_names=["temperature"], celsius=True):
             warn(field + " data not present in icon file " + fname)
         else:
             var_data = _ncvar_to_dict(ncvars[icon_name], dtype="float16")
-
             # remove dimension ensemble member of icon-ch1-eps
             if var_data["data"].ndim == 5:
                 var_data["data"] = np.squeeze(var_data["data"], axis=1)
@@ -324,7 +323,6 @@ def read_icon_data(fname, field_names=["temperature"], celsius=True):
 
     # close object
     ncobj.close()
-
     icon_data.update(
         {
             "metadata": metadata,
@@ -408,7 +406,7 @@ def _ncvar_to_dict(ncvar, dtype=np.float32):
     d.update({"data": ncvar[:]})
     if "_FillValue" in d:
         d["data"] = np.ma.asarray(d["data"], dtype=dtype)
-        d["data"] = np.ma.masked_values(d["data"], float(d["_FillValue"]))
+        d["data"] = np.ma.masked_equal(d["data"], float(d["_FillValue"]))
     else:
         d["data"] = np.asarray(d["data"], dtype=dtype)
 

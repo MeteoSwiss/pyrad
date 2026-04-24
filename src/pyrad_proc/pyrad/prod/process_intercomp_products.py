@@ -42,7 +42,7 @@ def generate_intercomp_products(dataset, prdcfg):
         'PLOT_AND_WRITE_INTERCOMP_TS': Writes statistics of radar
             intercomparison in a file and plots the time series of the
             statistics. Note that in order to use this product you need
-            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
+            to also define the product WRITE_INTERCOMP for the dataset in question.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
@@ -86,17 +86,26 @@ def generate_intercomp_products(dataset, prdcfg):
                 vmax: float
                     Maximum value of the density plot. If vmin or vmax are not define the range limits
                     of the field as defined in the Py-ART config file are going to be used.
+                min_cnt: int
+                    Minimum number of samples in a 2D histogram bin for the bin to be displayed.
+                    Default is 0 so all histogram bins with a last one sample are displayed.
+                bins_transform: str
+                    Either "linear" or "log". Specifies whether the counts in the colorbar of the scatter-plots
+                    are in linear or in log scale. Default is "linear"
                 cap_limits: bool
                     If set to 1, all values larger than vmax or smaller than vmin will be discarded from the
                     scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin
                     of the histogram. Default is 0.
+                double_conditional_threshold: float
+                    If set a double conditional threshold will be applied in the computation of the scores,
+                    e.g. only samples where both radars have measured a value > threshold will be used.
                 scatter_type: str
                     Type of scatter plot. Can be a plot for each radar volume
                     (instant) or at the end of the processing period
                     (cumulative). Default is cumulative
                 range_bins: list of floats
-                    Range bins to radar 1 to consider, a different plot will be generated for
-                    all range bins.This can be used to differentiate the analysis in different
+                    Range bins in meters to radar 1 to consider, a different plot will be generated for
+                    all range bins. This can be used to differentiate the analysis in different
                     radar ranges.
                     Default is to generate only one figure, regardless of the distance to radar 1.
                 transform: str
@@ -105,6 +114,8 @@ def generate_intercomp_products(dataset, prdcfg):
                     is accepted for example "sin(x) + x**2" or "10 * log10(x)"
                     Default is to use no transform
         'WRITE_INTERCOMP': Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.
+            Beware that if the file already exists for a given processing day, the data will be appended to the existing file
+            and you might get duplicates. To avoid this delete the existing file first.
             User defined parameters:
                 voltype: str
                     name of the pyrad variable to use, it must be available in the dataset
@@ -181,7 +192,10 @@ def generate_intercomp_products(dataset, prdcfg):
         step = prdcfg.get("step", None)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
+        min_cnt = prdcfg.get("min_cnt", 0)
+        bins_transform = prdcfg.get("bins_transform", 0)
         cap_limits = prdcfg.get("cap_limits", 0)
+        double_conditional_threshold = prdcfg.get("double_conditional_threshold", None)
 
         fname_list = []
         for i in range(len(range_bins) - 1):  # loop on range bins
@@ -234,6 +248,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 vmin=vmin,
                 vmax=vmax,
                 cap_limits=cap_limits,
+                double_conditional_threshold=double_conditional_threshold,
             )
             if hist_2d is None:
                 return None
@@ -282,6 +297,8 @@ def generate_intercomp_products(dataset, prdcfg):
                 rad2_name=dataset["intercomp_dict"]["rad2_name"],
                 vmin=vmin,
                 vmax=vmax,
+                min_cnt=min_cnt,
+                bins_transform=bins_transform,
             )
 
             fname_list.extend(f_list)
