@@ -1324,7 +1324,7 @@ User defined parameters:</p>
 from the Py-ART config file.</p>
 </dd>
 <dt>plot_type: str</dt><dd><p>The type of plot to generate. Can be ‘timeseries’ (default) or
-‘scatter’.</p>
+‘scatter’. Scatter-plots also show the RMSE and bias.</p>
 </dd>
 <dt>time_interval: int or None</dt><dd><p>Time interval in seconds used to resample both radar and sensor
 series before comparison. If None, the native timestamps are used.</p>
@@ -1360,22 +1360,26 @@ If not provided a potentially deep recursive search will be performed which can 
 </dl>
 </div></blockquote>
 </dd>
-<dt>‘COMPARE_SCORES_SENSOR’: Plots and/or compares radar and co-located gauge (sensor)</dt><dd><p>data at a point of interest. The product always writes a combined CSV file
-containing both radar and sensor data. Optionally, the radar and sensor
-time series can be time-averaged or time-accumulated to a user-defined
-interval (if no interval is provided, native sampling is used). The plot
-can be either a dual time series comparison or a scatter plot of radar vs
-sensor.
+<dt>‘COMPARE_SCORES_SENSOR’: Computes performance scores using sensor data as a reference and radar</dt><dd><p>data as the estimate.  It will generate a csv file containing the daily scores for one or multiple radars (if present)
+as well as update a plot of the time series of performance scores over time.
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
-<dt>dpi: int</dt><dd><p>The pixel density of the plot. Default 72</p>
+<dt>scores: list of str</dt><dd><p>Which scores to compute, currently the following are supported:
+- corr (pearson correlation)
+- RMSE (root mean square error)
+- logBias (bias in log scale)
+- scatter (see <a class="reference external" href="https://doi.org/10.1256/qj.05.190">https://doi.org/10.1256/qj.05.190</a>)
+Default is RMSE and corr</p>
 </dd>
-<dt>vmin, vmax: float</dt><dd><p>The limits of the Y-axis. If none they will be obtained
-from the Py-ART config file.</p>
+<dt>bounds: list of float</dt><dd><p>If set will compute the scores in the specified bounds based on the sensor value.
+e.g. 0,1,10 will compute the scores in the [0,1] and [1,10] will be computed separately
+and will be written to the csv file.
+If not provided no bounds will be used</p>
 </dd>
-<dt>plot_type: str</dt><dd><p>The type of plot to generate. Can be ‘timeseries’ (default) or
-‘scatter’.</p>
+<dt>double_conditional_threshold: float</dt><dd><p>Optionally a double conditional threshold can be applied in the computation of the scores
+e.g. only points where both the estimate and the reference exceed this threshold will be used
+in the score computation</p>
 </dd>
 <dt>time_interval: int or None</dt><dd><p>Time interval in seconds used to resample both radar and sensor
 series before comparison. If None, the native timestamps are used.</p>

@@ -6993,20 +6993,107 @@
 </section>
 <section id="intercomp-with-qc">
 <h3>INTERCOMP_WITH_QC<a class="headerlink" href="#intercomp-with-qc" title="Link to this heading">#</a></h3>
-<dl>
-<dt>description</dt><dd><blockquote>
-<div><p>Intercomparison between the time-averaged value of an arbitrary radar field for two radars (at co-located gates), including QC based on PhiDP and a time-averaging flag field. Expected dscfg[“datatype”] content (for each radar): - one “main” datatype to be intercompared (ANY pyrad-supported datatype), - one PhiDP datatype: “PhiDP” or “PhiDPc”, - one flag datatype: “time_avg_flag” Output: - in procstatus==1: intercomp_dict contains rad1_val / rad2_val (the main field), plus rad1_PhiDPavg/rad2_PhiDPavg and rad1_Flagavg/rad2_Flagavg (kept for QC/debug) - in procstatus==2: final intercomp_dict contains rad1_val / rad2_val only (after QC) Notes: - This function keeps using read_colocated_data_time_avg(…) in procstatus==2. That reader likely returns the “main field” column as the same slot previously called rad*_dBZ. Here we treat it generically as rad*_val.</p>
+<p>description</p>
+<blockquote>
+<div><p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_with_QC">[Source]</a></p>
 </div></blockquote>
-<p><a class="reference external" href="https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_intercomp.html#process_intercomp_with_QC">[Source]</a></p>
+<dl>
+<dt>parameters</dt><dd><dl>
+<dt>datatype<span class="classifier">list of string. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">The input data types, must contain</div>
+<div class="line-block">
+<div class="line">- one “main” datatype to be intercompared (ANY pyrad-supported datatype),</div>
+<div class="line">- “PhiDP” or “PhiDPc”</div>
+<div class="line">- “time_avg_flag”</div>
+<div class="line">for the two radars</div>
+</div>
+</div>
+</dd>
+<dt>colocgatespath<span class="classifier">string.</span></dt><dd><div class="line-block">
+<div class="line">base path to the file containing the coordinates of the co-located</div>
+<div class="line-block">
+<div class="line">gates</div>
+</div>
+</div>
+</dd>
+<dt>coloc_data_dir<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">name of the directory containing the csv file with colocated data</div>
+</div>
+</dd>
+<dt>coloc_radars_name<span class="classifier">string. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">string identifying the radar names</div>
+</div>
+</dd>
+<dt>rays_are_indexed<span class="classifier">bool. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">If True it is considered that the rays are indexed and that the</div>
+<div class="line-block">
+<div class="line">data can be selected simply looking at the ray number.</div>
+<div class="line">Default false</div>
+</div>
+</div>
+</dd>
+<dt>azi_tol<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">azimuth tolerance between the two radars. Default 0.5 deg</div>
+</div>
+</dd>
+<dt>ele_tol<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">elevation tolerance between the two radars. Default 0.5 deg</div>
+</div>
+</dd>
+<dt>rng_tol<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">range tolerance between the two radars. Default 50 m</div>
+</div>
+</dd>
+<dt>average_range_gates: list of int. Dataset keyword</dt><dd><div class="line-block">
+<div class="line">Number of consecutive range gates to average for every radar. If not</div>
+<div class="line-block">
+<div class="line">provided it will average the highest resolution radar to match the resolution</div>
+<div class="line">of the lowest resolution radar. If both radars have similar resolutions, it will</div>
+<div class="line">not do any averaging.</div>
+</div>
+</div>
+</dd>
+<dt>clt_max<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">maximum fraction  of samples that can be clutter contaminated.</div>
+<div class="line-block">
+<div class="line">Default 1. i.e. all</div>
+</div>
+</div>
+</dd>
+<dt>phi_excess_max<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">maximum fraction of samples that can have excess instantaneous</div>
+<div class="line-block">
+<div class="line">PhiDP. Excess phidp is computed in the FLAG_TIME_AVG dataset, it corresponds to</div>
+<div class="line">an exceedance of a threshold in PhiDP at the native time resolution of the data</div>
+<div class="line">(no averaging). The excess phidp value corresponds to the parameter phidpmax used in the</div>
+<div class="line">FLAG_TIME_AVG dataset used as input. Default 1. i.e. all</div>
+</div>
+</div>
+</dd>
+<dt>non_rain_max<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">maximum fraction of samples that can be no rain. Default 1. i.e. all</div>
+</div>
+</dd>
+<dt>phi_avg_max<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
+<div class="line">maximum average (hourly) PhiDP in degrees allowed. This conditions differs from</div>
+<div class="line-block">
+<div class="line">phi_excess_max, because it concerns only average values and is defined in degrees</div>
+<div class="line">and not in percentage of samples. Default is infinite, i.e. any</div>
+</div>
+</div>
 </dd>
 </dl>
-<p>parameters</p>
-<blockquote>
-<div><div class="line-block">
-<div class="line"><br /></div>
+</dd>
+<dt>returns</dt><dd><dl>
+<dt>new_dataset<span class="classifier">dict</span></dt><dd><div class="line-block">
+<div class="line">dictionary containing a dictionary with intercomparison data and the</div>
+<div class="line">key “final” which contains a boolean that is true when all volumes</div>
+<div class="line">have been processed</div>
 </div>
-</div></blockquote>
-<p>returns</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </section>
 <section id="ml">
@@ -8821,8 +8908,9 @@
 <div class="line-block">
 <div class="line">ele/azi/rng</div>
 </div>
-<div class="line">‘nearest_valid’ : will only get the nearest valid point to prescribed</div>
+<div class="line">‘nearest_valid’ : will only get the nearest valid point, within</div>
 <div class="line-block">
+<div class="line">tolerance AziTol, EleTol and RngTol to prescribed</div>
 <div class="line">lon/lat/alt or ele/azi/rng (ignore missing values)</div>
 </div>
 <div class="line">‘average’ : will average (while ignore missing values), all values</div>

@@ -1669,7 +1669,7 @@
 <div class="line">in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L542">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L559">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -1684,7 +1684,7 @@
 <div class="line">gridMapImageConfig structure of the loc file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L568">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L585">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>grid_size:<span class="classifier"><em>float</em></span></dt><dd><p>Size of the grid in degrees (lat/lon). If not provided, the grid size defined in gridMapImageConfig with lat_min, lon_min, lat_max, lon_max and lonstep, latstep will be used. All the products of the ‘VOL’ dataset group</p>
@@ -2609,10 +2609,10 @@
 <div class="line">Writes statistics of radar</div>
 <div class="line">intercomparison in a file and plots the time series of the</div>
 <div class="line">statistics. Note that in order to use this product you need</div>
-<div class="line">to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</div>
+<div class="line">to also define the product WRITE_INTERCOMP for the dataset in question.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L293">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L310">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2644,7 +2644,7 @@
 <div class="line">to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L159">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L170">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2655,11 +2655,17 @@
 </dd>
 <dt>vmax:<span class="classifier"><em>float</em></span></dt><dd><p>Maximum value of the density plot. If vmin or vmax are not define the range limits of the field as defined in the Py-ART config file are going to be used.</p>
 </dd>
+<dt>min_cnt:<span class="classifier"><em>int</em></span></dt><dd><p>Minimum number of samples in a 2D histogram bin for the bin to be displayed. Default is 0 so all histogram bins with a last one sample are displayed.</p>
+</dd>
+<dt>bins_transform:<span class="classifier"><em>str</em></span></dt><dd><p>Either “linear” or “log”. Specifies whether the counts in the colorbar of the scatter-plots are in linear or in log scale. Default is “linear”</p>
+</dd>
 <dt>cap_limits:<span class="classifier"><em>bool</em></span></dt><dd><p>If set to 1, all values larger than vmax or smaller than vmin will be discarded from the scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin of the histogram. Default is 0.</p>
+</dd>
+<dt>double_conditional_threshold:<span class="classifier"><em>float</em></span></dt><dd><p>If set a double conditional threshold will be applied in the computation of the scores, e.g. only samples where both radars have measured a value &gt; threshold will be used.</p>
 </dd>
 <dt>scatter_type:<span class="classifier"><em>str</em></span></dt><dd><p>Type of scatter plot. Can be a plot for each radar volume (instant) or at the end of the processing period (cumulative). Default is cumulative</p>
 </dd>
-<dt>range_bins:<span class="classifier"><em>list of floats</em></span></dt><dd><p>Range bins to radar 1 to consider, a different plot will be generated for all range bins.This can be used to differentiate the analysis in different radar ranges. Default is to generate only one figure, regardless of the distance to radar 1.</p>
+<dt>range_bins:<span class="classifier"><em>list of floats</em></span></dt><dd><p>Range bins in meters to radar 1 to consider, a different plot will be generated for all range bins. This can be used to differentiate the analysis in different radar ranges. Default is to generate only one figure, regardless of the distance to radar 1.</p>
 </dd>
 <dt>transform:<span class="classifier"><em>str</em></span></dt><dd><p>A transform to apply to the data before computing the statistics and generating the plots. Any mathematical function with argument “x” is accepted for example “sin(x) + x**2” or “10 * log10(x)” Default is to use no transform</p>
 </dd>
@@ -2672,9 +2678,11 @@
 <dl>
 <dt>description</dt><dd><div class="line-block">
 <div class="line">Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.</div>
+<div class="line">Beware that if the file already exists for a given processing day, the data will be appended to the existing file</div>
+<div class="line">and you might get duplicates. To avoid this delete the existing file first.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L293">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L310">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3117,14 +3125,14 @@
 <div class="line">sensor.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L379">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L383">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
 <dt>vmin,<span class="classifier"><em>vmax: float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
 </dd>
-<dt>plot_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to generate. Can be ‘timeseries’ (default) or ‘scatter’.</p>
+<dt>plot_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to generate. Can be ‘timeseries’ (default) or ‘scatter’. Scatter-plots also show the RMSE and bias.</p>
 </dd>
 <dt>time_interval:<span class="classifier"><em>int or None</em></span></dt><dd><p>Time interval in seconds used to resample both radar and sensor series before comparison. If None, the native timestamps are used.</p>
 </dd>
@@ -3152,23 +3160,31 @@
 <h3>COMPARE_SCORES_SENSOR<a class="headerlink" href="#compare-scores-sensor" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
-<div class="line">Plots and/or compares radar and co-located gauge (sensor)</div>
-<div class="line">data at a point of interest. The product always writes a combined CSV file</div>
-<div class="line">containing both radar and sensor data. Optionally, the radar and sensor</div>
-<div class="line">time series can be time-averaged or time-accumulated to a user-defined</div>
-<div class="line">interval (if no interval is provided, native sampling is used). The plot</div>
-<div class="line">can be either a dual time series comparison or a scatter plot of radar vs</div>
-<div class="line">sensor.</div>
+<div class="line">Computes performance scores using sensor data as a reference and radar</div>
+<div class="line">data as the estimate. It will generate a csv file containing the daily scores for one or multiple radars (if present)</div>
+<div class="line">as well as update a plot of the time series of performance scores over time.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L732">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L744">[Source]</a></p>
 </dd>
-<dt>parameters</dt><dd><dl>
-<dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
+<dt>parameters</dt><dd><p>scores: : <em>list of str</em></p>
+<dl>
+<dt>Which<span class="classifier"><em>scores to compute, currently the following are supported:</em></span></dt><dd><ul class="simple">
+<li><p>corr (pearson correlation) - RMSE (root mean square error) - logBias (bias in log scale)</p></li>
+</ul>
 </dd>
-<dt>vmin,<span class="classifier"><em>vmax: float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
+</dl>
+<ul class="simple">
+<li><dl class="simple">
+<dt>: <em>scatter (see https://doi.org/10.1256/qj.05.190)</em></dt><dd><p>Default is RMSE and corr</p>
 </dd>
-<dt>plot_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of plot to generate. Can be ‘timeseries’ (default) or ‘scatter’.</p>
+</dl>
+</li>
+</ul>
+<dl>
+<dt>bounds:<span class="classifier"><em>list of float</em></span></dt><dd><p>If set will compute the scores in the specified bounds based on the sensor value. e.g. 0,1,10 will compute the scores in the [0,1] and [1,10] will be computed separately and will be written to the csv file. If not provided no bounds will be used</p>
+</dd>
+<dt>double_conditional_threshold:<span class="classifier"><em>float</em></span></dt><dd><p>Optionally a double conditional threshold can be applied in the computation of the scores e.g. only points where both the estimate and the reference exceed this threshold will be used in the score computation</p>
 </dd>
 <dt>time_interval:<span class="classifier"><em>int or None</em></span></dt><dd><p>Time interval in seconds used to resample both radar and sensor series before comparison. If None, the native timestamps are used.</p>
 </dd>
@@ -3199,7 +3215,7 @@
 <div class="line">Writes and plots a trajectory time series.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1005">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1016">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3218,7 +3234,7 @@
 <div class="line">during the trajectory processing</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1066">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1077">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3237,7 +3253,7 @@
 <div class="line">overplot on it.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1112">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1123">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3262,7 +3278,7 @@
 <div class="line">multiple points obtained from a radar object</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L228">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L232">[Source]</a></p>
 </dd>
 </dl>
 </section>

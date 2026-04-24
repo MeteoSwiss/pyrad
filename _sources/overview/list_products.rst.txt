@@ -940,7 +940,7 @@ description
  | Writes the position of the co-located gates
  | in a csv file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L542>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L559>`_
 
 PLOT_COLOCATED_GATES
 """"""""""""""""""""""""""""""
@@ -951,7 +951,7 @@ description
  | average height. All other plotting parameters are obtained from the 
  | gridMapImageConfig structure of the loc file. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L568>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L585>`_
 parameters
    grid_size: : *float*
        Size of the grid in degrees (lat/lon). If not provided, the grid size defined in gridMapImageConfig with lat_min, lon_min, lat_max, lon_max and lonstep, latstep will be used. All the products of the 'VOL' dataset group    
@@ -1669,9 +1669,9 @@ description
  | Writes statistics of radar
  | intercomparison in a file and plots the time series of the 
  | statistics. Note that in order to use this product you need 
- | to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question. 
+ | to also define the product WRITE_INTERCOMP for the dataset in question. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L293>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L310>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1697,7 +1697,7 @@ description
  | radar 1 versus the points of radar 2. Note that in order to use this product you need 
  | to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L159>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L170>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -1707,12 +1707,18 @@ parameters
        Minimum value of the density plot. If vmin or vmax are not define the range limits of the field as defined in the Py-ART config file are going to be used. 
    vmax: : *float*
        Maximum value of the density plot. If vmin or vmax are not define the range limits of the field as defined in the Py-ART config file are going to be used. 
+   min_cnt: : *int*
+       Minimum number of samples in a 2D histogram bin for the bin to be displayed. Default is 0 so all histogram bins with a last one sample are displayed. 
+   bins_transform: : *str*
+       Either "linear" or "log". Specifies whether the counts in the colorbar of the scatter-plots are in linear or in log scale. Default is "linear" 
    cap_limits: : *bool*
        If set to 1, all values larger than vmax or smaller than vmin will be discarded from the scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin of the histogram. Default is 0. 
+   double_conditional_threshold: : *float*
+       If set a double conditional threshold will be applied in the computation of the scores, e.g. only samples where both radars have measured a value > threshold will be used. 
    scatter_type: : *str*
        Type of scatter plot. Can be a plot for each radar volume (instant) or at the end of the processing period (cumulative). Default is cumulative 
    range_bins: : *list of floats*
-       Range bins to radar 1 to consider, a different plot will be generated for all range bins.This can be used to differentiate the analysis in different radar ranges. Default is to generate only one figure, regardless of the distance to radar 1. 
+       Range bins in meters to radar 1 to consider, a different plot will be generated for all range bins. This can be used to differentiate the analysis in different radar ranges. Default is to generate only one figure, regardless of the distance to radar 1. 
    transform: : *str*
        A transform to apply to the data before computing the statistics and generating the plots. Any mathematical function with argument "x" is accepted for example "sin(x) + x**2" or "10 * log10(x)" Default is to use no transform  
 
@@ -1720,8 +1726,10 @@ WRITE_INTERCOMP
 """"""""""""""""""""""""""""""
 description
  | Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.
+ | Beware that if the file already exists for a given processing day, the data will be appended to the existing file 
+ | and you might get duplicates. To avoid this delete the existing file first. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L293>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L310>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset   
@@ -2053,14 +2061,14 @@ description
  | can be either a dual time series comparison or a scatter plot of radar vs 
  | sensor. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L379>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L383>`_
 parameters
    dpi: : *int*
        The pixel density of the plot. Default 72 
    vmin, : *vmax: float*
        The limits of the Y-axis. If none they will be obtained from the Py-ART config file. 
    plot_type: : *str*
-       The type of plot to generate. Can be 'timeseries' (default) or 'scatter'. 
+       The type of plot to generate. Can be 'timeseries' (default) or 'scatter'. Scatter-plots also show the RMSE and bias. 
    time_interval: : *int or None*
        Time interval in seconds used to resample both radar and sensor series before comparison. If None, the native timestamps are used. 
    agg_mode: : *str*
@@ -2083,22 +2091,22 @@ parameters
 COMPARE_SCORES_SENSOR
 """"""""""""""""""""""""""""""
 description
- | Plots and/or compares radar and co-located gauge (sensor)
- | data at a point of interest. The product always writes a combined CSV file 
- | containing both radar and sensor data. Optionally, the radar and sensor 
- | time series can be time-averaged or time-accumulated to a user-defined 
- | interval (if no interval is provided, native sampling is used). The plot 
- | can be either a dual time series comparison or a scatter plot of radar vs 
- | sensor. 
+ | Computes performance scores using sensor data as a reference and radar
+ | data as the estimate. It will generate a csv file containing the daily scores for one or multiple radars (if present) 
+ | as well as update a plot of the time series of performance scores over time. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L732>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L744>`_
 parameters
-   dpi: : *int*
-       The pixel density of the plot. Default 72 
-   vmin, : *vmax: float*
-       The limits of the Y-axis. If none they will be obtained from the Py-ART config file. 
-   plot_type: : *str*
-       The type of plot to generate. Can be 'timeseries' (default) or 'scatter'. 
+   scores: : *list of str*
+       
+   Which : *scores to compute, currently the following are supported:*
+       - corr (pearson correlation) - RMSE (root mean square error) - logBias (bias in log scale) 
+   - : *scatter (see https://doi.org/10.1256/qj.05.190)*
+       Default is RMSE and corr 
+   bounds: : *list of float*
+       If set will compute the scores in the specified bounds based on the sensor value. e.g. 0,1,10 will compute the scores in the [0,1] and [1,10] will be computed separately and will be written to the csv file. If not provided no bounds will be used 
+   double_conditional_threshold: : *float*
+       Optionally a double conditional threshold can be applied in the computation of the scores e.g. only points where both the estimate and the reference exceed this threshold will be used in the score computation 
    time_interval: : *int or None*
        Time interval in seconds used to resample both radar and sensor series before comparison. If None, the native timestamps are used. 
    agg_mode: : *str*
@@ -2123,7 +2131,7 @@ PLOT_AND_WRITE_TRAJ
 description
  | Writes and plots a trajectory time series.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1005>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1016>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2136,7 +2144,7 @@ description
  | plots and writes a histogram of all the data gathered
  | during the trajectory processing 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1066>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1077>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2149,7 +2157,7 @@ description
  | Creates a CAPPI image with the trajectory position
  | overplot on it. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1112>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1123>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2168,7 +2176,7 @@ description
  | Writes a csv file containing data from
  | multiple points obtained from a radar object 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L228>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L232>`_
 
 TRAJ_ONLY
 -----------------------------

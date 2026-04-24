@@ -1307,29 +1307,72 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.proc.process_intercomp_with_QC">
 <span class="sig-prename descclassname"><span class="pre">pyrad.proc.</span></span><span class="sig-name descname"><span class="pre">process_intercomp_with_QC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">procstatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dscfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/proc/process_intercomp.html#process_intercomp_with_QC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.proc.process_intercomp_with_QC" title="Link to this definition">#</a></dt>
-<dd><p>Intercomparison between the time-averaged value of an arbitrary radar field
-for two radars (at co-located gates), including QC based on PhiDP and a
-time-averaging flag field.</p>
-<dl class="simple">
-<dt>Expected dscfg[“datatype”] content (for each radar):</dt><dd><ul class="simple">
-<li><p>one “main” datatype to be intercompared (ANY pyrad-supported datatype),</p></li>
-<li><p>one PhiDP datatype: “PhiDP” or “PhiDPc”,</p></li>
-<li><p>one flag datatype: “time_avg_flag”</p></li>
+<dd><dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>procstatus</strong> (<em>int</em>) – Processing status: 0 initializing, 1 processing volume,
+2 post-processing</p></li>
+<li><p><strong>dscfg</strong> (<em>dictionary of dictionaries</em>) –</p>
+<p>data set configuration. Accepted Configuration Keywords:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">datatype</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">The</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">types</span><span class="p">,</span> <span class="n">must</span> <span class="n">contain</span>
+    <span class="o">-</span> <span class="n">one</span> <span class="s2">&quot;main&quot;</span> <span class="n">datatype</span> <span class="n">to</span> <span class="n">be</span> <span class="n">intercompared</span> <span class="p">(</span><span class="n">ANY</span> <span class="n">pyrad</span><span class="o">-</span><span class="n">supported</span> <span class="n">datatype</span><span class="p">),</span>
+    <span class="o">-</span> <span class="s2">&quot;PhiDP&quot;</span> <span class="ow">or</span> <span class="s2">&quot;PhiDPc&quot;</span>
+    <span class="o">-</span> <span class="s2">&quot;time_avg_flag&quot;</span>
+    <span class="k">for</span> <span class="n">the</span> <span class="n">two</span> <span class="n">radars</span>
+<span class="n">colocgatespath</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span>
+    <span class="n">base</span> <span class="n">path</span> <span class="n">to</span> <span class="n">the</span> <span class="n">file</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">coordinates</span> <span class="n">of</span> <span class="n">the</span> <span class="n">co</span><span class="o">-</span><span class="n">located</span>
+    <span class="n">gates</span>
+<span class="n">coloc_data_dir</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">directory</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">csv</span> <span class="n">file</span> <span class="k">with</span> <span class="n">colocated</span> <span class="n">data</span>
+<span class="n">coloc_radars_name</span> <span class="p">:</span> <span class="n">string</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">string</span> <span class="n">identifying</span> <span class="n">the</span> <span class="n">radar</span> <span class="n">names</span>
+<span class="n">rays_are_indexed</span> <span class="p">:</span> <span class="nb">bool</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">If</span> <span class="kc">True</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">considered</span> <span class="n">that</span> <span class="n">the</span> <span class="n">rays</span> <span class="n">are</span> <span class="n">indexed</span> <span class="ow">and</span> <span class="n">that</span> <span class="n">the</span>
+    <span class="n">data</span> <span class="n">can</span> <span class="n">be</span> <span class="n">selected</span> <span class="n">simply</span> <span class="n">looking</span> <span class="n">at</span> <span class="n">the</span> <span class="n">ray</span> <span class="n">number</span><span class="o">.</span>
+    <span class="n">Default</span> <span class="n">false</span>
+<span class="n">azi_tol</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">azimuth</span> <span class="n">tolerance</span> <span class="n">between</span> <span class="n">the</span> <span class="n">two</span> <span class="n">radars</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">0.5</span> <span class="n">deg</span>
+<span class="n">ele_tol</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">elevation</span> <span class="n">tolerance</span> <span class="n">between</span> <span class="n">the</span> <span class="n">two</span> <span class="n">radars</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">0.5</span> <span class="n">deg</span>
+<span class="n">rng_tol</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="nb">range</span> <span class="n">tolerance</span> <span class="n">between</span> <span class="n">the</span> <span class="n">two</span> <span class="n">radars</span><span class="o">.</span> <span class="n">Default</span> <span class="mi">50</span> <span class="n">m</span>
+<span class="n">average_range_gates</span><span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="nb">int</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">Number</span> <span class="n">of</span> <span class="n">consecutive</span> <span class="nb">range</span> <span class="n">gates</span> <span class="n">to</span> <span class="n">average</span> <span class="k">for</span> <span class="n">every</span> <span class="n">radar</span><span class="o">.</span> <span class="n">If</span> <span class="ow">not</span>
+    <span class="n">provided</span> <span class="n">it</span> <span class="n">will</span> <span class="n">average</span> <span class="n">the</span> <span class="n">highest</span> <span class="n">resolution</span> <span class="n">radar</span> <span class="n">to</span> <span class="n">match</span> <span class="n">the</span> <span class="n">resolution</span>
+    <span class="n">of</span> <span class="n">the</span> <span class="n">lowest</span> <span class="n">resolution</span> <span class="n">radar</span><span class="o">.</span> <span class="n">If</span> <span class="n">both</span> <span class="n">radars</span> <span class="n">have</span> <span class="n">similar</span> <span class="n">resolutions</span><span class="p">,</span> <span class="n">it</span> <span class="n">will</span>
+    <span class="ow">not</span> <span class="n">do</span> <span class="nb">any</span> <span class="n">averaging</span><span class="o">.</span>
+<span class="n">clt_max</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">maximum</span> <span class="n">fraction</span>  <span class="n">of</span> <span class="n">samples</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">clutter</span> <span class="n">contaminated</span><span class="o">.</span>
+    <span class="n">Default</span> <span class="mf">1.</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="nb">all</span>
+<span class="n">phi_excess_max</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">maximum</span> <span class="n">fraction</span> <span class="n">of</span> <span class="n">samples</span> <span class="n">that</span> <span class="n">can</span> <span class="n">have</span> <span class="n">excess</span> <span class="n">instantaneous</span>
+    <span class="n">PhiDP</span><span class="o">.</span> <span class="n">Excess</span> <span class="n">phidp</span> <span class="ow">is</span> <span class="n">computed</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">FLAG_TIME_AVG</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">it</span> <span class="n">corresponds</span> <span class="n">to</span>
+    <span class="n">an</span> <span class="n">exceedance</span> <span class="n">of</span> <span class="n">a</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">PhiDP</span> <span class="n">at</span> <span class="n">the</span> <span class="n">native</span> <span class="n">time</span> <span class="n">resolution</span> <span class="n">of</span> <span class="n">the</span> <span class="n">data</span>
+    <span class="p">(</span><span class="n">no</span> <span class="n">averaging</span><span class="p">)</span><span class="o">.</span> <span class="n">The</span> <span class="n">excess</span> <span class="n">phidp</span> <span class="n">value</span> <span class="n">corresponds</span> <span class="n">to</span> <span class="n">the</span> <span class="n">parameter</span> <span class="n">phidpmax</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">the</span>
+    <span class="n">FLAG_TIME_AVG</span> <span class="n">dataset</span> <span class="n">used</span> <span class="k">as</span> <span class="nb">input</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">1.</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="nb">all</span>
+<span class="n">non_rain_max</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">maximum</span> <span class="n">fraction</span> <span class="n">of</span> <span class="n">samples</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">no</span> <span class="n">rain</span><span class="o">.</span> <span class="n">Default</span> <span class="mf">1.</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="nb">all</span>
+<span class="n">phi_avg_max</span> <span class="p">:</span> <span class="nb">float</span><span class="o">.</span> <span class="n">Dataset</span> <span class="n">keyword</span>
+    <span class="n">maximum</span> <span class="n">average</span> <span class="p">(</span><span class="n">hourly</span><span class="p">)</span> <span class="n">PhiDP</span> <span class="ow">in</span> <span class="n">degrees</span> <span class="n">allowed</span><span class="o">.</span> <span class="n">This</span> <span class="n">conditions</span> <span class="n">differs</span> <span class="kn">from</span>
+<span class="w">    </span><span class="nn">phi_excess_max</span><span class="p">,</span> <span class="n">because</span> <span class="n">it</span> <span class="n">concerns</span> <span class="n">only</span> <span class="n">average</span> <span class="n">values</span> <span class="ow">and</span> <span class="ow">is</span> <span class="n">defined</span> <span class="ow">in</span> <span class="n">degrees</span>
+    <span class="ow">and</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">percentage</span> <span class="n">of</span> <span class="n">samples</span><span class="o">.</span> <span class="n">Default</span> <span class="ow">is</span> <span class="n">infinite</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">e</span><span class="o">.</span> <span class="nb">any</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>radar_list</strong> (<em>list of Radar objects</em>) – Optional. list of radar objects</p></li>
 </ul>
 </dd>
-<dt>Output:</dt><dd><ul class="simple">
-<li><p>in procstatus==1: intercomp_dict contains rad1_val / rad2_val (the main field),
-plus rad1_PhiDPavg/rad2_PhiDPavg and rad1_Flagavg/rad2_Flagavg (kept for QC/debug)</p></li>
-<li><p>in procstatus==2: final intercomp_dict contains rad1_val / rad2_val only (after QC)</p></li>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>new_dataset</strong> (<em>dict</em>) – dictionary containing a dictionary with intercomparison data and the
+key “final” which contains a boolean that is true when all volumes
+have been processed</p></li>
+<li><p><strong>ind_rad</strong> (<em>int</em>) – radar index</p></li>
 </ul>
+</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>This function keeps using read_colocated_data_time_avg(…) in procstatus==2.
-That reader likely returns the “main field” column as the same slot previously
-called rad*_dBZ. Here we treat it generically as rad*_val.</p></li>
-</ul>
 </dd></dl>
 
 </section>

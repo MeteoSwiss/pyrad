@@ -1427,7 +1427,15 @@
         <span class="s2">&quot;lrxh&quot;</span><span class="p">,</span>
     <span class="p">]</span>
 
-    <span class="n">GECSX_OPTIONAL</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;attg&quot;</span><span class="p">,</span> <span class="s2">&quot;AzimTol&quot;</span><span class="p">,</span> <span class="s2">&quot;mosotti_factor&quot;</span><span class="p">,</span> <span class="s2">&quot;refcorr&quot;</span><span class="p">,</span> <span class="s2">&quot;RadarPosition&quot;</span><span class="p">]</span>
+    <span class="n">GECSX_OPTIONAL</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;attg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;AzimTol&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mosotti_factor&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;refcorr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;altitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
 
     <span class="nb">print</span><span class="p">(</span>
         <span class="s2">&quot;- PYRAD version: </span><span class="si">{}</span><span class="s2"> (compiled </span><span class="si">{}</span><span class="s2"> by </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -1520,25 +1528,15 @@
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">GECSX_OPTIONAL</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">datacfg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">dset</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">datacfg</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">valid_radarpos</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">if</span> <span class="s2">&quot;RadarPosition&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">:</span>
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="s2">&quot;latitude&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">]</span>
-                    <span class="ow">and</span> <span class="s2">&quot;longitude&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">]</span>
-                    <span class="ow">and</span> <span class="s2">&quot;altitude&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">]</span>
-                <span class="p">):</span>
-                    <span class="n">valid_radarpos</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_radarpos</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="s2">&quot;latitude&quot;</span> <span class="ow">in</span> <span class="n">dset</span> <span class="ow">and</span> <span class="s2">&quot;longitude&quot;</span> <span class="ow">in</span> <span class="n">dset</span> <span class="ow">and</span> <span class="s2">&quot;altitude&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;When no radar data is provided, the structure &quot;</span>
-                    <span class="s1">&#39;&quot;RadarPosition&quot; with field &quot;altitude&quot;, &quot;latitude&quot; &#39;</span>
-                    <span class="s1">&#39;and &quot;longitude&quot; must be provided in the loc file&#39;</span>
+                    <span class="s2">&quot;When no radar data is provided, the keys &#39;altitude&#39;, latitude&#39; and &#39;longitude&#39; must be provided in the loc file&quot;</span>
                 <span class="p">)</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">dset</span><span class="p">[</span><span class="s2">&quot;RadarPosition&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]]</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="s2">&quot;altitude&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dset</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">dset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">dset</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
 
     <span class="c1"># process all data sets</span>
     <span class="n">dscfg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_process_datasets</span><span class="p">(</span>

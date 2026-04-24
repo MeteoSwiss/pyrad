@@ -1308,7 +1308,8 @@
 <dt class="sig sig-object py" id="pyrad.io.write_colocated_data">
 <span class="sig-prename descclassname"><span class="pre">pyrad.io.</span></span><span class="sig-name descname"><span class="pre">write_colocated_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coloc_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/io/write_data.html#write_colocated_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.io.write_colocated_data" title="Link to this definition">#</a></dt>
 <dd><p>Writes the time averaged data of gates colocated with two radars, if QC metadata
-is available, it will be written as well.</p>
+is available, it will be written as well. If the file already exists new records will be
+appended if they are not already present (based on rad1_time and rad2_time columns)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

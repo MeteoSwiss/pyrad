@@ -1357,6 +1357,164 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_angular_diff_deg</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Smallest absolute angular difference in degrees.&quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mf">360.0</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_ray_tree</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">,</span> <span class="n">azi_vec</span><span class="p">,</span> <span class="n">ele_tol</span><span class="p">,</span> <span class="n">azi_tol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Build a KD-tree in normalized (ele, azi) space so that a unit ball</span>
+<span class="sd">    corresponds to the rectangular tolerance test approximately.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">ele_vec</span> <span class="o">/</span> <span class="n">ele_tol</span><span class="p">,</span> <span class="n">azi_vec</span> <span class="o">/</span> <span class="n">azi_tol</span><span class="p">))</span>
+    <span class="n">tree</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">cKDTree</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tree</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_query_ray_index</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ele_vec</span><span class="p">,</span> <span class="n">azi_vec</span><span class="p">,</span> <span class="n">ele</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">ele_tol</span><span class="p">,</span> <span class="n">azi_tol</span><span class="p">,</span> <span class="n">nearest</span><span class="o">=</span><span class="s2">&quot;azi&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find candidate rays using KD-tree, then apply exact rectangular tolerance</span>
+<span class="sd">    and the same tie-breaking logic as the original function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query_pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ele</span> <span class="o">/</span> <span class="n">ele_tol</span><span class="p">,</span> <span class="n">azi</span> <span class="o">/</span> <span class="n">azi_tol</span><span class="p">])</span>
+
+    <span class="c1"># Radius sqrt(2) covers the rectangle in normalized coordinates.</span>
+    <span class="n">cand</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">query_ball_point</span><span class="p">(</span><span class="n">query_pt</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cand</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">cand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">cand</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># Exact tolerance filter</span>
+    <span class="n">ele_ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">[</span><span class="n">cand</span><span class="p">]</span> <span class="o">-</span> <span class="n">ele</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">ele_tol</span>
+    <span class="n">azi_ok</span> <span class="o">=</span> <span class="n">_angular_diff_deg</span><span class="p">(</span><span class="n">azi_vec</span><span class="p">[</span><span class="n">cand</span><span class="p">],</span> <span class="n">azi</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">azi_tol</span>
+    <span class="n">cand</span> <span class="o">=</span> <span class="n">cand</span><span class="p">[</span><span class="n">ele_ok</span> <span class="o">&amp;</span> <span class="n">azi_ok</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">cand</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">cand</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">cand</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">nearest</span> <span class="o">==</span> <span class="s2">&quot;azi&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">cand</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">_angular_diff_deg</span><span class="p">(</span><span class="n">azi_vec</span><span class="p">[</span><span class="n">cand</span><span class="p">],</span> <span class="n">azi</span><span class="p">))])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">cand</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ele_vec</span><span class="p">[</span><span class="n">cand</span><span class="p">]</span> <span class="o">-</span> <span class="n">ele</span><span class="p">))])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_rng_indices_sorted</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rngs</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vectorized nearest-neighbor lookup on a sorted range vector.</span>
+<span class="sd">    Returns indices and a validity mask.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">)</span>
+    <span class="n">rngs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rngs</span><span class="p">)</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rngs</span><span class="p">)</span>
+
+    <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">dleft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">-</span> <span class="n">rngs</span><span class="p">)</span>
+    <span class="n">dright</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">-</span> <span class="n">rngs</span><span class="p">)</span>
+
+    <span class="n">use_right</span> <span class="o">=</span> <span class="n">dright</span> <span class="o">&lt;</span> <span class="n">dleft</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">use_right</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">left</span><span class="p">)</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">use_right</span><span class="p">,</span> <span class="n">dright</span><span class="p">,</span> <span class="n">dleft</span><span class="p">)</span>
+
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">&lt;=</span> <span class="n">rng_tol</span>
+    <span class="k">return</span> <span class="n">idx</span><span class="p">,</span> <span class="n">valid</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_colocated_indexes_fast</span><span class="p">(</span>
+    <span class="n">radar1</span><span class="p">,</span>
+    <span class="n">radar2</span><span class="p">,</span>
+    <span class="n">rad1_ele</span><span class="p">,</span>
+    <span class="n">rad1_azi</span><span class="p">,</span>
+    <span class="n">rad1_rng</span><span class="p">,</span>
+    <span class="n">rad2_ele</span><span class="p">,</span>
+    <span class="n">rad2_azi</span><span class="p">,</span>
+    <span class="n">rad2_rng</span><span class="p">,</span>
+    <span class="n">ele_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">azi_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">rng_tol</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">nearest</span><span class="o">=</span><span class="s2">&quot;azi&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Faster version of find_colocated_indexes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rad1_ele</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rad1_ele</span><span class="p">)</span>
+    <span class="n">rad1_azi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rad1_azi</span><span class="p">)</span>
+    <span class="n">rad1_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rad1_rng</span><span class="p">)</span>
+    <span class="n">rad2_ele</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rad2_ele</span><span class="p">)</span>
+    <span class="n">rad2_azi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rad2_azi</span><span class="p">)</span>
+    <span class="n">rad2_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">rad2_rng</span><span class="p">)</span>
+
+    <span class="n">ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rad1_ele</span><span class="p">)</span>
+
+    <span class="n">ele1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar1</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">azi1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar1</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">rng1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar1</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
+    <span class="n">ele2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar2</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">azi2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar2</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">rng2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar2</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Precompute fast range lookup for all points</span>
+    <span class="n">ind_rng_rad1</span><span class="p">,</span> <span class="n">ok_rng1</span> <span class="o">=</span> <span class="n">_find_rng_indices_sorted</span><span class="p">(</span><span class="n">rng1</span><span class="p">,</span> <span class="n">rad1_rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="n">rng_tol</span><span class="p">)</span>
+    <span class="n">ind_rng_rad2</span><span class="p">,</span> <span class="n">ok_rng2</span> <span class="o">=</span> <span class="n">_find_rng_indices_sorted</span><span class="p">(</span><span class="n">rng2</span><span class="p">,</span> <span class="n">rad2_rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="n">rng_tol</span><span class="p">)</span>
+
+    <span class="c1"># Build KD-trees once</span>
+    <span class="n">tree1</span> <span class="o">=</span> <span class="n">_build_ray_tree</span><span class="p">(</span><span class="n">ele1</span><span class="p">,</span> <span class="n">azi1</span><span class="p">,</span> <span class="n">ele_tol</span><span class="p">,</span> <span class="n">azi_tol</span><span class="p">)</span>
+    <span class="n">tree2</span> <span class="o">=</span> <span class="n">_build_ray_tree</span><span class="p">(</span><span class="n">ele2</span><span class="p">,</span> <span class="n">azi2</span><span class="p">,</span> <span class="n">ele_tol</span><span class="p">,</span> <span class="n">azi_tol</span><span class="p">)</span>
+
+    <span class="n">ind_ray_rad1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">ind_ray_rad2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ngates</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok_rng1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">ok_rng2</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">continue</span>
+
+        <span class="n">ir1</span> <span class="o">=</span> <span class="n">_query_ray_index</span><span class="p">(</span>
+            <span class="n">tree1</span><span class="p">,</span>
+            <span class="n">ele1</span><span class="p">,</span>
+            <span class="n">azi1</span><span class="p">,</span>
+            <span class="n">rad1_ele</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">rad1_azi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">ele_tol</span><span class="p">,</span>
+            <span class="n">azi_tol</span><span class="p">,</span>
+            <span class="n">nearest</span><span class="o">=</span><span class="n">nearest</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ir1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">ir2</span> <span class="o">=</span> <span class="n">_query_ray_index</span><span class="p">(</span>
+            <span class="n">tree2</span><span class="p">,</span>
+            <span class="n">ele2</span><span class="p">,</span>
+            <span class="n">azi2</span><span class="p">,</span>
+            <span class="n">rad2_ele</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">rad2_azi</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">ele_tol</span><span class="p">,</span>
+            <span class="n">azi_tol</span><span class="p">,</span>
+            <span class="n">nearest</span><span class="o">=</span><span class="n">nearest</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ir2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">ind_ray_rad1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ir1</span>
+        <span class="n">ind_ray_rad2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ir2</span>
+        <span class="n">valid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">ind_ray_rad1</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
+        <span class="n">ind_rng_rad1</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
+        <span class="n">ind_ray_rad2</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
+        <span class="n">ind_rng_rad2</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
+    <span class="p">)</span>
+
+
 <div class="viewcode-block" id="find_rng_index">
 <a class="viewcode-back" href="../../../API/generated/pyrad.util.find_rng_index.html#pyrad.util.find_rng_index">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
@@ -2290,6 +2448,7 @@
     <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">cap_limits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">double_conditional_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    computes a 2D histogram and statistics of the data</span>
@@ -2315,6 +2474,9 @@
 <span class="sd">    cap_limits: bool</span>
 <span class="sd">        If true, all values larger than vmax or smaller than vmin will be discarded from the</span>
 <span class="sd">        scatter plot. Otherwise, they will be kept and assigned to the smallest/largest bin</span>
+<span class="sd">    double_conditional_threshold: float</span>
+<span class="sd">        If set a double conditional threshold will be applied in the computation of the scores,</span>
+<span class="sd">        e.g. only samples where both radars have measured a value &gt; threshold will be used.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2346,6 +2508,12 @@
         <span class="n">field1</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">field1</span><span class="p">)</span>
         <span class="n">field2</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">field2</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">double_conditional_threshold</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+            <span class="n">field1</span> <span class="o">&gt;</span> <span class="n">double_conditional_threshold</span><span class="p">,</span> <span class="n">field2</span> <span class="o">&gt;</span> <span class="n">double_conditional_threshold</span>
+        <span class="p">)</span>
+        <span class="n">field1</span> <span class="o">=</span> <span class="n">field1</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">field2</span> <span class="o">=</span> <span class="n">field2</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
     <span class="n">hist_2d</span><span class="p">,</span> <span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span> <span class="o">=</span> <span class="n">compute_2d_hist</span><span class="p">(</span>
         <span class="n">field1</span><span class="p">,</span>
         <span class="n">field2</span><span class="p">,</span>

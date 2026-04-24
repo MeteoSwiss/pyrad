@@ -490,7 +490,6 @@
 
     <span class="n">keep_in_memory</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;keep_in_memory&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">regular_grid</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regular_grid&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
     <span class="n">icon_type</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;icon_type&quot;</span><span class="p">,</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">icon_type</span> <span class="o">==</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span>
         <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;temperature&quot;</span><span class="p">]</span>
@@ -604,7 +603,6 @@
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">icon_fields</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">field</span><span class="p">:</span>
             <span class="n">new_dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
-
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
@@ -1098,7 +1096,6 @@
                 <span class="n">warn</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ee</span><span class="p">))</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to add icon &quot;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s2">&quot; field to radar object&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-
     <span class="k">return</span> <span class="n">new_dataset</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 
@@ -1394,7 +1391,6 @@
                 <span class="n">radar_out</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field</span><span class="p">[</span><span class="n">field_name</span><span class="p">])</span>
 
         <span class="n">icon_radars</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;ind_rad&quot;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span> <span class="s2">&quot;radar_out&quot;</span><span class="p">:</span> <span class="n">radar_out</span><span class="p">,</span> <span class="s2">&quot;dticon&quot;</span><span class="p">:</span> <span class="n">dtc</span><span class="p">})</span>
-
     <span class="k">return</span> <span class="n">icon_radars</span><span class="p">,</span> <span class="n">ind_rad</span></div>
 
 

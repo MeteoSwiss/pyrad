@@ -432,7 +432,7 @@
 <span class="sd">        &#39;PLOT_AND_WRITE_INTERCOMP_TS&#39;: Writes statistics of radar</span>
 <span class="sd">            intercomparison in a file and plots the time series of the</span>
 <span class="sd">            statistics. Note that in order to use this product you need</span>
-<span class="sd">            to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</span>
+<span class="sd">            to also define the product WRITE_INTERCOMP for the dataset in question.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
@@ -476,17 +476,26 @@
 <span class="sd">                vmax: float</span>
 <span class="sd">                    Maximum value of the density plot. If vmin or vmax are not define the range limits</span>
 <span class="sd">                    of the field as defined in the Py-ART config file are going to be used.</span>
+<span class="sd">                min_cnt: int</span>
+<span class="sd">                    Minimum number of samples in a 2D histogram bin for the bin to be displayed.</span>
+<span class="sd">                    Default is 0 so all histogram bins with a last one sample are displayed.</span>
+<span class="sd">                bins_transform: str</span>
+<span class="sd">                    Either &quot;linear&quot; or &quot;log&quot;. Specifies whether the counts in the colorbar of the scatter-plots</span>
+<span class="sd">                    are in linear or in log scale. Default is &quot;linear&quot;</span>
 <span class="sd">                cap_limits: bool</span>
 <span class="sd">                    If set to 1, all values larger than vmax or smaller than vmin will be discarded from the</span>
 <span class="sd">                    scatter plot. If set to 0, they will be kept and assigned to the smallest/largest bin</span>
 <span class="sd">                    of the histogram. Default is 0.</span>
+<span class="sd">                double_conditional_threshold: float</span>
+<span class="sd">                    If set a double conditional threshold will be applied in the computation of the scores,</span>
+<span class="sd">                    e.g. only samples where both radars have measured a value &gt; threshold will be used.</span>
 <span class="sd">                scatter_type: str</span>
 <span class="sd">                    Type of scatter plot. Can be a plot for each radar volume</span>
 <span class="sd">                    (instant) or at the end of the processing period</span>
 <span class="sd">                    (cumulative). Default is cumulative</span>
 <span class="sd">                range_bins: list of floats</span>
-<span class="sd">                    Range bins to radar 1 to consider, a different plot will be generated for</span>
-<span class="sd">                    all range bins.This can be used to differentiate the analysis in different</span>
+<span class="sd">                    Range bins in meters to radar 1 to consider, a different plot will be generated for</span>
+<span class="sd">                    all range bins. This can be used to differentiate the analysis in different</span>
 <span class="sd">                    radar ranges.</span>
 <span class="sd">                    Default is to generate only one figure, regardless of the distance to radar 1.</span>
 <span class="sd">                transform: str</span>
@@ -495,6 +504,8 @@
 <span class="sd">                    is accepted for example &quot;sin(x) + x**2&quot; or &quot;10 * log10(x)&quot;</span>
 <span class="sd">                    Default is to use no transform</span>
 <span class="sd">        &#39;WRITE_INTERCOMP&#39;: Writes the instantaneously intercompared data (gate positions, values, etc.) in a csv file.</span>
+<span class="sd">            Beware that if the file already exists for a given processing day, the data will be appended to the existing file</span>
+<span class="sd">            and you might get duplicates. To avoid this delete the existing file first.</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str</span>
 <span class="sd">                    name of the pyrad variable to use, it must be available in the dataset</span>
@@ -571,7 +582,10 @@
         <span class="n">step</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;step&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">min_cnt</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_cnt&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">bins_transform</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bins_transform&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">cap_limits</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cap_limits&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">double_conditional_threshold</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;double_conditional_threshold&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">range_bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># loop on range bins</span>
@@ -624,6 +638,7 @@
                 <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
                 <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
                 <span class="n">cap_limits</span><span class="o">=</span><span class="n">cap_limits</span><span class="p">,</span>
+                <span class="n">double_conditional_threshold</span><span class="o">=</span><span class="n">double_conditional_threshold</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">hist_2d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
@@ -672,6 +687,8 @@
                 <span class="n">rad2_name</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad2_name&quot;</span><span class="p">],</span>
                 <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
                 <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+                <span class="n">min_cnt</span><span class="o">=</span><span class="n">min_cnt</span><span class="p">,</span>
+                <span class="n">bins_transform</span><span class="o">=</span><span class="n">bins_transform</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="n">fname_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">f_list</span><span class="p">)</span>

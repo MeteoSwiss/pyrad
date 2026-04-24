@@ -1306,30 +1306,36 @@
 <h1>pyrad.graph.plot_scatter_comp<a class="headerlink" href="#pyrad-graph-plot-scatter-comp" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.graph.plot_scatter_comp">
-<span class="sig-prename descclassname"><span class="pre">pyrad.graph.</span></span><span class="sig-name descname"><span class="pre">plot_scatter_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Sensor</span> <span class="pre">1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labely</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Sensor</span> <span class="pre">2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Scatter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bx'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/graph/plots.html#plot_scatter_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.graph.plot_scatter_comp" title="Link to this definition">#</a></dt>
-<dd><p>plots the scatter between two time series</p>
+<span class="sig-prename descclassname"><span class="pre">pyrad.graph.</span></span><span class="sig-name descname"><span class="pre">plot_scatter_comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Sensor</span> <span class="pre">1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labely</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Scatter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markersize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/graph/plots.html#plot_scatter_comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.graph.plot_scatter_comp" title="Link to this definition">#</a></dt>
+<dd><p>Plot scatter comparisons of multiple arrays against the first array.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>value1</strong> (<em>float array</em>) – values of the first time series</p></li>
-<li><p><strong>value2</strong> (<em>float array</em>) – values of the second time series</p></li>
-<li><p><strong>fname_list</strong> (<em>list of str</em>) – list of names of the files where to store the plot</p></li>
-<li><p><strong>labelx</strong> (<em>str</em>) – The label of the X axis</p></li>
-<li><p><strong>labely</strong> (<em>str</em>) – The label of the Y axis</p></li>
-<li><p><strong>titl</strong> (<em>str</em>) – The figure title</p></li>
-<li><p><strong>axis</strong> (<em>str</em>) – type of axis</p></li>
-<li><p><strong>metadata</strong> (<em>string</em>) – a string containing metadata</p></li>
-<li><p><strong>dpi</strong> (<em>int</em>) – dots per inch</p></li>
-<li><p><strong>fig</strong> (<em>Figure</em>) – Figure to add the colorbar to. If none a new figure will be created</p></li>
-<li><p><strong>ax</strong> (<em>Axis</em>) – Axis to plot on. if fig is None a new axis will be created</p></li>
-<li><p><strong>save_fig</strong> (<em>bool</em>) – if true save the figure if false it does not close the plot and
-returns the handle to the figure</p></li>
-<li><p><strong>point_format</strong> (<em>str</em>) – format of the scatter point</p></li>
-<li><p><strong>write_stats</strong> (<em>bool</em>) – If set to True will write the RMSE and bias on the plot. Default is true.</p></li>
+<li><p><strong>values</strong> (<em>list of array-like</em>) – List of arrays. The first array is used as x, and all others are
+plotted against it as y.</p></li>
+<li><p><strong>fname_list</strong> (<em>list of str</em>) – List of names of the files where to store the plot.</p></li>
+<li><p><strong>labelx</strong> (<em>str</em>) – Label of the X axis.</p></li>
+<li><p><strong>labely</strong> (<em>str or None</em>) – Label of the Y axis. If None, defaults to “Estimated values”.</p></li>
+<li><p><strong>titl</strong> (<em>str</em>) – Figure title.</p></li>
+<li><p><strong>axis</strong> (<em>str</em>) – Type of axis. If “equal”, enforce equal axis limits and draw 1:1 line.</p></li>
+<li><p><strong>metadata</strong> (<em>str</em>) – A string containing metadata.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em>) – Dots per inch.</p></li>
+<li><p><strong>fig</strong> (<em>Figure</em>) – Figure to plot on. If None, a new figure will be created.</p></li>
+<li><p><strong>ax</strong> (<em>Axis</em>) – Axis to plot on. If fig is None, a new axis will be created.</p></li>
+<li><p><strong>save_fig</strong> (<em>bool</em>) – If True save the figure. If False, return figure and axis handles.</p></li>
+<li><p><strong>labels</strong> (<em>list of str or None</em>) – Labels for arrays 2..N. Length must be len(values)-1 if provided.</p></li>
+<li><p><strong>write_stats</strong> (<em>bool</em>) – If True, write stats for each series on the plot.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – Transparency of scatter points.</p></li>
+<li><p><strong>markersize</strong> (<em>float</em>) – Scatter marker size.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fname_list</strong> (<em>list of str</em>) – list of names of the created plots</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>fname_list</strong> (<em>list of str</em>) – List of names of the created plots, if save_fig is True.</p></li>
+<li><p><em>or</em></p></li>
+<li><p><strong>(fig, ax)</strong> (<em>tuple</em>) – Figure and axis handles, if save_fig is False.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

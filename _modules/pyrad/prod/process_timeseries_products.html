@@ -453,7 +453,7 @@
 <span class="sd">                from the Py-ART config file.</span>
 <span class="sd">            plot_type: str</span>
 <span class="sd">                The type of plot to generate. Can be &#39;timeseries&#39; (default) or</span>
-<span class="sd">                &#39;scatter&#39;.</span>
+<span class="sd">                &#39;scatter&#39;. Scatter-plots also show the RMSE and bias.</span>
 <span class="sd">            time_interval: int or None</span>
 <span class="sd">                Time interval in seconds used to resample both radar and sensor</span>
 <span class="sd">                series before comparison. If None, the native timestamps are used.</span>
@@ -485,22 +485,26 @@
 <span class="sd">                (e.g. %Y, %m, %d, %Y%m%d, optionally written as {%Y%m%d}), which will be expanded using the provided sensorid</span>
 <span class="sd">                and date before performing the recursive search, for example &quot;{%Y-%m-%d}/{sensorid}/&quot;</span>
 <span class="sd">                If not provided a potentially deep recursive search will be performed which can take some time.</span>
-<span class="sd">    &#39;COMPARE_SCORES_SENSOR&#39;: Plots and/or compares radar and co-located gauge (sensor)</span>
-<span class="sd">        data at a point of interest. The product always writes a combined CSV file</span>
-<span class="sd">        containing both radar and sensor data. Optionally, the radar and sensor</span>
-<span class="sd">        time series can be time-averaged or time-accumulated to a user-defined</span>
-<span class="sd">        interval (if no interval is provided, native sampling is used). The plot</span>
-<span class="sd">        can be either a dual time series comparison or a scatter plot of radar vs</span>
-<span class="sd">        sensor.</span>
+<span class="sd">    &#39;COMPARE_SCORES_SENSOR&#39;: Computes performance scores using sensor data as a reference and radar</span>
+<span class="sd">        data as the estimate.  It will generate a csv file containing the daily scores for one or multiple radars (if present)</span>
+<span class="sd">        as well as update a plot of the time series of performance scores over time.</span>
 <span class="sd">        User defined parameters:</span>
-<span class="sd">            dpi: int</span>
-<span class="sd">                The pixel density of the plot. Default 72</span>
-<span class="sd">            vmin, vmax: float</span>
-<span class="sd">                The limits of the Y-axis. If none they will be obtained</span>
-<span class="sd">                from the Py-ART config file.</span>
-<span class="sd">            plot_type: str</span>
-<span class="sd">                The type of plot to generate. Can be &#39;timeseries&#39; (default) or</span>
-<span class="sd">                &#39;scatter&#39;.</span>
+<span class="sd">            scores: list of str</span>
+<span class="sd">                Which scores to compute, currently the following are supported:</span>
+<span class="sd">                - corr (pearson correlation)</span>
+<span class="sd">                - RMSE (root mean square error)</span>
+<span class="sd">                - logBias (bias in log scale)</span>
+<span class="sd">                - scatter (see https://doi.org/10.1256/qj.05.190)</span>
+<span class="sd">                Default is RMSE and corr</span>
+<span class="sd">            bounds: list of float</span>
+<span class="sd">                If set will compute the scores in the specified bounds based on the sensor value.</span>
+<span class="sd">                e.g. 0,1,10 will compute the scores in the [0,1] and [1,10] will be computed separately</span>
+<span class="sd">                and will be written to the csv file.</span>
+<span class="sd">                If not provided no bounds will be used</span>
+<span class="sd">            double_conditional_threshold: float</span>
+<span class="sd">                Optionally a double conditional threshold can be applied in the computation of the scores</span>
+<span class="sd">                e.g. only points where both the estimate and the reference exceed this threshold will be used</span>
+<span class="sd">                in the score computation</span>
 <span class="sd">            time_interval: int or None</span>
 <span class="sd">                Time interval in seconds used to resample both radar and sensor</span>
 <span class="sd">                series before comparison. If None, the native timestamps are used.</span>
@@ -796,12 +800,6 @@
         <span class="k">if</span> <span class="n">do_only_final</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="s2">&quot;scatter&quot;</span><span class="p">:</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;COMPARE_POINT_SENSOR: plot_type=&#39;scatter&#39; is not supported for multi-radar case&quot;</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
         <span class="c1"># -------------------------</span>
         <span class="c1"># 1) point / gateinfo (use reference radar)</span>
         <span class="c1"># -------------------------</span>
@@ -981,11 +979,13 @@
 
             <span class="n">df_out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;radar_</span><span class="si">{</span><span class="n">radarnr</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_tmp</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
-            <span class="c1"># Collect for plotting: radar series itself (not the aligned-to-sensor version)</span>
+            <span class="c1"># Collect for plotting</span>
             <span class="n">plot_dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_r</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mixed&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+                    <span class="n">df_out</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mixed&quot;</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
             <span class="p">)</span>
-            <span class="n">plot_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_r</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+            <span class="n">plot_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_tmp</span><span class="p">[</span><span class="s2">&quot;radar&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 
         <span class="c1"># Replace NaN</span>
         <span class="n">df_out</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_fillvalue</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1055,20 +1055,32 @@
         <span class="n">figfname_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">savedir</span> <span class="o">+</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">figfname_list</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="s2">&quot;scatter&quot;</span><span class="p">:</span>
-            <span class="c1"># x = sensor, y = radar</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">plot_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">plot_values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="n">plot_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No radar series available to plot scatter&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="c1"># Keep only valid x</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ys</span><span class="p">]</span>
+
+            <span class="c1"># Keep only series with valid pairs</span>
+            <span class="n">ys_valid</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">ys</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+                    <span class="n">ys_valid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">ys_valid</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;No matched radar/sensor pairs to plot scatter&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
             <span class="n">labelx</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label_sensor</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">labely</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">labely</span> <span class="k">else</span> <span class="n">label_sensor</span>
-            <span class="n">labely2</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label_radar_base</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">labely</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">labely</span> <span class="k">else</span> <span class="n">label_radar_base</span>
+            <span class="n">labely2</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label_radar_base</span><span class="si">}</span><span class="se">\n</span><span class="s2">(</span><span class="si">{</span><span class="n">labely</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">if</span> <span class="n">labely</span> <span class="k">else</span> <span class="n">label_radar_base</span>
 
-            <span class="n">titl</span> <span class="o">=</span> <span class="s2">&quot;Radar vs Gauge&quot;</span>
+            <span class="n">titl</span> <span class="o">=</span> <span class="s2">&quot;Radar vs Sensor&quot;</span>
             <span class="k">if</span> <span class="n">time_interval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">titl</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; (</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">time_interval</span><span class="p">)</span><span class="si">}</span><span class="s2">s </span><span class="si">{</span><span class="n">agg_mode</span><span class="si">}</span><span class="s2">)&quot;</span>
             <span class="n">titl</span> <span class="o">+=</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
@@ -1076,11 +1088,11 @@
             <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">plot_scatter_comp</span><span class="p">(</span>
-                <span class="n">x</span><span class="p">,</span>
-                <span class="n">y</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">ys_valid</span><span class="p">,</span>
                 <span class="n">figfname_list</span><span class="p">,</span>
                 <span class="n">labelx</span><span class="o">=</span><span class="n">labelx</span><span class="p">,</span>
                 <span class="n">labely</span><span class="o">=</span><span class="n">labely2</span><span class="p">,</span>
+                <span class="n">labels</span><span class="o">=</span><span class="n">plot_labels</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
                 <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
                 <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span>
                 <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span>
@@ -1122,7 +1134,6 @@
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;COMPARE_SCORES_SENSOR&quot;</span><span class="p">:</span>
         <span class="n">dpi</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dpi&quot;</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
         <span class="n">bounds</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bounds&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">set_time_info</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;set_time_info&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">time_interval</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time_interval&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># seconds or None</span>
         <span class="n">base_time</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_time&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># seconds</span>
         <span class="n">agg_mode</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agg_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)</span>  <span class="c1"># &quot;mean&quot; or &quot;sum&quot;</span>
