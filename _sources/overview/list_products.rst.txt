@@ -2050,6 +2050,44 @@ TIMEAVG
 
 TIMESERIES
 -----------------------------
+POINT_TS
+""""""""""""""""""""""""""""""
+description
+ | Writes and plots point time series for one or multiple radars.
+ | 
+ | It generates a CSV file containing the time series values at a single 
+ | point or radar gate. If multiple radar entries are present in the 
+ | dataset, all radar series are written to the same CSV file and plotted 
+ | together in one figure. If the timestamps of the different radars don't agree 
+ | an outer join will be performed and missing timestamps will be filled with 
+ | NaNs 
+ | 
+ |
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L298>`_
+parameters
+   set_time_info: : *bool*
+       If True, date information is added to the output directory and filenames. Default is True. 
+   do_only_final: : *bool*
+       If True, the product is only generated when dataset['final'] is True. Default is True. 
+   RadarName: : *list of str*
+       Names of the radars to use as plot labels. The order should match the RADAR entries in the dataset. 
+   basepath: : *str*
+       Base path where the product output directory is created. 
+   procname: : *str*
+       Processing name used to build the output directory. 
+   dstype: : *str*
+       Dataset type used in the output filename. 
+   imgformat: : *list of str*
+       List of image formats to generate. 
+   dpi: : *int*
+       Figure resolution in dots per inch. Default is 72. 
+   vmin: : *float or None*
+       Minimum y-axis value used in the plot. If None, the limit is determined automatically. 
+   vmax: : *float or None*
+       Maximum y-axis value used in the plot. If None, the limit is determined automatically. 
+   label: : *str*
+       Optional label added to the plot title.   
+
 COMPARE_POINT_SENSOR
 """"""""""""""""""""""""""""""
 description
@@ -2061,8 +2099,12 @@ description
  | can be either a dual time series comparison or a scatter plot of radar vs 
  | sensor. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L383>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L440>`_
 parameters
+   set_time_info: : *bool*
+       If True, date information is added to the output directory and filenames. Default is True. 
+   do_only_final: : *bool*
+       If True, the product is only generated when dataset['final'] is True. Default is True. 
    dpi: : *int*
        The pixel density of the plot. Default 72 
    vmin, : *vmax: float*
@@ -2095,7 +2137,7 @@ description
  | data as the estimate. It will generate a csv file containing the daily scores for one or multiple radars (if present) 
  | as well as update a plot of the time series of performance scores over time. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L744>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L801>`_
 parameters
    scores: : *list of str*
        
@@ -2131,7 +2173,7 @@ PLOT_AND_WRITE_TRAJ
 description
  | Writes and plots a trajectory time series.
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1016>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1073>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2144,7 +2186,7 @@ description
  | plots and writes a histogram of all the data gathered
  | during the trajectory processing 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1077>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1134>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2157,7 +2199,7 @@ description
  | Creates a CAPPI image with the trajectory position
  | overplot on it. 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1123>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1180>`_
 parameters
    voltype: : *str*
        name of the pyrad variable to use, it must be available in the dataset 
@@ -2176,7 +2218,7 @@ description
  | Writes a csv file containing data from
  | multiple points obtained from a radar object 
  |
- `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L232>`_
+ `[Source] <https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L275>`_
 
 TRAJ_ONLY
 -----------------------------

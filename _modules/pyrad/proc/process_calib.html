@@ -617,6 +617,9 @@
 <span class="sd">        filter_prec : str. Dataset keyword</span>
 <span class="sd">            Give which type of volume should be filtered. None, no filtering;</span>
 <span class="sd">            keep_wet, keep wet volumes; keep_dry, keep dry volumes.</span>
+<span class="sd">        range_limits : tuple or list of two floats, optional</span>
+<span class="sd">            Range bounds [rmin, rmax] in meters. If provided, only data within</span>
+<span class="sd">            this range interval will be used in the monitoring.</span>
 <span class="sd">        rmax_prec : float. Dataset keyword</span>
 <span class="sd">            Maximum range to consider when looking for wet gates [m]</span>
 <span class="sd">        percent_prec_max : float. Dataset keyword</span>
@@ -692,6 +695,9 @@
         <span class="n">field</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
         <span class="n">field</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
 
+        <span class="c1"># Range limits</span>
+        <span class="n">range_limits</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_limits&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
         <span class="c1"># filter wet or dry volumes</span>
         <span class="n">filter_prec</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filter_prec&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filter_prec</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;keep_wet&quot;</span><span class="p">,</span> <span class="s2">&quot;keep_dry&quot;</span><span class="p">):</span>
@@ -708,7 +714,6 @@
 
             <span class="n">rmax_prec</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rmax_prec&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
             <span class="n">percent_prec_max</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;percent_prec_max&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
-
             <span class="n">ngates</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span>
             <span class="k">if</span> <span class="n">rmax_prec</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
                 <span class="n">ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">rmax_prec</span><span class="p">])</span>
@@ -759,7 +764,16 @@
         <span class="k">if</span> <span class="n">regular_grid</span><span class="p">:</span>
             <span class="n">ray_ind</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;ray_ind&quot;</span><span class="p">]</span>
             <span class="n">rng_ind</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="s2">&quot;rng_ind&quot;</span><span class="p">]</span>
-            <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="n">ray_ind</span><span class="p">,</span> <span class="n">rng_ind</span><span class="p">]</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
+
+            <span class="n">field_vals</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="n">ray_ind</span><span class="p">,</span> <span class="n">rng_ind</span><span class="p">]</span>
+            <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rng_ind</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">range_limits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rmin</span><span class="p">,</span> <span class="n">rmax</span> <span class="o">=</span> <span class="n">range_limits</span>
+                <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">ranges</span> <span class="o">&gt;=</span> <span class="n">rmin</span><span class="p">,</span> <span class="n">ranges</span> <span class="o">&lt;=</span> <span class="n">rmax</span><span class="p">)</span>
+                <span class="n">field_vals</span> <span class="o">=</span> <span class="n">field_vals</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+
+            <span class="n">field</span> <span class="o">=</span> <span class="n">field_vals</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">azi_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;azi_tol&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
             <span class="n">ele_tol</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ele_tol&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
@@ -790,7 +804,15 @@
                 <span class="n">rng_ind</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_rng_rad</span>
             <span class="n">ray_ind</span> <span class="o">=</span> <span class="n">ray_ind</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
             <span class="n">rng_ind</span> <span class="o">=</span> <span class="n">rng_ind</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
-            <span class="n">field</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="n">ray_ind</span><span class="p">,</span> <span class="n">rng_ind</span><span class="p">]</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
+            <span class="n">field_vals</span> <span class="o">=</span> <span class="n">field</span><span class="p">[</span><span class="n">ray_ind</span><span class="p">,</span> <span class="n">rng_ind</span><span class="p">]</span>
+            <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">rng_ind</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">range_limits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rmin</span><span class="p">,</span> <span class="n">rmax</span> <span class="o">=</span> <span class="n">range_limits</span>
+                <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">ranges</span> <span class="o">&gt;=</span> <span class="n">rmin</span><span class="p">,</span> <span class="n">ranges</span> <span class="o">&lt;=</span> <span class="n">rmax</span><span class="p">)</span>
+                <span class="n">field_vals</span> <span class="o">=</span> <span class="n">field_vals</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+
+            <span class="n">field</span> <span class="o">=</span> <span class="n">field_vals</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
 
         <span class="c1"># put gates with values off limits to limit</span>
         <span class="c1"># and compute histogram</span>

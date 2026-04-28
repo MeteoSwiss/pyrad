@@ -1311,32 +1311,47 @@
 <section id="behavior">
 <h2>Behavior<a class="headerlink" href="#behavior" title="Link to this heading">#</a></h2>
 <ul>
-<li><p>Legacy: if <cite>data_list</cite> is a list of 1D arrays (one per series), plot them.</p></li>
-<li><p>Multi-timeseries: if <cite>data_list</cite> is a list of lists/tuples, each inner list
-represents a “group” (e.g., multiple radars) and all series in the group
-are plotted as lines. If labels is None, defaults to RADAR001, RADAR002, …</p>
-<dl class="simple">
-<dt>Examples:</dt><dd><p>data_list = [series1, series2]                 -&gt; 2 lines (legacy)
-data_list = [[r1, r2, r3]]                     -&gt; 3 lines
-data_list = [[r1, r2], [r1b, r2b]]             -&gt; 4 lines (all plotted)</p>
+<li><dl class="simple">
+<dt>Legacy single-time-vector mode:</dt><dd><p>tvec = common_time_vector
+data_list = [series1, series2]</p>
 </dd>
 </dl>
+<p>All series are plotted against the same time vector.</p>
+</li>
+<li><dl class="simple">
+<dt>Multi-time-vector mode:</dt><dd><p>tvec = [time1, time2, time3]
+data_list = [series1, series2, series3]</p>
+</dd>
+</dl>
+<p>Each series is plotted against its corresponding time vector. This allows
+plotting time series with different temporal supports.</p>
+</li>
+<li><dl class="simple">
+<dt>Grouped multi-timeseries mode:</dt><dd><p>data_list = [[r1, r2, r3]]</p>
+</dd>
+</dl>
+<p>If tvec is also grouped in the same way:</p>
+<blockquote>
+<div><p>tvec = [[t1, t2, t3]]</p>
+</div></blockquote>
+<p>then each radar uses its own time vector.</p>
+<p>If tvec is a single vector, it is reused for all plotted series.</p>
 </li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tvec</strong> (<em>array-like of datetime</em>) – Time vector.</p></li>
-<li><p><strong>data_list</strong> (<em>list</em>) – List of series (legacy) OR list of lists of series (multi-timeseries).</p></li>
+<li><p><strong>tvec</strong> (<em>array-like of datetime, or list of array-like of datetime</em>) – Either one common time vector or one time vector per plotted data
+series. Each time vector must have the same length as its corresponding
+value series.</p></li>
+<li><p><strong>data_list</strong> (<em>list</em>) – List of series, or list of lists of series.</p></li>
 <li><p><strong>fname_list</strong> (<em>list of str</em>) – Output filenames.</p></li>
-<li><p><strong>labels</strong> (<em>list of str or None</em>) – Legend labels (one per plotted line). If None and multi-timeseries is
-detected, defaults to RADAR001, RADAR002, … up to number of lines.
-If None in legacy mode, no legend is shown.</p></li>
-<li><p><strong>period</strong> (<em>float</em>) – Measurement period in seconds used to compute accumulation. If 0 no
+<li><p><strong>labels</strong> (<em>list of str or None</em>) – Legend labels, one per plotted line. If None and grouped mode is
+detected, defaults to RADAR001, RADAR002, …</p></li>
+<li><p><strong>period</strong> (<em>float</em>) – Measurement period in seconds used to compute accumulation. If 0, no
 accumulation is computed.</p></li>
 <li><p><strong>timeformat</strong> (<em>str, optional</em>) – Datetime formatter string for x-axis.</p></li>
-<li><p><strong>colors, linestyles, markers</strong> (<em>list, optional</em>) – Styling per plotted line (length must match number of plotted lines),
-or None to use matplotlib defaults.</p></li>
+<li><p><strong>colors, linestyles, markers</strong> (<em>list, optional</em>) – Styling per plotted line.</p></li>
 <li><p><strong>ymin, ymax</strong> (<em>float, optional</em>) – Y-axis limits.</p></li>
 <li><p><strong>dpi</strong> (<em>int</em>) – Figure DPI.</p></li>
 </ul>

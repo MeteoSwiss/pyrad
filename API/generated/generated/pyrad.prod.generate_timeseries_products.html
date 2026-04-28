@@ -1307,8 +1307,49 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.prod.generate_timeseries_products">
 <span class="sig-prename descclassname"><span class="pre">pyrad.prod.</span></span><span class="sig-name descname"><span class="pre">generate_timeseries_products</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prdcfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrad/prod/process_timeseries_products.html#generate_timeseries_products"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.prod.generate_timeseries_products" title="Link to this definition">#</a></dt>
-<dd><p>Generates time series products. Accepted product types:</p>
-<dl>
+<dd><dl>
+<dt>Generates time series products. Accepted product types:</dt><dd><p>‘POINT_TS’: Writes and plots point time series for one or multiple radars.</p>
+<blockquote>
+<div><p>It generates a CSV file containing the time series values at a single
+point or radar gate. If multiple radar entries are present in the
+dataset, all radar series are written to the same CSV file and plotted
+together in one figure. If the timestamps of the different radars don’t agree
+an outer join will be performed and missing timestamps will be filled with
+NaNs</p>
+<dl class="simple">
+<dt>User defined parameters:</dt><dd><dl class="simple">
+<dt>set_time_info: bool</dt><dd><p>If True, date information is added to the output directory and
+filenames. Default is True.</p>
+</dd>
+<dt>do_only_final: bool</dt><dd><p>If True, the product is only generated when dataset[‘final’] is
+True. Default is True.</p>
+</dd>
+<dt>RadarName: list of str</dt><dd><p>Names of the radars to use as plot labels. The order should
+match the RADAR entries in the dataset.</p>
+</dd>
+<dt>basepath: str</dt><dd><p>Base path where the product output directory is created.</p>
+</dd>
+<dt>procname: str</dt><dd><p>Processing name used to build the output directory.</p>
+</dd>
+<dt>dstype: str</dt><dd><p>Dataset type used in the output filename.</p>
+</dd>
+<dt>imgformat: list of str</dt><dd><p>List of image formats to generate.</p>
+</dd>
+<dt>dpi: int</dt><dd><p>Figure resolution in dots per inch. Default is 72.</p>
+</dd>
+<dt>vmin: float or None</dt><dd><p>Minimum y-axis value used in the plot. If None, the limit is
+determined automatically.</p>
+</dd>
+<dt>vmax: float or None</dt><dd><p>Maximum y-axis value used in the plot. If None, the limit is
+determined automatically.</p>
+</dd>
+<dt>label: str</dt><dd><p>Optional label added to the plot title.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
 <dt>‘COMPARE_POINT_SENSOR’: Plots and/or compares radar and co-located gauge (sensor)</dt><dd><p>data at a point of interest. The product always writes a combined CSV file
 containing both radar and sensor data. Optionally, the radar and sensor
 time series can be time-averaged or time-accumulated to a user-defined
@@ -1318,6 +1359,12 @@ sensor.
 User defined parameters:</p>
 <blockquote>
 <div><dl class="simple">
+<dt>set_time_info: bool</dt><dd><p>If True, date information is added to the output directory and
+filenames. Default is True.</p>
+</dd>
+<dt>do_only_final: bool</dt><dd><p>If True, the product is only generated when dataset[‘final’] is
+True. Default is True.</p>
+</dd>
 <dt>dpi: int</dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
 <dt>vmin, vmax: float</dt><dd><p>The limits of the Y-axis. If none they will be obtained

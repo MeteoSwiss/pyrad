@@ -421,7 +421,7 @@
 
 <span class="k">if</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShadedReliefESRI</span><span class="p">,</span> <span class="n">OTM</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.plots_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShadedReliefESRI</span><span class="p">,</span> <span class="n">OTM</span><span class="p">,</span> <span class="n">OTM_BW</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span>
@@ -665,29 +665,34 @@
             <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">embellish</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">and</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">or</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">or</span> <span class="s2">&quot;OTM_BW&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;Plotting both &#39;relief&#39; and &#39;OTM&#39; is not supported, choosing only relief&quot;</span><span class="p">,</span>
                 <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">maps_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;OTM&quot;</span><span class="p">)</span>
 
+        <span class="n">bg_alpha</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bg_alpha&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span> <span class="ow">or</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
-            <span class="c1"># Check cache dir</span>
             <span class="k">if</span> <span class="s2">&quot;PYRAD_CACHE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
                 <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PYRAD_CACHE&quot;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">cache_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;pyrad_cache&quot;</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">cache_dir</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
             <span class="n">tiler</span> <span class="o">=</span> <span class="n">ShadedReliefESRI</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;OTM&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
-            <span class="n">tiler</span> <span class="o">=</span> <span class="n">OTM</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;OTM_BW&quot;</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
+            <span class="n">tiler</span> <span class="o">=</span> <span class="n">OTM_BW</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">)</span>
+
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">cartomap</span> <span class="ow">in</span> <span class="n">maps_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;relief&quot;</span> <span class="ow">or</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;OTM&quot;</span><span class="p">:</span>
-                <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">tiler</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cartomap</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;relief&quot;</span><span class="p">,</span> <span class="s2">&quot;OTM&quot;</span><span class="p">,</span> <span class="s2">&quot;OTM_BW&quot;</span><span class="p">]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">tiler</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">bg_alpha</span><span class="p">)</span>
+
             <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;countries&quot;</span><span class="p">:</span>
                 <span class="c1"># add countries</span>
                 <span class="n">countries</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>

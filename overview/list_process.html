@@ -7350,6 +7350,13 @@
 </div>
 </div>
 </dd>
+<dt>range_limits<span class="classifier">tuple or list of two floats, optional</span></dt><dd><div class="line-block">
+<div class="line">Range bounds [rmin, rmax] in meters. If provided, only data within</div>
+<div class="line-block">
+<div class="line">this range interval will be used in the monitoring.</div>
+</div>
+</div>
+</dd>
 <dt>rmax_prec<span class="classifier">float. Dataset keyword</span></dt><dd><div class="line-block">
 <div class="line">Maximum range to consider when looking for wet gates [m]</div>
 </div>
@@ -8921,6 +8928,12 @@
 <div class="line-block">
 <div class="line">fall within the tolerance in AziTol, EleTol and RngTol, each</div>
 <div class="line">with its individual timestamp</div>
+</div>
+<div class="line">‘min’ : minimum value within the tolerance in AziTol, EleTol and RngTol</div>
+<div class="line">‘max’ : maximum value within the tolerance in AziTol, EleTol and RngTol</div>
+<div class="line">‘maxZH’ : value at the location of the maximum in reflectivity within the tolerance in AziTol, EleTol and RngTol.</div>
+<div class="line-block">
+<div class="line">for each radar. Accepted reflectivity datatype names are: dBuZ, dBZ, dBZv, dBuZv, dBZc, dBZvc</div>
 </div>
 <div class="line">Default is ‘nearest’</div>
 </div>

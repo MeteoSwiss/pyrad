@@ -3112,6 +3112,50 @@
 </section>
 <section id="timeseries">
 <h2>TIMESERIES<a class="headerlink" href="#timeseries" title="Link to this heading">#</a></h2>
+<section id="point-ts">
+<h3>POINT_TS<a class="headerlink" href="#point-ts" title="Link to this heading">#</a></h3>
+<dl>
+<dt>description</dt><dd><div class="line-block">
+<div class="line">Writes and plots point time series for one or multiple radars.</div>
+<div class="line"><br /></div>
+<div class="line">It generates a CSV file containing the time series values at a single</div>
+<div class="line">point or radar gate. If multiple radar entries are present in the</div>
+<div class="line">dataset, all radar series are written to the same CSV file and plotted</div>
+<div class="line">together in one figure. If the timestamps of the different radars don’t agree</div>
+<div class="line">an outer join will be performed and missing timestamps will be filled with</div>
+<div class="line">NaNs</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L298">[Source]</a></p>
+</dd>
+<dt>parameters</dt><dd><dl>
+<dt>set_time_info:<span class="classifier"><em>bool</em></span></dt><dd><p>If True, date information is added to the output directory and filenames. Default is True.</p>
+</dd>
+<dt>do_only_final:<span class="classifier"><em>bool</em></span></dt><dd><p>If True, the product is only generated when dataset[‘final’] is True. Default is True.</p>
+</dd>
+<dt>RadarName:<span class="classifier"><em>list of str</em></span></dt><dd><p>Names of the radars to use as plot labels. The order should match the RADAR entries in the dataset.</p>
+</dd>
+<dt>basepath:<span class="classifier"><em>str</em></span></dt><dd><p>Base path where the product output directory is created.</p>
+</dd>
+<dt>procname:<span class="classifier"><em>str</em></span></dt><dd><p>Processing name used to build the output directory.</p>
+</dd>
+<dt>dstype:<span class="classifier"><em>str</em></span></dt><dd><p>Dataset type used in the output filename.</p>
+</dd>
+<dt>imgformat:<span class="classifier"><em>list of str</em></span></dt><dd><p>List of image formats to generate.</p>
+</dd>
+<dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>Figure resolution in dots per inch. Default is 72.</p>
+</dd>
+<dt>vmin:<span class="classifier"><em>float or None</em></span></dt><dd><p>Minimum y-axis value used in the plot. If None, the limit is determined automatically.</p>
+</dd>
+<dt>vmax:<span class="classifier"><em>float or None</em></span></dt><dd><p>Maximum y-axis value used in the plot. If None, the limit is determined automatically.</p>
+</dd>
+<dt>label:<span class="classifier"><em>str</em></span></dt><dd><p>Optional label added to the plot title.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
 <section id="compare-point-sensor">
 <h3>COMPARE_POINT_SENSOR<a class="headerlink" href="#compare-point-sensor" title="Link to this heading">#</a></h3>
 <dl>
@@ -3125,9 +3169,13 @@
 <div class="line">sensor.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L383">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L440">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
+<dt>set_time_info:<span class="classifier"><em>bool</em></span></dt><dd><p>If True, date information is added to the output directory and filenames. Default is True.</p>
+</dd>
+<dt>do_only_final:<span class="classifier"><em>bool</em></span></dt><dd><p>If True, the product is only generated when dataset[‘final’] is True. Default is True.</p>
+</dd>
 <dt>dpi:<span class="classifier"><em>int</em></span></dt><dd><p>The pixel density of the plot. Default 72</p>
 </dd>
 <dt>vmin,<span class="classifier"><em>vmax: float</em></span></dt><dd><p>The limits of the Y-axis. If none they will be obtained from the Py-ART config file.</p>
@@ -3165,7 +3213,7 @@
 <div class="line">as well as update a plot of the time series of performance scores over time.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L744">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L801">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><p>scores: : <em>list of str</em></p>
 <dl>
@@ -3215,7 +3263,7 @@
 <div class="line">Writes and plots a trajectory time series.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1016">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1073">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3234,7 +3282,7 @@
 <div class="line">during the trajectory processing</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1077">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1134">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3253,7 +3301,7 @@
 <div class="line">overplot on it.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1123">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L1180">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -3278,7 +3326,7 @@
 <div class="line">multiple points obtained from a radar object</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L232">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_timeseries_products.py#L275">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -3568,6 +3616,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#timeavg">TIMEAVG</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#timeseries">TIMESERIES</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#point-ts">POINT_TS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-point-sensor">COMPARE_POINT_SENSOR</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-scores-sensor">COMPARE_SCORES_SENSOR</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-and-write-traj">PLOT_AND_WRITE_TRAJ</a></li>

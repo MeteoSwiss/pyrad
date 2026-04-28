@@ -451,6 +451,10 @@
 <span class="sd">            &#39;none&#39; : will not perform any averaging and will get all values that</span>
 <span class="sd">                fall within the tolerance in AziTol, EleTol and RngTol, each</span>
 <span class="sd">                with its individual timestamp</span>
+<span class="sd">            &#39;min&#39; : minimum value within the tolerance in AziTol, EleTol and RngTol</span>
+<span class="sd">            &#39;max&#39; : maximum value within the tolerance in AziTol, EleTol and RngTol</span>
+<span class="sd">            &#39;maxZH&#39; : value at the location of the maximum in reflectivity within the tolerance in AziTol, EleTol and RngTol.</span>
+<span class="sd">                for each radar. Accepted reflectivity datatype names are: dBuZ, dBZ, dBZv, dBuZv, dBZc, dBZvc</span>
 <span class="sd">            Default is &#39;nearest&#39;</span>
 <span class="sd">        latlon : boolean. Dataset keyword</span>
 <span class="sd">            if True position is obtained from latitude, longitude information,</span>
@@ -497,49 +501,59 @@
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="c1"># Parse requested radars + datatype(s) from dscfg[&quot;datatype&quot;]</span>
-    <span class="c1"># Expected: one entry per radar (e.g., &quot;RADAR001:...&quot; etc.)</span>
-    <span class="n">req</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">refl_datatypes</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dBuZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZ&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBuZv&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZc&quot;</span><span class="p">,</span> <span class="s2">&quot;dBZvc&quot;</span><span class="p">}</span>
+    <span class="n">valid_agg_methods</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;nearest_valid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;average&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;maxZH&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Parse requested radars + datatype(s)</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="n">req_by_radar</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">datatypedescr</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]:</span>
         <span class="n">radarnr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_datatype_fields</span><span class="p">(</span><span class="n">datatypedescr</span><span class="p">)</span>
-        <span class="n">req</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">radarnr</span><span class="p">,</span> <span class="n">datatype</span><span class="p">))</span>
+        <span class="n">req_by_radar</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">radarnr</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
+
+    <span class="n">req</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">req_by_radar</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latlon&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">req</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Multi-radar point measurement requires dscfg[&#39;latlon&#39;]=True.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="c1"># (Optional) sanity check: all datatypes equal</span>
-    <span class="n">datatypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">dt</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">req</span><span class="p">}</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">datatypes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">warn</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Multiple datatypes requested (</span><span class="si">{</span><span class="n">datatypes</span><span class="si">}</span><span class="s2">). This function assumes one datatype.&quot;</span>
-        <span class="p">)</span>
-    <span class="n">datatype0</span> <span class="o">=</span> <span class="n">req</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">agg_method</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agg_method&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">agg_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_agg_methods</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Invalid agg_method. Using &#39;nearest&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">agg_method</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span>
 
-    <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype0</span><span class="p">)</span>
-
-    <span class="c1"># -----------------------</span>
-    <span class="c1"># Finalization (procstatus==2)</span>
-    <span class="c1"># -----------------------</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Finalization</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
     <span class="k">if</span> <span class="n">procstatus</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">ind_out</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">radarnr</span><span class="p">,</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+
+        <span class="k">for</span> <span class="n">radarnr</span><span class="p">,</span> <span class="n">datatype_list</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">radarnr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
-                <span class="c1"># radar never successfully initialized</span>
                 <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">ind_out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">continue</span>
 
             <span class="n">gd</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">]</span>
+
             <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;ref_time&quot;</span><span class="p">:</span> <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;ref_time&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;datatype&quot;</span><span class="p">:</span> <span class="n">datatype</span><span class="p">,</span>
+                <span class="s2">&quot;datatype&quot;</span><span class="p">:</span> <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">:</span> <span class="n">gd</span><span class="p">[</span>
                     <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span>
                 <span class="p">],</span>
@@ -552,38 +566,58 @@
         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">ind_out</span>
 
-    <span class="c1"># -----------------------</span>
-    <span class="c1"># Processing (procstatus==1)</span>
-    <span class="c1"># -----------------------</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Processing</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
     <span class="k">if</span> <span class="n">radar_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;ERROR: radar_list is None&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-    <span class="c1"># Common point definition (lon/lat) is shared; per-radar az/el/r differs</span>
     <span class="n">lon</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">]</span>
     <span class="n">lat</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span>
-
     <span class="n">fill_value</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fill_value&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="n">agg_method</span> <span class="o">=</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;agg_method&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">agg_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">]:</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Invalid agg_method. Using &#39;nearest&#39;.&quot;</span><span class="p">)</span>
-        <span class="n">agg_method</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span>
 
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">ind_out</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">for</span> <span class="n">radarnr</span><span class="p">,</span> <span class="n">datatype</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">radarnr</span><span class="p">,</span> <span class="n">datatype_list</span> <span class="ow">in</span> <span class="n">req</span><span class="p">:</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Determine main field and, if needed, reflectivity field</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;maxZH&quot;</span><span class="p">:</span>
+            <span class="n">refl_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">dt</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">datatype_list</span> <span class="k">if</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">refl_datatypes</span><span class="p">]</span>
+            <span class="n">value_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">dt</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">datatype_list</span> <span class="k">if</span> <span class="n">dt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">refl_datatypes</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">refl_candidates</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: agg_method=&#39;maxZH&#39; requires one reflectivity &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;datatype in </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">refl_datatypes</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">continue</span>
+
+            <span class="n">refl_datatype</span> <span class="o">=</span> <span class="n">refl_candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">refl_field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">refl_datatype</span><span class="p">)</span>
+
+            <span class="c1"># If only reflectivity is provided, return reflectivity at max ZH.</span>
+            <span class="k">if</span> <span class="n">value_candidates</span><span class="p">:</span>
+                <span class="n">datatype</span> <span class="o">=</span> <span class="n">value_candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">datatype</span> <span class="o">=</span> <span class="n">refl_datatype</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">datatype</span> <span class="o">=</span> <span class="n">datatype_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">refl_datatype</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">refl_field_name</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>
 
-        <span class="c1"># Map radarnr -&gt; radar_list index (as in your original code)</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Map radar number to radar_list index</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">ind_rad</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radarnr</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">ind_out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_rad</span>
 
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="n">ind_rad</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="ow">or</span> <span class="p">(</span><span class="n">ind_rad</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar_list</span><span class="p">))</span>
-            <span class="ow">or</span> <span class="p">(</span><span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="p">):</span>
+        <span class="k">if</span> <span class="n">ind_rad</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ind_rad</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar_list</span><span class="p">)</span> <span class="ow">or</span> <span class="n">radar_list</span><span class="p">[</span><span class="n">ind_rad</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: No valid radar for </span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">continue</span>
@@ -595,48 +629,67 @@
             <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">continue</span>
 
-        <span class="c1"># Projection (per radar)</span>
+        <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;maxZH&quot;</span> <span class="ow">and</span> <span class="n">refl_field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: Reflectivity field &#39;</span><span class="si">{</span><span class="n">refl_field_name</span><span class="si">}</span><span class="s2">&#39; not available. &quot;</span>
+                <span class="s2">&quot;Skipping.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Projection: lon/lat -&gt; x/y</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;proj&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">,</span>
             <span class="s2">&quot;lon_0&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
             <span class="s2">&quot;lat_0&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
         <span class="p">}</span>
 
-        <span class="c1"># Lon/lat -&gt; x/y (per radar, because lon_0/lat_0 differ)</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">geographic_to_cartesian</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">projparams</span><span class="p">)</span>
 
-        <span class="c1"># Determine alt: either true altitude or beam height at given ele</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Determine altitude</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">dscfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;truealt&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;_KE&quot;</span><span class="p">):</span>
                 <span class="n">ke</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">_KE</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ke</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="mf">3.0</span>
+
             <span class="n">a</span> <span class="o">=</span> <span class="mf">6378100.0</span>
             <span class="n">re</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">ke</span>
 
             <span class="n">elrad</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;ele&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
             <span class="n">r_ground</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">r_ground</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">elrad</span><span class="p">)</span>
+            <span class="n">r_tmp</span> <span class="o">=</span> <span class="n">r_ground</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">elrad</span><span class="p">)</span>
+
             <span class="n">alt</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">re</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">re</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">elrad</span><span class="p">))</span>
+                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">r_tmp</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">re</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">r_tmp</span> <span class="o">*</span> <span class="n">re</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">elrad</span><span class="p">))</span>
                 <span class="o">-</span> <span class="n">re</span>
             <span class="p">)</span>
             <span class="n">alt</span> <span class="o">=</span> <span class="n">alt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">alt</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">]</span>
 
-        <span class="c1"># Cartesian -&gt; antenna coords (per radar!)</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Cartesian -&gt; antenna coordinates</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">r</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">el</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alt</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
         <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">az</span> <span class="o">=</span> <span class="n">az</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">el</span> <span class="o">=</span> <span class="n">el</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="c1"># Check tolerances</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Tolerance checks</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">d_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;AziTol&quot;</span><span class="p">]:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No bin found (az tol). min d_az=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;AziTol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No bin found (az tol). &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;min d_az=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;AziTol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
             <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">continue</span>
@@ -644,7 +697,8 @@
         <span class="n">d_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;EleTol&quot;</span><span class="p">]:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No bin found (el tol). min d_el=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;EleTol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No bin found (el tol). &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;min d_el=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;EleTol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
             <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">continue</span>
@@ -652,38 +706,72 @@
         <span class="n">d_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_r</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RngTol&quot;</span><span class="p">]:</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No bin found (range tol). min d_r=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_r</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;RngTol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No bin found (range tol). &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;min d_r=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_r</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">dscfg</span><span class="p">[</span><span class="s1">&#39;RngTol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
             <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">continue</span>
 
-        <span class="c1"># Extract value</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Extract / aggregate value</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
             <span class="n">ind_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span>
                 <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+
             <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_r</span><span class="p">]</span>
+
             <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray</span><span class="p">)</span>
             <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r</span><span class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">d_az</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;AziTol&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">d_el</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;EleTol&quot;</span><span class="p">])</span>
             <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RngTol&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_r</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RngTol&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No gates found within tolerance.&quot;</span><span class="p">)</span>
                 <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="k">continue</span>
 
+            <span class="n">data_region</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
+
             <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
-                    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
-                <span class="p">)</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+
             <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span>
+
+            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;maxZH&quot;</span><span class="p">:</span>
+                <span class="n">refl_region</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][</span>
+                    <span class="p">:,</span> <span class="n">ind_r_arr</span>
+                <span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">refl_region</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid reflectivity values found for maxZH.&quot;</span><span class="p">)</span>
+                    <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">continue</span>
+
+                <span class="n">zh_flat_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">refl_region</span><span class="p">)</span>
+                <span class="n">zh_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">zh_flat_idx</span><span class="p">,</span> <span class="n">refl_region</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+                <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">]</span>
+
+                <span class="c1"># Reduce to selected gate indices</span>
+                <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
             <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">:</span>
                 <span class="n">ind_clo_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span>
@@ -704,29 +792,45 @@
                 <span class="n">vmask</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
                 <span class="n">dist_to_clo</span><span class="p">[</span><span class="n">vmask</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid gates found within tolerance.&quot;</span><span class="p">)</span>
+                    <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">continue</span>
+
                 <span class="n">clo_valid_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">),</span> <span class="n">dist_to_clo</span><span class="o">.</span><span class="n">shape</span>
                 <span class="p">)</span>
+
                 <span class="n">val</span> <span class="o">=</span> <span class="n">vmask</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">]</span>
 
-                <span class="c1"># Reduce to single gate indices</span>
+                <span class="c1"># Reduce to selected gate indices</span>
                 <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
                 <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
 
-        <span class="c1"># Antenna coords used</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Antenna coordinates actually used</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">ant_coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="n">ant_coord</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">]</span>
         <span class="n">ant_coord</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">]</span>
-        <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
-        <span class="c1"># Fill value if requested</span>
+        <span class="k">if</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r_arr</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Fill masked values if requested</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="k">pass</span>
 
-        <span class="c1"># Time for the selected ray(s): keep same approach as your original</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Time for selected ray(s)</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">time</span> <span class="o">=</span> <span class="n">cftodatetime</span><span class="p">(</span>
             <span class="n">num2date</span><span class="p">(</span>
                 <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">],</span>
@@ -735,11 +839,12 @@
             <span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="c1"># initialize global data if needed</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Persistent storage</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="k">if</span> <span class="s2">&quot;global_data&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">:</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="c1"># Initialize per-radar persistent storage if needed</span>
         <span class="k">if</span> <span class="n">radarnr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">alt</span><span class="p">],</span>
@@ -748,14 +853,18 @@
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[],</span>
                 <span class="s2">&quot;ref_time&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;ind_rad&quot;</span><span class="p">:</span> <span class="n">ind_rad</span><span class="p">,</span>
+                <span class="s2">&quot;datatype&quot;</span><span class="p">:</span> <span class="n">datatype</span><span class="p">,</span>
             <span class="p">}</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;ref_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
         <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datatype</span>
 
-        <span class="c1"># Build per-radar output dataset</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Per-radar output</span>
+        <span class="c1"># --------------------------------------------------------------</span>
         <span class="n">new_dataset</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
             <span class="s2">&quot;datatype&quot;</span><span class="p">:</span> <span class="n">datatype</span><span class="p">,</span>

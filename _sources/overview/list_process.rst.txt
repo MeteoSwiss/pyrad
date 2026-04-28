@@ -3605,6 +3605,9 @@ parameters
    filter_prec : str. Dataset keyword
      | Give which type of volume should be filtered. None, no filtering;
      |     keep_wet, keep wet volumes; keep_dry, keep dry volumes.
+   range_limits : tuple or list of two floats, optional
+     | Range bounds [rmin, rmax] in meters. If provided, only data within
+     |     this range interval will be used in the monitoring.
    rmax_prec : float. Dataset keyword
      | Maximum range to consider when looking for wet gates [m]
    percent_prec_max : float. Dataset keyword
@@ -4422,6 +4425,10 @@ parameters
      |     'none' : will not perform any averaging and will get all values that
      |         fall within the tolerance in AziTol, EleTol and RngTol, each
      |         with its individual timestamp
+     |     'min' : minimum value within the tolerance in AziTol, EleTol and RngTol
+     |     'max' : maximum value within the tolerance in AziTol, EleTol and RngTol
+     |     'maxZH' : value at the location of the maximum in reflectivity within the tolerance in AziTol, EleTol and RngTol.
+     |         for each radar. Accepted reflectivity datatype names are: dBuZ, dBZ, dBZv, dBuZv, dBZc, dBZvc
      |     Default is 'nearest'
    latlon : boolean. Dataset keyword
      | if True position is obtained from latitude, longitude information,
