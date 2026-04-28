@@ -33,6 +33,7 @@ import os
 from netCDF4 import num2date
 import pyart
 import matplotlib.pyplot as plt
+import importlib.util
 
 from ..io.write_data import write_histogram
 from ..util.radar_utils import compute_histogram_sweep
@@ -47,7 +48,7 @@ from .plots_aux import _CARTOPY_AVAILABLE
 
 if _CARTOPY_AVAILABLE:
     import cartopy
-    from .plots_aux import ShadedReliefESRI, OTM
+    from .plots_aux import ShadedReliefESRI, OTM, OTM_BW
 
 try:
     import shapely
@@ -57,11 +58,9 @@ except ImportError:
     warn("shapely not available", use_debug=False)
     _SHAPELY_AVAILABLE = False
 
-try:
-    import geopandas
-
+if importlib.util.find_spec("geopandas") is not None:
     _GEOPANDAS_AVAILABLE = True
-except ImportError:
+else:
     warn(
         "geopandas not available, you won't be able to display geojson files",
         use_debug=False,
@@ -77,7 +76,6 @@ else:
         + " of pyrad are not supported by ARM pyart!"
     )
     _PYARTMCH_AVAILABLE = False
-
 
 import matplotlib as mpl
 
@@ -471,23 +469,30 @@ def plot_ppi_map(
             )
             maps_list.remove("OTM")
 
-        if "relief" in maps_list or "OTM" in maps_list:
-            # Check cache dir
+        bg_alpha = prdcfg["ppiMapImageConfig"].get("bg_alpha", 1.0)
+        if "relief" in maps_list or "OTM" in maps_list or "OTM_BW" in maps_list:
             if "PYRAD_CACHE" in os.environ:
                 cache_dir = os.environ["PYRAD_CACHE"]
             else:
                 cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+
             if not os.path.exists(cache_dir):
                 os.makedirs(cache_dir)
+
         if "relief" in maps_list:
             tiler = ShadedReliefESRI(cache=cache_dir)
+
+        if "OTM_BW" in maps_list:
+            tiler = OTM_BW(cache=cache_dir)
+
         if "OTM" in maps_list:
             tiler = OTM(cache=cache_dir)
+
         for cartomap in maps_list:
-            if cartomap == "relief" or cartomap == "OTM":
-                ax.add_image(tiler, background_zoom)
+            if cartomap in ["relief", "OTM", "OTM_BW"]:
+                ax.add_image(tiler, background_zoom, alpha=bg_alpha)
+
             elif cartomap == "countries":
-                # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
                     category="cultural",
                     name="admin_0_countries",
@@ -495,98 +500,6 @@ def plot_ppi_map(
                     facecolor="none",
                 )
                 ax.add_feature(countries, edgecolor="black")
-            elif cartomap == "provinces":
-                # Create a feature for States/Admin 1 regions at
-                # 1:resolution from Natural Earth
-                states_provinces = cartopy.feature.NaturalEarthFeature(
-                    category="cultural",
-                    name="admin_1_states_provinces_lines",
-                    scale=resolution,
-                    facecolor="none",
-                )
-                ax.add_feature(states_provinces, edgecolor="gray")
-            elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
-                urban_areas = cartopy.feature.NaturalEarthFeature(
-                    category="cultural", name="urban_areas", scale=resolution
-                )
-                ax.add_feature(
-                    urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
-                )
-            elif cartomap == "roads" and resolution == "10m":
-                roads = cartopy.feature.NaturalEarthFeature(
-                    category="cultural", name="roads", scale=resolution
-                )
-                ax.add_feature(roads, edgecolor="red", facecolor="none")
-            elif cartomap == "railroads" and resolution == "10m":
-                railroads = cartopy.feature.NaturalEarthFeature(
-                    category="cultural", name="railroads", scale=resolution
-                )
-                ax.add_feature(
-                    railroads, edgecolor="green", facecolor="none", linestyle=":"
-                )
-            elif cartomap == "coastlines":
-                ax.coastlines(resolution=resolution)
-            elif cartomap == "lakes":
-                # add lakes
-                lakes = cartopy.feature.NaturalEarthFeature(
-                    category="physical", name="lakes", scale=resolution
-                )
-                ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
-            elif resolution == "10m" and cartomap == "lakes_europe":
-                lakes_europe = cartopy.feature.NaturalEarthFeature(
-                    category="physical", name="lakes_europe", scale=resolution
-                )
-                ax.add_feature(
-                    lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25
-                )
-            elif cartomap == "rivers":
-                # add rivers
-                rivers = cartopy.feature.NaturalEarthFeature(
-                    category="physical",
-                    name="rivers_lake_centerlines",
-                    scale=resolution,
-                )
-                ax.add_feature(rivers, edgecolor="blue", facecolor="none")
-            elif resolution == "10m" and cartomap == "rivers_europe":
-                rivers_europe = cartopy.feature.NaturalEarthFeature(
-                    category="physical", name="rivers_europe", scale=resolution
-                )
-                ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
-            elif (
-                _GEOPANDAS_AVAILABLE
-                and os.path.isfile(cartomap)
-                and cartomap.lower().endswith((".shp", ".geojson", ".json"))
-            ):
-                # --- VECTOR CARTOMAP (GeoPandas: SHP / GeoJSON / JSON) ---
-                try:
-                    gdf = geopandas.read_file(cartomap)
-                    # Detect / assume CRS if missing (Swiss datasets)
-                    if gdf.crs is None:
-                        xmin, _, _, _ = gdf.total_bounds
-                        if xmin > 1e6:
-                            gdf = gdf.set_crs(epsg=2056)  # CH1903+ / LV95
-                        else:
-                            gdf = gdf.set_crs(epsg=21781)  # CH1903 / LV03
-
-                    # Reproject to WGS84 (what Cartopy expects)
-
-                    ax.add_geometries(
-                        gdf.geometry,
-                        crs=cartopy.crs.epsg(gdf.crs.to_epsg()),
-                        facecolor="none",
-                        edgecolor="gray",
-                        linewidth=1.2,
-                    )
-                except Exception as e:
-                    warn(f"Failed to load cartomap {cartomap}: {e}")
-            else:
-                warn(
-                    "cartomap "
-                    + cartomap
-                    + " for resolution "
-                    + resolution
-                    + " not available"
-                )
     if "rngRing" in prdcfg["ppiMapImageConfig"]:
         if prdcfg["ppiMapImageConfig"]["rngRing"] > 0:
             rng_rings = np.arange(

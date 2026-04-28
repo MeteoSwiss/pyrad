@@ -37,6 +37,7 @@ mpl.rcParams.update({"font.family": "sans-serif"})
 _CARTOPY_AVAILABLE = False
 try:
     from cartopy.io.img_tiles import GoogleTiles
+    from PIL import Image
 
     # Define ESRI terrain tiles
     class ShadedReliefESRI(GoogleTiles):
@@ -61,6 +62,21 @@ try:
         def _image_url(self, tile):
             x, y, z = tile
             return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
+
+    class OTM_BW(OTM):  # BW OTM
+        """OpenTopoMap tiler converted to grayscale."""
+
+        def get_image(self, tile):
+            img, extent, origin = super().get_image(tile)
+
+            # Convert numpy array -> PIL Image if needed
+            if isinstance(img, np.ndarray):
+                img = Image.fromarray(img)
+
+            # Now safe to convert
+            img = img.convert("L").convert("RGB")
+
+            return img, extent, origin
 
     _CARTOPY_AVAILABLE = True
 except ImportError:

@@ -221,6 +221,9 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         filter_prec : str. Dataset keyword
             Give which type of volume should be filtered. None, no filtering;
             keep_wet, keep wet volumes; keep_dry, keep dry volumes.
+        range_limits : tuple or list of two floats, optional
+            Range bounds [rmin, rmax] in meters. If provided, only data within
+            this range interval will be used in the monitoring.
         rmax_prec : float. Dataset keyword
             Maximum range to consider when looking for wet gates [m]
         percent_prec_max : float. Dataset keyword
@@ -296,6 +299,9 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         field = deepcopy(radar.fields[field_name]["data"])
         field[mask] = np.ma.masked
 
+        # Range limits
+        range_limits = dscfg.get("range_limits", None)
+
         # filter wet or dry volumes
         filter_prec = dscfg.get("filter_prec", "None")
         if filter_prec in ("keep_wet", "keep_dry"):
@@ -312,7 +318,6 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
 
             rmax_prec = dscfg.get("rmax_prec", 0.0)
             percent_prec_max = dscfg.get("percent_prec_max", 10.0)
-
             ngates = radar.ngates
             if rmax_prec > 0.0:
                 ngates = len(radar.range["data"][radar.range["data"] < rmax_prec])
@@ -363,7 +368,16 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
         if regular_grid:
             ray_ind = dscfg["global_data"]["ray_ind"]
             rng_ind = dscfg["global_data"]["rng_ind"]
-            field = field[ray_ind, rng_ind].compressed()
+
+            field_vals = field[ray_ind, rng_ind]
+            ranges = radar.range["data"][rng_ind]
+
+            if range_limits is not None:
+                rmin, rmax = range_limits
+                valid = np.logical_and(ranges >= rmin, ranges <= rmax)
+                field_vals = field_vals[valid]
+
+            field = field_vals.compressed()
         else:
             azi_tol = dscfg.get("azi_tol", 0.5)
             ele_tol = dscfg.get("ele_tol", 0.5)
@@ -394,7 +408,15 @@ def process_gc_monitoring(procstatus, dscfg, radar_list=None):
                 rng_ind[i] = ind_rng_rad
             ray_ind = ray_ind.compressed()
             rng_ind = rng_ind.compressed()
-            field = field[ray_ind, rng_ind].compressed()
+            field_vals = field[ray_ind, rng_ind]
+            ranges = radar.range["data"][rng_ind]
+
+            if range_limits is not None:
+                rmin, rmax = range_limits
+                valid = np.logical_and(ranges >= rmin, ranges <= rmax)
+                field_vals = field_vals[valid]
+
+            field = field_vals.compressed()
 
         # put gates with values off limits to limit
         # and compute histogram

@@ -47,6 +47,43 @@ mpl_colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 def generate_timeseries_products(dataset, prdcfg):
     """
     Generates time series products. Accepted product types:
+        'POINT_TS': Writes and plots point time series for one or multiple radars.
+
+            It generates a CSV file containing the time series values at a single
+            point or radar gate. If multiple radar entries are present in the
+            dataset, all radar series are written to the same CSV file and plotted
+            together in one figure. If the timestamps of the different radars don't agree
+            an outer join will be performed and missing timestamps will be filled with
+            NaNs
+
+            User defined parameters:
+                set_time_info: bool
+                    If True, date information is added to the output directory and
+                    filenames. Default is True.
+                do_only_final: bool
+                    If True, the product is only generated when dataset['final'] is
+                    True. Default is True.
+                RadarName: list of str
+                    Names of the radars to use as plot labels. The order should
+                    match the RADAR entries in the dataset.
+                basepath: str
+                    Base path where the product output directory is created.
+                procname: str
+                    Processing name used to build the output directory.
+                dstype: str
+                    Dataset type used in the output filename.
+                imgformat: list of str
+                    List of image formats to generate.
+                dpi: int
+                    Figure resolution in dots per inch. Default is 72.
+                vmin: float or None
+                    Minimum y-axis value used in the plot. If None, the limit is
+                    determined automatically.
+                vmax: float or None
+                    Maximum y-axis value used in the plot. If None, the limit is
+                    determined automatically.
+                label: str
+                    Optional label added to the plot title.
 
     'COMPARE_POINT_SENSOR': Plots and/or compares radar and co-located gauge (sensor)
         data at a point of interest. The product always writes a combined CSV file
@@ -56,6 +93,12 @@ def generate_timeseries_products(dataset, prdcfg):
         can be either a dual time series comparison or a scatter plot of radar vs
         sensor.
         User defined parameters:
+            set_time_info: bool
+                If True, date information is added to the output directory and
+                filenames. Default is True.
+            do_only_final: bool
+                If True, the product is only generated when dataset['final'] is
+                True. Default is True.
             dpi: int
                 The pixel density of the plot. Default 72
             vmin, vmax: float
@@ -253,128 +296,142 @@ def generate_timeseries_products(dataset, prdcfg):
         return csvfname
 
     if prdcfg["type"] == "POINT_TS":
+        # ---- configuration ----
         set_time_info = prdcfg.get("set_time_info", True)
+        do_only_final = prdcfg.get("do_only_final", True)
+        radar_names = prdcfg["RadarName"]
+        basepath = prdcfg["basepath"]
+        procname = prdcfg["procname"]
+        dstype = prdcfg["dstype"]
+        imgformat = prdcfg["imgformat"]
+        label = prdcfg.get("label", "")
+        dpi = prdcfg.get("dpi", 72)
+        vmin = prdcfg.get("vmin", None)
+        vmax = prdcfg.get("vmax", None)
 
-        if prdcfg.get("do_only_final", True) and not dataset["final"]:
+        if do_only_final and not dataset["final"]:
             return None
 
-        # ---- multi-radar keys ----
+        # ---- radar entries ----
         radar_keys = sorted(
-            [k for k in dataset.keys() if isinstance(k, str) and k.startswith("RADAR")]
+            key
+            for key in dataset.keys()
+            if isinstance(key, str) and key.startswith("RADAR")
         )
+
         if not radar_keys:
             warn("Unable to plot time series. No radar entries in dataset")
             return None
 
-        # Reference radar for metadata/filenames
+        # Reference radar for metadata, filenames and time vector
         ds0 = dataset[radar_keys[0]]
+        datatype = ds0["datatype"]
 
-        # Gate info (use reference radar)
-        is_single_radar = len(prdcfg["RadarName"]) == 1
-        has_antenna = "antenna_coordinates_az_el_r" in ds0
+        # ---- gate / point information ----
+        is_single_radar = len(radar_names) == 1
+        has_antenna_coordinates = "antenna_coordinates_az_el_r" in ds0
 
-        if has_antenna and is_single_radar:
-            az, el, r = ds0["antenna_coordinates_az_el_r"]
-            gateinfo = f"az{az:.1f}r{r:.1f}el{el:.1f}"
+        if has_antenna_coordinates and is_single_radar:
+            az, el, rng = ds0["antenna_coordinates_az_el_r"]
+            prdcfginfo = f"az{az:.1f}r{rng:.1f}el{el:.1f}"
         else:
             lon, lat, alt = ds0["point_coordinates_WGS84_lon_lat_alt"]
-            gateinfo = f"lon{lon:.3f}lat{lat:.3f}alt{alt:.1f}"
+            prdcfginfo = f"lon{lon:.3f}lat{lat:.3f}alt{alt:.1f}"
 
-        timeformat = None
-        timeinfo = None
-        if set_time_info:
-            timeformat = "%Y%m%d"
-            timeinfo = ds0.get("ref_time", None)
+        # ---- time information ----
+        timeformat = "%Y%m%d" if set_time_info else None
+        timeinfo = ds0.get("ref_time", None) if set_time_info else None
 
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdsavedir,
-            timeinfo=timeinfo,
-        )
-
-        # One CSV for all radars
-        csvfname = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            ds0["datatype"],
-            ["csv"],
-            prdcfginfo=gateinfo,
-            timeinfo=timeinfo,
-            timeformat=timeformat,
-        )[0]
-        csvfname = savedir + csvfname
-
-        if "antenna_coordinates_az_el_r" in ds0:
-            write_ts_polar_data(dataset, csvfname)  # multi-radar supported
-        else:
-            write_ts_grid_data(dataset, csvfname)  # multi-radar supported
-        print("saved CSV file: " + csvfname)
-
-        dpi = prdcfg.get("dpi", 72)
-        vmin = prdcfg.get("vmin", None)
-        vmax = prdcfg.get("vmax", None)
-        do_only_final = prdcfg.get("do_only_final", True)
-
-        # ---- time vector from dataset  ----
         date = ds0.get("time", None)
         if date is None or len(date) == 0:
             warn("Unable to plot time series. No valid time vector")
             return None
 
-        # ---- per-radar series from dataset ----
-        series_list = []
-        for radarnr in radar_keys:
-            v = dataset[radarnr].get("value", None)
-            if v is None:
-                series_list.append(np.full(len(date), np.nan))
-                continue
+        timeinfo_fig = date[0] if set_time_info else None
 
-            # masked -> nan
-            if np.ma.isMaskedArray(v):
-                v = v.filled(np.nan)
-            else:
-                try:
-                    v = np.array(
-                        [np.nan if x is np.ma.masked else x for x in v], dtype=float
-                    )
-                except Exception:
-                    v = np.asarray(v)
+        # ---- output paths ----
+        savedir = get_save_dir(
+            basepath,
+            procname,
+            dssavedir,
+            prdsavedir,
+            timeinfo=timeinfo,
+        )
 
-            series_list.append(v)
-
-        timeinfo_fig = None
-        if set_time_info:
-            timeinfo_fig = date[0]
+        csvfname = make_filename(
+            "ts",
+            dstype,
+            datatype,
+            ["csv"],
+            prdcfginfo=prdcfginfo,
+            timeinfo=timeinfo,
+            timeformat=timeformat,
+        )[0]
+        csvfname = savedir + csvfname
 
         figfname_list = make_filename(
             "ts",
-            prdcfg["dstype"],
-            ds0["datatype"],
-            prdcfg["imgformat"],
-            prdcfginfo=gateinfo,
+            dstype,
+            datatype,
+            imgformat,
+            prdcfginfo=prdcfginfo,
             timeinfo=timeinfo_fig,
             timeformat=timeformat,
         )
-        figfname_list = [savedir + fn for fn in figfname_list]
+        figfname_list = [savedir + fname for fname in figfname_list]
 
-        titl = "Time Series " + date[0].strftime("%Y-%m-%d")
-        labely = generate_field_name_str(ds0["datatype"])
+        # ---- write CSV ----
+        if has_antenna_coordinates:
+            write_ts_polar_data(dataset, csvfname)
+        else:
+            write_ts_grid_data(dataset, csvfname)
 
-        # Multi-series plot: pass list-of-lists so each inner list becomes multiple lines
+        print("saved CSV file: " + csvfname)
+
+        # ---- extract radar time series ----
+        series_list = []
+        dates_list = []
+        for radar_key in radar_keys:
+            values = dataset[radar_key].get("value", None)
+            times = dataset[radar_key].get("time", None)
+            if values is None:
+                series_list.append(np.full(len(date), np.nan))
+                continue
+
+            if np.ma.isMaskedArray(values):
+                values = values.filled(np.nan)
+            else:
+                try:
+                    values = np.array(
+                        [
+                            np.nan if value is np.ma.masked else value
+                            for value in values
+                        ],
+                        dtype=float,
+                    )
+                except Exception:
+                    values = np.asarray(values)
+
+            series_list.append(values)
+            dates_list.append(times)
+
+        # ---- plot ----
+        title = f"Time Series {label} {date[0].strftime('%Y-%m-%d')}"
+        labely = generate_field_name_str(datatype)
+
         plot_timeseries(
-            date,
-            [series_list],
+            dates_list,
+            series_list,
             figfname_list,
             labelx="Time UTC",
             labely=labely,
-            labels=prdcfg["RadarName"],
-            title=titl,
+            labels=radar_names,
+            title=title,
             dpi=dpi,
             ymin=vmin,
             ymax=vmax,
         )
+
         print("----- save to " + " ".join(figfname_list))
 
         figfname_list.append(csvfname)

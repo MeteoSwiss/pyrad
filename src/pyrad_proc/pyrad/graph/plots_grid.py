@@ -33,7 +33,7 @@ from .plots_aux import _CARTOPY_AVAILABLE
 
 if _CARTOPY_AVAILABLE:
     import cartopy
-    from .plots_aux import ShadedReliefESRI, OTM
+    from .plots_aux import ShadedReliefESRI, OTM, OTM_BW
 
 try:
     import geopandas
@@ -275,29 +275,34 @@ def plot_surface(
             )
 
     if embellish:
-        if "relief" in maps_list and "OTM" in maps_list:
+        if "relief" in maps_list or "OTM" in maps_list or "OTM_BW" in maps_list:
             warn(
                 "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
                 use_debug=False,
             )
             maps_list.remove("OTM")
 
+        bg_alpha = prdcfg["ppiMapImageConfig"].get("bg_alpha", 1.0)
         if "relief" in maps_list or "OTM" in maps_list:
-            # Check cache dir
             if "PYRAD_CACHE" in os.environ:
                 cache_dir = os.environ["PYRAD_CACHE"]
             else:
                 cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+
             if not os.path.exists(cache_dir):
                 os.makedirs(cache_dir)
+
         if "relief" in maps_list:
             tiler = ShadedReliefESRI(cache=cache_dir)
-        if "OTM" in maps_list:
-            tiler = OTM(cache=cache_dir)
+
+        if "OTM_BW" in maps_list:
+            tiler = OTM_BW(cache=cache_dir)
+
         ax = plt.gca()
         for cartomap in maps_list:
-            if cartomap == "relief" or cartomap == "OTM":
-                ax.add_image(tiler, background_zoom)
+            if cartomap in ["relief", "OTM", "OTM_BW"]:
+                ax.add_image(tiler, background_zoom, alpha=bg_alpha)
+
             elif cartomap == "countries":
                 # add countries
                 countries = cartopy.feature.NaturalEarthFeature(

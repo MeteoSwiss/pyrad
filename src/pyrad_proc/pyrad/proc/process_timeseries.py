@@ -61,6 +61,10 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             'none' : will not perform any averaging and will get all values that
                 fall within the tolerance in AziTol, EleTol and RngTol, each
                 with its individual timestamp
+            'min' : minimum value within the tolerance in AziTol, EleTol and RngTol
+            'max' : maximum value within the tolerance in AziTol, EleTol and RngTol
+            'maxZH' : value at the location of the maximum in reflectivity within the tolerance in AziTol, EleTol and RngTol.
+                for each radar. Accepted reflectivity datatype names are: dBuZ, dBZ, dBZv, dBuZv, dBZc, dBZvc
             Default is 'nearest'
         latlon : boolean. Dataset keyword
             if True position is obtained from latitude, longitude information,
@@ -107,49 +111,59 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
     if procstatus == 0:
         return None, None
 
-    # Parse requested radars + datatype(s) from dscfg["datatype"]
-    # Expected: one entry per radar (e.g., "RADAR001:..." etc.)
-    req = []
+    refl_datatypes = {"dBuZ", "dBZ", "dBZv", "dBuZv", "dBZc", "dBZvc"}
+    valid_agg_methods = [
+        "nearest",
+        "nearest_valid",
+        "average",
+        "max",
+        "min",
+        "maxZH",
+        "none",
+    ]
+
+    # ------------------------------------------------------------------
+    # Parse requested radars + datatype(s)
+    # ------------------------------------------------------------------
+    req_by_radar = {}
     for datatypedescr in dscfg["datatype"]:
         radarnr, _, datatype, _, _ = get_datatype_fields(datatypedescr)
-        req.append((radarnr, datatype))
+        req_by_radar.setdefault(radarnr, []).append(datatype)
+
+    req = list(req_by_radar.items())
 
     if not dscfg.get("latlon", False) and len(req) > 1:
         warn("Multi-radar point measurement requires dscfg['latlon']=True.")
         return None, None
 
-    # (Optional) sanity check: all datatypes equal
-    datatypes = {dt for _, dt in req}
-    if len(datatypes) != 1:
-        warn(
-            f"Multiple datatypes requested ({datatypes}). This function assumes one datatype."
-        )
-    datatype0 = req[0][1]
+    agg_method = dscfg.get("agg_method", "nearest")
+    if agg_method not in valid_agg_methods:
+        warn("Invalid agg_method. Using 'nearest'.")
+        agg_method = "nearest"
 
-    field_name = get_fieldname_pyart(datatype0)
-
-    # -----------------------
-    # Finalization (procstatus==2)
-    # -----------------------
+    # ------------------------------------------------------------------
+    # Finalization
+    # ------------------------------------------------------------------
     if procstatus == 2:
         if dscfg["initialized"] == 0:
             return None, None
 
         out = {}
         ind_out = {}
-        for radarnr, datatype in req:
+
+        for radarnr, datatype_list in req:
             if radarnr not in dscfg["global_data"]:
-                # radar never successfully initialized
                 out[radarnr] = None
                 ind_out[radarnr] = None
                 continue
 
             gd = dscfg["global_data"][radarnr]
+
             out[radarnr] = {
                 "time": gd["time"],
                 "value": gd["value"],
                 "ref_time": gd["ref_time"],
-                "datatype": datatype,
+                "datatype": gd["datatype"],
                 "point_coordinates_WGS84_lon_lat_alt": gd[
                     "point_coordinates_WGS84_lon_lat_alt"
                 ],
@@ -162,38 +176,58 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         out["final"] = True
         return out, ind_out
 
-    # -----------------------
-    # Processing (procstatus==1)
-    # -----------------------
+    # ------------------------------------------------------------------
+    # Processing
+    # ------------------------------------------------------------------
     if radar_list is None:
         warn("ERROR: radar_list is None")
         return None, None
 
-    # Common point definition (lon/lat) is shared; per-radar az/el/r differs
     lon = dscfg["lon"]
     lat = dscfg["lat"]
-
     fill_value = dscfg.get("fill_value", None)
-    agg_method = dscfg.get("agg_method", "nearest")
-    if agg_method not in ["nearest", "nearest_valid", "average", "none"]:
-        warn("Invalid agg_method. Using 'nearest'.")
-        agg_method = "nearest"
 
     out = {}
     ind_out = {}
 
-    for radarnr, datatype in req:
+    for radarnr, datatype_list in req:
+        # --------------------------------------------------------------
+        # Determine main field and, if needed, reflectivity field
+        # --------------------------------------------------------------
+        if agg_method == "maxZH":
+            refl_candidates = [dt for dt in datatype_list if dt in refl_datatypes]
+            value_candidates = [dt for dt in datatype_list if dt not in refl_datatypes]
+
+            if not refl_candidates:
+                warn(
+                    f"{radarnr}: agg_method='maxZH' requires one reflectivity "
+                    f"datatype in {sorted(refl_datatypes)}."
+                )
+                out[radarnr] = None
+                continue
+
+            refl_datatype = refl_candidates[0]
+            refl_field_name = get_fieldname_pyart(refl_datatype)
+
+            # If only reflectivity is provided, return reflectivity at max ZH.
+            if value_candidates:
+                datatype = value_candidates[0]
+            else:
+                datatype = refl_datatype
+        else:
+            datatype = datatype_list[0]
+            refl_datatype = None
+            refl_field_name = None
+
         field_name = get_fieldname_pyart(datatype)
 
-        # Map radarnr -> radar_list index (as in your original code)
+        # --------------------------------------------------------------
+        # Map radar number to radar_list index
+        # --------------------------------------------------------------
         ind_rad = int(radarnr[5:8]) - 1
         ind_out[radarnr] = ind_rad
 
-        if (
-            (ind_rad < 0)
-            or (ind_rad >= len(radar_list))
-            or (radar_list[ind_rad] is None)
-        ):
+        if ind_rad < 0 or ind_rad >= len(radar_list) or radar_list[ind_rad] is None:
             warn(f"ERROR: No valid radar for {radarnr}")
             out[radarnr] = None
             continue
@@ -205,48 +239,67 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             out[radarnr] = None
             continue
 
-        # Projection (per radar)
+        if agg_method == "maxZH" and refl_field_name not in radar.fields:
+            warn(
+                f"{radarnr}: Reflectivity field '{refl_field_name}' not available. "
+                "Skipping."
+            )
+            out[radarnr] = None
+            continue
+
+        # --------------------------------------------------------------
+        # Projection: lon/lat -> x/y
+        # --------------------------------------------------------------
         projparams = {
             "proj": "pyart_aeqd",
             "lon_0": radar.longitude["data"],
             "lat_0": radar.latitude["data"],
         }
 
-        # Lon/lat -> x/y (per radar, because lon_0/lat_0 differ)
         x, y = pyart.core.geographic_to_cartesian(lon, lat, projparams)
 
-        # Determine alt: either true altitude or beam height at given ele
+        # --------------------------------------------------------------
+        # Determine altitude
+        # --------------------------------------------------------------
         if not dscfg.get("truealt", False):
             if hasattr(pyart.config, "_KE"):
                 ke = pyart.config._KE
             else:
                 ke = 4.0 / 3.0
+
             a = 6378100.0
             re = a * ke
 
             elrad = dscfg["ele"] * np.pi / 180.0
             r_ground = np.sqrt(x**2.0 + y**2.0)
-            r = r_ground / np.cos(elrad)
+            r_tmp = r_ground / np.cos(elrad)
+
             alt = (
                 radar.altitude["data"]
-                + np.sqrt(r**2.0 + re**2.0 + 2.0 * r * re * np.sin(elrad))
+                + np.sqrt(r_tmp**2.0 + re**2.0 + 2.0 * r_tmp * re * np.sin(elrad))
                 - re
             )
             alt = alt[0]
         else:
             alt = dscfg["alt"]
 
-        # Cartesian -> antenna coords (per radar!)
+        # --------------------------------------------------------------
+        # Cartesian -> antenna coordinates
+        # --------------------------------------------------------------
         r, az, el = pyart.core.cartesian_to_antenna(x, y, alt - radar.altitude["data"])
+
         r = r[0]
         az = az[0]
         el = el[0]
 
-        # Check tolerances
+        # --------------------------------------------------------------
+        # Tolerance checks
+        # --------------------------------------------------------------
         d_az = np.abs(radar.azimuth["data"] - az)
         if np.min(d_az) > dscfg["AziTol"]:
             warn(
-                f"{radarnr}: No bin found (az tol). min d_az={np.min(d_az)} > {dscfg['AziTol']}"
+                f"{radarnr}: No bin found (az tol). "
+                f"min d_az={np.min(d_az)} > {dscfg['AziTol']}"
             )
             out[radarnr] = None
             continue
@@ -254,7 +307,8 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         d_el = np.abs(radar.elevation["data"] - el)
         if np.min(d_el) > dscfg["EleTol"]:
             warn(
-                f"{radarnr}: No bin found (el tol). min d_el={np.min(d_el)} > {dscfg['EleTol']}"
+                f"{radarnr}: No bin found (el tol). "
+                f"min d_el={np.min(d_el)} > {dscfg['EleTol']}"
             )
             out[radarnr] = None
             continue
@@ -262,38 +316,72 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         d_r = np.abs(radar.range["data"] - r)
         if np.min(d_r) > dscfg["RngTol"]:
             warn(
-                f"{radarnr}: No bin found (range tol). min d_r={np.min(d_r)} > {dscfg['RngTol']}"
+                f"{radarnr}: No bin found (range tol). "
+                f"min d_r={np.min(d_r)} > {dscfg['RngTol']}"
             )
             out[radarnr] = None
             continue
 
-        # Extract value
+        # --------------------------------------------------------------
+        # Extract / aggregate value
+        # --------------------------------------------------------------
         if agg_method == "nearest":
             ind_ray = np.argmin(
                 np.abs(radar.azimuth["data"] - az)
                 + np.abs(radar.elevation["data"] - el)
             )
             ind_r = np.argmin(np.abs(radar.range["data"] - r))
+
             val = radar.fields[field_name]["data"][ind_ray, ind_r]
+
             ind_ray_arr = np.atleast_1d(ind_ray)
             ind_r_arr = np.atleast_1d(ind_r)
+
         else:
             ind_ray_arr = np.where(
                 (d_az <= dscfg["AziTol"]) & (d_el <= dscfg["EleTol"])
             )[0]
-            ind_r_arr = np.where(np.abs(radar.range["data"] - r) < dscfg["RngTol"])[0]
+
+            ind_r_arr = np.where(d_r <= dscfg["RngTol"])[0]
 
             if ind_ray_arr.size == 0 or ind_r_arr.size == 0:
                 warn(f"{radarnr}: No gates found within tolerance.")
                 out[radarnr] = None
                 continue
 
+            data_region = radar.fields[field_name]["data"][ind_ray_arr][:, ind_r_arr]
+
             if agg_method == "average":
-                val = np.nanmean(
-                    radar.fields[field_name]["data"].data[ind_ray_arr][:, ind_r_arr]
-                )
+                val = np.ma.mean(data_region)
+
+            elif agg_method == "max":
+                val = np.ma.max(data_region)
+
+            elif agg_method == "min":
+                val = np.ma.min(data_region)
+
             elif agg_method == "none":
-                val = radar.fields[field_name]["data"].data[ind_ray_arr][:, ind_r_arr]
+                val = data_region
+
+            elif agg_method == "maxZH":
+                refl_region = radar.fields[refl_field_name]["data"][ind_ray_arr][
+                    :, ind_r_arr
+                ]
+
+                if np.ma.count(refl_region) == 0:
+                    warn(f"{radarnr}: No valid reflectivity values found for maxZH.")
+                    out[radarnr] = None
+                    continue
+
+                zh_flat_idx = np.ma.argmax(refl_region)
+                zh_idx = np.unravel_index(zh_flat_idx, refl_region.shape)
+
+                val = data_region[zh_idx]
+
+                # Reduce to selected gate indices
+                ind_ray_arr = np.atleast_1d(ind_ray_arr[zh_idx[0]])
+                ind_r_arr = np.atleast_1d(ind_r_arr[zh_idx[1]])
+
             elif agg_method == "nearest_valid":
                 ind_clo_ray = np.argmin(
                     np.abs(radar.azimuth["data"] - az)
@@ -314,29 +402,45 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                 vmask = radar.fields[field_name]["data"][ind_ray_arr][:, ind_r_arr]
                 dist_to_clo[vmask.mask] = np.inf
 
+                if not np.isfinite(dist_to_clo).any():
+                    warn(f"{radarnr}: No valid gates found within tolerance.")
+                    out[radarnr] = None
+                    continue
+
                 clo_valid_idx = np.unravel_index(
                     np.argmin(dist_to_clo), dist_to_clo.shape
                 )
+
                 val = vmask[clo_valid_idx]
 
-                # Reduce to single gate indices
+                # Reduce to selected gate indices
                 ind_ray_arr = np.atleast_1d(ind_ray_arr[clo_valid_idx[0]])
                 ind_r_arr = np.atleast_1d(ind_r_arr[clo_valid_idx[1]])
 
-        # Antenna coords used
+        # --------------------------------------------------------------
+        # Antenna coordinates actually used
+        # --------------------------------------------------------------
         ant_coord = np.empty((3, ind_ray_arr.size), np.float32)
         ant_coord[0, :] = radar.azimuth["data"][ind_ray_arr]
         ant_coord[1, :] = radar.elevation["data"][ind_ray_arr]
-        ant_coord[2, :] = np.zeros(ind_ray_arr.size) + radar.range["data"][ind_r_arr[0]]
 
-        # Fill value if requested
+        if ind_r_arr.size == ind_ray_arr.size:
+            ant_coord[2, :] = radar.range["data"][ind_r_arr]
+        else:
+            ant_coord[2, :] = radar.range["data"][ind_r_arr[0]]
+
+        # --------------------------------------------------------------
+        # Fill masked values if requested
+        # --------------------------------------------------------------
         if fill_value is not None:
             try:
                 val = val.filled(fill_value)
             except AttributeError:
                 pass
 
-        # Time for the selected ray(s): keep same approach as your original
+        # --------------------------------------------------------------
+        # Time for selected ray(s)
+        # --------------------------------------------------------------
         time = cftodatetime(
             num2date(
                 radar.time["data"][ind_ray_arr],
@@ -345,11 +449,12 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             )
         )
 
-        # initialize global data if needed
+        # --------------------------------------------------------------
+        # Persistent storage
+        # --------------------------------------------------------------
         if "global_data" not in dscfg:
             dscfg["global_data"] = {}
 
-        # Initialize per-radar persistent storage if needed
         if radarnr not in dscfg["global_data"]:
             dscfg["global_data"][radarnr] = {
                 "point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt],
@@ -358,14 +463,18 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                 "value": [],
                 "ref_time": dscfg["timeinfo"],
                 "ind_rad": ind_rad,
+                "datatype": datatype,
             }
             dscfg["initialized"] = 1
 
         dscfg["global_data"][radarnr]["ref_time"] = dscfg["timeinfo"]
         dscfg["global_data"][radarnr]["value"].append(val)
         dscfg["global_data"][radarnr]["time"].append(time[0])
+        dscfg["global_data"][radarnr]["datatype"] = datatype
 
-        # Build per-radar output dataset
+        # --------------------------------------------------------------
+        # Per-radar output
+        # --------------------------------------------------------------
         new_dataset = {
             "value": dscfg["global_data"][radarnr]["value"],
             "datatype": datatype,

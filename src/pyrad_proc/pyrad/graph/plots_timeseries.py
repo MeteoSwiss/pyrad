@@ -20,7 +20,7 @@ import pyart
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import re
-
+import pandas as pd
 import numpy as np
 import datetime
 
@@ -41,7 +41,7 @@ def plot_timeseries(
     fname_list,
     labelx="Time [UTC]",
     labely="Value",
-    labels=None,  # <- changed default
+    labels=None,
     title="Time Series",
     period=0,
     timeformat=None,
@@ -57,36 +57,50 @@ def plot_timeseries(
 
     Behavior
     --------
-    - Legacy: if `data_list` is a list of 1D arrays (one per series), plot them.
-    - Multi-timeseries: if `data_list` is a list of lists/tuples, each inner list
-      represents a "group" (e.g., multiple radars) and all series in the group
-      are plotted as lines. If labels is None, defaults to RADAR001, RADAR002, ...
+    - Legacy single-time-vector mode:
+        tvec = common_time_vector
+        data_list = [series1, series2]
 
-      Examples:
-        data_list = [series1, series2]                 -> 2 lines (legacy)
-        data_list = [[r1, r2, r3]]                     -> 3 lines
-        data_list = [[r1, r2], [r1b, r2b]]             -> 4 lines (all plotted)
+      All series are plotted against the same time vector.
+
+    - Multi-time-vector mode:
+        tvec = [time1, time2, time3]
+        data_list = [series1, series2, series3]
+
+      Each series is plotted against its corresponding time vector. This allows
+      plotting time series with different temporal supports.
+
+    - Grouped multi-timeseries mode:
+        data_list = [[r1, r2, r3]]
+
+      If tvec is also grouped in the same way:
+
+        tvec = [[t1, t2, t3]]
+
+      then each radar uses its own time vector.
+
+      If tvec is a single vector, it is reused for all plotted series.
 
     Parameters
     ----------
-    tvec : array-like of datetime
-        Time vector.
+    tvec : array-like of datetime, or list of array-like of datetime
+        Either one common time vector or one time vector per plotted data
+        series. Each time vector must have the same length as its corresponding
+        value series.
     data_list : list
-        List of series (legacy) OR list of lists of series (multi-timeseries).
+        List of series, or list of lists of series.
     fname_list : list of str
         Output filenames.
     labels : list of str or None
-        Legend labels (one per plotted line). If None and multi-timeseries is
-        detected, defaults to RADAR001, RADAR002, ... up to number of lines.
-        If None in legacy mode, no legend is shown.
+        Legend labels, one per plotted line. If None and grouped mode is
+        detected, defaults to RADAR001, RADAR002, ...
     period : float
-        Measurement period in seconds used to compute accumulation. If 0 no
+        Measurement period in seconds used to compute accumulation. If 0, no
         accumulation is computed.
     timeformat : str, optional
         Datetime formatter string for x-axis.
     colors, linestyles, markers : list, optional
-        Styling per plotted line (length must match number of plotted lines),
-        or None to use matplotlib defaults.
+        Styling per plotted line.
     ymin, ymax : float, optional
         Y-axis limits.
     dpi : int
@@ -97,59 +111,83 @@ def plot_timeseries(
     fname_list : list of str
         Output filenames.
     """
-    tvec = np.array(tvec)  # convert from pandas if needed
-    if tvec.size == 0:
-        raise ValueError("tvec is empty")
 
-    # ---- normalize data_list into a flat list of series ----
-    def _is_sequence_of_series(obj):
-        # True if obj looks like a list/tuple of arrays (multi-timeseries group)
+    def _is_series(obj):
+        return isinstance(obj, (list, tuple, np.ndarray, pd.Series))
+
+    def _is_grouped(obj):
         if not isinstance(obj, (list, tuple)):
             return False
         if len(obj) == 0:
             return False
-        return isinstance(obj[0], (list, tuple, np.ndarray))
+        return isinstance(obj[0], (list, tuple, np.ndarray, pd.Series))
 
-    multi_mode = _is_sequence_of_series(data_list) and isinstance(
-        data_list[0], (list, tuple)
-    )
-    if multi_mode:
-        # Flatten groups: [[a,b],[c]] -> [a,b,c]
-        series = []
-        for grp in data_list:
-            series.extend(list(grp))
-        data_series = series
-    else:
-        # Legacy: [a,b,c] -> [a,b,c]
-        data_series = list(data_list)
+    def _flatten_groups(obj):
+        flat = []
+        for group in obj:
+            flat.extend(list(group))
+        return flat
 
-    n_lines = len(data_series)
+    def _to_array(obj):
+        return np.asarray(obj)
+
+    # ---- normalize data_list into a flat list of series ----
+    multi_mode = _is_grouped(data_list)
+    if not multi_mode:
+        data_list = list(data_list)
+
+    n_lines = len(data_list)
     if n_lines == 0:
         raise ValueError("data_list contains no series")
 
+    # ---- normalize tvec into one time vector per data series ----
+    tvec_is_grouped = _is_grouped(tvec)
+    if not tvec_is_grouped:
+        if multi_mode:
+            tvec_list = [tvec] * n_lines
+        else:
+            tvec_list = [tvec]
+    else:
+        tvec_list = tvec
+        if len(tvec_list) != n_lines:
+            raise ValueError(
+                "Number of time vectors must match number of data series. "
+                f"Got {len(tvec_list)} time vectors and {n_lines} data series."
+            )
+
+    # ---- convert and validate lengths ----
+    for i in range(n_lines):
+        data_list[i] = _to_array(data_list[i])
+        tvec_list[i] = np.asanyarray(tvec_list[i])
+
+        if tvec_list[i].size == 0:
+            raise ValueError(f"Time vector {i} is empty")
+
+        if len(tvec_list[i]) != len(data_list[i]):
+            raise ValueError(
+                f"Time vector and data series {i} have different lengths: "
+                f"{len(tvec_list[i])} != {len(data_list[i])}"
+            )
+
     # ---- accumulation if requested ----
     if period > 0:
-        for i, data in enumerate(data_series):
-            d = np.asanyarray(data)
-            d = d * (period / 3600.0)
-            data_series[i] = np.ma.cumsum(d)
+        for i, data in enumerate(data_list):
+            data_list[i] = np.ma.cumsum(data * (period / 3600.0))
 
     # ---- default labels ----
     if labels is None and multi_mode:
-        labels = [f"RADAR{idx+1:03d}" for idx in range(n_lines)]
+        labels = [f"RADAR{idx + 1:03d}" for idx in range(n_lines)]
 
-    # ---- validate style arrays ----
     def _get_style(arr, i, default):
-        if arr is None:
-            return default
-        if i >= len(arr):
+        if arr is None or i >= len(arr):
             return default
         return arr[i]
 
     fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
 
     any_label = False
-    for i, data in enumerate(data_series):
+
+    for i, data in enumerate(data_list):
         lab = labels[i] if labels is not None and i < len(labels) else None
         if lab is not None:
             any_label = True
@@ -158,13 +196,25 @@ def plot_timeseries(
         lstyle = _get_style(linestyles, i, "--")
         marker = _get_style(markers, i, "o")
 
-        ax.plot(tvec, data, label=lab, color=col, linestyle=lstyle, marker=marker)
+        ax.plot(
+            tvec_list[i],
+            data,
+            label=lab,
+            color=col,
+            linestyle=lstyle,
+            marker=marker,
+        )
 
     ax.set_title(title)
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_ylim(bottom=ymin, top=ymax)
-    ax.set_xlim([tvec[0], tvec[-1]])
+
+    # x-limits over all time vectors
+    all_times = np.concatenate([np.asarray(tv) for tv in tvec_list])
+    all_times = np.sort(all_times)
+
+    ax.set_xlim([all_times[0], all_times[-1]])
     ax.grid(True)
 
     if timeformat is not None:
@@ -173,12 +223,12 @@ def plot_timeseries(
     fig.autofmt_xdate()
     fig.tight_layout()
 
-    # Show legend only if we actually have labels
     if any_label:
         ax.legend(loc="best")
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+
     plt.close(fig)
 
     return fname_list

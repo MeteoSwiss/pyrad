@@ -2350,7 +2350,7 @@ def write_ts_polar_data(dataset, fname):
         col_order = ["date", "az", "el", "r", "value"]
 
     else:
-        # ---- multi radar (wide format) ----
+        # ---- multi radar (wide format, outer-joined timestamps) ----
         radar_keys = sorted(
             [
                 k
@@ -2361,30 +2361,54 @@ def write_ts_polar_data(dataset, fname):
         if not radar_keys:
             raise ValueError("Multi-radar dataset detected but no RADAR### keys found")
 
-        # Use first radar for time axis and shared coords in the table
         ds0 = dataset[radar_keys[0]]
-        t = _to_dt_series(ds0["time"])
-        n = len(t)
-        start_time = t.iloc[0].to_pydatetime()
+        fillvalue = get_fillvalue()
 
-        # Coordinates: keep lon/lat/alt columns (take from reference radar)
-        lon0, lat0, alt0 = ds0["point_coordinates_WGS84_lon_lat_alt"]
+        radar_frames = []
 
-        df = pd.DataFrame(
-            {
-                "date": t.dt.strftime("%Y%m%d%H%M%S"),
-                "lon": float(lon0),
-                "lat": float(lat0),
-                "alt": float(alt0),
-            }
-        )
-
-        # Add one value column per radar
         for rk in radar_keys:
             ds = dataset[rk]
-            # If times differ per radar, you need an outer join; here we assume same times.
-            val = _to_1d_values(ds["value"], n)
-            df[f"value_{rk.lower()}"] = val[:n]
+
+            t = _to_dt_series(ds["time"])
+            n = len(t)
+            val = _to_1d_values(ds["value"], n, fillvalue=fillvalue)
+
+            if len(val) < n:
+                val = np.pad(
+                    val,
+                    (0, n - len(val)),
+                    mode="constant",
+                    constant_values=fillvalue,
+                )
+
+            radar_df = pd.DataFrame(
+                {
+                    "time": t,
+                    f"value_{rk.lower()}": val[:n],
+                }
+            )
+
+            radar_frames.append(radar_df)
+
+        # Outer join all radar time axes
+        df = radar_frames[0]
+        for radar_df in radar_frames[1:]:
+            df = pd.merge(df, radar_df, on="time", how="outer")
+
+        df = df.sort_values("time").reset_index(drop=True)
+
+        # Fill missing radar values introduced by the outer join
+        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
+        df[value_cols] = df[value_cols].fillna(fillvalue)
+
+        # Coordinates: keep lon/lat/alt columns from reference radar
+        lon0, lat0, alt0 = ds0["point_coordinates_WGS84_lon_lat_alt"]
+        df["lon"] = float(lon0)
+        df["lat"] = float(lat0)
+        df["alt"] = float(alt0)
+
+        start_time = df["time"].iloc[0].to_pydatetime()
+        df["date"] = df["time"].dt.strftime("%Y%m%d%H%M%S")
 
         # Header listing coords/antenna per radar
         coord_lines = []
@@ -2392,29 +2416,30 @@ def write_ts_polar_data(dataset, fname):
         for rk in radar_keys:
             ds = dataset[rk]
             coord_lines.append(
-                f"# {rk} Location [lon, lat, alt]: {ds.get('point_coordinates_WGS84_lon_lat_alt')}"
+                f"# {rk} Location [lon, lat, alt]: "
+                f"{ds.get('point_coordinates_WGS84_lon_lat_alt')}"
             )
             ant_lines.append(
-                f"# {rk} Nominal antenna coordinates used [az, el, r]: {ds.get('antenna_coordinates_az_el_r')}"
+                f"# {rk} Nominal antenna coordinates used [az, el, r]: "
+                f"{ds.get('antenna_coordinates_az_el_r')}"
             )
 
         header = (
             "# Weather radar timeseries data file (multi-radar)\n"
             '# Comment lines are preceded by "#"\n'
             "# Description: \n"
-            "# Time series of weather radar data over a fixed location (multiple radars).\n"
+            "# Time series of weather radar data over a fixed location "
+            "(multiple radars).\n"
             + "\n".join(coord_lines)
             + "\n"
             + "\n".join(ant_lines)
             + "\n"
             f"# Data: {generate_field_name_str(ds0.get('datatype'))}\n"
-            f"# Fill Value: {get_fillvalue()}\n"
+            f"# Fill Value: {fillvalue}\n"
             f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
             "#\n"
         )
 
-        # Column order
-        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
         col_order = ["date", "lon", "lat", "alt"] + value_cols
 
     df = df[col_order]
@@ -2535,7 +2560,7 @@ def write_ts_grid_data(dataset, fname):
         col_order = ["date", "lon", "lat", "alt", "value"]
 
     else:
-        # ---- multi radar (wide format) ----
+        # ---- multi radar (wide format, outer-joined timestamps) ----
         radar_keys = sorted(
             [
                 k
@@ -2547,58 +2572,84 @@ def write_ts_grid_data(dataset, fname):
             raise ValueError("Multi-radar dataset detected but no RADAR### keys found")
 
         ds0 = dataset[radar_keys[0]]
-        t = _to_dt_series(ds0["time"])
-        n = len(t)
-        start_time = t.iloc[0].to_pydatetime()
+        fillvalue = get_fillvalue()
 
-        # Take lon/lat/alt columns from reference radar (if they differ, you should revisit format)
-        used0 = ds0["used_coordinates_WGS84_lon_lat_alt"]
-        lon0 = float(used0[0])
-        lat0 = float(used0[1])
-        alt0 = float(used0[2])
-
-        df = pd.DataFrame(
-            {
-                "date": t.dt.strftime("%Y%m%d%H%M%S"),
-                "lon": lon0,
-                "lat": lat0,
-                "alt": alt0,
-            }
-        )
+        radar_frames = []
 
         for rk in radar_keys:
             ds = dataset[rk]
+
+            t = _to_dt_series(ds["time"])
+            n = len(t)
             val = _to_1d_values(ds["value"], n)
-            df[f"value_{rk.lower()}"] = val[:n]
+
+            if len(val) < n:
+                val = np.pad(
+                    val,
+                    (0, n - len(val)),
+                    mode="constant",
+                    constant_values=fillvalue,
+                )
+
+            radar_df = pd.DataFrame(
+                {
+                    "time": t,
+                    f"value_{rk.lower()}": val[:n],
+                }
+            )
+
+            radar_frames.append(radar_df)
+
+        # Outer join all radar time axes
+        df = radar_frames[0]
+        for radar_df in radar_frames[1:]:
+            df = pd.merge(df, radar_df, on="time", how="outer")
+
+        df = df.sort_values("time").reset_index(drop=True)
+
+        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
+        df[value_cols] = df[value_cols].fillna(fillvalue)
+
+        # Take lon/lat/alt columns from reference radar
+        used0 = ds0["used_coordinates_WGS84_lon_lat_alt"]
+        df["lon"] = float(used0[0])
+        df["lat"] = float(used0[1])
+        df["alt"] = float(used0[2])
+
+        start_time = df["time"].iloc[0].to_pydatetime()
+        df["date"] = df["time"].dt.strftime("%Y%m%d%H%M%S")
 
         # Header: include per-radar nominal location and grid points if present
         loc_lines = []
         gp_lines = []
+
         for rk in radar_keys:
             ds = dataset[rk]
             loc_lines.append(
-                f"# {rk} Nominal location [lon, lat, alt]: {ds.get('point_coordinates_WGS84_lon_lat_alt')}"
+                f"# {rk} Nominal location [lon, lat, alt]: "
+                f"{ds.get('point_coordinates_WGS84_lon_lat_alt')}"
             )
             if "grid_points_iz_iy_ix" in ds:
                 gp_lines.append(
-                    f"# {rk} Grid points used [iz, iy, ix]: {ds.get('grid_points_iz_iy_ix')}"
+                    f"# {rk} Grid points used [iz, iy, ix]: "
+                    f"{ds.get('grid_points_iz_iy_ix')}"
                 )
 
         header = (
             "# Gridded data timeseries data file (multi-radar)\n"
             '# Comment lines are preceded by "#"\n'
             "# Description: \n"
-            "# Time series of gridded data over a fixed location (multiple radars).\n"
+            "# Time series of gridded data over a fixed location "
+            "(multiple radars).\n"
             + "\n".join(loc_lines)
             + "\n"
             + ("\n".join(gp_lines) + "\n" if gp_lines else "")
             + f"# Data: {generate_field_name_str(ds0.get('datatype'))}\n"
-            + f"# Fill Value: {get_fillvalue()}\n"
+            + f"# Fill Value: {fillvalue}\n"
             + f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
             + "#\n"
         )
 
-        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
         col_order = ["date", "lon", "lat", "alt"] + value_cols
 
     df = df[col_order]
