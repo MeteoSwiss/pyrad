@@ -421,7 +421,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.write_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_histogram</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_histogram_sweep</span>
@@ -446,9 +445,11 @@
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;shapely not available&quot;</span><span class="p">,</span> <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_SHAPELY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;geopandas&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span>
+
     <span class="n">_GEOPANDAS_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">else</span><span class="p">:</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">warn</span><span class="p">(</span>
         <span class="s2">&quot;geopandas not available, you won&#39;t be able to display geojson files&quot;</span><span class="p">,</span>
         <span class="n">use_debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -889,6 +890,7 @@
                 <span class="n">ax</span><span class="o">.</span><span class="n">add_image</span><span class="p">(</span><span class="n">tiler</span><span class="p">,</span> <span class="n">background_zoom</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">bg_alpha</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;countries&quot;</span><span class="p">:</span>
+                <span class="c1"># add countries</span>
                 <span class="n">countries</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
                     <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;admin_0_countries&quot;</span><span class="p">,</span>
@@ -896,6 +898,99 @@
                     <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">countries</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;provinces&quot;</span><span class="p">:</span>
+                <span class="c1"># Create a feature for States/Admin 1 regions at</span>
+                <span class="c1"># 1:resolution from Natural Earth</span>
+                <span class="n">states_provinces</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;admin_1_states_provinces_lines&quot;</span><span class="p">,</span>
+                    <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                    <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">states_provinces</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;urban_areas&quot;</span> <span class="ow">and</span> <span class="n">resolution</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span> <span class="s2">&quot;50m&quot;</span><span class="p">):</span>
+                <span class="n">urban_areas</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;urban_areas&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
+                    <span class="n">urban_areas</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;brown&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;roads&quot;</span> <span class="ow">and</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span><span class="p">:</span>
+                <span class="n">roads</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;roads&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">roads</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;railroads&quot;</span> <span class="ow">and</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span><span class="p">:</span>
+                <span class="n">railroads</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;railroads&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
+                    <span class="n">railroads</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;:&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;coastlines&quot;</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;lakes&quot;</span><span class="p">:</span>
+                <span class="c1"># add lakes</span>
+                <span class="n">lakes</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lakes&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">lakes</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span> <span class="ow">and</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;lakes_europe&quot;</span><span class="p">:</span>
+                <span class="n">lakes_europe</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lakes_europe&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
+                    <span class="n">lakes_europe</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;rivers&quot;</span><span class="p">:</span>
+                <span class="c1"># add rivers</span>
+                <span class="n">rivers</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span>
+                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rivers_lake_centerlines&quot;</span><span class="p">,</span>
+                    <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">rivers</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">resolution</span> <span class="o">==</span> <span class="s2">&quot;10m&quot;</span> <span class="ow">and</span> <span class="n">cartomap</span> <span class="o">==</span> <span class="s2">&quot;rivers_europe&quot;</span><span class="p">:</span>
+                <span class="n">rivers_europe</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rivers_europe&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span>
+                <span class="p">)</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">rivers_europe</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">_GEOPANDAS_AVAILABLE</span>
+                <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">cartomap</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">cartomap</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;.geojson&quot;</span><span class="p">,</span> <span class="s2">&quot;.json&quot;</span><span class="p">))</span>
+            <span class="p">):</span>
+                <span class="c1"># --- VECTOR CARTOMAP (GeoPandas: SHP / GeoJSON / JSON) ---</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">gdf</span> <span class="o">=</span> <span class="n">geopandas</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">cartomap</span><span class="p">)</span>
+                    <span class="c1"># Detect / assume CRS if missing (Swiss datasets)</span>
+                    <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">xmin</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">total_bounds</span>
+                        <span class="k">if</span> <span class="n">xmin</span> <span class="o">&gt;</span> <span class="mf">1e6</span><span class="p">:</span>
+                            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2056</span><span class="p">)</span>  <span class="c1"># CH1903+ / LV95</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">21781</span><span class="p">)</span>  <span class="c1"># CH1903 / LV03</span>
+
+                    <span class="c1"># Reproject to WGS84 (what Cartopy expects)</span>
+                    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+
+                    <span class="n">ax</span><span class="o">.</span><span class="n">add_geometries</span><span class="p">(</span>
+                        <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span>
+                        <span class="n">crs</span><span class="o">=</span><span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                        <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                        <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                        <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load cartomap </span><span class="si">{</span><span class="n">cartomap</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;cartomap &quot;</span>
+                    <span class="o">+</span> <span class="n">cartomap</span>
+                    <span class="o">+</span> <span class="s2">&quot; for resolution &quot;</span>
+                    <span class="o">+</span> <span class="n">resolution</span>
+                    <span class="o">+</span> <span class="s2">&quot; not available&quot;</span>
+                <span class="p">)</span>
     <span class="k">if</span> <span class="s2">&quot;rngRing&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;ppiMapImageConfig&quot;</span><span class="p">][</span><span class="s2">&quot;rngRing&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">rng_rings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
