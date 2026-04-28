@@ -33,7 +33,6 @@ import os
 from netCDF4 import num2date
 import pyart
 import matplotlib.pyplot as plt
-import importlib.util
 
 from ..io.write_data import write_histogram
 from ..util.radar_utils import compute_histogram_sweep
@@ -58,9 +57,11 @@ except ImportError:
     warn("shapely not available", use_debug=False)
     _SHAPELY_AVAILABLE = False
 
-if importlib.util.find_spec("geopandas") is not None:
+try:
+    import geopandas
+
     _GEOPANDAS_AVAILABLE = True
-else:
+except ImportError:
     warn(
         "geopandas not available, you won't be able to display geojson files",
         use_debug=False,
@@ -493,6 +494,7 @@ def plot_ppi_map(
                 ax.add_image(tiler, background_zoom, alpha=bg_alpha)
 
             elif cartomap == "countries":
+                # add countries
                 countries = cartopy.feature.NaturalEarthFeature(
                     category="cultural",
                     name="admin_0_countries",
@@ -500,6 +502,99 @@ def plot_ppi_map(
                     facecolor="none",
                 )
                 ax.add_feature(countries, edgecolor="black")
+            elif cartomap == "provinces":
+                # Create a feature for States/Admin 1 regions at
+                # 1:resolution from Natural Earth
+                states_provinces = cartopy.feature.NaturalEarthFeature(
+                    category="cultural",
+                    name="admin_1_states_provinces_lines",
+                    scale=resolution,
+                    facecolor="none",
+                )
+                ax.add_feature(states_provinces, edgecolor="gray")
+            elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
+                urban_areas = cartopy.feature.NaturalEarthFeature(
+                    category="cultural", name="urban_areas", scale=resolution
+                )
+                ax.add_feature(
+                    urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
+                )
+            elif cartomap == "roads" and resolution == "10m":
+                roads = cartopy.feature.NaturalEarthFeature(
+                    category="cultural", name="roads", scale=resolution
+                )
+                ax.add_feature(roads, edgecolor="red", facecolor="none")
+            elif cartomap == "railroads" and resolution == "10m":
+                railroads = cartopy.feature.NaturalEarthFeature(
+                    category="cultural", name="railroads", scale=resolution
+                )
+                ax.add_feature(
+                    railroads, edgecolor="green", facecolor="none", linestyle=":"
+                )
+            elif cartomap == "coastlines":
+                ax.coastlines(resolution=resolution)
+            elif cartomap == "lakes":
+                # add lakes
+                lakes = cartopy.feature.NaturalEarthFeature(
+                    category="physical", name="lakes", scale=resolution
+                )
+                ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
+            elif resolution == "10m" and cartomap == "lakes_europe":
+                lakes_europe = cartopy.feature.NaturalEarthFeature(
+                    category="physical", name="lakes_europe", scale=resolution
+                )
+                ax.add_feature(
+                    lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25
+                )
+            elif cartomap == "rivers":
+                # add rivers
+                rivers = cartopy.feature.NaturalEarthFeature(
+                    category="physical",
+                    name="rivers_lake_centerlines",
+                    scale=resolution,
+                )
+                ax.add_feature(rivers, edgecolor="blue", facecolor="none")
+            elif resolution == "10m" and cartomap == "rivers_europe":
+                rivers_europe = cartopy.feature.NaturalEarthFeature(
+                    category="physical", name="rivers_europe", scale=resolution
+                )
+                ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
+            elif (
+                _GEOPANDAS_AVAILABLE
+                and os.path.isfile(cartomap)
+                and cartomap.lower().endswith((".shp", ".geojson", ".json"))
+            ):
+                # --- VECTOR CARTOMAP (GeoPandas: SHP / GeoJSON / JSON) ---
+                try:
+                    gdf = geopandas.read_file(cartomap)
+                    # Detect / assume CRS if missing (Swiss datasets)
+                    if gdf.crs is None:
+                        xmin, _, _, _ = gdf.total_bounds
+                        if xmin > 1e6:
+                            gdf = gdf.set_crs(epsg=2056)  # CH1903+ / LV95
+                        else:
+                            gdf = gdf.set_crs(epsg=21781)  # CH1903 / LV03
+
+                    # Reproject to WGS84 (what Cartopy expects)
+                    gdf = gdf.to_crs(epsg=4326)
+
+                    ax.add_geometries(
+                        gdf.geometry,
+                        crs=cartopy.crs.PlateCarree(),
+                        facecolor="none",
+                        edgecolor="black",
+                        linewidth=1.2,
+                    )
+                except Exception as e:
+                    warn(f"Failed to load cartomap {cartomap}: {e}")
+            else:
+                warn(
+                    "cartomap "
+                    + cartomap
+                    + " for resolution "
+                    + resolution
+                    + " not available"
+                )
     if "rngRing" in prdcfg["ppiMapImageConfig"]:
         if prdcfg["ppiMapImageConfig"]["rngRing"] > 0:
             rng_rings = np.arange(
