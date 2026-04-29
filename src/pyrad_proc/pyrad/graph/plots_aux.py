@@ -83,6 +83,44 @@ except ImportError:
     pass
 
 
+def parse_cartomap_style(cartomap):
+    parts = [p.strip() for p in cartomap.split("|")]
+
+    filename = parts[0]
+
+    # Defaults
+    style = {
+        "color": "black",
+        "lw": 1.2,
+        "ls": "-",
+        "alpha": 1.0,
+    }
+
+    for part in parts[1:]:
+        if "=" not in part:
+            continue
+        key, value = part.split("=", 1)
+        key = key.strip().lower()
+        value = value.strip()
+
+        if key in ("lw", "linewidth"):
+            try:
+                style["linewidth"] = float(value)
+            except ValueError:
+                pass
+        elif key in ("ls", "linestyle"):
+            style["linestyle"] = value
+        elif key in ("color", "c"):
+            style["color"] = value
+        elif key == "alpha":
+            try:
+                style["alpha"] = float(value)
+            except ValueError:
+                pass
+
+    return filename, style
+
+
 def generate_complex_range_Doppler_title(radar, field, ray, datetime_format=None):
     """
     creates the fixed range plot title

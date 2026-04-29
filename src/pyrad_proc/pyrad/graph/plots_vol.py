@@ -42,6 +42,7 @@ from .plots import plot_quantiles, plot_histogram, _plot_time_range
 from .plots_aux import generate_complex_range_Doppler_title
 from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
+from .plots_aux import parse_cartomap_style
 from ..util import warn
 from .plots_aux import _CARTOPY_AVAILABLE
 
@@ -559,34 +560,34 @@ def plot_ppi_map(
                     category="physical", name="rivers_europe", scale=resolution
                 )
                 ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
-            elif (
-                _GEOPANDAS_AVAILABLE
-                and os.path.isfile(cartomap)
-                and cartomap.lower().endswith((".shp", ".geojson", ".json"))
-            ):
-                # --- VECTOR CARTOMAP (GeoPandas: SHP / GeoJSON / JSON) ---
-                try:
-                    gdf = geopandas.read_file(cartomap)
-                    # Detect / assume CRS if missing (Swiss datasets)
-                    if gdf.crs is None:
-                        xmin, _, _, _ = gdf.total_bounds
-                        if xmin > 1e6:
-                            gdf = gdf.set_crs(epsg=2056)  # CH1903+ / LV95
-                        else:
-                            gdf = gdf.set_crs(epsg=21781)  # CH1903 / LV03
+            elif ".shp" in cartomap or ".geojson" in cartomap or ".json" in cartomap:
+                if _GEOPANDAS_AVAILABLE:
+                    cartomap_file, style = parse_cartomap_style(cartomap)
+                    try:
+                        gdf = geopandas.read_file(cartomap_file)
 
-                    # Reproject to WGS84 (what Cartopy expects)
-                    gdf = gdf.to_crs(epsg=4326)
+                        if gdf.crs is None:
+                            xmin, _, _, _ = gdf.total_bounds
+                            if xmin > 1e6:
+                                gdf = gdf.set_crs(epsg=2056)
+                            else:
+                                gdf = gdf.set_crs(epsg=21781)
 
-                    ax.add_geometries(
-                        gdf.geometry,
-                        crs=cartopy.crs.PlateCarree(),
-                        facecolor="none",
-                        edgecolor="black",
-                        linewidth=1.2,
-                    )
-                except Exception as e:
-                    warn(f"Failed to load cartomap {cartomap}: {e}")
+                        gdf = gdf.to_crs(epsg=4326)
+
+                        ax.add_geometries(
+                            gdf.geometry,
+                            crs=cartopy.crs.PlateCarree(),
+                            facecolor="none",
+                            edgecolor=style["color"],
+                            linewidth=style["linewidth"],
+                            linestyle=style["linestyle"],
+                            alpha=style["alpha"],
+                        )
+                    except Exception as e:
+                        warn(f"Failed to load cartomap {cartomap}: {e}")
+                else:
+                    warn(f"Geopandas not available, not able to display map {cartomap}")
             else:
                 warn(
                     "cartomap "

@@ -308,7 +308,6 @@ def process_intercomp(procstatus, dscfg, radar_list=None):
     ind_radar_list = np.array(ind_radar_list)
     datatype_list = np.array(datatype_list)
     field_name_list = np.array(field_name_list)
-
     if (ind_radar_list.size != 2) or (np.unique(ind_radar_list).size < 2):
         warn("Intercomparison requires data from two different radars")
         return None, None
@@ -736,7 +735,6 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             radarnr = datatypedescr.split(":")[0]
             ind_radar_set.add(int(radarnr[5:8]) - 1)
         ind_radar_list = list(ind_radar_set)
-
         if (len(ind_radar_list) != 2) or (radar_list is None) or (len(radar_list) < 2):
             warn("Intercomparison requires data from two different radars")
             return None, None
