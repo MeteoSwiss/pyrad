@@ -2370,9 +2370,9 @@ def read_sensor_data(fname, varname):
         # Prefer columns whose name suggests date/time
         candidate_cols = sorted(
             df.columns,
-            key=lambda c: 0
-            if any(k in c.lower() for k in ["date", "time", "timestamp"])
-            else 1,
+            key=lambda c: (
+                0 if any(k in c.lower() for k in ["date", "time", "timestamp"]) else 1
+            ),
         )
 
         for col in candidate_cols:

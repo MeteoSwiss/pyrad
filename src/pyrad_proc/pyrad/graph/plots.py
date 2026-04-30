@@ -27,6 +27,7 @@ Functions to plot Pyrad datasets
 """
 
 from ..util.radar_utils import compute_quantiles_from_hist
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from .plots_aux import get_colobar_label, get_field_name, get_norm
 import pyart
 import matplotlib.pyplot as plt
@@ -540,54 +541,56 @@ def plot_scatter(
     vmax=None,
     min_cnt=0,
     bins_transform="linear",
+    marginals=True,
 ):
     """
-    2D histogram
+    2D histogram (scatter density) plot with optional marginal distributions.
 
     Parameters
     ----------
-    bin_edges1, bin_edges2 : float array2
-        the bins of each field
-    hist_2d : ndarray 2D
-        the 2D histogram
+    bin_edges1, bin_edges2 : array-like
+        Bin edges of each field (x and y dimensions).
+    hist_2d : ndarray (2D)
+        The 2D histogram (counts per bin).
     field_name1, field_name2 : str
-        the names of each field
+        Names of each field (used for axis labeling).
     fname_list : list of str
-        list of names of the files where to store the plot
+        List of filenames where the plot will be saved.
     prdcfg : dict
-        product configuration dictionary
-    metadata : str
-        a string with metadata to write in the plot
-    lin_regr : tupple with 2 values
-        the coefficients for a linear regression
-    lin_regr_slope1 : float
-        the intercep point of a linear regression of slope 1
-    rad1_name, rad2_name : str
-        name of the radars which data is used
-    titl : str
-        plot title
-    cmap : str or None
-        name of the colormap. If None it will be choosen the default for the
-        field_name
-    vmin: float
-        Minimum value of the 2D histogram.
-    vmax: float
-        Maximum value of the 2D histogram.
-    min_cnt: int
-        Minimum number of counts in the 2D histogram
-    bins__transform: str
-        Either "linear" or "log". Specifies whether the counts in the colorbar of the scatter-plots
-        are in linear or in log scale. Default is "linear"
+        Product configuration dictionary. Must contain the key
+        "ppiImageConfig" with entries "xsize", "ysize", and optionally "dpi".
+    metadata : str, optional
+        String with metadata to display in the plot (top-left corner).
+    lin_regr : tuple of float, optional
+        Coefficients (slope, intercept) of a linear regression line to plot.
+    lin_regr_slope1 : float, optional
+        Intercept of a regression line with slope fixed to 1.
+    rad1_name, rad2_name : str, optional
+        Names of the radars providing the data.
+    titl : str, optional
+        Plot title.
+    cmap : str or None, optional
+        Name of the colormap. If None, the default Py-ART colormap for
+        `field_name1` will be used.
+    vmin, vmax : float, optional
+        Minimum and maximum values for the axes limits.
+    min_cnt : int, optional
+        Minimum number of counts displayed in the histogram.
+    bins_transform : {"linear", "log"}, optional
+        Scaling of the histogram colorbar. If "log", a logarithmic scale is used.
+        Default is "linear".
+    marginals : bool, optional
+        If True, marginal distributions (1D histograms) are plotted on the top
+        and right side of the 2D histogram. Default is False.
+
     Returns
     -------
     fname_list : list of str
-        list of names of the created plots
-
+        List of filenames of the created plots.
     """
     # mask 0 data
     hist_2d = np.ma.masked_where(hist_2d == 0, hist_2d)
 
-    # display data
     label = "Number of Points"
     labelx = rad1_name + " " + field_name1
     labely = rad2_name + " " + field_name2
@@ -597,10 +600,46 @@ def plot_scatter(
         dpi = prdcfg["ppiImageConfig"]["dpi"]
 
     fig = plt.figure(
-        figsize=[prdcfg["ppiImageConfig"]["xsize"], prdcfg["ppiImageConfig"]["ysize"]],
+        figsize=[
+            prdcfg["ppiImageConfig"]["xsize"],
+            prdcfg["ppiImageConfig"]["ysize"],
+        ],
         dpi=dpi,
     )
+
     ax = fig.add_subplot(111)
+    ax.set_aspect("equal", adjustable="box")
+    ax.grid()
+    if marginals:
+        divider = make_axes_locatable(ax)
+
+        ax_marg_x = divider.append_axes(
+            "top",
+            size="22%",
+            pad=0.0,
+            sharex=ax,
+        )
+
+        ax_marg_y = divider.append_axes(
+            "right",
+            size="22%",
+            pad=0.0,
+            sharey=ax,
+        )
+
+        cax_cb = divider.append_axes(
+            "right",
+            size="4%",
+            pad=0.12,
+        )
+
+        ax_marg_x.tick_params(axis="x", labelbottom=False)
+        ax_marg_y.tick_params(axis="y", labelleft=False)
+
+    else:
+        ax_marg_x = None
+        ax_marg_y = None
+        cax_cb = None
 
     if cmap is None:
         cmap = pyart.config.get_field_colormap(field_name1)
@@ -626,10 +665,69 @@ def plot_scatter(
         )
 
     step1 = bin_edges1[1] - bin_edges1[0]
-    bin_centers1 = bin_edges1[0:-1] + step1 / 2.0
+    bin_centers1 = bin_edges1[:-1] + step1 / 2.0
 
     step2 = bin_edges2[1] - bin_edges2[0]
-    bin_centers2 = bin_edges2[0:-1] + step2 / 2.0
+    bin_centers2 = bin_edges2[:-1] + step2 / 2.0
+
+    # Marginal distributions
+    if marginals:
+        hist_for_marginals = np.ma.filled(hist_2d, 0)
+
+        marginal_x = hist_for_marginals.sum(axis=1)
+        marginal_y = hist_for_marginals.sum(axis=0)
+
+        if marginal_x.max() > 0:
+            marginal_x = marginal_x / marginal_x.max()
+        if marginal_y.max() > 0:
+            marginal_y = marginal_y / marginal_y.max()
+
+        ax_marg_x.plot(
+            bin_centers1,
+            marginal_x,
+            color="k",
+            alpha=0.6,
+            lw=1.2,
+        )
+
+        ax_marg_y.plot(
+            marginal_y,
+            bin_centers2,
+            color="k",
+            alpha=0.6,
+            lw=1.2,
+        )
+
+        ax_marg_x.set_ylim(0, 1.05)
+        ax_marg_y.set_xlim(0, 1.05)
+
+        # Jointplot-like clean marginals
+        for spine in ax_marg_x.spines.values():
+            spine.set_visible(False)
+        for spine in ax_marg_y.spines.values():
+            spine.set_visible(False)
+
+        ax_marg_x.tick_params(
+            axis="both",
+            which="both",
+            bottom=False,
+            top=False,
+            left=False,
+            right=False,
+            labelbottom=False,
+            labelleft=False,
+        )
+
+        ax_marg_y.tick_params(
+            axis="both",
+            which="both",
+            bottom=False,
+            top=False,
+            left=False,
+            right=False,
+            labelbottom=False,
+            labelleft=False,
+        )
 
     # plot reference
     if bin_edges1.size == bin_edges2.size:
@@ -638,18 +736,25 @@ def plot_scatter(
     # plot linear regression
     if lin_regr is not None:
         ax.plot(bin_centers1, lin_regr[0] * bin_centers1 + lin_regr[1], "r")
+
     if lin_regr_slope1 is not None:
         ax.plot(bin_centers1, bin_centers1 + lin_regr_slope1, "g")
 
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
-    ax.set_title(titl)
+    if marginals:
+        ax_marg_x.set_title(titl, pad=10)
+    else:
+        ax.set_title(titl)
 
-    if vmin and vmax:
+    if vmin is not None and vmax is not None:
         ax.set_xlim([vmin, vmax])
         ax.set_ylim([vmin, vmax])
 
-    cb = fig.colorbar(cax)
+    if marginals:
+        cb = fig.colorbar(cax, cax=cax_cb)
+    else:
+        cb = fig.colorbar(cax, ax=ax)
     cb.set_label(label)
 
     if bins_transform == "log":
@@ -659,7 +764,7 @@ def plot_scatter(
         cb.ax.yaxis.set_minor_formatter(formatter)
         cb.minorticks_on()
         cb.update_ticks()
-        # Optional styling for subtle minors
+
         cb.ax.tick_params(which="major", length=6, width=1.0)
         cb.ax.tick_params(which="minor", length=3, width=0.6, color="0.5")
 
@@ -673,11 +778,27 @@ def plot_scatter(
             transform=ax.transAxes,
         )
 
-    # Make a tight layout
-    fig.tight_layout()
+    if marginals:
+        fig.canvas.draw()  # ensure positions are computed
+        pos_main = ax.get_position()
+
+        # Define a thinner width and attach it directly to the main axis
+        new_width = pos_main.width * 0.22  # adjust (0.15–0.25 works well)
+
+        ax_marg_y.set_position(
+            [
+                pos_main.x1,  # start exactly at right edge of main plot
+                pos_main.y0,  # same vertical start
+                new_width,  # thinner width
+                pos_main.height,  # same height
+            ]
+        )
+    else:
+        fig.tight_layout()
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+
     plt.close(fig)
 
     return fname_list
@@ -843,53 +964,120 @@ def plot_histogram(
     titl="histogram",
     binwidth_equal=False,
     dpi=72,
+    labels=None,
+    alpha=None,
 ):
     """
-    computes and plots histogram
+    Compute and plot one or several histograms.
 
     Parameters
     ----------
-    bin_edges : array
-        histogram bin edges
-    values : array
-        data values
+    bin_edges : array-like or list of array-like
+        Histogram bin edges. If a single array is provided, it is used for all
+        value arrays. If a list is provided, each entry is used for the
+        corresponding value array.
+    values : array-like or list of array-like
+        Data values. Can be a single array or a list of arrays to plot several
+        distributions on the same axis.
     fname_list : list of str
-        list of names of the files where to store the plot
-    labelx : str
-        The label of the X axis
-    labely : str
-        The label of the Y axis
-    titl : str
-        The figure title
-    binwidth_equal : bool
-        If True the bars are going to have the same width regardless of the
-        actual bin size
-    dpi : int
-        dots per inch
+        List of filenames where the plot will be saved.
+    labelx : str, optional
+        Label of the x-axis.
+    labely : str, optional
+        Label of the y-axis.
+    titl : str, optional
+        Figure title.
+    binwidth_equal : bool, optional
+        If True, bars are plotted with equal visual width regardless of the
+        actual bin size.
+    dpi : int, optional
+        Dots per inch.
+    labels : list of str, optional
+        Labels for each distribution. If provided, a legend is added.
+    alpha : float, optional
+        Transparency of the histogram (only used for single distribution).
 
     Returns
     -------
     fname_list : list of str
-        list of names of the created plots
-
+        List of filenames of the created plots.
     """
-    fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
-    if binwidth_equal:
-        hist, bin_edges = np.histogram(values, bins=bin_edges)
-        ax.bar(np.arange(len(bin_edges) - 1.0) + 0.5, hist, width=1)
-        ax.set_xticks(np.arange(len(bin_edges)))
-        ax.set_xticklabels(bin_edges, rotation=45.0)
+
+    # Normalize inputs
+    if not isinstance(values, (list, tuple)):
+        values_list = [values]
     else:
-        ax.hist(values, bins=bin_edges)
+        values_list = values
+
+    n_hist = len(values_list)
+
+    if isinstance(bin_edges, (list, tuple)) and len(bin_edges) == n_hist:
+        bin_edges_list = bin_edges
+    else:
+        bin_edges_list = [bin_edges] * n_hist
+
+    if labels is None:
+        labels = [None] * n_hist
+
+    # Alpha only relevant for single histogram
+    if n_hist == 1:
+        if alpha is None:
+            alpha = 0.7
+    else:
+        alpha = None  # not used
+
+    fig, ax = plt.subplots(figsize=[10, 6], dpi=dpi)
+
+    for vals, bins, lab in zip(values_list, bin_edges_list, labels):
+        hist, bins = np.histogram(vals, bins=bins)
+
+        if n_hist == 1:
+            # --- Standard filled histogram ---
+            if binwidth_equal:
+                x = np.arange(len(bins) - 1) + 0.5
+                ax.bar(
+                    x,
+                    hist,
+                    width=1,
+                    alpha=alpha,
+                    label=lab,
+                    edgecolor="black",
+                    linewidth=0.5,
+                )
+                ax.set_xticks(np.arange(len(bins)))
+                ax.set_xticklabels(bins, rotation=45.0)
+            else:
+                ax.hist(
+                    vals,
+                    bins=bins,
+                    alpha=alpha,
+                    label=lab,
+                    edgecolor="black",
+                    linewidth=0.5,
+                )
+
+        else:
+            # --- Line histogram (no fill) ---
+            bin_centers = 0.5 * (bins[:-1] + bins[1:])
+            ax.plot(
+                bin_centers,
+                hist,
+                label=lab,
+                linewidth=1.8,
+            )
+
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
 
-    # Make a tight layout
+    if any(label is not None for label in labels):
+        ax.legend()
+
     fig.tight_layout()
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+
     plt.close(fig)
 
     return fname_list
@@ -968,6 +1156,7 @@ def plot_histogram2(
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
+    ax.grid()
 
     if save_fig:
         for fname in fname_list:

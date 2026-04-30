@@ -183,7 +183,7 @@ class Trajectory:
 
         # Note: Earth curvature not considered yet!
 
-        (rvec, azvec, elvec) = pyart.core.cartesian_to_antenna(
+        rvec, azvec, elvec = pyart.core.cartesian_to_antenna(
             self.swiss_chy - rad.ch_y,
             self.swiss_chx - rad.ch_x,
             self.swiss_chh - rad.ch_alt,
@@ -779,7 +779,7 @@ class _Radar_Trajectory:
         if self._swiss_coords_done:
             return
 
-        (self.ch_y, self.ch_x, self.ch_alt) = pyart.core.wgs84_to_swissCH1903(
+        self.ch_y, self.ch_x, self.ch_alt = pyart.core.wgs84_to_swissCH1903(
             self.longitude, self.latitude, self.altitude, no_altitude_transform=True
         )
         self._swiss_coords_done = True

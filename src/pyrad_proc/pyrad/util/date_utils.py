@@ -151,9 +151,11 @@ def detect_datetime_columns(df: pd.DataFrame, min_valid_ratio: float = 0.95):
                 )
                 if parsed_nonnull is not None:
                     parsed_full = pd.to_datetime(
-                        s.astype("Int64").astype("string")
-                        if pd.api.types.is_numeric_dtype(s)
-                        else s.astype("string").str.strip(),
+                        (
+                            s.astype("Int64").astype("string")
+                            if pd.api.types.is_numeric_dtype(s)
+                            else s.astype("string").str.strip()
+                        ),
                         format=used_fmt,
                         errors="coerce",
                     )
@@ -165,9 +167,11 @@ def detect_datetime_columns(df: pd.DataFrame, min_valid_ratio: float = 0.95):
                 )
                 if parsed_nonnull is not None:
                     parsed_full = pd.to_datetime(
-                        s.astype("Int64").astype("string")
-                        if pd.api.types.is_numeric_dtype(s)
-                        else s.astype("string").str.strip(),
+                        (
+                            s.astype("Int64").astype("string")
+                            if pd.api.types.is_numeric_dtype(s)
+                            else s.astype("string").str.strip()
+                        ),
                         format=used_fmt,
                         errors="coerce",
                     )

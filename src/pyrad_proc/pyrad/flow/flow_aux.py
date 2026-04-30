@@ -1104,19 +1104,22 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
             and prdcfg.get("MySQLwrite", False)
         ):  # write to mysql
             MySQLport = prdcfg.get("MySQLport", 3306)
-            for fname in filenames:
-                if fname.endswith(".csv"):
-                    # generate table name
-                    table_name = prdname
-                    write_csv_to_mysql(
-                        prdcfg["MySQLhost"],
-                        MySQLport,
-                        prdcfg["MySQLdatabase"],
-                        prdcfg["MySQLuser"],
-                        MYSQL_PASSWORD,
-                        table_name,
-                        fname,
-                    )
+            csv_files = [fname for fname in filenames if ".csv" in fname]
+            multiple_files = len(csv_files) > 1
+            for i, fname in enumerate(csv_files):
+                # generate table name
+                table_name = prdname
+                if multiple_files:
+                    table_name += f"_{i+1}"
+                write_csv_to_mysql(
+                    prdcfg["MySQLhost"],
+                    MySQLport,
+                    prdcfg["MySQLdatabase"],
+                    prdcfg["MySQLuser"],
+                    MYSQL_PASSWORD,
+                    table_name,
+                    fname,
+                )
 
         return False
     except Exception as inst:

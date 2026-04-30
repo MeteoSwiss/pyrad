@@ -15,7 +15,6 @@ Functions to obtain time averages of radar data mostly for intercomparison purpo
 
 """
 
-
 import datetime
 from ..util import warn
 import numpy as np
@@ -839,7 +838,7 @@ def process_time_avg(procstatus, dscfg, radar_list=None):
         if "radar_out" not in dscfg["global_data"]:
             return None, None
 
-        (dscfg["global_data"]["radar_out"].fields[field_name]["data"]) /= dscfg[
+        dscfg["global_data"]["radar_out"].fields[field_name]["data"] /= dscfg[
             "global_data"
         ]["radar_out"].fields["number_of_samples"]["data"]
         if lin_trans:

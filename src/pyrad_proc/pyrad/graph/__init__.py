@@ -106,5 +106,4 @@ from .plots_timeseries import plot_sun_retrieval_ts, plot_ml_ts  # noqa
 
 from .plots_aux import get_colobar_label, get_field_name  # noqa
 
-
 __all__ = [s for s in dir() if not s.startswith("_")]

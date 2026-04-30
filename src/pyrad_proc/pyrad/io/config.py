@@ -16,6 +16,7 @@ Functions for reading pyrad config files
     init_array
 
 """
+
 import re
 import os
 import yaml
@@ -38,9 +39,9 @@ SCALAR_TYPES = {
     "BOOL": lambda x: str(x).lower() in ("true", "1"),
     "INT": int,
     "LONG": int,
-    "HEX": lambda x: int(x, 16)
-    if isinstance(x, str) and x.startswith("0x")
-    else int(x),
+    "HEX": lambda x: (
+        int(x, 16) if isinstance(x, str) and x.startswith("0x") else int(x)
+    ),
     "EXP": float,
     "FLOAT": float,
     "DOUBLE": float,

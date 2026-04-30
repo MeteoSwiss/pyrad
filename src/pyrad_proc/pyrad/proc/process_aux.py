@@ -2800,7 +2800,7 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     values[values_ma] = nan_value[field_name]
 
                 try:
-                    (avg, qvals, nvals_valid) = quantiles_weighted(
+                    avg, qvals, nvals_valid = quantiles_weighted(
                         values,
                         weight_vector=deepcopy(w_vec),
                         quantiles=tadict["quantiles"],
@@ -2864,7 +2864,7 @@ def _get_values_antenna_pattern(radar, tadict, field_names):
                     values[values_ma] = nan_value[field_name]
 
                 try:
-                    (avg, qvals, nvals_valid) = quantiles_weighted(
+                    avg, qvals, nvals_valid = quantiles_weighted(
                         values,
                         weight_vector=deepcopy(w_vec),
                         quantiles=tadict["quantiles"],

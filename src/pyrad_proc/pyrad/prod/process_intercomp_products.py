@@ -67,10 +67,42 @@ def generate_intercomp_products(dataset, prdcfg):
                     and generating the plots. Any mathematical function with argument "x"
                     is accepted for example "sin(x) + x**2" or "10 * log10(x)"
                     Default is to use no transform
+                range_bins : list of float, optional
+                    Range bin edges in meters. Separate files and plots are created for every set of range
+                    bins.
+                    Default is [0, np.inf].
                 corr_min: float
                     The minimum correlation to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0.
+        'INTERCOMP_HISTOGRAMS': Plots one-dimensional histograms of colocated intercomparison data from two
+            radars. The distributions of radar 1 and radar 2 are shown on the same plot,
+            optionally for different range intervals.
+            User defined parameters:
+                histogram_type : str, optional
+                    Type of histogram product. If set to "cumulative", the plot is only
+                    generated when dataset["final"] is True. Default is "cumulative".
+                range_bins : list of float, optional
+                    Range bin edges in meters. One histogram is produced for each range
+                    interval.
+                    Default is [0, np.inf].
+                transform : str, optional
+                    Mathematical expression applied to both radar values before plotting.
+                    Default is "x".
+                step : float, optional
+                    Histogram bin width. If None, bin edges are determined automatically.
+                vmin, vmax : float, optional
+                    Minimum and maximum histogram limits. If not specified, limits are inferred
+                    from the selected data.
+                cap_limits : bool, optional
+                    If True, values outside [vmin, vmax] are discarded. If False, values are
+                    clipped to the nearest limit. Default is False.
+                double_conditional_threshold : float, optional
+                    If set, only samples where both radar values are larger than this threshold
+                    are used.
+                binwidth_equal : bool, optional
+                    If True, histogram bars are shown with equal visual width regardless of the
+                    actual bin size. Default is False.
         'PLOT_SCATTER_INTERCOMP': Plots a density plot (2D histogram) with the points of
             radar 1 versus the points of radar 2. Note that in order to use this product you need
             to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
@@ -81,10 +113,10 @@ def generate_intercomp_products(dataset, prdcfg):
                     The quantization step of the data. If none it will be
                     computed using the Py-ART config file. Default None
                 vmin: float
-                    Minimum value of the density plot. If vmin or vmax are not define the range limits
+                    Minimum value of the density plot. If vmin or vmax are not defined the range limits
                     of the field as defined in the Py-ART config file are going to be used.
                 vmax: float
-                    Maximum value of the density plot. If vmin or vmax are not define the range limits
+                    Maximum value of the density plot. If vmin or vmax are not defined the range limits
                     of the field as defined in the Py-ART config file are going to be used.
                 min_cnt: int
                     Minimum number of samples in a 2D histogram bin for the bin to be displayed.
@@ -103,6 +135,8 @@ def generate_intercomp_products(dataset, prdcfg):
                     Type of scatter plot. Can be a plot for each radar volume
                     (instant) or at the end of the processing period
                     (cumulative). Default is cumulative
+                marginals: bool
+                    If set to 1, will also plot the two marginal distributions on the sides of the scatter-plot
                 range_bins: list of floats
                     Range bins in meters to radar 1 to consider, a different plot will be generated for
                     all range bins. This can be used to differentiate the analysis in different
@@ -166,7 +200,165 @@ def generate_intercomp_products(dataset, prdcfg):
         print("saved colocated data file: " + fname)
 
         return fname
+    if prdcfg["type"] == "INTERCOMP_HISTOGRAMS":
+        histogram_type = prdcfg.get("histogram_type", "cumulative")
+        if histogram_type == "cumulative" and not dataset["final"]:
+            return None
 
+        timeformat = "%Y%m%d"
+        colname = "val"
+        if f"rad1_{colname}" not in dataset["intercomp_dict"]:
+            return None
+
+        field_name = get_fieldname_pyart(prdcfg["voltype"])
+        savedir = get_save_dir(
+            prdcfg["basepath"],
+            prdcfg["procname"],
+            dssavedir,
+            prdcfg["prdname"],
+            timeinfo=dataset["timeinfo"],
+        )
+
+        transform_str = prdcfg.get("transform", "x")
+        transform = parse_math_expression(transform_str)
+
+        range_bins = prdcfg.get("range_bins", [0, np.inf])
+        step = prdcfg.get("step", None)
+        vmin = prdcfg.get("vmin", None)
+        vmax = prdcfg.get("vmax", None)
+        cap_limits = prdcfg.get("cap_limits", False)
+        binwidth_equal = prdcfg.get("binwidth_equal", False)
+        double_conditional_threshold = prdcfg.get("double_conditional_threshold", None)
+
+        fname_list = []
+
+        for i in range(len(range_bins) - 1):
+            if len(range_bins) > 2:
+                rangebin_info = (
+                    f"range_bin_{range_bins[i]:.0f}_{range_bins[i + 1]:.0f}m"
+                )
+                rangebin_info_title = (
+                    f"range_bin {range_bins[i]:.0f}-{range_bins[i + 1]:.0f}m"
+                )
+            else:
+                rangebin_info = None
+                rangebin_info_title = ""
+
+            f_list = make_filename(
+                "histogram",
+                prdcfg["dstype"],
+                prdcfg["voltype"],
+                prdcfg["imgformat"],
+                prdcfginfo=rangebin_info,
+                timeinfo=dataset["timeinfo"],
+                timeformat=timeformat,
+            )
+
+            for j, fname in enumerate(f_list):
+                f_list[j] = savedir + fname
+
+            rad1 = dataset["intercomp_dict"]["rad1_name"]
+            rad2 = dataset["intercomp_dict"]["rad2_name"]
+
+            titl = (
+                f"colocated radar gates {rad1}-{rad2}\n"
+                f"{rangebin_info_title} " + dataset["timeinfo"].strftime(timeformat)
+            )
+            if transform_str != "x":
+                titl += f"\n f(x)={transform_str}"
+
+            selection = np.logical_and(
+                dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
+                dataset["intercomp_dict"]["rad1_rng"] < range_bins[i + 1],
+            )
+            if not np.sum(selection):
+                continue
+
+            rad1_values = np.ma.asarray(
+                dataset["intercomp_dict"][f"rad1_{colname}"][selection]
+            )
+            rad2_values = np.ma.asarray(
+                dataset["intercomp_dict"][f"rad2_{colname}"][selection]
+            )
+
+            if transform is not None:
+                rad1_values = transform(rad1_values)
+                rad2_values = transform(rad2_values)
+
+            if double_conditional_threshold is not None:
+                valid = np.logical_and(
+                    rad1_values > double_conditional_threshold,
+                    rad2_values > double_conditional_threshold,
+                )
+                rad1_values = rad1_values[valid]
+                rad2_values = rad2_values[valid]
+
+            if rad1_values.size == 0 or rad2_values.size == 0:
+                continue
+
+            if vmin is None:
+                vmin_aux = min(
+                    np.ma.min(rad1_values),
+                    np.ma.min(rad2_values),
+                )
+            else:
+                vmin_aux = vmin
+
+            if vmax is None:
+                vmax_aux = max(
+                    np.ma.max(rad1_values),
+                    np.ma.max(rad2_values),
+                )
+            else:
+                vmax_aux = vmax
+
+            if cap_limits:
+                valid = np.logical_and.reduce(
+                    (
+                        rad1_values >= vmin_aux,
+                        rad1_values <= vmax_aux,
+                        rad2_values >= vmin_aux,
+                        rad2_values <= vmax_aux,
+                    )
+                )
+                rad1_values = rad1_values[valid]
+                rad2_values = rad2_values[valid]
+            else:
+                rad1_values = np.ma.clip(rad1_values, vmin_aux, vmax_aux)
+                rad2_values = np.ma.clip(rad2_values, vmin_aux, vmax_aux)
+
+            if step is None:
+                bin_edges = np.histogram_bin_edges(
+                    np.ma.concatenate(
+                        [rad1_values.compressed(), rad2_values.compressed()]
+                    ),
+                    bins="auto",
+                    range=(vmin_aux, vmax_aux),
+                )
+            else:
+                bin_edges = np.arange(vmin_aux, vmax_aux + step, step)
+
+            labelx = field_name
+            if transform_str != "x":
+                labelx = f"f({field_name})"
+
+            plot_histogram(
+                bin_edges,
+                [rad1_values.compressed(), rad2_values.compressed()],
+                f_list,
+                labelx=labelx,
+                labely="Number of Samples",
+                titl=titl,
+                binwidth_equal=binwidth_equal,
+                dpi=prdcfg.get("dpi", 72),
+                labels=[rad1, rad2],
+            )
+
+            fname_list.extend(f_list)
+
+            print("----- save to " + " ".join(f_list))
+
+        return fname_list
     if prdcfg["type"] == "PLOT_SCATTER_INTERCOMP":
         scatter_type = prdcfg.get("scatter_type", "cumulative")
         if scatter_type == "cumulative" and not dataset["final"]:
@@ -192,6 +384,7 @@ def generate_intercomp_products(dataset, prdcfg):
         step = prdcfg.get("step", None)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
+        marginals = prdcfg.get("marginals", False)
         min_cnt = prdcfg.get("min_cnt", 0)
         bins_transform = prdcfg.get("bins_transform", 0)
         cap_limits = prdcfg.get("cap_limits", 0)
@@ -298,6 +491,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 vmin=vmin,
                 vmax=vmax,
                 min_cnt=min_cnt,
+                marginals=marginals,
                 bins_transform=bins_transform,
             )
 
@@ -313,32 +507,27 @@ def generate_intercomp_products(dataset, prdcfg):
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         step = prdcfg.get("step", None)
-        transform = parse_math_expression(prdcfg.get("transform", "x"))
+        transform_str = prdcfg.get("transform", "x")
+        transform = parse_math_expression(transform_str)
+
+        range_bins = prdcfg.get("range_bins", [0, np.inf])
+        vmin = prdcfg.get("vmin", None)
+        vmax = prdcfg.get("vmax", None)
+        cap_limits = prdcfg.get("cap_limits", False)
+        double_conditional_threshold = prdcfg.get("double_conditional_threshold", None)
+
         rad1_name = dataset["intercomp_dict"]["rad1_name"]
         rad2_name = dataset["intercomp_dict"]["rad2_name"]
-
-        hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
-            transform(np.ma.asarray(dataset["intercomp_dict"]["rad1_val"])),
-            transform(np.ma.asarray(dataset["intercomp_dict"]["rad2_val"])),
-            field_name,
-            field_name,
-            step1=step,
-            step2=step,
-        )
 
         # put time info in file path and name
         csvtimeinfo_file = None
         timeformat = None
-        sort_by_date = False
-        rewrite = False
-        if "add_date_in_fname" in prdcfg:
-            if prdcfg["add_date_in_fname"]:
-                csvtimeinfo_file = dataset["timeinfo"]
-                timeformat = "%Y"
-        if "sort_by_date" in prdcfg:
-            sort_by_date = prdcfg["sort_by_date"]
-        if "rewrite" in prdcfg:
-            rewrite = prdcfg["rewrite"]
+        sort_by_date = prdcfg.get("sort_by_date", False)
+        rewrite = prdcfg.get("rewrite", False)
+
+        if prdcfg.get("add_date_in_fname", False):
+            csvtimeinfo_file = dataset["timeinfo"]
+            timeformat = "%Y"
 
         savedir = get_save_dir(
             prdcfg["basepath"],
@@ -348,175 +537,184 @@ def generate_intercomp_products(dataset, prdcfg):
             timeinfo=None,
         )
 
-        csvfname = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            prdcfg["voltype"],
-            ["csv"],
-            prdcfginfo=rad1_name + "-" + rad2_name,
-            timeinfo=csvtimeinfo_file,
-            timeformat=timeformat,
-        )[0]
+        fname_list = []
 
-        csvfname = savedir + csvfname
+        for i in range(len(range_bins) - 1):
+            if len(range_bins) > 2:
+                rangebin_info = (
+                    f"range_bin_{range_bins[i]:.0f}_{range_bins[i + 1]:.0f}m"
+                )
+                rangebin_info_title = (
+                    f" range {range_bins[i]:.0f}-{range_bins[i + 1]:.0f} m"
+                )
+            else:
+                rangebin_info = None
+                rangebin_info_title = ""
 
-        write_intercomp_scores_ts(
-            dataset["timeinfo"],
-            stats,
-            field_name,
-            csvfname,
-            rad1_name=rad1_name,
-            rad2_name=rad2_name,
-        )
-        print("saved CSV file: " + csvfname)
+            selection = np.logical_and(
+                dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
+                dataset["intercomp_dict"]["rad1_rng"] < range_bins[i + 1],
+            )
 
-        (
-            date_vec,
-            np_vec,
-            meanbias_vec,
-            medianbias_vec,
-            quant25bias_vec,
-            quant75bias_vec,
-            modebias_vec,
-            corr_vec,
-            slope_vec,
-            intercep_vec,
-            intercep_slope1_vec,
-        ) = read_intercomp_scores_ts(csvfname, sort_by_date=sort_by_date)
+            if not np.sum(selection):
+                continue
 
-        if date_vec is None:
-            warn("Unable to plot time series. No valid data")
-            return None
+            hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
+                np.ma.asarray(dataset["intercomp_dict"]["rad1_val"][selection]),
+                np.ma.asarray(dataset["intercomp_dict"]["rad2_val"][selection]),
+                field_name,
+                field_name,
+                step1=step,
+                step2=step,
+                transform=transform,
+                vmin=vmin,
+                vmax=vmax,
+                cap_limits=cap_limits,
+                double_conditional_threshold=double_conditional_threshold,
+            )
 
-        if len(date_vec) < 2:
-            warn("Unable to plot time series. Not enough points")
-            return None
+            if hist_2d is None:
+                continue
 
-        if rewrite:
-            stats = {
-                "npoints": np_vec,
-                "meanbias": meanbias_vec,
-                "medianbias": medianbias_vec,
-                "quant25bias": quant25bias_vec,
-                "quant75bias": quant75bias_vec,
-                "modebias": modebias_vec,
-                "corr": corr_vec,
-                "slope": slope_vec,
-                "intercep": intercep_vec,
-                "intercep_slope_1": intercep_slope1_vec,
-            }
+            prdcfginfo = rad1_name + "-" + rad2_name
+            if rangebin_info is not None:
+                prdcfginfo += "_" + rangebin_info
+
+            csvfname = make_filename(
+                "ts",
+                prdcfg["dstype"],
+                prdcfg["voltype"],
+                ["csv"],
+                prdcfginfo=prdcfginfo,
+                timeinfo=csvtimeinfo_file,
+                timeformat=timeformat,
+            )[0]
+
+            csvfname = savedir + csvfname
+
             write_intercomp_scores_ts(
-                date_vec,
+                dataset["timeinfo"],
                 stats,
                 field_name,
                 csvfname,
                 rad1_name=rad1_name,
                 rad2_name=rad2_name,
             )
-        figtimeinfo = None
-        titldate = (
-            date_vec[0].strftime("%Y%m%d") + "-" + date_vec[-1].strftime("%Y%m%d")
-        )
-        if "add_date_in_fname" in prdcfg:
-            if prdcfg["add_date_in_fname"]:
+
+            print("saved CSV file: " + csvfname)
+
+            (
+                date_vec,
+                np_vec,
+                meanbias_vec,
+                medianbias_vec,
+                quant25bias_vec,
+                quant75bias_vec,
+                modebias_vec,
+                corr_vec,
+                slope_vec,
+                intercep_vec,
+                intercep_slope1_vec,
+            ) = read_intercomp_scores_ts(csvfname, sort_by_date=sort_by_date)
+
+            if date_vec is None:
+                warn("Unable to plot time series. No valid data")
+                continue
+
+            if len(date_vec) < 2:
+                warn("Unable to plot time series. Not enough points")
+                continue
+
+            if rewrite:
+                stats_rewrite = {
+                    "npoints": np_vec,
+                    "meanbias": meanbias_vec,
+                    "medianbias": medianbias_vec,
+                    "quant25bias": quant25bias_vec,
+                    "quant75bias": quant75bias_vec,
+                    "modebias": modebias_vec,
+                    "corr": corr_vec,
+                    "slope": slope_vec,
+                    "intercep": intercep_vec,
+                    "intercep_slope_1": intercep_slope1_vec,
+                }
+
+                write_intercomp_scores_ts(
+                    date_vec,
+                    stats_rewrite,
+                    field_name,
+                    csvfname,
+                    rad1_name=rad1_name,
+                    rad2_name=rad2_name,
+                )
+
+            figtimeinfo = None
+            fig_timeformat = None
+
+            titldate = (
+                date_vec[0].strftime("%Y%m%d") + "-" + date_vec[-1].strftime("%Y%m%d")
+            )
+
+            if prdcfg.get("add_date_in_fname", False):
                 figtimeinfo = date_vec[0]
-                timeformat = "%Y"
+                fig_timeformat = "%Y"
 
-        figfname_list = make_filename(
-            "ts",
-            prdcfg["dstype"],
-            prdcfg["voltype"],
-            prdcfg["imgformat"],
-            prdcfginfo=rad1_name + "-" + rad2_name,
-            timeinfo=figtimeinfo,
-            timeformat=timeformat,
-        )
+            figfname_list = make_filename(
+                "ts",
+                prdcfg["dstype"],
+                prdcfg["voltype"],
+                prdcfg["imgformat"],
+                prdcfginfo=prdcfginfo,
+                timeinfo=figtimeinfo,
+                timeformat=fig_timeformat,
+            )
 
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
+            for j, figfname in enumerate(figfname_list):
+                figfname_list[j] = savedir + figfname
 
-        np_min = prdcfg.get("npoints_min", 0)
-        corr_min = prdcfg.get("corr_min", 0.0)
+            np_min = prdcfg.get("npoints_min", 0)
+            corr_min = prdcfg.get("corr_min", 0.0)
 
-        titl = (
-            rad1_name
-            + "-"
-            + rad2_name
-            + " "
-            + field_name
-            + " intercomparison "
-            + titldate
-        )
-        plot_intercomp_scores_ts(
-            date_vec,
-            np_vec,
-            meanbias_vec,
-            medianbias_vec,
-            quant25bias_vec,
-            quant75bias_vec,
-            modebias_vec,
-            corr_vec,
-            slope_vec,
-            intercep_vec,
-            intercep_slope1_vec,
-            figfname_list,
-            ref_value=0.0,
-            np_min=np_min,
-            corr_min=corr_min,
-            labelx="Time UTC",
-            titl=titl,
-        )
-        print("----- save to " + " ".join(figfname_list))
+            plot_field_name = field_name
+            if transform_str != "x":
+                plot_field_name = f"f({field_name})"
 
-        return figfname_list
+            titl = (
+                rad1_name
+                + "-"
+                + rad2_name
+                + " "
+                + plot_field_name
+                + " intercomparison "
+                + titldate
+                + rangebin_info_title
+            )
 
-    elif prdcfg["type"] == "PLOT_HIST_TIME_OFFSETS":
-        if not dataset["final"]:
-            return None
-        times1 = dataset["intercomp_dict"]["rad1_time"]
-        times2 = dataset["intercomp_dict"]["rad2_time"]
-        rad1_name = dataset["intercomp_dict"]["rad1_name"]
-        rad2_name = dataset["intercomp_dict"]["rad2_name"]
-        offsets = (times1 - times2) / np.timedelta64(1, "s")
-        figtimeinfo = None
-        timeformat = None
-        titldate = (
-            times1[0].item().strftime("%Y%m%d")
-            + "-"
-            + times1[-1].item().strftime("%Y%m%d")
-        )
-        if "add_date_in_fname" in prdcfg:
-            if prdcfg["add_date_in_fname"]:
-                figtimeinfo = times1[0]
-                timeformat = "%Y"
+            plot_intercomp_scores_ts(
+                date_vec,
+                np_vec,
+                meanbias_vec,
+                medianbias_vec,
+                quant25bias_vec,
+                quant75bias_vec,
+                modebias_vec,
+                corr_vec,
+                slope_vec,
+                intercep_vec,
+                intercep_slope1_vec,
+                figfname_list,
+                ref_value=0.0,
+                np_min=np_min,
+                corr_min=corr_min,
+                labelx="Time UTC",
+                titl=titl,
+            )
 
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdname"],
-            timeinfo=None,
-        )
+            print("----- save to " + " ".join(figfname_list))
 
-        figfname_list = make_filename(
-            "hist_time_offsets",
-            prdcfg["dstype"],
-            prdcfg["voltype"],
-            prdcfg["imgformat"],
-            prdcfginfo=rad1_name + "-" + rad2_name,
-            timeinfo=figtimeinfo,
-            timeformat=timeformat,
-        )
+            fname_list.extend(figfname_list)
 
-        for i, figfname in enumerate(figfname_list):
-            figfname_list[i] = savedir + figfname
-
-        bin_edges = np.arange(-60, 65, 5)
-        titl = "Time offsets (rad1-rad2)"
-        figfname_list = plot_histogram(bin_edges, offsets, figfname_list, titl=titl)
-
-        print("----- save to " + " ".join(figfname_list))
-        return figfname_list
+        return fname_list
 
     else:
         warn(" Unsupported product type: " + prdcfg["type"])

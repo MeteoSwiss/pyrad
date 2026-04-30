@@ -532,9 +532,11 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "surface",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="l" + str(level),
             timeinfo=prdcfg["timeinfo"],
@@ -577,9 +579,11 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "surface",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="l" + str(level),
             timeinfo=prdcfg["timeinfo"],
@@ -845,9 +849,11 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "lat_slice",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="lat" + "{:.2f}".format(lat),
             timeinfo=prdcfg["timeinfo"],
@@ -893,9 +899,11 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "lon_slice",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="lon" + "{:.2f}".format(lon),
             timeinfo=prdcfg["timeinfo"],
@@ -957,9 +965,11 @@ def generate_grid_products(dataset, prdcfg):
         fname_list = make_filename(
             "lonlat",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="lon-lat1_"
             + "{:.2f}".format(lon1)

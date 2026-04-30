@@ -8,7 +8,7 @@ Functions for writing pyrad output data
     :toctree: generated/
 
     write_to_s3
-    write_to_mysql
+    write_csv_to_mysql
     write_vol_csv
     write_vol_kml
     write_centroids
@@ -396,6 +396,7 @@ def write_csv_to_mysql(
         return
 
     # Convert pandas NaT/NaN again after filtering
+    df = df.astype(object)
     df = df.where(pd.notna(df), None)
 
     # -----------------------------

@@ -930,9 +930,11 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             "ppi",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="el" + "{:.1f}".format(el),
             timeinfo=prdcfg["timeinfo"],
@@ -956,9 +958,11 @@ def generate_vol_products(dataset, prdcfg):
                 + make_filename(
                     "ppi",
                     prdcfg["dstype"],
-                    "RGB"
-                    if isinstance(prdcfg["voltype"], (tuple, list))
-                    else prdcfg["voltype"],
+                    (
+                        "RGB"
+                        if isinstance(prdcfg["voltype"], (tuple, list))
+                        else prdcfg["voltype"]
+                    ),
                     ["csv"],
                     prdcfginfo="el" + "{:.1f}".format(el),
                     timeinfo=prdcfg["timeinfo"],
@@ -1020,9 +1024,11 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 "ppi",
                 prdcfg["dstype"],
-                "RGB"
-                if isinstance(prdcfg["voltype"], (tuple, list))
-                else prdcfg["voltype"],
+                (
+                    "RGB"
+                    if isinstance(prdcfg["voltype"], (tuple, list))
+                    else prdcfg["voltype"]
+                ),
                 prdcfg["imgformat"],
                 prdcfginfo="el" + "{:.1f}".format(prdcfg["angle"]),
                 timeinfo=prdcfg["timeinfo"],
@@ -1088,9 +1094,11 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             "ppi_map",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="el" + "{:.1f}".format(el),
             timeinfo=prdcfg["timeinfo"],
@@ -1480,9 +1488,11 @@ def generate_vol_products(dataset, prdcfg):
         fname_list = make_filename(
             "rhi",
             prdcfg["dstype"],
-            "RGB"
-            if isinstance(prdcfg["voltype"], (tuple, list))
-            else prdcfg["voltype"],
+            (
+                "RGB"
+                if isinstance(prdcfg["voltype"], (tuple, list))
+                else prdcfg["voltype"]
+            ),
             prdcfg["imgformat"],
             prdcfginfo="az" + "{:.1f}".format(az),
             timeinfo=prdcfg["timeinfo"],
@@ -1551,9 +1561,11 @@ def generate_vol_products(dataset, prdcfg):
             fname_list = make_filename(
                 "rhi",
                 prdcfg["dstype"],
-                "RGB"
-                if isinstance(prdcfg["voltype"], (tuple, list))
-                else prdcfg["voltype"],
+                (
+                    "RGB"
+                    if isinstance(prdcfg["voltype"], (tuple, list))
+                    else prdcfg["voltype"]
+                ),
                 prdcfg["imgformat"],
                 prdcfginfo="az" + "{:.1f}".format(prdcfg["angle"]),
                 timeinfo=prdcfg["timeinfo"],

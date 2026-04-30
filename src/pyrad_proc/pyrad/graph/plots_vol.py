@@ -27,6 +27,7 @@ Functions to plot radar volume data
     plot_field_coverage
 
 """
+
 from copy import deepcopy
 import numpy as np
 import os
@@ -42,13 +43,13 @@ from .plots import plot_quantiles, plot_histogram, _plot_time_range
 from .plots_aux import generate_complex_range_Doppler_title
 from .plots_aux import generate_fixed_rng_span_title
 from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
-from .plots_aux import parse_cartomap_style
+from .plots_aux import embellish_plot
 from ..util import warn
 from .plots_aux import _CARTOPY_AVAILABLE
 
 if _CARTOPY_AVAILABLE:
     import cartopy
-    from .plots_aux import ShadedReliefESRI, OTM, OTM_BW
+    from .plots_aux import ShadedReliefESRI
 
 try:
     import shapely
@@ -57,17 +58,6 @@ try:
 except ImportError:
     warn("shapely not available", use_debug=False)
     _SHAPELY_AVAILABLE = False
-
-try:
-    import geopandas
-
-    _GEOPANDAS_AVAILABLE = True
-except ImportError:
-    warn(
-        "geopandas not available, you won't be able to display geojson files",
-        use_debug=False,
-    )
-    _GEOPANDAS_AVAILABLE = False
 
 # Test whether ARM or MCH fork of pyart
 if hasattr(pyart, "__ismchfork__"):
@@ -391,12 +381,6 @@ def plot_ppi_map(
     max_lat = prdcfg["ppiMapImageConfig"].get("latmax", 49.5)
     alpha = prdcfg["ppiMapImageConfig"].get("alpha", 1)
     exact_limits = prdcfg["ppiMapImageConfig"].get("exact_limits", True)
-    resolution = prdcfg["ppiMapImageConfig"].get("mapres", "110m")
-    maps_list = prdcfg["ppiMapImageConfig"].get("maps", [])
-    if resolution not in ("110m", "50m", "10m"):
-        warn("Unknown map resolution: " + resolution)
-        resolution = "110m"
-    background_zoom = prdcfg["ppiMapImageConfig"].get("background_zoom", 8)
 
     if exact_limits:
         lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
@@ -413,7 +397,10 @@ def plot_ppi_map(
     # Use different transparency and zorder if plotting over OTM or hillshade
     zorder = 1
     if "maps" in prdcfg["ppiMapImageConfig"]:
-        if "relief" in maps_list or "OTM" in maps_list:
+        if (
+            "relief" in prdcfg["ppiMapImageConfig"]
+            or "OTM" in prdcfg["ppiMapImageConfig"]
+        ):
             zorder = 2
 
     if _PYARTMCH_AVAILABLE:
@@ -463,139 +450,9 @@ def plot_ppi_map(
         )
     ax = display_map.ax
 
-    if "maps" in prdcfg["ppiMapImageConfig"]:
-        if "relief" in maps_list and "OTM" in maps_list:
-            warn(
-                "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
-                use_debug=False,
-            )
-            maps_list.remove("OTM")
+    if "maps" in prdcfg["ppiMapImageConfig"] and _CARTOPY_AVAILABLE:
+        embellish_plot(ax, prdcfg["ppiMapImageConfig"])
 
-        bg_alpha = prdcfg["ppiMapImageConfig"].get("bg_alpha", 1.0)
-        if "relief" in maps_list or "OTM" in maps_list or "OTM_BW" in maps_list:
-            if "PYRAD_CACHE" in os.environ:
-                cache_dir = os.environ["PYRAD_CACHE"]
-            else:
-                cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
-
-            if not os.path.exists(cache_dir):
-                os.makedirs(cache_dir)
-
-        if "relief" in maps_list:
-            tiler = ShadedReliefESRI(cache=cache_dir)
-
-        if "OTM_BW" in maps_list:
-            tiler = OTM_BW(cache=cache_dir)
-
-        if "OTM" in maps_list:
-            tiler = OTM(cache=cache_dir)
-
-        for cartomap in maps_list:
-            if cartomap in ["relief", "OTM", "OTM_BW"]:
-                ax.add_image(tiler, background_zoom, alpha=bg_alpha)
-
-            elif cartomap == "countries":
-                # add countries
-                countries = cartopy.feature.NaturalEarthFeature(
-                    category="cultural",
-                    name="admin_0_countries",
-                    scale=resolution,
-                    facecolor="none",
-                )
-                ax.add_feature(countries, edgecolor="black")
-            elif cartomap == "provinces":
-                # Create a feature for States/Admin 1 regions at
-                # 1:resolution from Natural Earth
-                states_provinces = cartopy.feature.NaturalEarthFeature(
-                    category="cultural",
-                    name="admin_1_states_provinces_lines",
-                    scale=resolution,
-                    facecolor="none",
-                )
-                ax.add_feature(states_provinces, edgecolor="gray")
-            elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
-                urban_areas = cartopy.feature.NaturalEarthFeature(
-                    category="cultural", name="urban_areas", scale=resolution
-                )
-                ax.add_feature(
-                    urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
-                )
-            elif cartomap == "roads" and resolution == "10m":
-                roads = cartopy.feature.NaturalEarthFeature(
-                    category="cultural", name="roads", scale=resolution
-                )
-                ax.add_feature(roads, edgecolor="red", facecolor="none")
-            elif cartomap == "railroads" and resolution == "10m":
-                railroads = cartopy.feature.NaturalEarthFeature(
-                    category="cultural", name="railroads", scale=resolution
-                )
-                ax.add_feature(
-                    railroads, edgecolor="green", facecolor="none", linestyle=":"
-                )
-            elif cartomap == "coastlines":
-                ax.coastlines(resolution=resolution)
-            elif cartomap == "lakes":
-                # add lakes
-                lakes = cartopy.feature.NaturalEarthFeature(
-                    category="physical", name="lakes", scale=resolution
-                )
-                ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
-            elif resolution == "10m" and cartomap == "lakes_europe":
-                lakes_europe = cartopy.feature.NaturalEarthFeature(
-                    category="physical", name="lakes_europe", scale=resolution
-                )
-                ax.add_feature(
-                    lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25
-                )
-            elif cartomap == "rivers":
-                # add rivers
-                rivers = cartopy.feature.NaturalEarthFeature(
-                    category="physical",
-                    name="rivers_lake_centerlines",
-                    scale=resolution,
-                )
-                ax.add_feature(rivers, edgecolor="blue", facecolor="none")
-            elif resolution == "10m" and cartomap == "rivers_europe":
-                rivers_europe = cartopy.feature.NaturalEarthFeature(
-                    category="physical", name="rivers_europe", scale=resolution
-                )
-                ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
-            elif ".shp" in cartomap or ".geojson" in cartomap or ".json" in cartomap:
-                if _GEOPANDAS_AVAILABLE:
-                    cartomap_file, style = parse_cartomap_style(cartomap)
-                    try:
-                        gdf = geopandas.read_file(cartomap_file)
-
-                        if gdf.crs is None:
-                            xmin, _, _, _ = gdf.total_bounds
-                            if xmin > 1e6:
-                                gdf = gdf.set_crs(epsg=2056)
-                            else:
-                                gdf = gdf.set_crs(epsg=21781)
-
-                        gdf = gdf.to_crs(epsg=4326)
-
-                        ax.add_geometries(
-                            gdf.geometry,
-                            crs=cartopy.crs.PlateCarree(),
-                            facecolor="none",
-                            edgecolor=style["color"],
-                            linewidth=style["linewidth"],
-                            linestyle=style["linestyle"],
-                            alpha=style["alpha"],
-                        )
-                    except Exception as e:
-                        warn(f"Failed to load cartomap {cartomap}: {e}")
-                else:
-                    warn(f"Geopandas not available, not able to display map {cartomap}")
-            else:
-                warn(
-                    "cartomap "
-                    + cartomap
-                    + " for resolution "
-                    + resolution
-                    + " not available"
-                )
     if "rngRing" in prdcfg["ppiMapImageConfig"]:
         if prdcfg["ppiMapImageConfig"]["rngRing"] > 0:
             rng_rings = np.arange(

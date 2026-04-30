@@ -26,7 +26,6 @@ import numpy as np
 
 import pyart
 
-
 try:
     import pytda
 

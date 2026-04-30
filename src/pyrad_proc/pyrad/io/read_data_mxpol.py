@@ -1072,7 +1072,7 @@ def generate_polvar_metadata(polvar, filename=None):
             plot_interval,
         ) = _DEFAULT_POLARNAMES[polvar]
     else:
-        (standard_name, long_name, units, valid_min, valid_max, plot_interval) = (
+        standard_name, long_name, units, valid_min, valid_max, plot_interval = (
             None,
             None,
             None,

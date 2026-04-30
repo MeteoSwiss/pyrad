@@ -2063,7 +2063,7 @@ def process_centroids(procstatus, dscfg, radar_list=None):
 
         samples_per_vol = dscfg.get("samples_per_vol", 20000)
 
-        (refl, zdr, kdp, rhohv, relh) = pyart.retrieve.data_for_centroids(
+        refl, zdr, kdp, rhohv, relh = pyart.retrieve.data_for_centroids(
             radar,
             refl_field=refl_field,
             zdr_field=zdr_field,
@@ -2660,7 +2660,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
                         "age": age_arr,
                     }
 
-        (ml_obj, ml_dict, iso0_dict, ml_retrieved) = pyart.retrieve.melting_layer_mf(
+        ml_obj, ml_dict, iso0_dict, ml_retrieved = pyart.retrieve.melting_layer_mf(
             radar,
             nvalid_min=nvalid_min,
             ml_thickness_min=ml_thickness_min,

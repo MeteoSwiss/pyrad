@@ -647,11 +647,6 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             elevation tolerance between the two radars. Default 0.5 deg
         rng_tol : float. Dataset keyword
             range tolerance between the two radars. Default 50 m
-        average_range_gates: list of int. Dataset keyword
-            Number of consecutive range gates to average for every radar. If not
-            provided it will average the highest resolution radar to match the resolution
-            of the lowest resolution radar. If both radars have similar resolutions, it will
-            not do any averaging.
         clt_max : float. Dataset keyword
             maximum fraction  of samples that can be clutter contaminated.
             Default 1. i.e. all
@@ -784,6 +779,10 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             )
             return None, None
 
+        linear_avg = False
+        if "reflectivity" in get_fieldname_pyart(main_type):
+            linear_avg = True
+
         radar1 = radar_list[ind_radar_list[0]]
         radar2 = radar_list[ind_radar_list[1]]
 
@@ -862,20 +861,11 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             "rad1_name": dscfg["global_data"]["rad1_name"],
             "rad2_name": dscfg["global_data"]["rad2_name"],
         }
-        average_range_gates = dscfg.get("average_range_gates", None)
-        if average_range_gates:
-            avg_rad1 = average_range_gates[0] > 1
-            avg_rad2 = average_range_gates[1] > 1
-            nbins = int(average_range_gates[0])
-            avg_rad_lim1 = [-int(nbins / 2) - 1, int(nbins / 2)]
-            nbins = int(average_range_gates[1])
-            avg_rad_lim2 = [-int(nbins / 2) - 1, int(nbins / 2)]
-        else:
-            # determine if radar data has to be averaged
-            avg_rad1, avg_rad2, avg_rad_lim1 = get_range_bins_to_avg(
-                radar1.range["data"], radar2.range["data"]
-            )
-            avg_rad_lim2 = avg_rad_lim1
+        # determine if radar data has to be averaged
+        avg_rad1, avg_rad2, avg_rad_lim1 = get_range_bins_to_avg(
+            radar1.range["data"], radar2.range["data"]
+        )
+        avg_rad_lim2 = avg_rad_lim1
 
         # rays are indexed to regular grid
         rays_are_indexed = dscfg.get("rays_are_indexed", False)
@@ -956,7 +946,18 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
                 if np.any(np.ma.getmaskarray(phidp1[rad1_ray_ind[i], ind_rng])):
                     continue
 
-                val1_vec[i] = np.ma.asarray(np.ma.mean(val1[rad1_ray_ind[i], ind_rng]))
+                if linear_avg:
+                    val1_vec[i] = np.ma.asarray(
+                        10
+                        * np.log10(
+                            np.ma.mean(10 ** (0.1 * val1[rad1_ray_ind[i], ind_rng]))
+                        )
+                    )
+                else:
+                    val1_vec[i] = np.ma.asarray(
+                        np.ma.mean(val1[rad1_ray_ind[i], ind_rng])
+                    )
+
                 phidp1_vec[i] = np.ma.asarray(
                     np.ma.mean(phidp1[rad1_ray_ind[i], ind_rng])
                 )
@@ -1013,7 +1014,18 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
                 if np.any(np.ma.getmaskarray(phidp2[rad2_ray_ind[i], ind_rng])):
                     continue
 
-                val2_vec[i] = np.ma.asarray(np.ma.mean(val2[rad2_ray_ind[i], ind_rng]))
+                if linear_avg:
+                    val2_vec[i] = np.ma.asarray(
+                        10
+                        * np.log10(
+                            np.ma.mean(10 ** (0.1 * val2[rad2_ray_ind[i], ind_rng]))
+                        )
+                    )
+                else:
+                    val2_vec[i] = np.ma.asarray(
+                        np.ma.mean(val2[rad2_ray_ind[i], ind_rng])
+                    )
+
                 phidp2_vec[i] = np.ma.asarray(
                     np.ma.mean(phidp2[rad2_ray_ind[i], ind_rng])
                 )

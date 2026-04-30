@@ -1435,7 +1435,7 @@ def _get_ts_values_antenna_pattern(
         tt = traj_time_vec[tind]
 
         # Select radar object, find closest azimuth and elevation ray
-        (radar_sel, ray_sel, rr_ind, el_vec_rnd, az_vec_rnd) = _get_closest_bin(
+        radar_sel, ray_sel, rr_ind, el_vec_rnd, az_vec_rnd = _get_closest_bin(
             az, el, rr, tt, radar, tadict
         )
 
@@ -1510,7 +1510,7 @@ def _get_ts_values_antenna_pattern(
                     values_ma = np.ma.getmaskarray(values)
                     values[values_ma] = nan_value[field_name]
                 try:
-                    (avg, qvals, nvals_valid) = quantiles_weighted(
+                    avg, qvals, nvals_valid = quantiles_weighted(
                         values,
                         weight_vector=w_vec,
                         quantiles=tadict["quantiles"],
@@ -1556,7 +1556,7 @@ def _get_ts_values_antenna_pattern(
                     values[values_ma] = nan_value[field_name]
 
                 try:
-                    (avg, qvals, nvals_valid) = quantiles_weighted(
+                    avg, qvals, nvals_valid = quantiles_weighted(
                         values,
                         weight_vector=w_vec,
                         quantiles=tadict["quantiles"],
@@ -1687,7 +1687,7 @@ def _get_gates(radar, az, el, rr, tt, trajdict, ang_tol=1.2, az_tol=3.0, el_tol=
 
     """
     # Find closest azimuth and elevation ray
-    (radar_sel, ray_sel, rr_ind, el_vec_rnd, az_vec_rnd) = _get_closest_bin(
+    radar_sel, ray_sel, rr_ind, el_vec_rnd, az_vec_rnd = _get_closest_bin(
         az, el, rr, tt, radar, trajdict
     )
 

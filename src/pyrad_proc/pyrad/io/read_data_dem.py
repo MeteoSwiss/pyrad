@@ -72,7 +72,7 @@ def dem2radar_data(radar, dem_data, slice_xy=True, field_name="visibility"):
 
     x_radar, y_radar, _ = _put_radar_in_swiss_coord(radar)
 
-    (x_dem, y_dem, ind_xmin, ind_ymin, ind_xmax, ind_ymax) = _prepare_for_interpolation(
+    x_dem, y_dem, ind_xmin, ind_ymin, ind_xmax, ind_ymax = _prepare_for_interpolation(
         x_radar, y_radar, dem_data, slice_xy=slice_xy
     )
 

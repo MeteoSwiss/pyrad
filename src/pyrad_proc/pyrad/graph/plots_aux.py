@@ -24,9 +24,10 @@ Auxiliary plotting functions
 import numpy as np
 
 import pyart
-
+import os
 import matplotlib as mpl
 import matplotlib.cm
+from warnings import warn
 
 mpl.use("Agg")
 
@@ -36,6 +37,7 @@ mpl.rcParams.update({"font.family": "sans-serif"})
 
 _CARTOPY_AVAILABLE = False
 try:
+    import cartopy
     from cartopy.io.img_tiles import GoogleTiles
     from PIL import Image
 
@@ -82,8 +84,56 @@ try:
 except ImportError:
     pass
 
+try:
+    import geopandas
+
+    _GEOPANDAS_AVAILABLE = True
+except ImportError:
+    warn(
+        "geopandas not available, you won't be able to display geojson files",
+        use_debug=False,
+    )
+    _GEOPANDAS_AVAILABLE = False
+
 
 def parse_cartomap_style(cartomap):
+    """
+    Parse a cartomap string with inline styling options.
+
+    The input string is expected to follow a pipe-separated format:
+
+        "filename|key=value|key=value|..."
+
+    where the first element is the file path (e.g. shapefile or GeoJSON),
+    and subsequent elements define optional styling parameters.
+
+    Supported style keys include:
+        - "color" or "c" : line color
+        - "lw" or "linewidth" : line width (float)
+        - "ls" or "linestyle" : line style (e.g. "-", "--", ":")
+        - "alpha" : transparency (float between 0 and 1)
+
+    Missing or invalid values are ignored and replaced with defaults.
+
+    Parameters
+    ----------
+    cartomap : str
+        Cartomap specification string. The first element is the filename,
+        followed by optional styling parameters separated by "|".
+
+        Example:
+            "borders.shp|color=#ffffff|lw=1.5|ls=--|alpha=0.6"
+
+    Returns
+    -------
+    filename : str
+        Path to the cartomap file.
+    style : dict
+        Dictionary containing parsed styling parameters with keys:
+        "color", "linewidth", "linestyle", and "alpha".
+
+    Invalid values (e.g. non-numeric linewidth) are silently ignored.
+    """
     parts = [p.strip() for p in cartomap.split("|")]
 
     filename = parts[0]
@@ -119,6 +169,187 @@ def parse_cartomap_style(cartomap):
                 pass
 
     return filename, style
+
+
+def embellish_plot(ax, plot_config):
+    """
+    Add map features and background layers to a Cartopy axis.
+
+    This function enhances a given axis by adding cartographic elements such as:
+    background tiles, country borders, coastlines, rivers, and user-provided
+    vector layers (e.g. shapefiles or GeoJSON files).
+
+    The behavior is controlled via the `plot_config` dictionary.
+
+    Parameters
+    ----------
+    ax : cartopy.mpl.geoaxes.GeoAxes
+        Cartopy axis to which map features will be added.
+    plot_config : dict
+        Dictionary containing plotting options. Supported keys include:
+
+        - "maps" : list of str
+            List of map layers to add. Elements can be:
+                * predefined keywords:
+                    "relief", "OTM", "OTM_BW",
+                    "countries", "provinces", "urban_areas",
+                    "roads", "railroads", "coastlines",
+                    "lakes", "lakes_europe",
+                    "rivers", "rivers_europe"
+                * file paths (".shp", ".geojson", ".json") optionally
+                  with inline styling:
+                    "file.shp|color=red|lw=1.5|ls=--|alpha=0.5"
+
+        - "resolution" : {"10m", "50m", "110m"}, optional
+            Resolution of Natural Earth features. Default is "10m".
+
+        - "bg_alpha" : float, optional
+            Transparency of background tiles (e.g. relief or OTM).
+            Default is 1.0.
+
+        - "background_zoom" : int, optional
+            Zoom level for background tile providers. Default is 8.
+
+
+    Returns
+    -------
+    None
+        The function modifies the input axis in place.
+    """
+    maps_list = plot_config.get("maps", [])
+    resolution = plot_config.get("resolution", "10m")
+    bg_alpha = plot_config.get("bg_alpha", 1.0)
+    background_zoom = plot_config.get("background_zoom", 8)
+
+    if "relief" in maps_list and "OTM" in maps_list:
+        warn(
+            "Plotting both 'relief' and 'OTM' is not supported, choosing only relief",
+            use_debug=False,
+        )
+        maps_list.remove("OTM")
+
+    if "relief" in maps_list or "OTM" in maps_list or "OTM_BW" in maps_list:
+        if "PYRAD_CACHE" in os.environ:
+            cache_dir = os.environ["PYRAD_CACHE"]
+        else:
+            cache_dir = os.path.join(os.path.expanduser("~"), "pyrad_cache")
+
+        if not os.path.exists(cache_dir):
+            os.makedirs(cache_dir)
+
+    if "relief" in maps_list:
+        tiler = ShadedReliefESRI(cache=cache_dir)
+
+    if "OTM_BW" in maps_list:
+        tiler = OTM_BW(cache=cache_dir)
+
+    if "OTM" in maps_list:
+        tiler = OTM(cache=cache_dir)
+
+    for cartomap in maps_list:
+        if cartomap in ["relief", "OTM", "OTM_BW"]:
+            ax.add_image(tiler, background_zoom, alpha=bg_alpha)
+
+        elif cartomap == "countries":
+            # add countries
+            countries = cartopy.feature.NaturalEarthFeature(
+                category="cultural",
+                name="admin_0_countries",
+                scale=resolution,
+                facecolor="none",
+            )
+            ax.add_feature(countries, edgecolor="black")
+        elif cartomap == "provinces":
+            # Create a feature for States/Admin 1 regions at
+            # 1:resolution from Natural Earth
+            states_provinces = cartopy.feature.NaturalEarthFeature(
+                category="cultural",
+                name="admin_1_states_provinces_lines",
+                scale=resolution,
+                facecolor="none",
+            )
+            ax.add_feature(states_provinces, edgecolor="gray")
+        elif cartomap == "urban_areas" and resolution in ("10m", "50m"):
+            urban_areas = cartopy.feature.NaturalEarthFeature(
+                category="cultural", name="urban_areas", scale=resolution
+            )
+            ax.add_feature(
+                urban_areas, edgecolor="brown", facecolor="brown", alpha=0.25
+            )
+        elif cartomap == "roads" and resolution == "10m":
+            roads = cartopy.feature.NaturalEarthFeature(
+                category="cultural", name="roads", scale=resolution
+            )
+            ax.add_feature(roads, edgecolor="red", facecolor="none")
+        elif cartomap == "railroads" and resolution == "10m":
+            railroads = cartopy.feature.NaturalEarthFeature(
+                category="cultural", name="railroads", scale=resolution
+            )
+            ax.add_feature(
+                railroads, edgecolor="green", facecolor="none", linestyle=":"
+            )
+        elif cartomap == "coastlines":
+            ax.coastlines(resolution=resolution)
+        elif cartomap == "lakes":
+            # add lakes
+            lakes = cartopy.feature.NaturalEarthFeature(
+                category="physical", name="lakes", scale=resolution
+            )
+            ax.add_feature(lakes, edgecolor="blue", facecolor="blue", alpha=0.25)
+        elif resolution == "10m" and cartomap == "lakes_europe":
+            lakes_europe = cartopy.feature.NaturalEarthFeature(
+                category="physical", name="lakes_europe", scale=resolution
+            )
+            ax.add_feature(lakes_europe, edgecolor="blue", facecolor="blue", alpha=0.25)
+        elif cartomap == "rivers":
+            # add rivers
+            rivers = cartopy.feature.NaturalEarthFeature(
+                category="physical",
+                name="rivers_lake_centerlines",
+                scale=resolution,
+            )
+            ax.add_feature(rivers, edgecolor="blue", facecolor="none")
+        elif resolution == "10m" and cartomap == "rivers_europe":
+            rivers_europe = cartopy.feature.NaturalEarthFeature(
+                category="physical", name="rivers_europe", scale=resolution
+            )
+            ax.add_feature(rivers_europe, edgecolor="blue", facecolor="none")
+        elif ".shp" in cartomap or ".geojson" in cartomap or ".json" in cartomap:
+            if _GEOPANDAS_AVAILABLE:
+                cartomap_file, style = parse_cartomap_style(cartomap)
+                try:
+                    gdf = geopandas.read_file(cartomap_file)
+
+                    if gdf.crs is None:
+                        xmin, _, _, _ = gdf.total_bounds
+                        if xmin > 1e6:
+                            gdf = gdf.set_crs(epsg=2056)
+                        else:
+                            gdf = gdf.set_crs(epsg=21781)
+
+                    gdf = gdf.to_crs(epsg=4326)
+
+                    ax.add_geometries(
+                        gdf.geometry,
+                        crs=cartopy.crs.PlateCarree(),
+                        facecolor="none",
+                        edgecolor=style["color"],
+                        linewidth=style["linewidth"],
+                        linestyle=style["linestyle"],
+                        alpha=style["alpha"],
+                    )
+                except Exception as e:
+                    warn(f"Failed to load cartomap {cartomap}: {e}")
+            else:
+                warn(f"Geopandas not available, not able to display map {cartomap}")
+        else:
+            warn(
+                "cartomap "
+                + cartomap
+                + " for resolution "
+                + resolution
+                + " not available"
+            )
 
 
 def generate_complex_range_Doppler_title(radar, field, ray, datetime_format=None):
