@@ -27,7 +27,7 @@ import pyart
 import os
 import matplotlib as mpl
 import matplotlib.cm
-from warnings import warn
+from ..util import warn
 
 mpl.use("Agg")
 
