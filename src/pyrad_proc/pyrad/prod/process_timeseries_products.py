@@ -106,7 +106,10 @@ def generate_timeseries_products(dataset, prdcfg):
                 from the Py-ART config file.
             plot_type: str
                 The type of plot to generate. Can be 'timeseries' (default) or
-                'scatter'. Scatter-plots also show the RMSE and bias.
+                'scatter'. Scatter-plots also show the RMSE, corr and bias.
+            double_conditional_threshold: float
+                When using plot_type == "scatter", the data can be filtered with a double-conditional threshold.
+                Default is -infinity (no thresholding)
             time_interval: int or None
                 Time interval in seconds used to resample both radar and sensor
                 series before comparison. If None, the native timestamps are used.
@@ -121,7 +124,8 @@ def generate_timeseries_products(dataset, prdcfg):
                 radar and gauge match perfectly.
             nearest_tol: int or None
                 Maximum allowed time difference in seconds when align='nearest'.
-                If None, no tolerance is applied (nearest_tol = infinity)
+                If None, no tolerance is applied (nearest_tol = infinity), which is not recommended when there are holes in the
+                radar timeseries, as it will lead to erroneous interpolation.
             sensor: str
                 The sensor type. Can be 'rgage', 'rgage_knmi' or 'disdro'
             sensorid: str
@@ -172,7 +176,8 @@ def generate_timeseries_products(dataset, prdcfg):
                 radar and gauge match perfectly.
             nearest_tol: int or None
                 Maximum allowed time difference in seconds when align='nearest'.
-                If None, no tolerance is applied (nearest_tol = infinity)
+                If None, no tolerance is applied (nearest_tol = infinity), which is not recommended when there are holes in the
+                radar timeseries, as it will lead to erroneous interpolation.
             sensor: str
                 The sensor type. Can be 'rgage', 'rgage_knmi' or 'disdro'
             sensorid: str
@@ -455,6 +460,7 @@ def generate_timeseries_products(dataset, prdcfg):
         align = prdcfg.get("align", "nearest")  # "nearest" or "inner"
         nearest_tol = prdcfg.get("nearest_tol", None)  # seconds or None
         sensor_id = prdcfg.get("sensorid", "")  # sensor ID
+        doublecond = prdcfg.get("double_conditional_threshold", -np.inf)
 
         radar_keys = sorted(
             [k for k in dataset.keys() if isinstance(k, str) and k.startswith("RADAR")]
@@ -564,7 +570,6 @@ def generate_timeseries_products(dataset, prdcfg):
         ]
         plot_values = [df_s["sensor"].to_numpy()]
         plot_labels = [label_sensor]
-
         # merge_asof tolerance
         tol = None
         if nearest_tol is not None:
@@ -572,7 +577,6 @@ def generate_timeseries_products(dataset, prdcfg):
 
         for radarnr in radar_keys:
             ds = dataset[radarnr]
-
             radarvalue = ds.get("value", None)
             radardate = ds.get("time", None)  # as requested
             if radarvalue is None or radardate is None:
@@ -729,18 +733,23 @@ def generate_timeseries_products(dataset, prdcfg):
                 warn("No radar series available to plot scatter")
                 return None
 
-            # Keep only valid x
-            ok = np.isfinite(x)
-            x = x[ok]
-            ys = [y[ok] for y in ys]
-
-            # Keep only series with valid pairs
-            ys_valid = []
+            # Create list of x,y pairs to plot
+            pairs = []
             for y in ys:
-                if np.any(np.isfinite(x) & np.isfinite(y)):
-                    ys_valid.append(y)
+                # Keep only valid x,y
+                ok = np.isfinite(x)
+                x_pair = x[ok]
+                y_pair = y[ok]
 
-            if x.size == 0 or len(ys_valid) == 0:
+                # Use double conditional threshold
+                ok = (x_pair >= doublecond) & (y_pair >= doublecond)
+                x_pair = x_pair[ok]
+                y_pair = y_pair[ok]
+
+                if np.any(np.isfinite(x_pair) & np.isfinite(y_pair)):
+                    pairs.append((x_pair, y_pair))
+
+            if not len(pairs):
                 warn("No matched radar/sensor pairs to plot scatter")
                 return None
 
@@ -755,7 +764,7 @@ def generate_timeseries_products(dataset, prdcfg):
             ).strftime("%Y-%m-%d")
 
             plot_scatter_comp(
-                [x] + ys_valid,
+                pairs,
                 figfname_list,
                 labelx=labelx,
                 labely=labely2,

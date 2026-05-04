@@ -1867,9 +1867,8 @@ def plot_scatter_comp(
 
     Parameters
     ----------
-    values : list of array-like
-        List of arrays. The first array is used as x, and all others are
-        plotted against it as y.
+    values : list of tuple(array-like, array-like)
+        List of (x, y) pairs. Each tuple is plotted as one scatter series.
     fname_list : list of str
         List of names of the files where to store the plot.
     labelx : str
@@ -1908,25 +1907,31 @@ def plot_scatter_comp(
         Figure and axis handles, if save_fig is False.
     """
 
-    if values is None or len(values) < 2:
-        raise ValueError("values must be a list with at least 2 arrays")
+    if values is None or len(values) == 0:
+        raise ValueError("values must be a non-empty list of (x, y) tuples")
 
-    values = [np.asanyarray(v) for v in values]
-
-    npoints = len(values[0])
-    for i, v in enumerate(values):
-        if len(v) != npoints:
+    xy_pairs = []
+    for i, pair in enumerate(values):
+        if not isinstance(pair, (tuple, list)) or len(pair) != 2:
             raise ValueError(
-                f"All arrays must have the same length. "
-                f"Array 0 has length {npoints}, array {i} has length {len(v)}."
+                f"values[{i}] must be a tuple/list of two elements: (x, y)"
             )
 
-    x = values[0]
+        x = np.asanyarray(pair[0])
+        y = np.asanyarray(pair[1])
+
+        if len(x) != len(y):
+            raise ValueError(
+                f"x and y must have the same length for values[{i}]. "
+                f"Got len(x)={len(x)}, len(y)={len(y)}."
+            )
+
+        xy_pairs.append((x, y))
 
     if labels is None:
-        labels = [f"Series {i}" for i in range(2, len(values) + 1)]
-    elif len(labels) != len(values) - 1:
-        raise ValueError("labels must have length len(values)-1")
+        labels = [f"Series {i + 1}" for i in range(len(xy_pairs))]
+    elif len(labels) != len(xy_pairs):
+        raise ValueError("labels must have length len(values)")
 
     if labely is None:
         labely = "Estimated values"
@@ -1939,16 +1944,16 @@ def plot_scatter_comp(
     for txt in old_texts:
         txt.remove()
 
-    # Nice color cycle from matplotlib default
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     markers = ["o", "s", "^", "D", "v", "P", "X", "<", ">"]
 
     all_valid = []
 
-    for i, y in enumerate(values[1:]):
+    for i, (x, y) in enumerate(xy_pairs):
         mask = np.isfinite(x) & np.isfinite(y)
         xv = x[mask]
         yv = y[mask]
+
         all_valid.append((xv, yv))
 
         color = colors[i % len(colors)]
@@ -2000,6 +2005,7 @@ def plot_scatter_comp(
 
     if write_stats:
         stats_lines = []
+
         for i, (xv, yv) in enumerate(all_valid):
             if xv.size == 0:
                 rmse = np.nan
@@ -2008,6 +2014,7 @@ def plot_scatter_comp(
             else:
                 rmse = np.sqrt(np.nanmean((xv - yv) ** 2))
                 bias = np.nanmean(yv - xv)
+
                 if xv.size > 1 and np.nanstd(xv) > 0 and np.nanstd(yv) > 0:
                     corr = np.corrcoef(xv, yv)[0, 1]
                 else:
@@ -2025,7 +2032,12 @@ def plot_scatter_comp(
             verticalalignment="top",
             transform=ax.transAxes,
             fontsize=9,
-            bbox=dict(boxstyle="round", facecolor="white", alpha=0.7, edgecolor="none"),
+            bbox=dict(
+                boxstyle="round",
+                facecolor="white",
+                alpha=0.7,
+                edgecolor="none",
+            ),
         )
 
     ax.grid()
@@ -2037,8 +2049,6 @@ def plot_scatter_comp(
             fig.savefig(fname, dpi=dpi, bbox_inches="tight")
         plt.close(fig)
         return fname_list
-
-    return fig, ax
 
 
 def plot_sun_hits(field, field_name, fname_list, prdcfg):

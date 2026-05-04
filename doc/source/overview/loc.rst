@@ -123,7 +123,7 @@ it is not necessarily defined in this file. The fields are described in the tabl
        - alpha: FLOAT: transparency value (between 0 and 1) of the displayed radar data, alpha smaller than 1 is required when plotting over a relief or OTM map
        - bg_alpha: FLOAT: transparency value (between 0 and 1) of the displayed OTM or relief map. Used only if OTM or relief is in the list of maps.
        - background_zoom: INT: Zoom level of the additional cartopy raster geodata, the higher the value, the higher the resolution (typically between 8 and 12). Default is 8.
-       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), OTM_BW (otm in blackwhite), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe, as well as any shapefile or geojson filename. Note that for custom geojson or shapefiles, geopandas is required.
+       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), OTM_BW (otm in blackwhite), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe, as well as any shapefile or geojson filename. For geojson or shapefiles it is possible to specify the line format by adding the suffix |color=HEXCODE|lw=LINEWIDTH|ls=LINESTYLE|alpha=ALPHA to the filename (e.g. /storage/geodata/geojson/chlakes.shp.p0.geojson|color=#00004C|lw=1.|ls=-|alpha=0.5). Note that for custom geojson or shapefiles, geopandas is required.
        - rngRing: INT: if defined will plot range rings every x kilometers from the radar (x is the specified value)
    * - gridMapImageConfig
      - STRUCT
@@ -139,7 +139,7 @@ it is not necessarily defined in this file. The fields are described in the tabl
        - alpha: FLOAT: transparency value (between 0 and 1) of the displayed radar data, alpha smaller than 1 is required when plotting over a relief or OTM map
        - bg_alpha: FLOAT: transparency value (between 0 and 1) of the displayed OTM or relief maps. Used only if OTM or relief is in the list of maps.
        - background_zoom: INT: Zoom level of the additional cartopy raster geodata, the higher the value, the higher the resolution (typically between 8 and 12). Default is 8.
-       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), OTM_BW (otm in blackwhite), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe, as well as any shapefile or geojson filename. Note that for custom geojson or shapefiles, geopandas is required.
+       - maps: list of STRING: list of additional geodata to plot. The following are supported: relief (hillshade), OTM (opentopomaps), OTM_BW (otm in blackwhite), provinces, urban_areas, roads, railroads, coastlines, lakes, lakes_europe, rivers, rivers_europe, as well as any shapefile or geojson filename. For geojson or shapefiles it is possible to specify the line format by adding the suffix |color=HEXCODE|lw=LINEWIDTH|ls=LINESTYLE|alpha=ALPHA to the filename (e.g. /storage/geodata/geojson/chlakes.shp.p0.geojson|color=#00004C|lw=1.|ls=-|alpha=0.5). Note that for custom geojson or shapefiles, geopandas is required.
     * - xsecImageConfig
      - STRUCT
      - Structure defining the cross-section images generated from gridded data (CROSS_SECTION, LATITUDE_SLICE and LONGITUDE_SLICE products). It can contain the following keys:

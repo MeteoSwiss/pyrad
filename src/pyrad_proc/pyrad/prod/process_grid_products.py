@@ -717,7 +717,6 @@ def generate_grid_products(dataset, prdcfg):
             titl=titl,
             save_fig=False,
         )
-
         fname_list = plot_surface_contour(
             dataset["radar_out"],
             contour_name,

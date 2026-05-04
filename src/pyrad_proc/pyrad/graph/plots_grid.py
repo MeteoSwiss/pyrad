@@ -194,7 +194,7 @@ def plot_surface(
             projection = cartopy.crs.PlateCarree()
 
             display = pyart.graph.GridMapDisplay(grid)
-            display.plot_grid(
+            fig, ax = display.plot_grid(
                 field_name,
                 level=level,
                 norm=norm,
@@ -237,7 +237,7 @@ def plot_surface(
                 fig=fig,
             )
         else:
-            display.plot_grid(
+            fig, ax = display.plot_grid(
                 field_name,
                 level=level,
                 norm=norm,
@@ -460,7 +460,6 @@ def plot_surface_contour(
     min_lat = prdcfg["gridMapImageConfig"].get("latmin", 43.5)
     max_lat = prdcfg["gridMapImageConfig"].get("latmax", 49.5)
     exact_limits = prdcfg["gridMapImageConfig"].get("exact_limits", 0)
-
     if fig is None:
         if exact_limits:
             lon_lines = np.arange(min_lon, max_lon + lonstep, lonstep)
@@ -471,7 +470,6 @@ def plot_surface_contour(
 
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111)
-
         if use_basemap or not _CARTOPY_AVAILABLE:
             resolution = prdcfg["gridMapImageConfig"].get("mapres", "l")
             if resolution not in ("c", "l", "i", "h", "f"):
@@ -531,7 +529,6 @@ def plot_surface_contour(
                 resolution = "110m"
             background_zoom = prdcfg["gridMapImageConfig"].get("background_zoom", 8)
             maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
-
             display = pyart.graph.GridMapDisplay(grid)
             fig, ax = display.plot_grid_contour(
                 field_name,
@@ -565,7 +562,6 @@ def plot_surface_contour(
         else:
             lons, lats = grid.get_point_longitude_latitude(edges=False)
             data = grid.fields[field_name]["data"][level, :, :]
-
             ax.contour(
                 lons,
                 lats,
@@ -576,7 +572,6 @@ def plot_surface_contour(
                 transform=cartopy.crs.PlateCarree(),
             )
             ax.set_extent([min_lon, max_lon, min_lat, max_lat])
-
     if save_fig:
         for fname in fname_list:
             fig.savefig(fname, dpi=dpi, bbox_inches="tight")
