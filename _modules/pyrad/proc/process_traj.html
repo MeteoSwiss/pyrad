@@ -1841,7 +1841,7 @@
         <span class="n">tt</span> <span class="o">=</span> <span class="n">traj_time_vec</span><span class="p">[</span><span class="n">tind</span><span class="p">]</span>
 
         <span class="c1"># Select radar object, find closest azimuth and elevation ray</span>
-        <span class="p">(</span><span class="n">radar_sel</span><span class="p">,</span> <span class="n">ray_sel</span><span class="p">,</span> <span class="n">rr_ind</span><span class="p">,</span> <span class="n">el_vec_rnd</span><span class="p">,</span> <span class="n">az_vec_rnd</span><span class="p">)</span> <span class="o">=</span> <span class="n">_get_closest_bin</span><span class="p">(</span>
+        <span class="n">radar_sel</span><span class="p">,</span> <span class="n">ray_sel</span><span class="p">,</span> <span class="n">rr_ind</span><span class="p">,</span> <span class="n">el_vec_rnd</span><span class="p">,</span> <span class="n">az_vec_rnd</span> <span class="o">=</span> <span class="n">_get_closest_bin</span><span class="p">(</span>
             <span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">tadict</span>
         <span class="p">)</span>
 
@@ -1916,7 +1916,7 @@
                     <span class="n">values_ma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
                     <span class="n">values</span><span class="p">[</span><span class="n">values_ma</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan_value</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span><span class="p">)</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
+                    <span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
                         <span class="n">values</span><span class="p">,</span>
                         <span class="n">weight_vector</span><span class="o">=</span><span class="n">w_vec</span><span class="p">,</span>
                         <span class="n">quantiles</span><span class="o">=</span><span class="n">tadict</span><span class="p">[</span><span class="s2">&quot;quantiles&quot;</span><span class="p">],</span>
@@ -1962,7 +1962,7 @@
                     <span class="n">values</span><span class="p">[</span><span class="n">values_ma</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan_value</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
 
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span><span class="p">)</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
+                    <span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
                         <span class="n">values</span><span class="p">,</span>
                         <span class="n">weight_vector</span><span class="o">=</span><span class="n">w_vec</span><span class="p">,</span>
                         <span class="n">quantiles</span><span class="o">=</span><span class="n">tadict</span><span class="p">[</span><span class="s2">&quot;quantiles&quot;</span><span class="p">],</span>
@@ -2093,7 +2093,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Find closest azimuth and elevation ray</span>
-    <span class="p">(</span><span class="n">radar_sel</span><span class="p">,</span> <span class="n">ray_sel</span><span class="p">,</span> <span class="n">rr_ind</span><span class="p">,</span> <span class="n">el_vec_rnd</span><span class="p">,</span> <span class="n">az_vec_rnd</span><span class="p">)</span> <span class="o">=</span> <span class="n">_get_closest_bin</span><span class="p">(</span>
+    <span class="n">radar_sel</span><span class="p">,</span> <span class="n">ray_sel</span><span class="p">,</span> <span class="n">rr_ind</span><span class="p">,</span> <span class="n">el_vec_rnd</span><span class="p">,</span> <span class="n">az_vec_rnd</span> <span class="o">=</span> <span class="n">_get_closest_bin</span><span class="p">(</span>
         <span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">rr</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">trajdict</span>
     <span class="p">)</span>
 

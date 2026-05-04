@@ -1306,24 +1306,29 @@
 <h1>pyrad.graph.plot_histogram<a class="headerlink" href="#pyrad-graph-plot-histogram" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrad.graph.plot_histogram">
-<span class="sig-prename descclassname"><span class="pre">pyrad.graph.</span></span><span class="sig-name descname"><span class="pre">plot_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bin_edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bins'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labely</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">Samples'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'histogram'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binwidth_equal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/graph/plots.html#plot_histogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.graph.plot_histogram" title="Link to this definition">#</a></dt>
-<dd><p>computes and plots histogram</p>
+<span class="sig-prename descclassname"><span class="pre">pyrad.graph.</span></span><span class="sig-name descname"><span class="pre">plot_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bin_edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bins'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labely</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">Samples'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'histogram'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binwidth_equal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyrad/graph/plots.html#plot_histogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrad.graph.plot_histogram" title="Link to this definition">#</a></dt>
+<dd><p>Compute and plot one or several histograms.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>bin_edges</strong> (<em>array</em>) – histogram bin edges</p></li>
-<li><p><strong>values</strong> (<em>array</em>) – data values</p></li>
-<li><p><strong>fname_list</strong> (<em>list of str</em>) – list of names of the files where to store the plot</p></li>
-<li><p><strong>labelx</strong> (<em>str</em>) – The label of the X axis</p></li>
-<li><p><strong>labely</strong> (<em>str</em>) – The label of the Y axis</p></li>
-<li><p><strong>titl</strong> (<em>str</em>) – The figure title</p></li>
-<li><p><strong>binwidth_equal</strong> (<em>bool</em>) – If True the bars are going to have the same width regardless of the
-actual bin size</p></li>
-<li><p><strong>dpi</strong> (<em>int</em>) – dots per inch</p></li>
+<li><p><strong>bin_edges</strong> (<em>array-like or list of array-like</em>) – Histogram bin edges. If a single array is provided, it is used for all
+value arrays. If a list is provided, each entry is used for the
+corresponding value array.</p></li>
+<li><p><strong>values</strong> (<em>array-like or list of array-like</em>) – Data values. Can be a single array or a list of arrays to plot several
+distributions on the same axis.</p></li>
+<li><p><strong>fname_list</strong> (<em>list of str</em>) – List of filenames where the plot will be saved.</p></li>
+<li><p><strong>labelx</strong> (<em>str, optional</em>) – Label of the x-axis.</p></li>
+<li><p><strong>labely</strong> (<em>str, optional</em>) – Label of the y-axis.</p></li>
+<li><p><strong>titl</strong> (<em>str, optional</em>) – Figure title.</p></li>
+<li><p><strong>binwidth_equal</strong> (<em>bool, optional</em>) – If True, bars are plotted with equal visual width regardless of the
+actual bin size.</p></li>
+<li><p><strong>dpi</strong> (<em>int, optional</em>) – Dots per inch.</p></li>
+<li><p><strong>labels</strong> (<em>list of str, optional</em>) – Labels for each distribution. If provided, a legend is added.</p></li>
+<li><p><strong>alpha</strong> (<em>float, optional</em>) – Transparency of the histogram (only used for single distribution).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fname_list</strong> (<em>list of str</em>) – list of names of the created plots</p>
+<dd class="field-even"><p><strong>fname_list</strong> (<em>list of str</em>) – List of filenames of the created plots.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -3449,11 +3449,6 @@ parameters
      | elevation tolerance between the two radars. Default 0.5 deg
    rng_tol : float. Dataset keyword
      | range tolerance between the two radars. Default 50 m
-   average_range_gates: list of int. Dataset keyword
-     | Number of consecutive range gates to average for every radar. If not
-     |     provided it will average the highest resolution radar to match the resolution
-     |     of the lowest resolution radar. If both radars have similar resolutions, it will
-     |     not do any averaging.
    clt_max : float. Dataset keyword
      | maximum fraction  of samples that can be clutter contaminated.
      |     Default 1. i.e. all

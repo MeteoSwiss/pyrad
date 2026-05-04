@@ -1338,9 +1338,45 @@ and generating the plots. Any mathematical function with argument “x”
 is accepted for example “sin(x) + x**2” or “10 * log10(x)”
 Default is to use no transform</p>
 </dd>
+<dt>range_bins<span class="classifier">list of float, optional</span></dt><dd><p>Range bin edges in meters. Separate files and plots are created for every set of range
+bins.
+Default is [0, np.inf].</p>
+</dd>
 <dt>corr_min: float</dt><dd><p>The minimum correlation to consider the statistics
 valid and therefore use the data point in the plotting.
 Default 0.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>‘INTERCOMP_HISTOGRAMS’: Plots one-dimensional histograms of colocated intercomparison data from two</dt><dd><p>radars. The distributions of radar 1 and radar 2 are shown on the same plot,
+optionally for different range intervals.
+User defined parameters:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>histogram_type<span class="classifier">str, optional</span></dt><dd><p>Type of histogram product. If set to “cumulative”, the plot is only
+generated when dataset[“final”] is True. Default is “cumulative”.</p>
+</dd>
+<dt>range_bins<span class="classifier">list of float, optional</span></dt><dd><p>Range bin edges in meters. One histogram is produced for each range
+interval.
+Default is [0, np.inf].</p>
+</dd>
+<dt>transform<span class="classifier">str, optional</span></dt><dd><p>Mathematical expression applied to both radar values before plotting.
+Default is “x”.</p>
+</dd>
+<dt>step<span class="classifier">float, optional</span></dt><dd><p>Histogram bin width. If None, bin edges are determined automatically.</p>
+</dd>
+<dt>vmin, vmax<span class="classifier">float, optional</span></dt><dd><p>Minimum and maximum histogram limits. If not specified, limits are inferred
+from the selected data.</p>
+</dd>
+<dt>cap_limits<span class="classifier">bool, optional</span></dt><dd><p>If True, values outside [vmin, vmax] are discarded. If False, values are
+clipped to the nearest limit. Default is False.</p>
+</dd>
+<dt>double_conditional_threshold<span class="classifier">float, optional</span></dt><dd><p>If set, only samples where both radar values are larger than this threshold
+are used.</p>
+</dd>
+<dt>binwidth_equal<span class="classifier">bool, optional</span></dt><dd><p>If True, histogram bars are shown with equal visual width regardless of the
+actual bin size. Default is False.</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -1355,10 +1391,10 @@ User defined parameters:</p>
 <dt>step: float</dt><dd><p>The quantization step of the data. If none it will be
 computed using the Py-ART config file. Default None</p>
 </dd>
-<dt>vmin: float</dt><dd><p>Minimum value of the density plot. If vmin or vmax are not define the range limits
+<dt>vmin: float</dt><dd><p>Minimum value of the density plot. If vmin or vmax are not defined the range limits
 of the field as defined in the Py-ART config file are going to be used.</p>
 </dd>
-<dt>vmax: float</dt><dd><p>Maximum value of the density plot. If vmin or vmax are not define the range limits
+<dt>vmax: float</dt><dd><p>Maximum value of the density plot. If vmin or vmax are not defined the range limits
 of the field as defined in the Py-ART config file are going to be used.</p>
 </dd>
 <dt>min_cnt: int</dt><dd><p>Minimum number of samples in a 2D histogram bin for the bin to be displayed.
@@ -1377,6 +1413,8 @@ e.g. only samples where both radars have measured a value &gt; threshold will be
 <dt>scatter_type: str</dt><dd><p>Type of scatter plot. Can be a plot for each radar volume
 (instant) or at the end of the processing period
 (cumulative). Default is cumulative</p>
+</dd>
+<dt>marginals: bool</dt><dd><p>If set to 1, will also plot the two marginal distributions on the sides of the scatter-plot</p>
 </dd>
 <dt>range_bins: list of floats</dt><dd><p>Range bins in meters to radar 1 to consider, a different plot will be generated for
 all range bins. This can be used to differentiate the analysis in different

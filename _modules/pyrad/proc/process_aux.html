@@ -3224,7 +3224,7 @@
                     <span class="n">values</span><span class="p">[</span><span class="n">values_ma</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan_value</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
 
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span><span class="p">)</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
+                    <span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
                         <span class="n">values</span><span class="p">,</span>
                         <span class="n">weight_vector</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">w_vec</span><span class="p">),</span>
                         <span class="n">quantiles</span><span class="o">=</span><span class="n">tadict</span><span class="p">[</span><span class="s2">&quot;quantiles&quot;</span><span class="p">],</span>
@@ -3288,7 +3288,7 @@
                     <span class="n">values</span><span class="p">[</span><span class="n">values_ma</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan_value</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
 
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="p">(</span><span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span><span class="p">)</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
+                    <span class="n">avg</span><span class="p">,</span> <span class="n">qvals</span><span class="p">,</span> <span class="n">nvals_valid</span> <span class="o">=</span> <span class="n">quantiles_weighted</span><span class="p">(</span>
                         <span class="n">values</span><span class="p">,</span>
                         <span class="n">weight_vector</span><span class="o">=</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">w_vec</span><span class="p">),</span>
                         <span class="n">quantiles</span><span class="o">=</span><span class="n">tadict</span><span class="p">[</span><span class="s2">&quot;quantiles&quot;</span><span class="p">],</span>

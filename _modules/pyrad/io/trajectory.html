@@ -575,7 +575,7 @@
 
         <span class="c1"># Note: Earth curvature not considered yet!</span>
 
-        <span class="p">(</span><span class="n">rvec</span><span class="p">,</span> <span class="n">azvec</span><span class="p">,</span> <span class="n">elvec</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span>
+        <span class="n">rvec</span><span class="p">,</span> <span class="n">azvec</span><span class="p">,</span> <span class="n">elvec</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">cartesian_to_antenna</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chy</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chx</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">swiss_chh</span> <span class="o">-</span> <span class="n">rad</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">,</span>
@@ -1185,7 +1185,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_alt</span><span class="p">)</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ch_y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ch_alt</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">wgs84_to_swissCH1903</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span><span class="p">,</span> <span class="n">no_altitude_transform</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_swiss_coords_done</span> <span class="o">=</span> <span class="kc">True</span>

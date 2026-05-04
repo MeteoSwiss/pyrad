@@ -1371,7 +1371,10 @@ True. Default is True.</p>
 from the Py-ART config file.</p>
 </dd>
 <dt>plot_type: str</dt><dd><p>The type of plot to generate. Can be ‘timeseries’ (default) or
-‘scatter’. Scatter-plots also show the RMSE and bias.</p>
+‘scatter’. Scatter-plots also show the RMSE, corr and bias.</p>
+</dd>
+<dt>double_conditional_threshold: float</dt><dd><p>When using plot_type == “scatter”, the data can be filtered with a double-conditional threshold.
+Default is -infinity (no thresholding)</p>
 </dd>
 <dt>time_interval: int or None</dt><dd><p>Time interval in seconds used to resample both radar and sensor
 series before comparison. If None, the native timestamps are used.</p>
@@ -1386,7 +1389,8 @@ values (used for CSV pairing and scatter plots). Can be ‘nearest’
 radar and gauge match perfectly.</p>
 </dd>
 <dt>nearest_tol: int or None</dt><dd><p>Maximum allowed time difference in seconds when align=’nearest’.
-If None, no tolerance is applied (nearest_tol = infinity)</p>
+If None, no tolerance is applied (nearest_tol = infinity), which is not recommended when there are holes in the
+radar timeseries, as it will lead to erroneous interpolation.</p>
 </dd>
 <dt>sensor: str</dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’ or ‘disdro’</p>
 </dd>
@@ -1441,7 +1445,8 @@ values (used for CSV pairing and scatter plots). Can be ‘nearest’
 radar and gauge match perfectly.</p>
 </dd>
 <dt>nearest_tol: int or None</dt><dd><p>Maximum allowed time difference in seconds when align=’nearest’.
-If None, no tolerance is applied (nearest_tol = infinity)</p>
+If None, no tolerance is applied (nearest_tol = infinity), which is not recommended when there are holes in the
+radar timeseries, as it will lead to erroneous interpolation.</p>
 </dd>
 <dt>sensor: str</dt><dd><p>The sensor type. Can be ‘rgage’, ‘rgage_knmi’ or ‘disdro’</p>
 </dd>

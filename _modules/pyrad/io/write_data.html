@@ -396,7 +396,7 @@
 <span class="sd">    :toctree: generated/</span>
 
 <span class="sd">    write_to_s3</span>
-<span class="sd">    write_to_mysql</span>
+<span class="sd">    write_csv_to_mysql</span>
 <span class="sd">    write_vol_csv</span>
 <span class="sd">    write_vol_kml</span>
 <span class="sd">    write_centroids</span>
@@ -784,6 +784,7 @@
         <span class="k">return</span>
 
     <span class="c1"># Convert pandas NaT/NaN again after filtering</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="c1"># -----------------------------</span>

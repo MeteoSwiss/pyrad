@@ -1311,8 +1311,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>values</strong> (<em>list of array-like</em>) – List of arrays. The first array is used as x, and all others are
-plotted against it as y.</p></li>
+<li><p><strong>values</strong> (<em>list of tuple(array-like, array-like)</em>) – List of (x, y) pairs. Each tuple is plotted as one scatter series.</p></li>
 <li><p><strong>fname_list</strong> (<em>list of str</em>) – List of names of the files where to store the plot.</p></li>
 <li><p><strong>labelx</strong> (<em>str</em>) – Label of the X axis.</p></li>
 <li><p><strong>labely</strong> (<em>str or None</em>) – Label of the Y axis. If None, defaults to “Estimated values”.</p></li>
