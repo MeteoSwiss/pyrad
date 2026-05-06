@@ -211,14 +211,6 @@ def generate_intercomp_products(dataset, prdcfg):
             return None
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdname"],
-            timeinfo=dataset["timeinfo"],
-        )
-
         transform_str = prdcfg.get("transform", "x")
         transform = parse_math_expression(transform_str)
 
@@ -243,6 +235,15 @@ def generate_intercomp_products(dataset, prdcfg):
             else:
                 rangebin_info = None
                 rangebin_info_title = ""
+
+            savedir = get_save_dir(
+                prdcfg["basepath"],
+                prdcfg["procname"],
+                dssavedir,
+                prdcfg["prdname"],
+                subdir=rangebin_info,
+                timeinfo=dataset["timeinfo"],
+            )
 
             f_list = make_filename(
                 "histogram",
@@ -370,14 +371,6 @@ def generate_intercomp_products(dataset, prdcfg):
             return
 
         field_name = get_fieldname_pyart(prdcfg["voltype"])
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdname"],
-            timeinfo=dataset["timeinfo"],
-        )
-
         transform_str = prdcfg.get("transform", "x")
         transform = parse_math_expression(transform_str)
         range_bins = prdcfg.get("range_bins", [0, np.inf])
@@ -400,6 +393,15 @@ def generate_intercomp_products(dataset, prdcfg):
             else:
                 rangebin_info = None  # only one range bin, leave empty
                 rangebin_info_title = ""
+
+            savedir = get_save_dir(
+                prdcfg["basepath"],
+                prdcfg["procname"],
+                dssavedir,
+                prdcfg["prdname"],
+                subdir=rangebin_info,
+                timeinfo=dataset["timeinfo"],
+            )
 
             f_list = make_filename(
                 "scatter",
@@ -529,14 +531,6 @@ def generate_intercomp_products(dataset, prdcfg):
             csvtimeinfo_file = dataset["timeinfo"]
             timeformat = "%Y"
 
-        savedir = get_save_dir(
-            prdcfg["basepath"],
-            prdcfg["procname"],
-            dssavedir,
-            prdcfg["prdname"],
-            timeinfo=None,
-        )
-
         fname_list = []
 
         for i in range(len(range_bins) - 1):
@@ -550,6 +544,15 @@ def generate_intercomp_products(dataset, prdcfg):
             else:
                 rangebin_info = None
                 rangebin_info_title = ""
+
+            savedir = get_save_dir(
+                prdcfg["basepath"],
+                prdcfg["procname"],
+                dssavedir,
+                prdcfg["prdname"],
+                subdir=rangebin_info,
+                timeinfo=None,
+            )
 
             selection = np.logical_and(
                 dataset["intercomp_dict"]["rad1_rng"] >= range_bins[i],
