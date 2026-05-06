@@ -148,6 +148,8 @@ def process_correct_noise_rhohv(procstatus, dscfg, radar_list=None):
             urhohv = "uncorrected_cross_correlation_ratio"
         if datatype == "SNRh":
             snr = "signal_to_noise_ratio_hh"
+        if datatype == "SNR":
+            snr = "signal_to_noise_ratio"
         if datatype == "ZDR":
             zdr = "differential_reflectivity"
         if datatype == "ZDRc":
