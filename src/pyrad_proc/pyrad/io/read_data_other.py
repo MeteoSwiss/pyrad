@@ -1444,7 +1444,7 @@ def read_monitoring_ts_old(fname):
         return None, None, None, None, None
 
 
-def read_intercomp_scores_ts(fname, sort_by_date=False):
+def read_intercomp_scores_ts(fname, sort_by_date=True):
     """
     Reads a radar intercomparison scores csv file
 

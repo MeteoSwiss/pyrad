@@ -1222,6 +1222,9 @@ def get_datatype_metranet(datatype):
     elif datatype == "MPH":
         datatype_metranet = "MPH"
         field_name = "mean_phase"
+    elif datatype == "SNR":
+        datatype_metranet = "SNR"
+        field_name = "signal_to_noise_ratio"
     else:
         raise ValueError("ERROR: Metranet fields do not contain datatype " + datatype)
 
