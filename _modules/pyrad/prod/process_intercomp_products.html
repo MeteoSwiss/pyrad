@@ -601,14 +601,6 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
-            <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-        <span class="p">)</span>
-
         <span class="n">transform_str</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="n">parse_math_expression</span><span class="p">(</span><span class="n">transform_str</span><span class="p">)</span>
 
@@ -633,6 +625,15 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">rangebin_info</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">rangebin_info_title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+                <span class="n">dssavedir</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+                <span class="n">subdir</span><span class="o">=</span><span class="n">rangebin_info</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
 
             <span class="n">f_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
                 <span class="s2">&quot;histogram&quot;</span><span class="p">,</span>
@@ -760,14 +761,6 @@
             <span class="k">return</span>
 
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
-            <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-        <span class="p">)</span>
-
         <span class="n">transform_str</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
         <span class="n">transform</span> <span class="o">=</span> <span class="n">parse_math_expression</span><span class="p">(</span><span class="n">transform_str</span><span class="p">)</span>
         <span class="n">range_bins</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_bins&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span>
@@ -790,6 +783,15 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">rangebin_info</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># only one range bin, leave empty</span>
                 <span class="n">rangebin_info_title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+                <span class="n">dssavedir</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+                <span class="n">subdir</span><span class="o">=</span><span class="n">rangebin_info</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
 
             <span class="n">f_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
                 <span class="s2">&quot;scatter&quot;</span><span class="p">,</span>
@@ -919,14 +921,6 @@
             <span class="n">csvtimeinfo_file</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
             <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y&quot;</span>
 
-        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
-            <span class="n">dssavedir</span><span class="p">,</span>
-            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
-            <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span>
-
         <span class="n">fname_list</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">range_bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -940,6 +934,15 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">rangebin_info</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">rangebin_info_title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+                <span class="n">dssavedir</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+                <span class="n">subdir</span><span class="o">=</span><span class="n">rangebin_info</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="p">)</span>
 
             <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>

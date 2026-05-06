@@ -1631,6 +1631,9 @@
     <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;MPH&quot;</span><span class="p">:</span>
         <span class="n">datatype_metranet</span> <span class="o">=</span> <span class="s2">&quot;MPH&quot;</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;mean_phase&quot;</span>
+    <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="s2">&quot;SNR&quot;</span><span class="p">:</span>
+        <span class="n">datatype_metranet</span> <span class="o">=</span> <span class="s2">&quot;SNR&quot;</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;signal_to_noise_ratio&quot;</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;ERROR: Metranet fields do not contain datatype &quot;</span> <span class="o">+</span> <span class="n">datatype</span><span class="p">)</span>
 
