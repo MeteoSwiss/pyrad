@@ -992,6 +992,7 @@ def get_save_dir(
     dsname,
     prdname,
     timeinfo=None,
+    subdir=None,
     timeformat="%Y-%m-%d",
     create_dir=True,
 ):
@@ -1008,6 +1009,9 @@ def get_save_dir(
         data set name
     prdname : str
         product name
+    subdir: str
+        Additional subdirectory to append to the product name in the file path
+        If None, no subdirectory is created
     timeinfo : datetime
         time info to generate the date directory. If None there is no time
         format in the path
@@ -1022,20 +1026,22 @@ def get_save_dir(
         path to product
 
     """
-    if timeinfo is None:
-        savedir = "{}{}/{}/{}/".format(basepath, procname, dsname, prdname)
-    else:
-        savedir = "{}{}/{}/{}/{}/".format(
-            basepath, procname, timeinfo.strftime(timeformat), dsname, prdname
-        )
+    parts = [basepath, procname]
 
-    if create_dir is False:
-        return savedir
+    if timeinfo is not None:
+        parts.append(timeinfo.strftime(timeformat))
 
-    if not os.path.isdir(savedir):
-        os.makedirs(savedir)
+    parts.extend([dsname, prdname])
 
-    return savedir
+    if subdir is not None:
+        parts.append(subdir)
+
+    savedir = os.path.join(*parts)
+
+    if create_dir:
+        os.makedirs(savedir, exist_ok=True)
+
+    return savedir + "/"
 
 
 def make_filename(
