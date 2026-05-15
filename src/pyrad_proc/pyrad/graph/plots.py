@@ -333,7 +333,6 @@ def plot_pos_map(
 
     return (fig, ax)
 
-
 def plot_density(
     hist_obj,
     hist_type,
@@ -368,58 +367,83 @@ def plot_density(
     ref_value : float
         the reference value
     vmin, vmax : float
-        Minim and maximum extend of the vertical axis
+        Minimum and maximum extent of the vertical axis
 
     Returns
     -------
     fname_list : list of str
         list of names of the created plots
-
     """
+
     hist_obj_aux = hist_obj.extract_sweeps([ind_sweep])
+
+    # --------------------------------------------------
+    # Get angular coordinate and sort field accordingly
+    # --------------------------------------------------
     if hist_obj_aux.scan_type == "ppi":
-        ang = np.sort(hist_obj_aux.azimuth["data"])
-        ind_ang = np.argsort(hist_obj_aux.azimuth["data"])
-        ang_min = np.min(hist_obj_aux.azimuth["data"])
-        ang_max = np.max(hist_obj_aux.azimuth["data"])
-        ang_step = ang[1] - ang[0]
+        ang_raw = hist_obj_aux.azimuth["data"]
+        ind_ang = np.argsort(ang_raw)
+        ang = ang_raw[ind_ang]
         field = hist_obj_aux.fields[field_name]["data"][ind_ang, :]
         labelx = "azimuth angle (degrees)"
+        force_full_angle_axis = True
+
     elif hist_obj_aux.scan_type == "rhi":
-        ang = np.sort(hist_obj_aux.elevation["data"])
-        ind_ang = np.argsort(hist_obj_aux.elevation["data"])
-        ang_min = np.min(hist_obj_aux.elevation["data"])
-        ang_max = np.max(hist_obj_aux.elevation["data"])
-        ang_step = ang[1] - ang[0]
+        ang_raw = hist_obj_aux.elevation["data"]
+        ind_ang = np.argsort(ang_raw)
+        ang = ang_raw[ind_ang]
         field = hist_obj_aux.fields[field_name]["data"][ind_ang, :]
         labelx = "elevation angle (degrees)"
+        force_full_angle_axis = False
+
     else:
         field = hist_obj_aux.fields[field_name]["data"]
-        ang = np.array(range(hist_obj_aux.nrays))
-        ang_min = 0
-        ang_max = hist_obj_aux.nrays - 1
-        ang_step = ang[1] - ang[0]
+        ang = np.arange(hist_obj_aux.nrays)
         labelx = "ray number"
+        force_full_angle_axis = False
 
+    quantiles = np.asarray(quantiles)
+
+    # --------------------------------------------------
     # Compute quantiles for each ray
+    # --------------------------------------------------
     az_percentiles = np.ma.masked_all((len(ang), len(quantiles)))
+
     for ray in range(len(ang)):
+        # If a ray has no samples, keep quantiles masked
+        if np.ma.sum(field[ray, :]) <= 0:
+            continue
+
         _, values_ray = compute_quantiles_from_hist(
-            hist_obj.range["data"], field[ray, :], quantiles=quantiles
+            hist_obj.range["data"],
+            field[ray, :],
+            quantiles=quantiles,
         )
         az_percentiles[ray, :] = values_ray
 
+    # --------------------------------------------------
     # Compute overall sweep quantiles
+    # --------------------------------------------------
     _, values_sweep = compute_quantiles_from_hist(
-        hist_obj.range["data"], np.ma.sum(field, axis=0), quantiles=quantiles
+        hist_obj.range["data"],
+        np.ma.sum(field, axis=0),
+        quantiles=quantiles,
     )
 
-    # mask 0 data
+    # --------------------------------------------------
+    # Mask empty histogram bins
+    # --------------------------------------------------
     field = np.ma.masked_where(field == 0, field)
 
-    # display data
+    # --------------------------------------------------
+    # Title and labels
+    # --------------------------------------------------
     if hist_type == "instant":
-        titl = pyart.graph.common.generate_title(hist_obj_aux, field_name, ind_sweep)
+        titl = pyart.graph.common.generate_title(
+            hist_obj_aux,
+            field_name,
+            ind_sweep,
+        )
     else:
         titl = (
             "{:.1f}".format(hist_obj_aux.fixed_angle["data"][0])
@@ -430,6 +454,7 @@ def plot_density(
             + "\n"
             + get_field_name(hist_obj.fields[field_name], field_name)
         )
+
     label = "Number of Points"
     labely = get_colobar_label(hist_obj_aux.fields[field_name], field_name)
 
@@ -438,69 +463,166 @@ def plot_density(
         dpi = prdcfg["ppiImageConfig"]["dpi"]
 
     fig = plt.figure(
-        figsize=[prdcfg["ppiImageConfig"]["xsize"], prdcfg["ppiImageConfig"]["ysize"]],
+        figsize=[
+            prdcfg["ppiImageConfig"]["xsize"],
+            prdcfg["ppiImageConfig"]["ysize"],
+        ],
         dpi=dpi,
     )
     ax = fig.add_subplot(111)
 
-    # define limits of field and color map
+    # --------------------------------------------------
+    # Build value-bin edges
+    # --------------------------------------------------
     cmap = pyart.config.get_field_colormap(field_name)
-    step = hist_obj.range["data"][1] - hist_obj.range["data"][0]
-    xmin = ang_min - ang_step / 2.0
-    xmax = ang_max + ang_step / 2.0
-    ymin = hist_obj.range["data"][0] - step / 2.0
-    ymax = hist_obj.range["data"][-1] + step / 2.0
 
-    cax = ax.imshow(
-        np.ma.transpose(field),
-        origin="lower",
-        cmap=cmap,
-        vmin=0.0,
-        vmax=np.max(field),
-        extent=(xmin, xmax, ymin, ymax),
-        aspect="auto",
-        interpolation="none",
+    step = hist_obj.range["data"][1] - hist_obj.range["data"][0]
+    val_edges = np.append(
+        hist_obj.range["data"] - step / 2.0,
+        hist_obj.range["data"][-1] + step / 2.0,
     )
+
+    # --------------------------------------------------
+    # Detect angular gaps
+    # --------------------------------------------------
+    if len(ang) > 1:
+        dang = np.diff(ang)
+        positive_dang = dang[dang > 0]
+
+        if len(positive_dang) > 0:
+            typical_step = np.ma.median(positive_dang)
+        else:
+            typical_step = 1.0
+
+        gap_ind = np.where(dang > 3.0 * typical_step)[0]
+    else:
+        gap_ind = np.array([], dtype=int)
+
+    segments = []
+    start = 0
+
+    for idx in gap_ind:
+        segments.append((start, idx + 1))
+        start = idx + 1
+
+    segments.append((start, len(ang)))
+
+    # --------------------------------------------------
+    # Plot density using pcolormesh
+    # --------------------------------------------------
+    cax = None
+    vmax_field = np.ma.max(field)
+
+    for start, end in segments:
+        ang_seg = ang[start:end]
+        field_seg = field[start:end, :]
+
+        if len(ang_seg) < 2:
+            continue
+
+        ang_step_seg = np.ma.median(np.diff(ang_seg))
+
+        ang_edges = np.empty(len(ang_seg) + 1)
+        ang_edges[1:-1] = 0.5 * (ang_seg[:-1] + ang_seg[1:])
+        ang_edges[0] = ang_seg[0] - 0.5 * ang_step_seg
+        ang_edges[-1] = ang_seg[-1] + 0.5 * ang_step_seg
+
+        cax = ax.pcolormesh(
+            ang_edges,
+            val_edges,
+            field_seg.T,
+            cmap=cmap,
+            vmin=0.0,
+            vmax=vmax_field,
+            shading="auto",
+        )
+
+    # --------------------------------------------------
+    # Axis limits
+    # --------------------------------------------------
+    if force_full_angle_axis:
+        ax.set_xlim(0.0, 360.0)
+    else:
+        if len(ang) > 1:
+            ang_step = np.ma.median(np.diff(ang))
+        else:
+            ang_step = 1.0
+
+        ax.set_xlim(
+            np.ma.min(ang) - ang_step / 2.0,
+            np.ma.max(ang) + ang_step / 2.0,
+        )
+
     ax.set_ylim(bottom=vmin, top=vmax)
     ax.autoscale(False)
 
-    # plot reference
-    ax.plot(ang, np.zeros(len(ang)) + ref_value, "k--")
+    # --------------------------------------------------
+    # Plot reference line, split at angular gaps
+    # --------------------------------------------------
+    for start, end in segments:
+        if end <= start:
+            continue
 
-    # Generate colormap for quantiles
+        ax.plot(
+            ang[start:end],
+            np.zeros(end - start) + ref_value,
+            "k--",
+        )
+
+    # --------------------------------------------------
+    # Plot quantile lines, split at angular gaps
+    # --------------------------------------------------
     quantile_colors = plt.cm.viridis_r(np.linspace(0, 1, len(quantiles)))
 
-    # Plot all quantiles
     for i, q in enumerate(quantiles):
-        ax.plot(
-            ang,
-            np.zeros(len(ang)) + values_sweep[i],
-            color=quantile_colors[i],
-            linestyle="--",
-            label=f"{q:.1f}th quantile",
-        )
-        ax.plot(
-            ang,
-            az_percentiles[:, i],
-            color=quantile_colors[i],
-            linestyle="-",
-            label=f"{q:.1f}th quantile",
-        )
+        first_label = True
 
-    # ax.autoscale(enable=True, axis='both', tight=True)
+        for start, end in segments:
+            if end <= start:
+                continue
 
+            label_sweep = f"{q:.1f}th sweep quantile" if first_label else None
+            label_ray = f"{q:.1f}th ray quantile" if first_label else None
+
+            ax.plot(
+                ang[start:end],
+                np.zeros(end - start) + values_sweep[i],
+                color=quantile_colors[i],
+                linestyle="--",
+                label=label_sweep,
+            )
+
+            ax.plot(
+                ang[start:end],
+                az_percentiles[start:end, i],
+                color=quantile_colors[i],
+                linestyle="-",
+                label=label_ray,
+            )
+
+            first_label = False
+
+    # --------------------------------------------------
+    # Labels, title, colorbar
+    # --------------------------------------------------
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
 
-    cb = fig.colorbar(cax)
-    cb.set_label(label)
+    if cax is not None:
+        cb = fig.colorbar(cax)
+        cb.set_label(label)
 
+    # --------------------------------------------------
+    # Metadata box
+    # --------------------------------------------------
     metadata = "npoints: " + str(np.ma.sum(field)) + "\n"
+
     for i, quant in enumerate(quantiles):
         val_quant_str = "--"
         if values_sweep[i] is not np.ma.masked:
             val_quant_str = f"{values_sweep[i]:.3f}"
+
         metadata += f"{quant} quant: {val_quant_str}\n"
 
     ax.text(
@@ -512,15 +634,17 @@ def plot_density(
         transform=ax.transAxes,
     )
 
-    # Turn on the grid
+    # --------------------------------------------------
+    # Grid and save
+    # --------------------------------------------------
     ax.grid()
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+
     plt.close(fig)
 
     return fname_list
-
 
 def plot_scatter(
     bin_edges1,
