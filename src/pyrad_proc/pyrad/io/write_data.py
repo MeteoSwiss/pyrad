@@ -2925,31 +2925,59 @@ def write_monitoring_ts(
     start_time, np_t, values, quantiles, mean_list, datatype, fname, rewrite=False
 ):
     nvalues = np.size(start_time)
+
     start_time_aux = (
         np.asarray([start_time]) if nvalues == 1 else np.asarray(start_time)
     )
-    np_t_aux = np.asarray([np_t]) if nvalues == 1 else np_t
+    np_t_aux = np.asarray([np_t]) if nvalues == 1 else np.asarray(np_t)
+
     values_aux = (
         np.asarray([values.filled(get_fillvalue())])
         if nvalues == 1
         else values.filled(get_fillvalue())
     )
 
+    mean0_aux = np.asarray([mean_list[0]]) if nvalues == 1 else np.asarray(mean_list[0])
+    mean1_aux = np.asarray([mean_list[1]]) if nvalues == 1 else np.asarray(mean_list[1])
+
     data = {
         "date": [t.strftime("%Y%m%d%H%M%S") for t in start_time_aux],
         "NP": np_t_aux,
-        "geometric_mean_dB": mean_list[0],
-        "linear_mean_dB": mean_list[1],
+        "geometric_mean_dB": mean0_aux,
+        "linear_mean_dB": mean1_aux,
     }
+
     for i, q in enumerate(quantiles):
         data[f"quantile_{q}"] = values_aux[:, i]
 
     df = pd.DataFrame(data)
 
+    # Clean new rows before writing
+    df["date"] = df["date"].astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
+    df["date_dt"] = pd.to_datetime(
+        df["date"],
+        format="%Y%m%d%H%M%S",
+        utc=True,
+        errors="coerce",
+    )
+
+    df["NP"] = pd.to_numeric(df["NP"], errors="coerce")
+
+    # Drop rows like: 0.5,,,,,,,
+    df = df.dropna(subset=["date_dt", "NP"])
+
+    df["NP"] = df["NP"].astype(int)
+    df["date"] = df["date_dt"].dt.strftime("%Y%m%d%H%M%S")
+    df = df.drop(columns="date_dt")
+
+    numeric_cols = [c for c in df.columns if c != "date"]
+    df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors="coerce")
+
     file_exists = os.path.exists(fname)
 
     with open(fname, "r+" if file_exists and not rewrite else "w") as f:
         lock_file(f)
+
         if rewrite or not file_exists:
             header = (
                 "# Weather radar monitoring timeseries data file\n"
@@ -2964,17 +2992,42 @@ def write_monitoring_ts(
             )
             f.write(header)
             df.to_csv(f, index=False)
+
         else:
             header = [line.strip() for line in f if line.startswith("#")]
+
             f.seek(0)
             existing_df = pd.read_csv(f, comment="#")
-            existing_df["date"] = existing_df["date"].astype(str)
+
+            # Clean existing file too, in case it already contains bad rows
+            existing_df["date"] = (
+                existing_df["date"]
+                .astype(str)
+                .str.strip()
+                .str.replace(r"\.0$", "", regex=True)
+            )
+            existing_df["date_dt"] = pd.to_datetime(
+                existing_df["date"],
+                format="%Y%m%d%H%M%S",
+                utc=True,
+                errors="coerce",
+            )
+            existing_df["NP"] = pd.to_numeric(existing_df["NP"], errors="coerce")
+            existing_df = existing_df.dropna(subset=["date_dt", "NP"])
+            existing_df["NP"] = existing_df["NP"].astype(int)
+            existing_df["date"] = existing_df["date_dt"].dt.strftime("%Y%m%d%H%M%S")
+            existing_df = existing_df.drop(columns="date_dt")
+
             combined_df = pd.concat([existing_df, df], ignore_index=True)
-            combined_df.drop_duplicates(subset=["date"], keep="last", inplace=True)
+            combined_df = combined_df.drop_duplicates(subset=["date"], keep="last")
+
             f.seek(0)
+            f.truncate()
             f.write("\n".join(header) + "\n")
             combined_df.to_csv(f, index=False)
+
         unlock_file(f)
+
     return fname
 
 

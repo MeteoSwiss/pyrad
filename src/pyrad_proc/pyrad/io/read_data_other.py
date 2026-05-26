@@ -51,17 +51,6 @@ import csv
 import xml.etree.ElementTree as et
 from ..util import warn
 
-try:
-    import fcntl
-
-    FCNTL_AVAIL = True
-except ModuleNotFoundError:
-    import msvcrt  # For windows
-
-    FCNTL_AVAIL = False
-import time
-import errno
-
 import numpy as np
 
 import pyart
@@ -1225,51 +1214,65 @@ def read_monitoring_ts(quantiles, fname, sort_by_date=False):
         with open(fname, "r+") as csvfile:
             lock_file(csvfile)
 
-            df = pd.read_csv(
-                csvfile,
-                comment="#",
+            df = pd.read_csv(csvfile, comment="#")
+
+            # Convert date robustly. Handles values like 20260416000414.0
+            date_str = (
+                df["date"].astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
             )
 
             df["date"] = pd.to_datetime(
-                df["date"],
+                date_str,
                 format="%Y%m%d%H%M%S",
                 utc=True,
+                errors="coerce",
             )
 
+            # Convert NP robustly. Bad/missing rows become NaN.
+            df["NP"] = pd.to_numeric(df["NP"], errors="coerce")
+
+            # Remove problematic rows
+            df = df.dropna(subset=["date", "NP"])
+
+            df["NP"] = df["NP"].astype(int)
+
             if sort_by_date:
-                df.sort_values(by="date", inplace=True)
+                df = df.sort_values(by="date")
 
             df = df.drop_duplicates(subset="date", keep="last")
+
             unlock_file(csvfile)
 
-        # Extract dant and NP values
         np_t = df["NP"].to_numpy(dtype=int)
         date = df["date"].dt.to_pydatetime().to_numpy()
 
-        # Extract all quantile values dynamically
         quantile_data = {}
         for q in quantiles:
             column_name = f"quantile_{q}"
             if column_name in df.columns:
-                quantile_data[q] = np.ma.masked_values(
-                    df[column_name].to_numpy(dtype=float), get_fillvalue()
+                vals = pd.to_numeric(df[column_name], errors="coerce").to_numpy(float)
+                quantile_data[q] = np.ma.masked_invalid(
+                    np.ma.masked_values(vals, get_fillvalue())
                 )
 
-        # Read mean values
-        geometric_mean_dB = (
-            np.ma.masked_values(
-                df["geometric_mean_dB"].to_numpy(dtype=float), get_fillvalue()
+        if "geometric_mean_dB" in df.columns:
+            vals = pd.to_numeric(df["geometric_mean_dB"], errors="coerce").to_numpy(
+                float
             )
-            if "geometric_mean_dB" in df.columns
-            else np.ma.masked
-        )
-        linear_mean_dB = (
-            np.ma.masked_values(
-                df["linear_mean_dB"].to_numpy(dtype=float), get_fillvalue()
+            geometric_mean_dB = np.ma.masked_invalid(
+                np.ma.masked_values(vals, get_fillvalue())
             )
-            if "linear_mean_dB" in df.columns
-            else np.ma.masked
-        )
+        else:
+            geometric_mean_dB = np.ma.masked_all(len(df))
+
+        if "linear_mean_dB" in df.columns:
+            vals = pd.to_numeric(df["linear_mean_dB"], errors="coerce").to_numpy(float)
+            linear_mean_dB = np.ma.masked_invalid(
+                np.ma.masked_values(vals, get_fillvalue())
+            )
+        else:
+            linear_mean_dB = np.ma.masked_all(len(df))
+
         return date, np_t, quantile_data, geometric_mean_dB, linear_mean_dB
 
     except Exception as e:
@@ -1444,145 +1447,97 @@ def read_monitoring_ts_old(fname):
         return None, None, None, None, None
 
 
-def read_intercomp_scores_ts(fname, sort_by_date=True):
+def read_intercomp_scores_ts(
+    fname,
+    sort_by_date=True,
+    fillvalue=None,
+    return_dataframe=False,
+):
     """
-    Reads a radar intercomparison scores csv file
+    Read a radar intercomparison scores CSV file using pandas.
 
-    Parameters
-    ----------
-    fname : str
-        path of time series file
-    sort_by_date : bool
-        if True, the read data is sorted by date prior to exit
-
-    Returns
-    -------
-    date_vec, np_vec, meanbias_vec, medianbias_vec, quant25bias_vec,
-    quant75bias_vec, modebias_vec, corr_vec, slope_vec, intercep_vec,
-    intercep_slope1_vec : tupple
-        The read data. None otherwise
-
+    Returns the same tuple as the original function by default.
+    If return_dataframe=True, returns the cleaned DataFrame instead.
     """
+
+    cols = [
+        "date",
+        "NP",
+        "mean_bias",
+        "median_bias",
+        "quant25_bias",
+        "quant75_bias",
+        "mode_bias",
+        "corr",
+        "slope_of_linear_regression",
+        "intercep_of_linear_regression",
+        "intercep_of_linear_regression_of_slope_1",
+    ]
+
     try:
-        with open(fname, "r", newline="") as csvfile:
-            if FCNTL_AVAIL:
-                while True:
-                    try:
-                        fcntl.flock(csvfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                        break
-                    except OSError as e:
-                        if e.errno == errno.EAGAIN:
-                            time.sleep(0.1)
-                        elif e.errno == errno.EBADF:
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
-            else:
-                while True:
-                    try:
-                        # Attempt to acquire an exclusive lock on the file
-                        msvcrt.locking(
-                            os.open(csvfile, os.O_RDWR | os.O_CREAT), msvcrt.LK_NBLCK, 0
-                        )
-                        break
-                    except OSError as e:
-                        if e.errno == 13:  # Permission denied
-                            time.sleep(0.1)
-                        elif e.errno == 13:  # No such file or directory
-                            warn(
-                                "WARNING: No file locking is possible (NFS mount?), "
-                                + "expect strange issues with multiprocessing..."
-                            )
-                            break
-                        else:
-                            raise
+        df = pd.read_csv(
+            fname,
+            comment="#",
+            usecols=lambda c: c in cols,
+            dtype=str,
+            skip_blank_lines=True,
+        )
 
-            # first count the lines
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            nrows = sum(1 for row in reader)
+        missing = set(cols) - set(df.columns)
+        if missing:
+            raise ValueError(f"Missing required columns: {sorted(missing)}")
 
-            np_vec = np.zeros(nrows, dtype=int)
-            meanbias_vec = np.ma.empty(nrows, dtype=float)
-            medianbias_vec = np.ma.empty(nrows, dtype=float)
-            quant25bias_vec = np.ma.empty(nrows, dtype=float)
-            quant75bias_vec = np.ma.empty(nrows, dtype=float)
-            modebias_vec = np.ma.empty(nrows, dtype=float)
-            corr_vec = np.ma.empty(nrows, dtype=float)
-            slope_vec = np.ma.empty(nrows, dtype=float)
-            intercep_vec = np.ma.empty(nrows, dtype=float)
-            intercep_slope1_vec = np.ma.empty(nrows, dtype=float)
-            date_vec = np.empty(nrows, dtype=datetime.datetime)
+        df = df[cols].copy()
 
-            # now read the data
-            csvfile.seek(0)
-            reader = csv.DictReader(row for row in csvfile if not row.startswith("#"))
-            for i, row in enumerate(reader):
-                date_vec[i] = datetime.datetime.strptime(
-                    row["date"], "%Y%m%d%H%M%S"
-                ).replace(tzinfo=datetime.timezone.utc)
-                np_vec[i] = int(row["NP"])
-                meanbias_vec[i] = float(row["mean_bias"])
-                medianbias_vec[i] = float(row["median_bias"])
-                quant25bias_vec[i] = float(row["quant25_bias"])
-                quant75bias_vec[i] = float(row["quant75_bias"])
-                modebias_vec[i] = float(row["mode_bias"])
-                corr_vec[i] = float(row["corr"])
-                slope_vec[i] = float(row["slope_of_linear_regression"])
-                intercep_vec[i] = float(row["intercep_of_linear_regression"])
-                intercep_slope1_vec[i] = float(
-                    row["intercep_of_linear_regression_of_slope_1"]
-                )
+        df["date"] = pd.to_datetime(
+            df["date"],
+            format="%Y%m%d%H%M%S",
+            utc=True,
+            errors="coerce",
+        )
 
-            fcntl.flock(csvfile, fcntl.LOCK_UN)
-            csvfile.close()
+        df["NP"] = pd.to_numeric(df["NP"], errors="coerce").astype("Int64")
 
-            meanbias_vec = np.ma.masked_values(meanbias_vec, get_fillvalue())
-            medianbias_vec = np.ma.masked_values(medianbias_vec, get_fillvalue())
-            quant25bias_vec = np.ma.masked_values(quant25bias_vec, get_fillvalue())
-            quant75bias_vec = np.ma.masked_values(quant75bias_vec, get_fillvalue())
-            modebias_vec = np.ma.masked_values(modebias_vec, get_fillvalue())
-            corr_vec = np.ma.masked_values(corr_vec, get_fillvalue())
-            slope_vec = np.ma.masked_values(slope_vec, get_fillvalue())
-            intercep_vec = np.ma.masked_values(intercep_vec, get_fillvalue())
-            intercep_slope1_vec = np.ma.masked_values(
-                intercep_slope1_vec, get_fillvalue()
-            )
+        float_cols = cols[2:]
+        df[float_cols] = df[float_cols].apply(pd.to_numeric, errors="coerce")
 
-            if sort_by_date:
-                ind = np.argsort(date_vec)
-                date_vec = date_vec[ind]
-                np_vec = np_vec[ind]
-                meanbias_vec = meanbias_vec[ind]
-                medianbias_vec = medianbias_vec[ind]
-                quant25bias_vec = quant25bias_vec[ind]
-                quant75bias_vec = quant75bias_vec[ind]
-                modebias_vec = modebias_vec[ind]
-                corr_vec = corr_vec[ind]
-                slope_vec = slope_vec[ind]
-                intercep_vec = intercep_vec[ind]
-                intercep_slope1_vec = intercep_slope1_vec[ind]
+        if fillvalue is None:
+            try:
+                fillvalue = get_fillvalue()
+            except NameError:
+                fillvalue = None
 
-            return (
-                date_vec,
-                np_vec,
-                meanbias_vec,
-                medianbias_vec,
-                quant25bias_vec,
-                quant75bias_vec,
-                modebias_vec,
-                corr_vec,
-                slope_vec,
-                intercep_vec,
-                intercep_slope1_vec,
-            )
-    except EnvironmentError as ee:
-        warn(str(ee))
-        warn("Unable to read file " + fname)
-        return (None, None, None, None, None, None, None, None, None, None, None)
+        if fillvalue is not None:
+            df[float_cols] = df[float_cols].mask(df[float_cols] == fillvalue)
+
+        df = df.dropna(subset=["date"])
+
+        if sort_by_date:
+            df = df.sort_values("date").reset_index(drop=True)
+
+        if return_dataframe:
+            return df
+
+        return (
+            df["date"].dt.to_pydatetime(),
+            df["NP"].fillna(0).to_numpy(dtype=int),
+            np.ma.masked_invalid(df["mean_bias"].to_numpy(float)),
+            np.ma.masked_invalid(df["median_bias"].to_numpy(float)),
+            np.ma.masked_invalid(df["quant25_bias"].to_numpy(float)),
+            np.ma.masked_invalid(df["quant75_bias"].to_numpy(float)),
+            np.ma.masked_invalid(df["mode_bias"].to_numpy(float)),
+            np.ma.masked_invalid(df["corr"].to_numpy(float)),
+            np.ma.masked_invalid(df["slope_of_linear_regression"].to_numpy(float)),
+            np.ma.masked_invalid(df["intercep_of_linear_regression"].to_numpy(float)),
+            np.ma.masked_invalid(
+                df["intercep_of_linear_regression_of_slope_1"].to_numpy(float)
+            ),
+        )
+
+    except (OSError, IOError, ValueError, pd.errors.ParserError) as exc:
+        warn(str(exc))
+        warn(f"Unable to read file {fname}")
+        return (None,) * 11
 
 
 def read_intercomp_scores_ts_old(fname):
