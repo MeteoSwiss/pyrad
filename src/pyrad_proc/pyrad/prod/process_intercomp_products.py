@@ -176,7 +176,6 @@ def generate_intercomp_products(dataset, prdcfg):
     if prdcfg["type"] == "WRITE_INTERCOMP":
         if dataset["final"]:
             return None
-
         savedir = get_save_dir(
             prdcfg["basepath"],
             prdcfg["procname"],
@@ -273,7 +272,11 @@ def generate_intercomp_products(dataset, prdcfg):
                 dataset["intercomp_dict"]["rad1_rng"] < range_bins[i + 1],
             )
             if not np.sum(selection):
-                continue
+                warn(
+                    "No data in range bin "
+                    + rangebin_info_title
+                    + ", skipping histogram"
+                )
 
             rad1_values = np.ma.asarray(
                 dataset["intercomp_dict"][f"rad1_{colname}"][selection]
@@ -364,7 +367,6 @@ def generate_intercomp_products(dataset, prdcfg):
         scatter_type = prdcfg.get("scatter_type", "cumulative")
         if scatter_type == "cumulative" and not dataset["final"]:
             return None
-
         timeformat = "%Y%m%d"
         colname = "val"
         if f"rad1_{colname}" not in dataset["intercomp_dict"]:
@@ -419,7 +421,7 @@ def generate_intercomp_products(dataset, prdcfg):
             rad1 = dataset["intercomp_dict"]["rad1_name"]
             rad2 = dataset["intercomp_dict"]["rad2_name"]
             titl = (
-                f"colocated radar gates {rad1}-{rad2} \n {rangebin_info_title} "
+                f"colocated radar gates {rad2}-{rad1} \n {rangebin_info_title} "
                 + dataset["timeinfo"].strftime(timeformat)
             )
             if transform_str != "x":
@@ -430,7 +432,11 @@ def generate_intercomp_products(dataset, prdcfg):
                 dataset["intercomp_dict"]["rad1_rng"] < range_bins[i + 1],
             )
             if not np.sum(selection):  # skip if selection empty
-                continue
+                warn(
+                    "No data in range bin "
+                    + rangebin_info_title
+                    + ", skipping scatter plot"
+                )
 
             hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(
                 np.ma.asarray(dataset["intercomp_dict"][f"rad1_{colname}"][selection]),
@@ -560,6 +566,11 @@ def generate_intercomp_products(dataset, prdcfg):
             )
 
             if not np.sum(selection):
+                warn(
+                    "No data in range bin "
+                    + rangebin_info_title
+                    + ", skipping statistics for timeseries plot"
+                )
                 continue
 
             hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats(

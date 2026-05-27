@@ -1119,6 +1119,7 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                     MYSQL_PASSWORD,
                     table_name,
                     fname,
+                    drop_table=prdcfg.get("MySQLdrop", False),
                 )
 
         return False

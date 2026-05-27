@@ -213,6 +213,7 @@ def write_csv_to_mysql(
     table_name: str,
     csv_file: str,
     chunksize: int = 1000,
+    drop_table: bool = False,
 ):
     """
     Write a CSV file into a MySQL database table.
@@ -286,7 +287,6 @@ def write_csv_to_mysql(
         return out
 
     df.columns = sanitize_columns(df.columns)
-
     # -----------------------------
     # 2) Auto-detect datetime columns
     # -----------------------------
@@ -327,6 +327,11 @@ def write_csv_to_mysql(
     # -----------------------------
     # 5) Create table if not exists
     # -----------------------------
+    with engine.begin() as conn:
+        if drop_table:
+            print(f"Dropping existing table {table_name}")
+            conn.execute(text(f"DROP TABLE IF EXISTS `{table_name}`"))
+
     df.head(0).to_sql(
         table_name,
         engine,
@@ -994,91 +999,86 @@ def write_smn(datetime_vec, value_avg_vec, value_std_vec, fname):
     return fname
 
 
-def write_timeseries_point(fname, data, dstype, text, timeformat=None, timeinfo=None):
+def write_timeseries_point(
+    fname,
+    data,
+    dstype,
+    text,
+    timeformat=None,
+    timeinfo=None,
+):
     """
-    Write one timesample of a time series to a file
+    Write one timesample of a time series to a CSV file using pandas.
 
     Parameters
     ----------
-    data      : time series structure with the fields:
-      time    : Time sample in Julian calendar format.
-      label[] : Header of each value column
-      value[] : Data value of each column
-    dataType  : Type of the data
-    cfginfo   : Information string describing the kind of data
-                in the text file. This string is part of the
-                generated file name.
-    text      : Text with description of the data in the
-                file. Must be a string array. Each string
-                is written to a new line an the comment symbol
-                is set at the beginning.
+    data : dict
+        Dictionary containing:
+            time    : datetime object
+            label[] : list of column names
+            value[] : list/array of values
+            unit    : data unit string
 
-    Keywords
-    --------
-    timeformat: If set, the date time column is set according to the
-                time format number. If not set, the time format
-                is 'YYYY-MM-DD, <seconds of day>'
-    timeinfo  : Used for the time stamp of the output file. If not set,
-                data.time is used to generate it.
+    dstype : str
+        Data type name
 
+    text : list[str]
+        Description text written as metadata comments
+
+    timeformat : str, optional
+        Datetime format string
+
+    timeinfo : optional
+        Unused (kept for compatibility)
     """
 
-    datatime = data["time"].strftime("%Y-%m-%d %H:%M:%S")
-    data["value"]
-    datatypename = dstype
-    unit = data["unit"]
+    print("----- Write timeseries", fname)
 
-    print("----- Write timeseries ", fname)
+    datatime = data["time"]
 
+    if timeformat is None:
+        tformat = "%Y-%m-%d %H:%M:%S"
+    else:
+        tformat = timeformat
+
+    time_str = datatime.strftime(tformat)
+
+    # Create dataframe row
+    row = {"Date": time_str}
+
+    for label, value in zip(data["label"], data["value"]):
+        row[label] = round(float(value), 4)
+
+    df = pd.DataFrame([row])
+
+    # File does not exist -> create with metadata + header
     if not os.path.isfile(fname):
-        # File does not exist. Open it and fill in header info.
-        with open(fname, "w", newline="") as csvfile:
-            csvfile.write("# Weather radar timeseries data file\n")
-            csvfile.write("# Project: MALSplus\n")
-            csvfile.write("# Data/Unit : " + datatypename + " [" + unit + "]\n")
-            csvfile.write("# Start : " + datatime + " UTC\n")
-            csvfile.write("# Header lines with comments are preceded by '#'\n")
+        with open(fname, "w", encoding="utf-8") as f:
+            f.write("# Weather radar timeseries data file\n")
+            f.write("# Project: MALSplus\n")
+            f.write(f"# Data/Unit : {dstype} [{data['unit']}]\n")
+            f.write(f"# Start : {datatime.strftime('%Y-%m-%d %H:%M:%S')} UTC\n")
+
             for line in text:
-                csvfile.write("# " + line + "\n")
-            csvfile.write("#\n")
+                f.write(f"# {line}\n")
 
-            if timeformat is None:
-                label_str = "# Date [YYYY-MM-DD hh:mm:ss]"
-                tformat = "%Y-%m-%d %H:%M:%S"
-                time_str_old = datetime.datetime.strptime(datatime, tformat).replace(
-                    tzinfo=datetime.timezone.utc
-                )
-                time_str = time_str_old.strftime(tformat)
-            else:
-                label_str = "# Date [" + timeformat + "]"
-                tformat = timeformat
-                time_str = datatime.strftime(tformat)
-
-            for label in data["label"]:
-                label_str = label_str + ", " + label
-            csvfile.write(label_str + "\n")
-
-            for value in data["value"]:
-                time_str = time_str + ", " + ("%.4f" % value)
-            csvfile.write(time_str + "\n")
+        # Write dataframe with clean column names (no #)
+        df.to_csv(
+            fname,
+            mode="a",
+            index=False,
+            float_format="%.4f",
+        )
 
     else:
-        if timeformat is None:
-            tformat = "%Y-%m-%d %H:%M:%S"
-            time_str_old = datetime.datetime.strptime(datatime, tformat).replace(
-                tzinfo=datetime.timezone.utc
-            )
-            time_str = time_str_old.strftime(tformat)
-        else:
-            tformat = timeformat
-            time_str = datatime.strftime(tformat)
-
-        with open(fname, "a", newline="") as csvfile:
-            for value in data["value"]:
-                time_str = time_str + ", " + ("%.4f" % value)
-            csvfile.write(time_str + "\n")
-
-    csvfile.close()
+        # Append without header
+        df.to_csv(
+            fname,
+            mode="a",
+            index=False,
+            header=False,
+            float_format="%.4f",
+        )
 
     return fname
 

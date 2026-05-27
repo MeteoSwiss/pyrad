@@ -791,7 +791,7 @@ def generate_vol_products(dataset, prdcfg):
                     If fixed_span is set, the minimum and maximum values of
                     the X-axis. If None, they are obtained from the span of
                     the U component defined in the Py-ART config file
-        'WRITE_STATS': write statistics about the average of a field within a certain
+        'WRITE_STATS': write statistics about the statistics of a field within a certain
             sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and
             additional quantiles
             User defined parameters:
