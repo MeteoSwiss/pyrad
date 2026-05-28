@@ -946,6 +946,7 @@ def read_colocated_data(fname):
     try:
         # Read the CSV file, skipping lines starting with "#"
         df = pd.read_csv(fname, comment="#", na_values="--")
+        df.drop_duplicates(inplace=True)
 
         # Convert rad1_time and rad2_time to datetime
         df["rad1_time"] = pd.to_datetime(df["rad1_time"], format="%Y%m%d%H%M%S")
@@ -999,6 +1000,7 @@ def read_colocated_data_with_QC(fname):
     try:
         # Read the CSV file, skipping lines starting with "#"
         df = pd.read_csv(fname, comment="#", na_values="--")
+        df.drop_duplicates(inplace=True)
 
         # Convert rad1_time and rad2_time to datetime
         df["rad1_time"] = pd.to_datetime(df["rad1_time"], format="%Y%m%d%H%M%S")

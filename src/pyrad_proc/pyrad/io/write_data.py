@@ -248,6 +248,8 @@ def write_csv_to_mysql(
         Path to the CSV file to import.
     chunksize : int, optional
         Number of rows inserted per batch. Default is 1000.
+    drop_table: bool, optional
+        Drop the table and recreate it if the format is not compatible with the CSV file. Default is False.
     """
     if not _MYSQL_AVAILABLE:
         warn(
@@ -325,12 +327,48 @@ def write_csv_to_mysql(
     )
 
     # -----------------------------
-    # 5) Create table if not exists
+    # 5) Create table if not exists.
+    #    If drop_table=True, only drop/recreate when schema differs.
     # -----------------------------
+    def get_existing_columns(conn, table_name):
+        result = conn.execute(
+            text(
+                """
+                SELECT COLUMN_NAME
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = :database
+                  AND TABLE_NAME = :table_name
+                ORDER BY ORDINAL_POSITION
+                """
+            ),
+            {"database": database, "table_name": table_name},
+        )
+        return [row[0] for row in result.fetchall()]
+
     with engine.begin() as conn:
-        if drop_table:
-            print(f"Dropping existing table {table_name}")
-            conn.execute(text(f"DROP TABLE IF EXISTS `{table_name}`"))
+        existing_columns = get_existing_columns(conn, table_name)
+        csv_columns = df.columns.tolist()
+
+        if existing_columns:
+            same_format = existing_columns == csv_columns
+
+            if drop_table and not same_format:
+                print(
+                    f"Table {database}.{table_name} exists but has a different format. "
+                    "Dropping and recreating it."
+                )
+                print(f"Existing columns: {existing_columns}")
+                print(f"CSV columns:      {csv_columns}")
+
+                conn.execute(text(f"DROP TABLE IF EXISTS `{table_name}`"))
+
+            elif not same_format:
+                raise ValueError(
+                    f"Table {database}.{table_name} has a different format than the CSV file.\n"
+                    f"Existing columns: {existing_columns}\n"
+                    f"CSV columns:      {csv_columns}\n"
+                    "Set drop_table=True to allow automatic recreation."
+                )
 
     df.head(0).to_sql(
         table_name,
