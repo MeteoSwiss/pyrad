@@ -333,6 +333,7 @@ def plot_pos_map(
 
     return (fig, ax)
 
+
 def plot_density(
     hist_obj,
     hist_type,
@@ -646,6 +647,7 @@ def plot_density(
 
     return fname_list
 
+
 def plot_scatter(
     bin_edges1,
     bin_edges2,
@@ -900,6 +902,9 @@ def plot_scatter(
             horizontalalignment="left",
             verticalalignment="top",
             transform=ax.transAxes,
+            color="#808080",
+            alpha=0.8,
+            fontsize=9,
         )
 
     if marginals:

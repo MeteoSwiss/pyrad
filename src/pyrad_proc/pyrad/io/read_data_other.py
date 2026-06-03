@@ -1483,6 +1483,7 @@ def read_intercomp_scores_ts(
             usecols=lambda c: c in cols,
             dtype=str,
             skip_blank_lines=True,
+            on_bad_lines="skip",
         )
 
         missing = set(cols) - set(df.columns)
@@ -1537,6 +1538,8 @@ def read_intercomp_scores_ts(
         )
 
     except (OSError, IOError, ValueError, pd.errors.ParserError) as exc:
+        if return_dataframe:
+            return pd.DataFrame()
         warn(str(exc))
         warn(f"Unable to read file {fname}")
         return (None,) * 11

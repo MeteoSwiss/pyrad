@@ -89,6 +89,9 @@ def generate_intercomp_products(dataset, prdcfg):
                 transform : str, optional
                     Mathematical expression applied to both radar values before plotting.
                     Default is "x".
+                plot_diff : bool, optional
+                    If True, plots the histogram of the difference between radar 1 and radar 2
+                    values instead of the histograms of the two radars. Default is False.
                 step : float, optional
                     Histogram bin width. If None, bin edges are determined automatically.
                 vmin, vmax : float, optional
@@ -220,6 +223,7 @@ def generate_intercomp_products(dataset, prdcfg):
         cap_limits = prdcfg.get("cap_limits", False)
         binwidth_equal = prdcfg.get("binwidth_equal", False)
         double_conditional_threshold = prdcfg.get("double_conditional_threshold", None)
+        plot_diff = prdcfg.get("plot_diff", False)
 
         fname_list = []
 
@@ -346,16 +350,23 @@ def generate_intercomp_products(dataset, prdcfg):
             if transform_str != "x":
                 labelx = f"f({field_name})"
 
+            if plot_diff:
+                data_histogram = rad2_values.compressed() - rad1_values.compressed()
+                labels = [f"{rad2} - {rad1}"]
+            else:
+                data_histogram = [rad1_values.compressed(), rad2_values.compressed()]
+                labels = [rad1, rad2]
+
             plot_histogram(
                 bin_edges,
-                [rad1_values.compressed(), rad2_values.compressed()],
+                data_histogram,
                 f_list,
                 labelx=labelx,
                 labely="Number of Samples",
                 titl=titl,
                 binwidth_equal=binwidth_equal,
                 dpi=prdcfg.get("dpi", 72),
-                labels=[rad1, rad2],
+                labels=labels,
             )
 
             fname_list.extend(f_list)
@@ -605,7 +616,7 @@ def generate_intercomp_products(dataset, prdcfg):
             )[0]
 
             csvfname = savedir + csvfname
-
+            fname_list.append(csvfname)
             write_intercomp_scores_ts(
                 dataset["timeinfo"],
                 stats,
@@ -664,9 +675,10 @@ def generate_intercomp_products(dataset, prdcfg):
 
             figtimeinfo = None
             fig_timeformat = None
-
             titldate = (
-                date_vec[0].strftime("%Y%m%d") + "-" + date_vec[-1].strftime("%Y%m%d")
+                date_vec.tolist()[0].strftime("%Y%m%d")
+                + "-"
+                + date_vec.tolist()[-1].strftime("%Y%m%d")
             )
 
             if prdcfg.get("add_date_in_fname", False):

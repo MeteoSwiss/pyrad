@@ -73,6 +73,7 @@ from cmweather.cm import cmap_d
 from .io_aux import generate_field_name_str
 from .flock_utils import lock_file, unlock_file
 from ..util.date_utils import detect_datetime_columns
+from .read_data_other import read_intercomp_scores_ts
 
 try:
     import simplekml
@@ -3340,168 +3341,101 @@ def write_intercomp_scores_ts(
     rewrite=False,
 ):
     """
-    writes time series of radar intercomparison scores
+    Writes time series of radar intercomparison scores.
 
-    Parameters
-    ----------
-    start_time : datetime object or array of date time objects
-        the time of the intercomparison
-    stats : dict
-        dictionary containing the statistics
-    field_name : str
-        The name of the field
-    fname : str
-        file name where to store the data
-    rad1_name, rad2_name : str
-        Name of the radars intercompared
-    rewrite : bool
-        if True a new file is created
-
-    Returns
-    -------
-    fname : str
-        the name of the file where data has written
-
+    If an existing file already contains a given date, the newly provided
+    value replaces the old one.
     """
+
+    fieldnames = [
+        "date",
+        "NP",
+        "mean_bias",
+        "median_bias",
+        "quant25_bias",
+        "quant75_bias",
+        "mode_bias",
+        "corr",
+        "slope_of_linear_regression",
+        "intercep_of_linear_regression",
+        "intercep_of_linear_regression_of_slope_1",
+    ]
+
     nvalues = np.size(start_time)
 
-    meanbias = stats["meanbias"].filled(fill_value=get_fillvalue())
-    medianbias = stats["medianbias"].filled(fill_value=get_fillvalue())
-    quant25bias = stats["quant25bias"].filled(fill_value=get_fillvalue())
-    quant75bias = stats["quant75bias"].filled(fill_value=get_fillvalue())
-    modebias = stats["modebias"].filled(fill_value=get_fillvalue())
-    corr = stats["corr"].filled(fill_value=get_fillvalue())
-    slope = stats["slope"].filled(fill_value=get_fillvalue())
-    intercep = stats["intercep"].filled(fill_value=get_fillvalue())
-    intercep_slope_1 = stats["intercep_slope_1"].filled(fill_value=get_fillvalue())
+    def _as_array(value):
+        value = value.filled(fill_value=get_fillvalue())
+        if nvalues == 1:
+            return np.asarray([value])
+        return np.asarray(value)
 
     if nvalues == 1:
         start_time_aux = np.asarray([start_time])
-        meanbias = np.asarray([meanbias])
-        medianbias = np.asarray([medianbias])
-        quant25bias = np.asarray([quant25bias])
-        quant75bias = np.asarray([quant75bias])
-        modebias = np.asarray([modebias])
-        corr = np.asarray([corr])
-        slope = np.asarray([slope])
-        intercep = np.asarray([intercep])
-        intercep_slope_1 = np.asarray([intercep_slope_1])
         np_t = np.asarray([stats["npoints"]])
     else:
         start_time_aux = np.asarray(start_time)
-        np_t = stats["npoints"]
+        np_t = np.asarray(stats["npoints"])
 
-    if rewrite:
-        file_exists = False
-    else:
-        filelist = glob.glob(fname)
-        if not filelist:
-            file_exists = False
+    new_df = pd.DataFrame(
+        {
+            "date": pd.to_datetime(start_time_aux),
+            "NP": np_t,
+            "mean_bias": _as_array(stats["meanbias"]),
+            "median_bias": _as_array(stats["medianbias"]),
+            "quant25_bias": _as_array(stats["quant25bias"]),
+            "quant75_bias": _as_array(stats["quant75bias"]),
+            "mode_bias": _as_array(stats["modebias"]),
+            "corr": _as_array(stats["corr"]),
+            "slope_of_linear_regression": _as_array(stats["slope"]),
+            "intercep_of_linear_regression": _as_array(stats["intercep"]),
+            "intercep_of_linear_regression_of_slope_1": _as_array(
+                stats["intercep_slope_1"]
+            ),
+        }
+    )
+
+    file_exists = bool(glob.glob(fname)) and not rewrite
+
+    if file_exists:
+        old_df = read_intercomp_scores_ts(fname, return_dataframe=True)
+        if len(old_df):
+            old_df["date"] = pd.to_datetime(old_df["date"], errors="coerce")
+            new_df["date"] = pd.to_datetime(new_df["date"], errors="coerce")
+
+            out_df = pd.concat([old_df, new_df], ignore_index=True)
         else:
-            file_exists = True
-
-    if not file_exists:
-        with open(fname, "w", newline="") as csvfile:
-            lock_file(csvfile)
-
-            csvfile.write(
-                "# Weather radar intercomparison scores timeseries file\n"
-                + '# Comment lines are preceded by "#"\n'
-                + "# Description: \n"
-                + "# Time series of the intercomparison between two radars.\n"
-                + "# Radar 1: "
-                + rad1_name
-                + "\n"
-                + "# Radar 2: "
-                + rad2_name
-                + "\n"
-                + "# Field name: "
-                + field_name
-                + "\n"
-                + "# Fill Value: "
-                + str(get_fillvalue())
-                + "\n"
-                + "# Start: "
-                + start_time_aux[0].strftime("%Y-%m-%d %H:%M:%S UTC")
-                + "\n"
-                + "#\n"
-            )
-
-            fieldnames = [
-                "date",
-                "NP",
-                "mean_bias",
-                "median_bias",
-                "quant25_bias",
-                "quant75_bias",
-                "mode_bias",
-                "corr",
-                "slope_of_linear_regression",
-                "intercep_of_linear_regression",
-                "intercep_of_linear_regression_of_slope_1",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            writer.writeheader()
-
-            for i, dtime in enumerate(start_time_aux):
-                writer.writerow(
-                    {
-                        "date": dtime.strftime("%Y%m%d%H%M%S"),
-                        "NP": np_t[i],
-                        "mean_bias": meanbias[i],
-                        "median_bias": medianbias[i],
-                        "quant25_bias": quant25bias[i],
-                        "quant75_bias": quant75bias[i],
-                        "mode_bias": modebias[i],
-                        "corr": corr[i],
-                        "slope_of_linear_regression": slope[i],
-                        "intercep_of_linear_regression": intercep[i],
-                        "intercep_of_linear_regression_of_slope_1": (
-                            intercep_slope_1[i]
-                        ),
-                    }
-                )
-
-            unlock_file(csvfile)
-            csvfile.close()
+            out_df = new_df
     else:
-        with open(fname, "a", newline="") as csvfile:
-            lock_file(csvfile)
+        out_df = new_df
 
-            fieldnames = [
-                "date",
-                "NP",
-                "mean_bias",
-                "median_bias",
-                "quant25_bias",
-                "quant75_bias",
-                "mode_bias",
-                "corr",
-                "slope_of_linear_regression",
-                "intercep_of_linear_regression",
-                "intercep_of_linear_regression_of_slope_1",
-            ]
-            writer = csv.DictWriter(csvfile, fieldnames)
-            for i, dtime in enumerate(start_time_aux):
-                writer.writerow(
-                    {
-                        "date": dtime.strftime("%Y%m%d%H%M%S"),
-                        "NP": np_t[i],
-                        "mean_bias": meanbias[i],
-                        "median_bias": medianbias[i],
-                        "quant25_bias": quant25bias[i],
-                        "quant75_bias": quant75bias[i],
-                        "mode_bias": modebias[i],
-                        "corr": corr[i],
-                        "slope_of_linear_regression": slope[i],
-                        "intercep_of_linear_regression": intercep[i],
-                        "intercep_of_linear_regression_of_slope_1": (
-                            intercep_slope_1[i]
-                        ),
-                    }
-                )
-            unlock_file(csvfile)
-            csvfile.close()
+    # Keep only the newest value for each date
+    out_df = out_df.drop_duplicates(subset="date", keep="last")
+
+    # Optional: sort chronologically
+    out_df = out_df.sort_values("date")
+
+    # Convert back to original CSV date format before writing
+    out_df["date"] = out_df["date"].dt.strftime("%Y%m%d%H%M%S")
+
+    with open(fname, "w", newline="") as csvfile:
+        lock_file(csvfile)
+
+        csvfile.write(
+            "# Weather radar intercomparison scores timeseries file\n"
+            '# Comment lines are preceded by "#"\n'
+            "# Description: \n"
+            "# Time series of the intercomparison between two radars.\n"
+            f"# Radar 1: {rad1_name}\n"
+            f"# Radar 2: {rad2_name}\n"
+            f"# Field name: {field_name}\n"
+            f"# Fill Value: {get_fillvalue()}\n"
+            f"# Start: {start_time_aux[0].strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
+            "#\n"
+        )
+
+        out_df.to_csv(csvfile, index=False, columns=fieldnames)
+
+        unlock_file(csvfile)
 
     return fname
 
