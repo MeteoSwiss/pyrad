@@ -866,7 +866,13 @@ def process_save_radar(procstatus, dscfg, radar_list=None):
         Processing status: 0 initializing, 1 processing volume,
         2 post-processing
     dscfg : dictionary of dictionaries
-        data set configuration
+        data set configuration. Accepted Configuration Keywords:
+
+        radar : int
+            If multiple radars are present, the radar number (1-99) to save.
+            If only one radar is present, the radar number can be omitted and the first radar will be saved.
+            This keyword is optional if only one radar is present, but if multiple radars are present, it must be included.
+                If multiple radars are present and the radar number is not included, a warning will be issued and the first radar will be saved.
     radar_list : list of Radar objects
         Optional. list of radar objects
 
@@ -882,14 +888,11 @@ def process_save_radar(procstatus, dscfg, radar_list=None):
     if procstatus != 1:
         return None, None
 
-    for datatypedescr in dscfg["datatype"]:
-        radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
-        break
-    ind_rad = int(radarnr[5:8]) - 1
-    if (radar_list is None) or (radar_list[ind_rad] is None):
+    ind_rad = dscfg.get("radar", 1)
+    if (radar_list is None) or (radar_list[ind_rad - 1] is None):
         warn("ERROR: No valid radar")
         return None, None
-    new_dataset = {"radar_out": deepcopy(radar_list[ind_rad])}
+    new_dataset = {"radar_out": deepcopy(radar_list[ind_rad - 1])}
 
     return new_dataset, ind_rad
 
