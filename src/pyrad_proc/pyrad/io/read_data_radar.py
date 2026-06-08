@@ -6044,16 +6044,31 @@ def add_field(radar_dest, radar_orig):
                     )
                 ):
                     for field_name in radar_orig.fields.keys():
+                        if field_name in radar_dest.fields:
+                            warn(
+                                f"Field {field_name} already exists in destination radar. Overwriting original data..."
+                            )
+                            radar_dest.fields.pop(field_name)
                         radar_dest.add_field(field_name, radar_orig.fields[field_name])
                 else:
                     for field_name in radar_orig.fields.keys():
                         field_interp = interpol_field(
                             radar_dest, radar_orig, field_name
                         )
+                        if field_name in radar_dest.fields:
+                            warn(
+                                f"Field {field_name} already exists in destination radar. Overwriting original data..."
+                            )
+                            radar_dest.fields.pop(field_name)
                         radar_dest.add_field(field_name, field_interp)
             else:
                 for field_name in radar_orig.fields.keys():
                     field_interp = interpol_field(radar_dest, radar_orig, field_name)
+                    if field_name in radar_dest.fields:
+                        warn(
+                            f"Field {field_name} already exists in destination radar. Overwriting original data..."
+                        )
+                        radar_dest.fields.pop(field_name)
                     radar_dest.add_field(field_name, field_interp)
 
     return radar_dest
