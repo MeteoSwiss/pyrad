@@ -236,7 +236,6 @@ def main(
                 pass
 
         print("\n- master file: {}".format(os.path.basename(masterfile)))
-
         master_voltime = get_datetime(masterfile, masterdatatypedescr)
 
         if USE_CHILD_PROCESS:

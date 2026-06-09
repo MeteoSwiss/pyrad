@@ -696,10 +696,8 @@ def process_raw(procstatus, dscfg, radar_list=None):
         radar index
 
     """
-
     if procstatus != 1:
         return None, None
-
     for datatypedescr in dscfg["datatype"]:
         radarnr, _, _, _, _ = get_datatype_fields(datatypedescr)
         break
@@ -708,7 +706,6 @@ def process_raw(procstatus, dscfg, radar_list=None):
         warn("ERROR: No valid radar")
         return None, None
     new_dataset = {"radar_out": deepcopy(radar_list[ind_rad])}
-
     return new_dataset, ind_rad
 
 

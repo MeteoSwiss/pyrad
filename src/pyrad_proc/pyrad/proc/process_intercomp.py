@@ -647,6 +647,12 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
             elevation tolerance between the two radars. Default 0.5 deg
         rng_tol : float. Dataset keyword
             range tolerance between the two radars. Default 50 m
+        min_nb_samples_rad1: int. Dataset keyword
+            minimum number of samples required for radar 1 to be included in the
+            intercomparison. Default 1.
+        min_nb_samples_rad2: int. Dataset keyword
+            minimum number of samples required for radar 2 to be included in the
+            intercomparison. Default 1.
         clt_max : float. Dataset keyword
             maximum fraction  of samples that can be clutter contaminated.
             Default 1. i.e. all
@@ -1184,6 +1190,8 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
         phi_excess_max = dscfg.get("phi_excess_max", 100)
         non_rain_max = dscfg.get("non_rain_max", 100)
         phi_avg_max = dscfg.get("phi_avg_max", np.inf)
+        min_nb_samples_rad1 = dscfg.get("min_nb_samples_rad1", 1)
+        min_nb_samples_rad2 = dscfg.get("min_nb_samples_rad2", 1)
 
         # Avoid division by zero
         rad1_ns = np.maximum(rad1_nsamples.astype(float), 1.0)
@@ -1201,6 +1209,8 @@ def process_intercomp_with_QC(procstatus, dscfg, radar_list=None):
                     (rad2_non_rain / rad2_ns) <= non_rain_max,
                     (rad1_phi / rad1_ns) <= phi_avg_max,
                     (rad2_phi / rad2_ns) <= phi_avg_max,
+                    (rad1_nsamples >= min_nb_samples_rad1),
+                    (rad2_nsamples >= min_nb_samples_rad2),
                 )
             )
         )[0]
