@@ -353,9 +353,11 @@ def generate_intercomp_products(dataset, prdcfg):
             if plot_diff:
                 data_histogram = rad2_values.compressed() - rad1_values.compressed()
                 labels = [f"{rad2} - {rad1}"]
+                vert_line = 0
             else:
                 data_histogram = [rad1_values.compressed(), rad2_values.compressed()]
                 labels = [rad1, rad2]
+                vert_line = None
 
             plot_histogram(
                 bin_edges,
@@ -367,6 +369,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 binwidth_equal=binwidth_equal,
                 dpi=prdcfg.get("dpi", 72),
                 labels=labels,
+                vert_line=vert_line,
             )
 
             fname_list.extend(f_list)

@@ -1095,6 +1095,7 @@ def plot_histogram(
     dpi=72,
     labels=None,
     alpha=None,
+    vert_line=None,
 ):
     """
     Compute and plot one or several histograms.
@@ -1125,7 +1126,8 @@ def plot_histogram(
         Labels for each distribution. If provided, a legend is added.
     alpha : float, optional
         Transparency of the histogram (only used for single distribution).
-
+    vert_line : float or list of float, optional
+        If provided, vertical line(s) are plotted at the specified x-value(s).
     Returns
     -------
     fname_list : list of str
@@ -1160,7 +1162,7 @@ def plot_histogram(
     for vals, bins, lab in zip(values_list, bin_edges_list, labels):
         hist, bins = np.histogram(vals, bins=bins)
 
-        if n_hist == 1:
+        if n_hist == 1 and len(bins) < 100:
             # --- Standard filled histogram ---
             if binwidth_equal:
                 x = np.arange(len(bins) - 1) + 0.5
@@ -1195,9 +1197,17 @@ def plot_histogram(
                 linewidth=1.8,
             )
 
+    ax.grid()
     ax.set_xlabel(labelx)
     ax.set_ylabel(labely)
     ax.set_title(titl)
+
+    if vert_line is not None:
+        if isinstance(vert_line, (list, tuple)):
+            for vline in vert_line:
+                ax.axvline(vline, color="r", linestyle="--")
+        else:
+            ax.axvline(vert_line, color="r", linestyle="--")
 
     if any(label is not None for label in labels):
         ax.legend()
