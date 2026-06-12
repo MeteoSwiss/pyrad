@@ -22,13 +22,14 @@ Auxiliary plotting functions
 """
 
 import numpy as np
-
+import socket
 import pyart
 import os
 import matplotlib as mpl
 import matplotlib.cm
 from ..util import warn
 
+socket.setdefaulttimeout(30)
 mpl.use("Agg")
 
 # Increase a bit font size
@@ -56,29 +57,32 @@ try:
             )
 
     class OTM(GoogleTiles):
-        def __init__(self, cache):
-            super().__init__(self, cache=cache)
+        def __init__(self, cache=True):
+            super().__init__(cache=cache)
             self.desired_tile_form = "RGB"
 
-        # OpenTopoMap
         def _image_url(self, tile):
             x, y, z = tile
             return f"https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
 
-    class OTM_BW(OTM):  # BW OTM
-        """OpenTopoMap tiler converted to grayscale."""
-
+    class OTM_BW(OTM):
         def get_image(self, tile):
             img, extent, origin = super().get_image(tile)
 
-            # Convert numpy array -> PIL Image if needed
             if isinstance(img, np.ndarray):
                 img = Image.fromarray(img)
 
-            # Now safe to convert
             img = img.convert("L").convert("RGB")
-
             return img, extent, origin
+
+    class Positron(GoogleTiles):
+        def __init__(self, cache=True):
+            super().__init__(cache=cache)
+            self.desired_tile_form = "RGB"
+
+        def _image_url(self, tile):
+            x, y, z = tile
+            return f"https://cartocdn.com{z}/{x}/{y}.png"
 
     _CARTOPY_AVAILABLE = True
 except ImportError:
@@ -191,7 +195,7 @@ def embellish_plot(ax, plot_config):
         - "maps" : list of str
             List of map layers to add. Elements can be:
                 * predefined keywords:
-                    "relief", "OTM", "OTM_BW",
+                    "relief", "OTM", "OTM_BW", "Positron",
                     "countries", "provinces", "urban_areas",
                     "roads", "railroads", "coastlines",
                     "lakes", "lakes_europe",
@@ -228,7 +232,12 @@ def embellish_plot(ax, plot_config):
         )
         maps_list.remove("OTM")
 
-    if "relief" in maps_list or "OTM" in maps_list or "OTM_BW" in maps_list:
+    if (
+        "relief" in maps_list
+        or "OTM" in maps_list
+        or "OTM_BW" in maps_list
+        or "Positron" in maps_list
+    ):
         if "PYRAD_CACHE" in os.environ:
             cache_dir = os.environ["PYRAD_CACHE"]
         else:
@@ -246,8 +255,11 @@ def embellish_plot(ax, plot_config):
     if "OTM" in maps_list:
         tiler = OTM(cache=cache_dir)
 
+    if "Positron" in maps_list:
+        tiler = Positron(cache=cache_dir)
+
     for cartomap in maps_list:
-        if cartomap in ["relief", "OTM", "OTM_BW"]:
+        if cartomap in ["relief", "OTM", "OTM_BW", "Positron"]:
             ax.add_image(tiler, background_zoom, alpha=bg_alpha)
 
         elif cartomap == "countries":

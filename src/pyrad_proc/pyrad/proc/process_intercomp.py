@@ -179,23 +179,6 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         intersec_field=coloc_gates_field,
     )
 
-    visib_field = None
-    if "visibility" in radarnr_dict["RADAR" + "{:03d}".format(ind_radar_list[1] + 1)]:
-        visib_field = "visibility"  # older IDL visibility codes
-    elif (
-        "visibility_polar"
-        in radarnr_dict["RADAR" + "{:03d}".format(ind_radar_list[1] + 1)]
-    ):
-        visib_field = "visibility_polar"  # GECSX format
-
-    if vismin is not None and visib_field is None:
-        warn(
-            "Unable to filter data according to visibility. "
-            + "Visibility field for RADAR"
-            + "{:03d}".format(ind_radar_list[1] + 1)
-            + " not available"
-        )
-
     gate_coloc_rad2_dict = pyart.util.intersection(
         radar2,
         radar1,
@@ -230,7 +213,6 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         latlon_tol=latlon_tol,
         coloc_gates_field=coloc_gates_field,
     )
-
     coloc_rad2_dict, new_rad2.fields["colocated_gates"] = pyart.util.colocated_gates(
         new_rad2,
         new_rad1,
@@ -238,7 +220,6 @@ def process_colocated_gates(procstatus, dscfg, radar_list=None):
         latlon_tol=latlon_tol,
         coloc_gates_field=coloc_gates_field,
     )
-
     # prepare output
     rad1_dict = {"coloc_dict": coloc_rad1_dict, "radar_out": new_rad1}
 
