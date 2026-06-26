@@ -345,6 +345,10 @@ def generate_intercomp_products(dataset, prdcfg):
                 )
             else:
                 bin_edges = np.arange(vmin_aux, vmax_aux + step, step)
+                if plot_diff:
+                    diff = rad2_values.compressed() - rad1_values.compressed()
+                    nbins = len(bin_edges)
+                    bin_edges = np.linspace(np.min(diff), np.max(diff), nbins)
 
             labelx = field_name
             if transform_str != "x":
@@ -353,6 +357,7 @@ def generate_intercomp_products(dataset, prdcfg):
             if plot_diff:
                 data_histogram = rad2_values.compressed() - rad1_values.compressed()
                 labels = [f"{rad2} - {rad1}"]
+                labelx += " differences"
                 vert_line = 0
             else:
                 data_histogram = [rad1_values.compressed(), rad2_values.compressed()]
