@@ -335,20 +335,23 @@ def generate_intercomp_products(dataset, prdcfg):
                 rad1_values = np.ma.clip(rad1_values, vmin_aux, vmax_aux)
                 rad2_values = np.ma.clip(rad2_values, vmin_aux, vmax_aux)
 
-            if step is None:
+            if plot_diff:
+                diff = rad2_values.compressed() - rad1_values.compressed()
                 bin_edges = np.histogram_bin_edges(
-                    np.ma.concatenate(
-                        [rad1_values.compressed(), rad2_values.compressed()]
-                    ),
+                    diff,
                     bins="auto",
-                    range=(vmin_aux, vmax_aux),
                 )
             else:
-                bin_edges = np.arange(vmin_aux, vmax_aux + step, step)
-                if plot_diff:
-                    diff = rad2_values.compressed() - rad1_values.compressed()
-                    nbins = len(bin_edges)
-                    bin_edges = np.linspace(np.min(diff), np.max(diff), nbins)
+                if step is None:
+                    bin_edges = np.histogram_bin_edges(
+                        np.ma.concatenate(
+                            [rad1_values.compressed(), rad2_values.compressed()]
+                        ),
+                        bins="auto",
+                        range=(vmin_aux, vmax_aux),
+                    )
+                else:
+                    bin_edges = np.arange(vmin_aux, vmax_aux + step, step)
 
             labelx = field_name
             if transform_str != "x":
