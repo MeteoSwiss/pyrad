@@ -67,6 +67,7 @@ Plots
     plot_time_Doppler
     plot_complex_time_Doppler
     plot_amp_phase_time_Doppler
+    plot_bias_over_range
     plot_roi_contour
     get_colobar_label
     get_field_name
@@ -78,7 +79,7 @@ from .plots import plot_histogram, plot_histogram2, plot_density, plot_scatter  
 from .plots import plot_pos, plot_pos_map, plot_sun_hits, plot_antenna_pattern  # noqa
 from .plots import plot_scatter_comp, plot_quantiles, plot_selfconsistency  # noqa
 from .plots import plot_selfconsistency_instrument, plot_centroids  # noqa
-from .plots import _plot_time_range  # noqa
+from .plots import _plot_time_range, plot_bias_over_range  # noqa
 
 from .plots_vol import plot_ppi, plot_ppi_map, plot_rhi, plot_bscope  # noqa
 from .plots_vol import plot_time_range, plot_cappi, plot_rhi_profile  # noqa

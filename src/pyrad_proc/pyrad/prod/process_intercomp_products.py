@@ -31,6 +31,7 @@ from ..io.write_data import write_intercomp_scores_ts
 from ..graph.plots import plot_scatter, plot_histogram
 from ..graph.plots_timeseries import plot_intercomp_scores_ts
 from ..graph import plot_colocated_gates
+from ..graph import plot_bias_over_range
 
 from ..util.radar_utils import compute_2d_stats
 from ..util.stat_utils import parse_math_expression
@@ -528,6 +529,428 @@ def generate_intercomp_products(dataset, prdcfg):
             fname_list.extend(f_list)
 
             print("----- save to " + " ".join(f_list))
+
+        return fname_list
+
+    if prdcfg["type"] == "BIAS_OVER_RANGE":
+        """
+        Plots radar intercomparison bias as a function of range.
+
+        The product uses only data already available in:
+            dataset["intercomp_dict"][f"rad1_{colname}"]
+            dataset["intercomp_dict"][f"rad2_{colname}"]
+
+        User defined parameters
+        -----------------------
+        voltype : str
+            Pyrad variable name, used for labels and filenames.
+        colname : str, optional
+            Suffix of the intercomparison value columns.
+            Default: "val", i.e. rad1_val and rad2_val.
+        reference : str, optional
+            Bias convention. Accepted values are:
+                "rad2-rad1"
+                "rad1-rad2"
+            Default: "rad2-rad1".
+        bias_type : str, optional
+            Type of bias-over-range product. Accepted values are:
+                "cumulative":
+                    The plot is only generated when dataset["final"] is True.
+                "instant":
+                    The plot is generated for the current dataset.
+            Default: "cumulative".
+        range_min : float, optional
+            Minimum range bin edge in meters.
+            Used together with range_max and range_step.
+            Default: 0.
+        range_max : float, optional
+            Maximum range bin edge in meters.
+            Used together with range_min and range_step.
+            The value is interpreted as the last bin edge.
+            Example:
+                range_min = 1300
+                range_max = 40300
+                range_step = 1000
+            gives bins:
+                1300, 2300, ..., 39300, 40300
+        range_step : float, optional
+            Range bin width in meters.
+            Used together with range_min and range_max.
+        range_bins : list of float, optional
+            Explicit range bin edges in meters.
+            If provided, this takes precedence over range_min, range_max
+            and range_step.
+            This option is kept for backward compatibility.
+        percentiles : list of float, optional
+            Percentiles of the point-wise offset to plot.
+            The offset is computed according to the selected reference.
+            Default: [25, 50, 75].
+        mean_method : str, optional
+            Method used to compute the mean bias. Accepted values are:
+                "linear_ratio":
+                    Computes mean bias as:
+                        10*log10(mean(10**(a/10)) / mean(10**(b/10)))
+                    This is appropriate for dBZ-like quantities.
+
+                "offset":
+                    Computes the arithmetic mean of the point-wise offsets:
+                        mean(a-b)
+
+            Default: "linear_ratio".
+        min_samples_per_range : int, optional
+            Minimum number of valid samples required in a range bin.
+            Range bins with fewer samples are set to NaN.
+            Default: 0.
+        transform : str, optional
+            Mathematical expression applied to both radar values before
+            computing statistics.
+            The expression must be a valid function of x.
+            Examples:
+                "x"
+                "10 * log10(x)"
+            Default: "x".
+        double_conditional_threshold : float, optional
+            If set, only samples where both radar values are larger than this
+            threshold are used.
+        range_marker : float, optional
+            If set, plots a vertical marker at this range in meters.
+        plot_npoints : bool, optional
+            If True, plots the number of samples on a secondary y-axis.
+            Default: True.
+        write_csv : bool, optional
+            If True, writes the bias-over-range statistics to a CSV file.
+            Default: True.
+        bias_vmin, bias_vmax : float, optional
+            y-axis limits for the bias axis.
+        figsize : tuple, optional
+            Figure size passed to the plotting function.
+            Default: (12, 7).
+        dpi : int, optional
+            Figure resolution.
+            Default: 72.
+
+        Returns
+        -------
+        fname_list : list of str
+            List of generated CSV and figure filenames.
+            None if no product is generated.
+        """
+
+        bias_type = prdcfg.get("bias_type", "cumulative")
+        if bias_type == "cumulative" and not dataset["final"]:
+            return None
+
+        timeformat = "%Y%m%d"
+
+        intercomp_dict = dataset["intercomp_dict"]
+
+        colname = prdcfg.get("colname", "val")
+        rad1_key = f"rad1_{colname}"
+        rad2_key = f"rad2_{colname}"
+
+        if rad1_key not in intercomp_dict:
+            warn(f"Unable to generate BIAS_OVER_RANGE. Missing key: {rad1_key}")
+            return None
+
+        if rad2_key not in intercomp_dict:
+            warn(f"Unable to generate BIAS_OVER_RANGE. Missing key: {rad2_key}")
+            return None
+
+        if "rad1_rng" not in intercomp_dict:
+            warn("Unable to generate BIAS_OVER_RANGE. Missing key: rad1_rng")
+            return None
+
+        field_name = get_fieldname_pyart(prdcfg["voltype"])
+
+        transform_str = prdcfg.get("transform", "x")
+        transform = parse_math_expression(transform_str)
+
+        if "range_bins" in prdcfg:
+            # Backward-compatible explicit bin edges
+            range_bins = np.asarray(prdcfg["range_bins"], dtype=float)
+        else:
+            range_min = prdcfg.get("range_min", 0.0)
+            range_max = prdcfg.get("range_max", np.inf)
+            range_step = prdcfg.get("range_step", None)
+
+            if range_step is None:
+                if np.isinf(range_max):
+                    range_bins = np.asarray([range_min, np.inf], dtype=float)
+                else:
+                    raise ValueError(
+                        "BIAS_OVER_RANGE requires either range_bins or "
+                        "range_min, range_max and range_step"
+                    )
+            else:
+                range_min = float(range_min)
+                range_max = float(range_max)
+                range_step = float(range_step)
+
+                if range_step <= 0.0:
+                    raise ValueError("range_step must be > 0")
+
+                if range_max <= range_min:
+                    raise ValueError("range_max must be > range_min")
+
+                # range_max is interpreted as the last bin edge.
+                # Example: 1300, 40300, 1000 -> 1300, 2300, ..., 40300
+                range_bins = np.arange(
+                    range_min,
+                    range_max + 0.5 * range_step,
+                    range_step,
+                    dtype=float,
+                )
+
+                # Avoid overshooting too much in case of floating-point steps
+                range_bins = range_bins[range_bins <= range_max + 1e-6]
+
+                if range_bins[-1] < range_max:
+                    range_bins = np.append(range_bins, range_max)
+
+        if range_bins.size < 2:
+            raise ValueError("At least two range bin edges are required")
+
+        range_centers = range_bins[:-1] + np.diff(range_bins) / 2.0
+
+        reference = prdcfg.get("reference", "rad2-rad1")
+        if reference == "rad2-rad1":
+            reference_label = (
+                f"{intercomp_dict['rad2_name']} - {intercomp_dict['rad1_name']}"
+            )
+            first_key = rad2_key
+            second_key = rad1_key
+        elif reference == "rad1-rad2":
+            reference_label = (
+                f"{intercomp_dict['rad1_name']} - {intercomp_dict['rad2_name']}"
+            )
+            first_key = rad1_key
+            second_key = rad2_key
+        else:
+            raise ValueError("reference must be either 'rad2-rad1' or 'rad1-rad2'")
+
+        percentiles = np.asarray(
+            prdcfg.get("percentiles", [25.0, 50.0, 75.0]),
+            dtype=float,
+        )
+
+        if np.any(percentiles < 0.0) or np.any(percentiles > 100.0):
+            raise ValueError("percentiles must be between 0 and 100")
+
+        mean_method = prdcfg.get("mean_method", "linear_ratio")
+        if mean_method not in ("linear_ratio", "offset"):
+            raise ValueError("mean_method must be 'linear_ratio' or 'offset'")
+
+        min_samples_per_range = prdcfg.get("min_samples_per_range", 0)
+        double_conditional_threshold = prdcfg.get("double_conditional_threshold", None)
+
+        rad1_rng = np.ma.asarray(intercomp_dict["rad1_rng"])
+
+        first_values_all = np.ma.asarray(intercomp_dict[first_key])
+        second_values_all = np.ma.asarray(intercomp_dict[second_key])
+
+        if transform is not None:
+            first_values_all = transform(first_values_all)
+            second_values_all = transform(second_values_all)
+
+        first_values_all = np.ma.masked_invalid(first_values_all)
+        second_values_all = np.ma.masked_invalid(second_values_all)
+
+        meanbias_vec = []
+        nsamples_vec = []
+        percentile_vecs = {perc: [] for perc in percentiles}
+
+        for i in range(len(range_bins) - 1):
+            selection = np.logical_and(
+                rad1_rng >= range_bins[i],
+                rad1_rng < range_bins[i + 1],
+            )
+
+            first_values = first_values_all[selection]
+            second_values = second_values_all[selection]
+
+            valid = np.logical_not(
+                np.logical_or(
+                    np.ma.getmaskarray(first_values),
+                    np.ma.getmaskarray(second_values),
+                )
+            )
+
+            first_values = np.asarray(first_values.filled(np.nan), dtype=float)
+            second_values = np.asarray(second_values.filled(np.nan), dtype=float)
+
+            valid = np.logical_and.reduce(
+                (
+                    valid,
+                    np.isfinite(first_values),
+                    np.isfinite(second_values),
+                )
+            )
+
+            if double_conditional_threshold is not None:
+                valid = np.logical_and.reduce(
+                    (
+                        valid,
+                        first_values > double_conditional_threshold,
+                        second_values > double_conditional_threshold,
+                    )
+                )
+
+            first_values = first_values[valid]
+            second_values = second_values[valid]
+
+            npoints = first_values.size
+            nsamples_vec.append(npoints)
+
+            if npoints < min_samples_per_range:
+                meanbias_vec.append(np.nan)
+                for perc in percentiles:
+                    percentile_vecs[perc].append(np.nan)
+                continue
+
+            offset = first_values - second_values
+
+            if mean_method == "linear_ratio":
+                mean_first = np.nanmean(10.0 ** (first_values / 10.0))
+                mean_second = np.nanmean(10.0 ** (second_values / 10.0))
+
+                if (
+                    np.isfinite(mean_first)
+                    and np.isfinite(mean_second)
+                    and mean_first > 0.0
+                    and mean_second > 0.0
+                ):
+                    meanbias = 10.0 * np.log10(mean_first / mean_second)
+                else:
+                    meanbias = np.nan
+            else:
+                meanbias = np.nanmean(offset)
+
+            meanbias_vec.append(meanbias)
+
+            for perc in percentiles:
+                percentile_vecs[perc].append(np.nanpercentile(offset, perc))
+
+        meanbias_vec = np.asarray(meanbias_vec)
+        nsamples_vec = np.asarray(nsamples_vec)
+
+        for perc in percentiles:
+            percentile_vecs[perc] = np.asarray(percentile_vecs[perc])
+
+        rad1_name = intercomp_dict["rad1_name"]
+        rad2_name = intercomp_dict["rad2_name"]
+
+        savedir = get_save_dir(
+            prdcfg["basepath"],
+            prdcfg["procname"],
+            dssavedir,
+            prdcfg["prdname"],
+            timeinfo=dataset["timeinfo"],
+        )
+
+        prdcfginfo = f"{rad1_name}-{rad2_name}_{reference}"
+
+        # ------------------------------------------------------------------
+        # Write CSV
+        # ------------------------------------------------------------------
+        fname_list = []
+
+        if prdcfg.get("write_csv", True):
+            csvfname = make_filename(
+                "bias_over_range",
+                prdcfg["dstype"],
+                prdcfg["voltype"],
+                ["csv"],
+                prdcfginfo=prdcfginfo,
+                timeinfo=dataset["timeinfo"],
+                timeformat=timeformat,
+            )[0]
+
+            csvfname = savedir + csvfname
+
+            csv_header = [
+                "range_start_m",
+                "range_end_m",
+                "range_center_m",
+                "npoints",
+                "meanbias",
+            ]
+
+            csv_data = [
+                range_bins[:-1],
+                range_bins[1:],
+                range_centers,
+                nsamples_vec,
+                meanbias_vec,
+            ]
+
+            for perc in percentiles:
+                csv_header.append(f"percentile_{perc:g}")
+                csv_data.append(percentile_vecs[perc])
+
+            csv_data = np.column_stack(csv_data)
+
+            np.savetxt(
+                csvfname,
+                csv_data,
+                delimiter=",",
+                header=",".join(csv_header),
+                comments="",
+            )
+
+            print("saved CSV file: " + csvfname)
+            fname_list.append(csvfname)
+
+        # ------------------------------------------------------------------
+        # Plot
+        # ------------------------------------------------------------------
+        figfname_list = make_filename(
+            "bias_over_range",
+            prdcfg["dstype"],
+            prdcfg["voltype"],
+            prdcfg.get("imgformat", ["png"]),
+            prdcfginfo=prdcfginfo,
+            timeinfo=dataset["timeinfo"],
+            timeformat=timeformat,
+        )
+
+        for j, figfname in enumerate(figfname_list):
+            figfname_list[j] = savedir + figfname
+
+        plot_field_name = field_name
+        if transform_str != "x":
+            plot_field_name = f"f({field_name})"
+
+        titl = (
+            f"{rad1_name}-{rad2_name} {plot_field_name} bias over range\n"
+            f"{reference_label}, "
+            f"{dataset['timeinfo'].strftime(timeformat)}"
+        )
+
+        if transform_str != "x":
+            titl += f"\n f(x)={transform_str}"
+
+        percentile_dict = {perc: percentile_vecs[perc] for perc in percentiles}
+
+        plot_bias_over_range(
+            range_centers,
+            meanbias_vec,
+            percentile_dict,
+            figfname_list,
+            nsamples=nsamples_vec,
+            reference_label=reference_label,
+            field_name=plot_field_name,
+            titl=titl,
+            mean_label=f"mean bias ({mean_method})",
+            range_marker=prdcfg.get("range_marker", None),
+            plot_npoints=prdcfg.get("plot_npoints", True),
+            bias_vmin=prdcfg.get("bias_vmin", None),
+            bias_vmax=prdcfg.get("bias_vmax", None),
+            figsize=prdcfg.get("figsize", (12, 7)),
+            dpi=prdcfg.get("dpi", 72),
+        )
+
+        print("----- save to " + " ".join(figfname_list))
+        fname_list.extend(figfname_list)
 
         return fname_list
 

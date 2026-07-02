@@ -2498,3 +2498,250 @@ def _plot_time_range(
         return fname_list
 
     return fig, ax
+
+
+def plot_bias_over_range(
+    range_centers,
+    meanbias,
+    percentile_dict,
+    fname_list,
+    nsamples=None,
+    reference_label="rad2 - rad1",
+    field_name="field",
+    titl=None,
+    labelx="Range to radar 1 (m)",
+    labely=None,
+    mean_label="mean bias",
+    range_marker=None,
+    ref_value=0.0,
+    plot_npoints=True,
+    bias_vmin=None,
+    bias_vmax=None,
+    figsize=(12, 7),
+    dpi=72,
+    percentile_style="band",
+):
+    """
+    Plot intercomparison bias over range.
+
+    Percentiles can be displayed either as discrete lines or as shaded
+    percentile envelopes. The default style, "band", is recommended for
+    readability because it highlights the median and the percentile spread
+    without overloading the figure.
+
+    Parameters
+    ----------
+    range_centers : array-like
+        Range bin centers in meters.
+
+    meanbias : array-like
+        Mean bias per range bin.
+
+    percentile_dict : dict
+        Dictionary mapping percentile value to percentile bias array.
+        Example:
+            {
+                5: quant05_vec,
+                25: quant25_vec,
+                50: median_vec,
+                75: quant75_vec,
+                95: quant95_vec,
+            }
+
+    fname_list : list of str
+        Output figure filenames.
+
+    nsamples : array-like, optional
+        Number of samples per range bin.
+
+    reference_label : str
+        Bias label, e.g. "310CHX - 144CHX".
+
+    field_name : str
+        Name of plotted field.
+
+    titl : str, optional
+        Plot title.
+
+    labelx : str
+        x-axis label.
+
+    labely : str, optional
+        y-axis label. If None, generated from reference_label.
+
+    mean_label : str
+        Legend label for the mean bias curve.
+
+    range_marker : float, optional
+        Vertical range marker in meters.
+
+    ref_value : float
+        Horizontal reference line value.
+
+    plot_npoints : bool
+        If True and nsamples is not None, plot sample count on secondary axis.
+
+    bias_vmin, bias_vmax : float, optional
+        y-axis limits.
+
+    figsize : tuple
+        Figure size.
+
+    dpi : int
+        Figure resolution.
+
+    percentile_style : str
+        How to display percentiles. Accepted values are:
+            "band":
+                Display percentile ranges as shaded envelopes.
+                If available, 5-95 and 25-75 bands are plotted, and the
+                50th percentile is shown as a discrete median line.
+            "lines":
+                Display all percentiles as thin, color-sorted lines.
+
+        Default: "band".
+
+    Returns
+    -------
+    fname_list : list of str
+        List of saved figure filenames.
+    """
+
+    range_centers = np.asarray(range_centers, dtype=float)
+    meanbias = np.asarray(meanbias, dtype=float)
+
+    percentile_dict = {
+        float(perc): np.asarray(values, dtype=float)
+        for perc, values in percentile_dict.items()
+    }
+
+    fig, ax1 = plt.subplots(figsize=figsize)
+
+    # ------------------------------------------------------------------
+    # Percentile display
+    # ------------------------------------------------------------------
+    if percentile_style == "band":
+        # Wide envelope: 5-95 %
+        if 5.0 in percentile_dict and 95.0 in percentile_dict:
+            ax1.fill_between(
+                range_centers,
+                percentile_dict[5.0],
+                percentile_dict[95.0],
+                alpha=0.12,
+                label="5-95th percentile",
+            )
+
+        # Inner envelope: 25-75 %
+        if 25.0 in percentile_dict and 75.0 in percentile_dict:
+            ax1.fill_between(
+                range_centers,
+                percentile_dict[25.0],
+                percentile_dict[75.0],
+                alpha=0.25,
+                label="25-75th percentile",
+            )
+
+        # Median
+        if 50.0 in percentile_dict:
+            ax1.plot(
+                range_centers,
+                percentile_dict[50.0],
+                "-",
+                linewidth=1.4,
+                alpha=0.9,
+                label="median",
+            )
+
+    elif percentile_style == "lines":
+        # Color-sorted but visually discrete percentile lines
+        percentiles = sorted(percentile_dict.keys())
+        cmap = plt.get_cmap("viridis")
+
+        for i, perc in enumerate(percentiles):
+            color = cmap(i / max(len(percentiles) - 1, 1))
+
+            linewidth = 1.4 if perc == 50.0 else 1.0
+            alpha = 0.9 if perc == 50.0 else 0.45
+            linestyle = "-" if perc == 50.0 else "--"
+
+            ax1.plot(
+                range_centers,
+                percentile_dict[perc],
+                linestyle=linestyle,
+                linewidth=linewidth,
+                alpha=alpha,
+                color=color,
+                label=f"{perc:g}th percentile",
+            )
+
+    else:
+        raise ValueError("percentile_style must be either 'band' or 'lines'")
+
+    # ------------------------------------------------------------------
+    # Mean bias on top
+    # ------------------------------------------------------------------
+    ax1.plot(
+        range_centers,
+        meanbias,
+        "-o",
+        linewidth=2.0,
+        markersize=4,
+        label=mean_label,
+        zorder=5,
+    )
+
+    ax1.axhline(ref_value, linestyle="--", linewidth=1)
+
+    if range_marker is not None:
+        ax1.axvline(range_marker, linestyle="--", linewidth=1)
+
+    ax1.set_xlabel(labelx)
+
+    if labely is None:
+        labely = f"Bias ({reference_label}) [dB]"
+
+    ax1.set_ylabel(labely)
+
+    if bias_vmin is not None or bias_vmax is not None:
+        ax1.set_ylim(bias_vmin, bias_vmax)
+
+    if titl is None:
+        titl = f"{field_name} bias over range"
+
+    ax1.set_title(titl)
+    ax1.grid(True, axis="y", alpha=0.3)
+
+    lines, labels = ax1.get_legend_handles_labels()
+
+    if plot_npoints and nsamples is not None:
+        nsamples = np.asarray(nsamples)
+
+        ax2 = ax1.twinx()
+        ax2.plot(
+            range_centers,
+            nsamples,
+            "k--",
+            linewidth=1,
+            alpha=0.5,
+            label="N samples",
+        )
+        ax2.set_ylabel("Number of samples")
+
+        lines2, labels2 = ax2.get_legend_handles_labels()
+        lines.extend(lines2)
+        labels.extend(labels2)
+
+    ax1.legend(lines, labels)
+
+    fig.tight_layout()
+
+    for fname in fname_list:
+        fig.savefig(
+            fname,
+            dpi=dpi,
+            bbox_inches="tight",
+        )
+
+    plt.close(fig)
+
+    return fname_list
