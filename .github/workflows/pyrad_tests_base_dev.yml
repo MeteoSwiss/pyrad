@@ -1,11 +1,14 @@
 name: Test pyrad base dev
 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ dev ]
+    branches:
+      - dev
+
   pull_request:
-    branches: [ dev ]
+    branches:
+      - dev
+
   workflow_dispatch:
 
 jobs:
@@ -16,59 +19,76 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ "ubuntu-latest" , "windows-latest"]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        os:
+          - ubuntu-latest
+          - windows-latest
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
       max-parallel: 6
 
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Pyrad
+        uses: actions/checkout@v4
         with:
-         submodules: recursive
-         ref : dev
-      - uses: actions/setup-python@v5
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      # Install dependencies
-      - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462
-        with:
-          environment-file: ci/environment-ci.yml
-          environment-name: pyrad-dev
-          cache-downloads: true
-          python-version: ${{ matrix.python-version }}
-      - name: Clone pyart
+          cache: pip
+          cache-dependency-path: |
+            ci/requirements-ci.txt
+            src/pyrad_proc/pyproject.toml
+            src/pyrad_proc/setup.cfg
+            src/pyrad_proc/setup.py
+
+      - name: Upgrade build tools
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+
+      - name: Clone Py-ART
         uses: actions/checkout@v4
         with:
           repository: ARM-DOE/pyart
           path: pyart
+
       - name: Clone pyrad-tests
         uses: actions/checkout@v4
         with:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
-      - name: Install pyart
-        working-directory:  ${{github.workspace}}/pyart/
-        run: python -m pip install .
-      - name: Install pyrad
-        if: matrix.os != 'macos-latest'
-        working-directory: ${{github.workspace}}/src/pyrad_proc/
-        run: python -m pip install .
 
-      - name: Check imports
-        working-directory: ${{github.workspace}}/pyrad-tests/
+      - name: Install all dependencies and packages
+        run: |
+          python -m pip install \
+            -r ci/requirements-ci.txt \
+            ./pyart \
+            ./src/pyrad_proc
+
+      - name: Check dependency consistency
+        run: |
+          python -m pip check
+          python -c "import boto3, botocore; print('boto3:', boto3.__version__); print('botocore:', botocore.__version__)"
+          python -c "import aiobotocore, s3fs; print('aiobotocore:', aiobotocore.__version__); print('s3fs:', s3fs.__version__)"
+
+      - name: Check Pyrad imports
         run: |
           python -c "import pyrad; print(pyrad.__file__)"
           python -c "from pyrad.flow import main"
+
       - name: Run tests
         env:
-            S3_SECRET_READ: ${{ secrets.S3_SECRET_READ }}
-            S3_KEY_READ: ${{ secrets.S3_KEY_READ }}
-            S3_SECRET_WRITE: ${{ secrets.S3_SECRET_WRITE }}
-            S3_KEY_WRITE: ${{ secrets.S3_KEY_WRITE }}
-            PYRAD_TESTS_PATH: ${{github.workspace}}/pyrad-tests/
-        working-directory: ${{github.workspace}}/pyrad-tests/
+          S3_SECRET_READ: ${{ secrets.S3_SECRET_READ }}
+          S3_KEY_READ: ${{ secrets.S3_KEY_READ }}
+          S3_SECRET_WRITE: ${{ secrets.S3_SECRET_WRITE }}
+          S3_KEY_WRITE: ${{ secrets.S3_KEY_WRITE }}
+          PYRAD_TESTS_PATH: ${{ github.workspace }}/pyrad-tests/
+        working-directory: ${{ github.workspace }}/pyrad-tests/
         run: pytest "run_tests.py::test_base"

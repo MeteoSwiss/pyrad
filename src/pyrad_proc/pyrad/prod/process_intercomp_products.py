@@ -475,7 +475,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 double_conditional_threshold=double_conditional_threshold,
             )
             if hist_2d is None:
-                return None
+                continue
 
             metadata = (
                 "npoints: "
@@ -535,10 +535,6 @@ def generate_intercomp_products(dataset, prdcfg):
     if prdcfg["type"] == "BIAS_OVER_RANGE":
         """
         Plots radar intercomparison bias as a function of range.
-
-        The product uses only data already available in:
-            dataset["intercomp_dict"][f"rad1_{colname}"]
-            dataset["intercomp_dict"][f"rad2_{colname}"]
 
         User defined parameters
         -----------------------
