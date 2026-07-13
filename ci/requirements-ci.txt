@@ -8,7 +8,6 @@ wradlib
 cartopy
 cvxopt
 xarray
-boto3
 xradar
 metpy
 pytest-cov
