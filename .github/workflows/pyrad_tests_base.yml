@@ -73,8 +73,9 @@ jobs:
             ./src/pyrad_proc
 
           python -m pip install --upgrade \
-            "aiobotocore[boto3]"
-
+            boto3 \
+            aiobotocore \
+            s3fs
           python -m pip check
 
       - name: Check dependency consistency

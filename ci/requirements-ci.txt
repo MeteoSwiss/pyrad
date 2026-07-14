@@ -17,7 +17,6 @@ coveralls
 flake8
 Cython
 fsspec
-pygrib
 imageio
 cftime
 setuptools
