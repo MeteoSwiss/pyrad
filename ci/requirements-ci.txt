@@ -22,6 +22,8 @@ cftime
 setuptools
 shapely
 ruff
+pyproj
+rasterio
 cibuildwheel
 pooch
 versioneer
