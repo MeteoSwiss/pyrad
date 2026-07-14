@@ -63,12 +63,16 @@ jobs:
           repository: MeteoSwiss/pyrad-tests
           path: pyrad-tests
 
-      - name: Install all dependencies and packages
+      - name: Install dependencies and packages
         run: |
           python -m pip install \
             -r ci/requirements-ci.txt \
-            ./src/pyart \
             ./src/pyrad_proc
+
+          python -m pip install --upgrade \
+            "aiobotocore[boto3]"
+
+          python -m pip check
 
       - name: Check dependency consistency
         run: |
