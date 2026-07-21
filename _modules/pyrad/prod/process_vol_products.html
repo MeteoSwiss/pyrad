@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -193,11 +193,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -210,8 +217,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -305,11 +311,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -322,8 +335,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -572,17 +584,21 @@
 <span class="sd">        &#39;FIXED_RNG_IMAGE&#39;: Plots a fixed range image</span>
 <span class="sd">            User defined parameters:</span>
 <span class="sd">                voltype: str or list of str</span>
-<span class="sd">                    Name of the pyrad variable to use, it must be either a voltype available in the dataset</span>
-<span class="sd">                    or &quot;RGB&quot;, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</span>
+<span class="sd">                    Name of the PyRAD variable to use. It must be either a</span>
+<span class="sd">                    voltype available in the dataset or &quot;RGB&quot;, which will make</span>
+<span class="sd">                    an RGB plot of Zh, Zdr and RhoHV if they are available.</span>
 <span class="sd">                AngTol : float</span>
 <span class="sd">                    The tolerance between the nominal angles and the actual</span>
 <span class="sd">                    radar angles. Default 1.</span>
-<span class="sd">                ele_res, azi_res: float or None</span>
-<span class="sd">                    The resolution of the fixed grid [deg]. If None it will be</span>
-<span class="sd">                    obtained from the separation between angles</span>
+<span class="sd">                ele_res, azi_res : float or None</span>
+<span class="sd">                    The resolution of the fixed grid [deg]. If None, it will be</span>
+<span class="sd">                    obtained from the separation between angles.</span>
 <span class="sd">                vmin, vmax : float or None</span>
-<span class="sd">                    Min and Max values of the color scale. If None the values</span>
-<span class="sd">                    are taken from the Py-ART config file</span>
+<span class="sd">                    Minimum and maximum values of the color scale. If None, the</span>
+<span class="sd">                    values are taken from the Py-ART configuration file.</span>
+<span class="sd">                plot_max : bool</span>
+<span class="sd">                    If True, marks the maximum value with a red dot and annotates</span>
+<span class="sd">                    its azimuth, elevation, and value. Default False.</span>
 <span class="sd">        &#39;FIXED_RNG_SPAN_IMAGE&#39;: Plots a user-defined statistic over a fixed</span>
 <span class="sd">            range image</span>
 <span class="sd">            User defined parameters:</span>
@@ -1181,7 +1197,7 @@
 <span class="sd">                    If fixed_span is set, the minimum and maximum values of</span>
 <span class="sd">                    the X-axis. If None, they are obtained from the span of</span>
 <span class="sd">                    the U component defined in the Py-ART config file</span>
-<span class="sd">        &#39;WRITE_STATS&#39;: write statistics about the average of a field within a certain</span>
+<span class="sd">        &#39;WRITE_STATS&#39;: write statistics about the statistics of a field within a certain</span>
 <span class="sd">            sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and</span>
 <span class="sd">            additional quantiles</span>
 <span class="sd">            User defined parameters:</span>
@@ -3364,21 +3380,23 @@
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
         <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot; Field type &quot;</span>
-                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
                 <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
                 <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="c1"># user defined parameters</span>
+        <span class="c1"># User-defined parameters</span>
         <span class="n">ang_tol</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AngTol&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">azi_res</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;azi_res&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">ele_res</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ele_res&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">plot_max</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_max&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
@@ -3393,7 +3411,7 @@
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
-            <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;rng&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;rng&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
             <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
         <span class="p">)</span>
@@ -3401,7 +3419,7 @@
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
             <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
-        <span class="n">plot_fixed_rng</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">plot_fixed_rng</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">],</span>
             <span class="n">field_name</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">,</span>
@@ -3411,30 +3429,39 @@
             <span class="n">ang_tol</span><span class="o">=</span><span class="n">ang_tol</span><span class="p">,</span>
             <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
             <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">plot_max</span><span class="o">=</span><span class="n">plot_max</span><span class="p">,</span>
         <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
-
-        <span class="k">return</span> <span class="n">fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;FIXED_RNG_SPAN_IMAGE&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span>
+
         <span class="n">names</span> <span class="o">=</span> <span class="n">field_name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">names</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot; Field type &quot;</span>
-                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="s2">&quot;Field type &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
                 <span class="o">+</span> <span class="s2">&quot; not available in data set. Skipping product &quot;</span>
                 <span class="o">+</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="c1"># user defined parameters</span>
+        <span class="c1"># User-defined parameters</span>
         <span class="n">ang_tol</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;AngTol&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">azi_res</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;azi_res&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">ele_res</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ele_res&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">stat</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">)</span>
+        <span class="n">plot_type</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_type&quot;</span><span class="p">,</span> <span class="s2">&quot;field&quot;</span><span class="p">)</span>
+        <span class="n">plot_max</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_max&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">plot_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;field&quot;</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">):</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid plot_type &#39;</span><span class="si">{</span><span class="n">plot_type</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                <span class="s2">&quot;It must be either &#39;field&#39; or &#39;range&#39;. &quot;</span>
+                <span class="s2">&quot;Skipping product FIXED_RNG_SPAN_IMAGE.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
@@ -3449,10 +3476,12 @@
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;imgformat&quot;</span><span class="p">],</span>
-            <span class="n">prdcfginfo</span><span class="o">=</span><span class="s2">&quot;rng&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-            <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="p">(</span>
+                <span class="s2">&quot;rng&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">),</span>
             <span class="n">timeinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
             <span class="n">runinfo</span><span class="o">=</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;runinfo&quot;</span><span class="p">],</span>
         <span class="p">)</span>
@@ -3460,7 +3489,7 @@
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fname_list</span><span class="p">):</span>
             <span class="n">fname_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">fname</span>
 
-        <span class="n">plot_fixed_rng_span</span><span class="p">(</span>
+        <span class="n">output_fname_list</span> <span class="o">=</span> <span class="n">plot_fixed_rng_span</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;radar_out&quot;</span><span class="p">],</span>
             <span class="n">field_name</span><span class="p">,</span>
             <span class="n">prdcfg</span><span class="p">,</span>
@@ -3469,11 +3498,13 @@
             <span class="n">ele_res</span><span class="o">=</span><span class="n">ele_res</span><span class="p">,</span>
             <span class="n">ang_tol</span><span class="o">=</span><span class="n">ang_tol</span><span class="p">,</span>
             <span class="n">stat</span><span class="o">=</span><span class="n">stat</span><span class="p">,</span>
+            <span class="n">plot_type</span><span class="o">=</span><span class="n">plot_type</span><span class="p">,</span>
+            <span class="n">plot_max</span><span class="o">=</span><span class="n">plot_max</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fname_list</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_fname_list</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">fname_list</span>
+        <span class="k">return</span> <span class="n">output_fname_list</span>
 
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PLOT_ALONG_COORD&quot;</span><span class="p">:</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
@@ -5605,8 +5636,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -5630,7 +5661,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

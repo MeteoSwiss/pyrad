@@ -35,6 +35,8 @@
     
     plot_antenna_pattern
     
+    plot_bias_over_range
+    
     plot_bscope
     
     plot_cappi

@@ -850,8 +850,11 @@ description
    Dummy function that allows to save the entire radar object
  `[Source] <https://meteoswiss.github.io/pyrad/_modules/pyrad/proc/process_aux.html#process_save_radar>`_
 parameters
-   
-     | 
+   radar : int
+     | If multiple radars are present, the radar number (1-99) to save.
+     |     If only one radar is present, the radar number can be omitted and the first radar will be saved.
+     |     This keyword is optional if only one radar is present, but if multiple radars are present, it must be included.
+     |         If multiple radars are present and the radar number is not included, a warning will be issued and the first radar will be saved.
 
 returns
    new_dataset : dict
@@ -3449,6 +3452,12 @@ parameters
      | elevation tolerance between the two radars. Default 0.5 deg
    rng_tol : float. Dataset keyword
      | range tolerance between the two radars. Default 50 m
+   min_nb_samples_rad1: int. Dataset keyword
+     | minimum number of samples required for radar 1 to be included in the
+     |     intercomparison. Default 1.
+   min_nb_samples_rad2: int. Dataset keyword
+     | minimum number of samples required for radar 2 to be included in the
+     |     intercomparison. Default 1.
    clt_max : float. Dataset keyword
      | maximum fraction  of samples that can be clutter contaminated.
      |     Default 1. i.e. all

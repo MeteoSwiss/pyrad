@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -193,11 +193,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -210,8 +217,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -305,11 +311,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -322,8 +335,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -419,6 +431,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_scatter</span><span class="p">,</span> <span class="n">plot_histogram</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph.plots_timeseries</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_intercomp_scores_ts</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_colocated_gates</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_bias_over_range</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_2d_stats</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.stat_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_math_expression</span>
@@ -479,6 +492,9 @@
 <span class="sd">                transform : str, optional</span>
 <span class="sd">                    Mathematical expression applied to both radar values before plotting.</span>
 <span class="sd">                    Default is &quot;x&quot;.</span>
+<span class="sd">                plot_diff : bool, optional</span>
+<span class="sd">                    If True, plots the histogram of the difference between radar 1 and radar 2</span>
+<span class="sd">                    values instead of the histograms of the two radars. Default is False.</span>
 <span class="sd">                step : float, optional</span>
 <span class="sd">                    Histogram bin width. If None, bin edges are determined automatically.</span>
 <span class="sd">                vmin, vmax : float, optional</span>
@@ -566,7 +582,6 @@
     <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;WRITE_INTERCOMP&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">None</span>
-
         <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
             <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
@@ -611,6 +626,7 @@
         <span class="n">cap_limits</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cap_limits&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">binwidth_equal</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;binwidth_equal&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">double_conditional_threshold</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;double_conditional_threshold&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">plot_diff</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_diff&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="n">fname_list</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -663,7 +679,11 @@
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
-                <span class="k">continue</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;No data in range bin &quot;</span>
+                    <span class="o">+</span> <span class="n">rangebin_info_title</span>
+                    <span class="o">+</span> <span class="s2">&quot;, skipping histogram&quot;</span>
+                <span class="p">)</span>
 
             <span class="n">rad1_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="n">selection</span><span class="p">]</span>
@@ -718,31 +738,49 @@
                 <span class="n">rad1_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rad1_values</span><span class="p">,</span> <span class="n">vmin_aux</span><span class="p">,</span> <span class="n">vmax_aux</span><span class="p">)</span>
                 <span class="n">rad2_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">rad2_values</span><span class="p">,</span> <span class="n">vmin_aux</span><span class="p">,</span> <span class="n">vmax_aux</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">plot_diff</span><span class="p">:</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">rad2_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span> <span class="o">-</span> <span class="n">rad1_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
                 <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram_bin_edges</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                        <span class="p">[</span><span class="n">rad1_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">(),</span> <span class="n">rad2_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()]</span>
-                    <span class="p">),</span>
+                    <span class="n">diff</span><span class="p">,</span>
                     <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-                    <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">vmin_aux</span><span class="p">,</span> <span class="n">vmax_aux</span><span class="p">),</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">vmin_aux</span><span class="p">,</span> <span class="n">vmax_aux</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram_bin_edges</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+                            <span class="p">[</span><span class="n">rad1_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">(),</span> <span class="n">rad2_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()]</span>
+                        <span class="p">),</span>
+                        <span class="n">bins</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+                        <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">vmin_aux</span><span class="p">,</span> <span class="n">vmax_aux</span><span class="p">),</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">bin_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">vmin_aux</span><span class="p">,</span> <span class="n">vmax_aux</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
 
             <span class="n">labelx</span> <span class="o">=</span> <span class="n">field_name</span>
             <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
                 <span class="n">labelx</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;f(</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">)&quot;</span>
 
+            <span class="k">if</span> <span class="n">plot_diff</span><span class="p">:</span>
+                <span class="n">data_histogram</span> <span class="o">=</span> <span class="n">rad2_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span> <span class="o">-</span> <span class="n">rad1_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rad2</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">rad1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+                <span class="n">labelx</span> <span class="o">+=</span> <span class="s2">&quot; differences&quot;</span>
+                <span class="n">vert_line</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data_histogram</span> <span class="o">=</span> <span class="p">[</span><span class="n">rad1_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">(),</span> <span class="n">rad2_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()]</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">rad1</span><span class="p">,</span> <span class="n">rad2</span><span class="p">]</span>
+                <span class="n">vert_line</span> <span class="o">=</span> <span class="kc">None</span>
+
             <span class="n">plot_histogram</span><span class="p">(</span>
                 <span class="n">bin_edges</span><span class="p">,</span>
-                <span class="p">[</span><span class="n">rad1_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">(),</span> <span class="n">rad2_values</span><span class="o">.</span><span class="n">compressed</span><span class="p">()],</span>
+                <span class="n">data_histogram</span><span class="p">,</span>
                 <span class="n">f_list</span><span class="p">,</span>
                 <span class="n">labelx</span><span class="o">=</span><span class="n">labelx</span><span class="p">,</span>
                 <span class="n">labely</span><span class="o">=</span><span class="s2">&quot;Number of Samples&quot;</span><span class="p">,</span>
                 <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
                 <span class="n">binwidth_equal</span><span class="o">=</span><span class="n">binwidth_equal</span><span class="p">,</span>
                 <span class="n">dpi</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dpi&quot;</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
-                <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="n">rad1</span><span class="p">,</span> <span class="n">rad2</span><span class="p">],</span>
+                <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+                <span class="n">vert_line</span><span class="o">=</span><span class="n">vert_line</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="n">fname_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">f_list</span><span class="p">)</span>
@@ -754,7 +792,6 @@
         <span class="n">scatter_type</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scatter_type&quot;</span><span class="p">,</span> <span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">scatter_type</span> <span class="o">==</span> <span class="s2">&quot;cumulative&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="kc">None</span>
-
         <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
         <span class="n">colname</span> <span class="o">=</span> <span class="s2">&quot;val&quot;</span>
         <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">]:</span>
@@ -809,7 +846,7 @@
             <span class="n">rad1</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_name&quot;</span><span class="p">]</span>
             <span class="n">rad2</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad2_name&quot;</span><span class="p">]</span>
             <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;colocated radar gates </span><span class="si">{</span><span class="n">rad1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rad2</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">rangebin_info_title</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;colocated radar gates </span><span class="si">{</span><span class="n">rad2</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rad1</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">rangebin_info_title</span><span class="si">}</span><span class="s2"> &quot;</span>
                 <span class="o">+</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeformat</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
@@ -820,7 +857,11 @@
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>  <span class="c1"># skip if selection empty</span>
-                <span class="k">continue</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;No data in range bin &quot;</span>
+                    <span class="o">+</span> <span class="n">rangebin_info_title</span>
+                    <span class="o">+</span> <span class="s2">&quot;, skipping scatter plot&quot;</span>
+                <span class="p">)</span>
 
             <span class="n">hist_2d</span><span class="p">,</span> <span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">compute_2d_stats</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">][</span><span class="n">selection</span><span class="p">]),</span>
@@ -836,7 +877,7 @@
                 <span class="n">double_conditional_threshold</span><span class="o">=</span><span class="n">double_conditional_threshold</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">hist_2d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">None</span>
+                <span class="k">continue</span>
 
             <span class="n">metadata</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;npoints: &quot;</span>
@@ -890,6 +931,424 @@
             <span class="n">fname_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">f_list</span><span class="p">)</span>
 
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f_list</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">fname_list</span>
+
+    <span class="k">if</span> <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;BIAS_OVER_RANGE&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots radar intercomparison bias as a function of range.</span>
+
+<span class="sd">        User defined parameters</span>
+<span class="sd">        -----------------------</span>
+<span class="sd">        voltype : str</span>
+<span class="sd">            Pyrad variable name, used for labels and filenames.</span>
+<span class="sd">        colname : str, optional</span>
+<span class="sd">            Suffix of the intercomparison value columns.</span>
+<span class="sd">            Default: &quot;val&quot;, i.e. rad1_val and rad2_val.</span>
+<span class="sd">        reference : str, optional</span>
+<span class="sd">            Bias convention. Accepted values are:</span>
+<span class="sd">                &quot;rad2-rad1&quot;</span>
+<span class="sd">                &quot;rad1-rad2&quot;</span>
+<span class="sd">            Default: &quot;rad2-rad1&quot;.</span>
+<span class="sd">        bias_type : str, optional</span>
+<span class="sd">            Type of bias-over-range product. Accepted values are:</span>
+<span class="sd">                &quot;cumulative&quot;:</span>
+<span class="sd">                    The plot is only generated when dataset[&quot;final&quot;] is True.</span>
+<span class="sd">                &quot;instant&quot;:</span>
+<span class="sd">                    The plot is generated for the current dataset.</span>
+<span class="sd">            Default: &quot;cumulative&quot;.</span>
+<span class="sd">        range_min : float, optional</span>
+<span class="sd">            Minimum range bin edge in meters.</span>
+<span class="sd">            Used together with range_max and range_step.</span>
+<span class="sd">            Default: 0.</span>
+<span class="sd">        range_max : float, optional</span>
+<span class="sd">            Maximum range bin edge in meters.</span>
+<span class="sd">            Used together with range_min and range_step.</span>
+<span class="sd">            The value is interpreted as the last bin edge.</span>
+<span class="sd">            Example:</span>
+<span class="sd">                range_min = 1300</span>
+<span class="sd">                range_max = 40300</span>
+<span class="sd">                range_step = 1000</span>
+<span class="sd">            gives bins:</span>
+<span class="sd">                1300, 2300, ..., 39300, 40300</span>
+<span class="sd">        range_step : float, optional</span>
+<span class="sd">            Range bin width in meters.</span>
+<span class="sd">            Used together with range_min and range_max.</span>
+<span class="sd">        range_bins : list of float, optional</span>
+<span class="sd">            Explicit range bin edges in meters.</span>
+<span class="sd">            If provided, this takes precedence over range_min, range_max</span>
+<span class="sd">            and range_step.</span>
+<span class="sd">            This option is kept for backward compatibility.</span>
+<span class="sd">        percentiles : list of float, optional</span>
+<span class="sd">            Percentiles of the point-wise offset to plot.</span>
+<span class="sd">            The offset is computed according to the selected reference.</span>
+<span class="sd">            Default: [25, 50, 75].</span>
+<span class="sd">        mean_method : str, optional</span>
+<span class="sd">            Method used to compute the mean bias. Accepted values are:</span>
+<span class="sd">                &quot;linear_ratio&quot;:</span>
+<span class="sd">                    Computes mean bias as:</span>
+<span class="sd">                        10*log10(mean(10**(a/10)) / mean(10**(b/10)))</span>
+<span class="sd">                    This is appropriate for dBZ-like quantities.</span>
+
+<span class="sd">                &quot;offset&quot;:</span>
+<span class="sd">                    Computes the arithmetic mean of the point-wise offsets:</span>
+<span class="sd">                        mean(a-b)</span>
+
+<span class="sd">            Default: &quot;linear_ratio&quot;.</span>
+<span class="sd">        min_samples_per_range : int, optional</span>
+<span class="sd">            Minimum number of valid samples required in a range bin.</span>
+<span class="sd">            Range bins with fewer samples are set to NaN.</span>
+<span class="sd">            Default: 0.</span>
+<span class="sd">        transform : str, optional</span>
+<span class="sd">            Mathematical expression applied to both radar values before</span>
+<span class="sd">            computing statistics.</span>
+<span class="sd">            The expression must be a valid function of x.</span>
+<span class="sd">            Examples:</span>
+<span class="sd">                &quot;x&quot;</span>
+<span class="sd">                &quot;10 * log10(x)&quot;</span>
+<span class="sd">            Default: &quot;x&quot;.</span>
+<span class="sd">        double_conditional_threshold : float, optional</span>
+<span class="sd">            If set, only samples where both radar values are larger than this</span>
+<span class="sd">            threshold are used.</span>
+<span class="sd">        range_marker : float, optional</span>
+<span class="sd">            If set, plots a vertical marker at this range in meters.</span>
+<span class="sd">        plot_npoints : bool, optional</span>
+<span class="sd">            If True, plots the number of samples on a secondary y-axis.</span>
+<span class="sd">            Default: True.</span>
+<span class="sd">        write_csv : bool, optional</span>
+<span class="sd">            If True, writes the bias-over-range statistics to a CSV file.</span>
+<span class="sd">            Default: True.</span>
+<span class="sd">        bias_vmin, bias_vmax : float, optional</span>
+<span class="sd">            y-axis limits for the bias axis.</span>
+<span class="sd">        figsize : tuple, optional</span>
+<span class="sd">            Figure size passed to the plotting function.</span>
+<span class="sd">            Default: (12, 7).</span>
+<span class="sd">        dpi : int, optional</span>
+<span class="sd">            Figure resolution.</span>
+<span class="sd">            Default: 72.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fname_list : list of str</span>
+<span class="sd">            List of generated CSV and figure filenames.</span>
+<span class="sd">            None if no product is generated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">bias_type</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bias_type&quot;</span><span class="p">,</span> <span class="s2">&quot;cumulative&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bias_type</span> <span class="o">==</span> <span class="s2">&quot;cumulative&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">timeformat</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
+
+        <span class="n">intercomp_dict</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;intercomp_dict&quot;</span><span class="p">]</span>
+
+        <span class="n">colname</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;colname&quot;</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">)</span>
+        <span class="n">rad1_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;rad1_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">rad2_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;rad2_</span><span class="si">{</span><span class="n">colname</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="n">rad1_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intercomp_dict</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to generate BIAS_OVER_RANGE. Missing key: </span><span class="si">{</span><span class="n">rad1_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">rad2_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intercomp_dict</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to generate BIAS_OVER_RANGE. Missing key: </span><span class="si">{</span><span class="n">rad2_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="s2">&quot;rad1_rng&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intercomp_dict</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to generate BIAS_OVER_RANGE. Missing key: rad1_rng&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_fieldname_pyart</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">])</span>
+
+        <span class="n">transform_str</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">parse_math_expression</span><span class="p">(</span><span class="n">transform_str</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;range_bins&quot;</span> <span class="ow">in</span> <span class="n">prdcfg</span><span class="p">:</span>
+            <span class="c1"># Backward-compatible explicit bin edges</span>
+            <span class="n">range_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;range_bins&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">range_min</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_min&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">range_max</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_max&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+            <span class="n">range_step</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_step&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">range_step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">range_max</span><span class="p">):</span>
+                    <span class="n">range_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">range_min</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;BIAS_OVER_RANGE requires either range_bins or &quot;</span>
+                        <span class="s2">&quot;range_min, range_max and range_step&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">range_min</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">range_min</span><span class="p">)</span>
+                <span class="n">range_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">range_max</span><span class="p">)</span>
+                <span class="n">range_step</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">range_step</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">range_step</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;range_step must be &gt; 0&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">range_max</span> <span class="o">&lt;=</span> <span class="n">range_min</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;range_max must be &gt; range_min&quot;</span><span class="p">)</span>
+
+                <span class="c1"># range_max is interpreted as the last bin edge.</span>
+                <span class="c1"># Example: 1300, 40300, 1000 -&gt; 1300, 2300, ..., 40300</span>
+                <span class="n">range_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                    <span class="n">range_min</span><span class="p">,</span>
+                    <span class="n">range_max</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">range_step</span><span class="p">,</span>
+                    <span class="n">range_step</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Avoid overshooting too much in case of floating-point steps</span>
+                <span class="n">range_bins</span> <span class="o">=</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">range_bins</span> <span class="o">&lt;=</span> <span class="n">range_max</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">range_bins</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">range_max</span><span class="p">:</span>
+                    <span class="n">range_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">range_bins</span><span class="p">,</span> <span class="n">range_max</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">range_bins</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least two range bin edges are required&quot;</span><span class="p">)</span>
+
+        <span class="n">range_centers</span> <span class="o">=</span> <span class="n">range_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">range_bins</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="n">reference</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reference&quot;</span><span class="p">,</span> <span class="s2">&quot;rad2-rad1&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reference</span> <span class="o">==</span> <span class="s2">&quot;rad2-rad1&quot;</span><span class="p">:</span>
+            <span class="n">reference_label</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="s1">&#39;rad2_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="s1">&#39;rad1_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">first_key</span> <span class="o">=</span> <span class="n">rad2_key</span>
+            <span class="n">second_key</span> <span class="o">=</span> <span class="n">rad1_key</span>
+        <span class="k">elif</span> <span class="n">reference</span> <span class="o">==</span> <span class="s2">&quot;rad1-rad2&quot;</span><span class="p">:</span>
+            <span class="n">reference_label</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="s1">&#39;rad1_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="s1">&#39;rad2_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">first_key</span> <span class="o">=</span> <span class="n">rad1_key</span>
+            <span class="n">second_key</span> <span class="o">=</span> <span class="n">rad2_key</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;reference must be either &#39;rad2-rad1&#39; or &#39;rad1-rad2&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+            <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;percentiles&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">25.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">]),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">percentiles</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">percentiles</span> <span class="o">&gt;</span> <span class="mf">100.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;percentiles must be between 0 and 100&quot;</span><span class="p">)</span>
+
+        <span class="n">mean_method</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mean_method&quot;</span><span class="p">,</span> <span class="s2">&quot;linear_ratio&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mean_method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;linear_ratio&quot;</span><span class="p">,</span> <span class="s2">&quot;offset&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mean_method must be &#39;linear_ratio&#39; or &#39;offset&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">min_samples_per_range</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_samples_per_range&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">double_conditional_threshold</span> <span class="o">=</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;double_conditional_threshold&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">rad1_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_rng&quot;</span><span class="p">])</span>
+
+        <span class="n">first_values_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="n">first_key</span><span class="p">])</span>
+        <span class="n">second_values_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">intercomp_dict</span><span class="p">[</span><span class="n">second_key</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">first_values_all</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">first_values_all</span><span class="p">)</span>
+            <span class="n">second_values_all</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">second_values_all</span><span class="p">)</span>
+
+        <span class="n">first_values_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">first_values_all</span><span class="p">)</span>
+        <span class="n">second_values_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">second_values_all</span><span class="p">)</span>
+
+        <span class="n">meanbias_vec</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nsamples_vec</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">percentile_vecs</span> <span class="o">=</span> <span class="p">{</span><span class="n">perc</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">range_bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">rad1_rng</span> <span class="o">&gt;=</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">rad1_rng</span> <span class="o">&lt;</span> <span class="n">range_bins</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="n">first_values</span> <span class="o">=</span> <span class="n">first_values_all</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+            <span class="n">second_values</span> <span class="o">=</span> <span class="n">second_values_all</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">first_values</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">second_values</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">first_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">first_values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">second_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">second_values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+            <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+                <span class="p">(</span>
+                    <span class="n">valid</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">first_values</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">second_values</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">double_conditional_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">valid</span><span class="p">,</span>
+                        <span class="n">first_values</span> <span class="o">&gt;</span> <span class="n">double_conditional_threshold</span><span class="p">,</span>
+                        <span class="n">second_values</span> <span class="o">&gt;</span> <span class="n">double_conditional_threshold</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="n">first_values</span> <span class="o">=</span> <span class="n">first_values</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+            <span class="n">second_values</span> <span class="o">=</span> <span class="n">second_values</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+
+            <span class="n">npoints</span> <span class="o">=</span> <span class="n">first_values</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">nsamples_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">npoints</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">npoints</span> <span class="o">&lt;</span> <span class="n">min_samples_per_range</span><span class="p">:</span>
+                <span class="n">meanbias_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">:</span>
+                    <span class="n">percentile_vecs</span><span class="p">[</span><span class="n">perc</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">first_values</span> <span class="o">-</span> <span class="n">second_values</span>
+
+            <span class="k">if</span> <span class="n">mean_method</span> <span class="o">==</span> <span class="s2">&quot;linear_ratio&quot;</span><span class="p">:</span>
+                <span class="n">mean_first</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">first_values</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">))</span>
+                <span class="n">mean_second</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">second_values</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">mean_first</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">mean_second</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">mean_first</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+                    <span class="ow">and</span> <span class="n">mean_second</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+                <span class="p">):</span>
+                    <span class="n">meanbias</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mean_first</span> <span class="o">/</span> <span class="n">mean_second</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">meanbias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">meanbias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+
+            <span class="n">meanbias_vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meanbias</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">:</span>
+                <span class="n">percentile_vecs</span><span class="p">[</span><span class="n">perc</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanpercentile</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">perc</span><span class="p">))</span>
+
+        <span class="n">meanbias_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">meanbias_vec</span><span class="p">)</span>
+        <span class="n">nsamples_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nsamples_vec</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">:</span>
+            <span class="n">percentile_vecs</span><span class="p">[</span><span class="n">perc</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">percentile_vecs</span><span class="p">[</span><span class="n">perc</span><span class="p">])</span>
+
+        <span class="n">rad1_name</span> <span class="o">=</span> <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad1_name&quot;</span><span class="p">]</span>
+        <span class="n">rad2_name</span> <span class="o">=</span> <span class="n">intercomp_dict</span><span class="p">[</span><span class="s2">&quot;rad2_name&quot;</span><span class="p">]</span>
+
+        <span class="n">savedir</span> <span class="o">=</span> <span class="n">get_save_dir</span><span class="p">(</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;basepath&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;procname&quot;</span><span class="p">],</span>
+            <span class="n">dssavedir</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;prdname&quot;</span><span class="p">],</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">prdcfginfo</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rad1_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rad2_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">reference</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># ------------------------------------------------------------------</span>
+        <span class="c1"># Write CSV</span>
+        <span class="c1"># ------------------------------------------------------------------</span>
+        <span class="n">fname_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;write_csv&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">csvfname</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+                <span class="s2">&quot;bias_over_range&quot;</span><span class="p">,</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+                <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;csv&quot;</span><span class="p">],</span>
+                <span class="n">prdcfginfo</span><span class="o">=</span><span class="n">prdcfginfo</span><span class="p">,</span>
+                <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+                <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
+
+            <span class="n">csv_header</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;range_start_m&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;range_end_m&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;range_center_m&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;npoints&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;meanbias&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="n">csv_data</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">range_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">range_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+                <span class="n">range_centers</span><span class="p">,</span>
+                <span class="n">nsamples_vec</span><span class="p">,</span>
+                <span class="n">meanbias_vec</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">:</span>
+                <span class="n">csv_header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;percentile_</span><span class="si">{</span><span class="n">perc</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">csv_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">percentile_vecs</span><span class="p">[</span><span class="n">perc</span><span class="p">])</span>
+
+            <span class="n">csv_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span><span class="n">csv_data</span><span class="p">)</span>
+
+            <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+                <span class="n">csvfname</span><span class="p">,</span>
+                <span class="n">csv_data</span><span class="p">,</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">csv_header</span><span class="p">),</span>
+                <span class="n">comments</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saved CSV file: &quot;</span> <span class="o">+</span> <span class="n">csvfname</span><span class="p">)</span>
+            <span class="n">fname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
+
+        <span class="c1"># ------------------------------------------------------------------</span>
+        <span class="c1"># Plot</span>
+        <span class="c1"># ------------------------------------------------------------------</span>
+        <span class="n">figfname_list</span> <span class="o">=</span> <span class="n">make_filename</span><span class="p">(</span>
+            <span class="s2">&quot;bias_over_range&quot;</span><span class="p">,</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;dstype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="p">[</span><span class="s2">&quot;voltype&quot;</span><span class="p">],</span>
+            <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imgformat&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;png&quot;</span><span class="p">]),</span>
+            <span class="n">prdcfginfo</span><span class="o">=</span><span class="n">prdcfginfo</span><span class="p">,</span>
+            <span class="n">timeinfo</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
+            <span class="n">timeformat</span><span class="o">=</span><span class="n">timeformat</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">figfname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">):</span>
+            <span class="n">figfname_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">figfname</span>
+
+        <span class="n">plot_field_name</span> <span class="o">=</span> <span class="n">field_name</span>
+        <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+            <span class="n">plot_field_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;f(</span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+        <span class="n">titl</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rad1_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rad2_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">plot_field_name</span><span class="si">}</span><span class="s2"> bias over range</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">reference_label</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;timeinfo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">timeformat</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">transform_str</span> <span class="o">!=</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+            <span class="n">titl</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> f(x)=</span><span class="si">{</span><span class="n">transform_str</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">percentile_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">perc</span><span class="p">:</span> <span class="n">percentile_vecs</span><span class="p">[</span><span class="n">perc</span><span class="p">]</span> <span class="k">for</span> <span class="n">perc</span> <span class="ow">in</span> <span class="n">percentiles</span><span class="p">}</span>
+
+        <span class="n">plot_bias_over_range</span><span class="p">(</span>
+            <span class="n">range_centers</span><span class="p">,</span>
+            <span class="n">meanbias_vec</span><span class="p">,</span>
+            <span class="n">percentile_dict</span><span class="p">,</span>
+            <span class="n">figfname_list</span><span class="p">,</span>
+            <span class="n">nsamples</span><span class="o">=</span><span class="n">nsamples_vec</span><span class="p">,</span>
+            <span class="n">reference_label</span><span class="o">=</span><span class="n">reference_label</span><span class="p">,</span>
+            <span class="n">field_name</span><span class="o">=</span><span class="n">plot_field_name</span><span class="p">,</span>
+            <span class="n">titl</span><span class="o">=</span><span class="n">titl</span><span class="p">,</span>
+            <span class="n">mean_label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;mean bias (</span><span class="si">{</span><span class="n">mean_method</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="n">range_marker</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;range_marker&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">plot_npoints</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;plot_npoints&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="n">bias_vmin</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bias_vmin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">bias_vmax</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bias_vmax&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">figsize</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;figsize&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">)),</span>
+            <span class="n">dpi</span><span class="o">=</span><span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dpi&quot;</span><span class="p">,</span> <span class="mi">72</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- save to &quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">))</span>
+        <span class="n">fname_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">figfname_list</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">fname_list</span>
 
@@ -950,6 +1409,11 @@
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">selection</span><span class="p">):</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;No data in range bin &quot;</span>
+                    <span class="o">+</span> <span class="n">rangebin_info_title</span>
+                    <span class="o">+</span> <span class="s2">&quot;, skipping statistics for timeseries plot&quot;</span>
+                <span class="p">)</span>
                 <span class="k">continue</span>
 
             <span class="n">hist_2d</span><span class="p">,</span> <span class="n">bin_edges1</span><span class="p">,</span> <span class="n">bin_edges2</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="n">compute_2d_stats</span><span class="p">(</span>
@@ -984,7 +1448,7 @@
             <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
             <span class="n">csvfname</span> <span class="o">=</span> <span class="n">savedir</span> <span class="o">+</span> <span class="n">csvfname</span>
-
+            <span class="n">fname_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">csvfname</span><span class="p">)</span>
             <span class="n">write_intercomp_scores_ts</span><span class="p">(</span>
                 <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
                 <span class="n">stats</span><span class="p">,</span>
@@ -1043,9 +1507,10 @@
 
             <span class="n">figtimeinfo</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">fig_timeformat</span> <span class="o">=</span> <span class="kc">None</span>
-
             <span class="n">titldate</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">date_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">date_vec</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">date_vec</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;-&quot;</span>
+                <span class="o">+</span> <span class="n">date_vec</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">prdcfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;add_date_in_fname&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
@@ -1274,8 +1739,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1299,7 +1764,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -193,11 +193,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -210,8 +217,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -305,11 +311,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -322,8 +335,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -715,118 +727,352 @@
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="c1"># Extract / aggregate value</span>
         <span class="c1"># --------------------------------------------------------------</span>
+        <span class="n">is_pointing</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Determine all rays and ranges falling inside the tolerances first.</span>
+        <span class="c1"># This is also needed to detect pointing scans for agg_method=&#39;nearest&#39;.</span>
+        <span class="n">tol_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">d_az</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;AziTol&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">d_el</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;EleTol&quot;</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">tol_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_r</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RngTol&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">tol_ray_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">tol_r_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No gates found within tolerance.&quot;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># In a pointing scan, every radar ray falls within the angular tolerance.</span>
+        <span class="n">is_pointing</span> <span class="o">=</span> <span class="n">tol_ray_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="n">field_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
-            <span class="n">ind_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span>
-                <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+            <span class="c1"># Nearest range gate is common to every ray.</span>
+            <span class="n">nearest_local_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_r</span><span class="p">[</span><span class="n">tol_r_arr</span><span class="p">])</span>
+            <span class="n">nearest_ind_r</span> <span class="o">=</span> <span class="n">tol_r_arr</span><span class="p">[</span><span class="n">nearest_local_r</span><span class="p">]</span>
 
-            <span class="n">val</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_r</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">is_pointing</span><span class="p">:</span>
+                <span class="c1"># Preserve every ray and its timestamp.</span>
+                <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">tol_ray_arr</span>
+                <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">nearest_ind_r</span><span class="p">)</span>
 
-            <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray</span><span class="p">)</span>
-            <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r</span><span class="p">)</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">field_data</span><span class="p">[</span><span class="n">ind_ray_arr</span><span class="p">,</span> <span class="n">nearest_ind_r</span><span class="p">]</span>
+
+                <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                    <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                    <span class="n">nearest_ind_r</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Normal scan: retain the original nearest-ray behaviour,</span>
+                <span class="c1"># but restrict the search to rays inside the tolerance.</span>
+                <span class="n">angular_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                    <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">tol_ray_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span>
+                <span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">tol_ray_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
+
+                <span class="n">nearest_local_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">angular_distance</span><span class="p">)</span>
+                <span class="n">nearest_ind_ray</span> <span class="o">=</span> <span class="n">tol_ray_arr</span><span class="p">[</span><span class="n">nearest_local_ray</span><span class="p">]</span>
+
+                <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">nearest_ind_ray</span><span class="p">)</span>
+                <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">nearest_ind_r</span><span class="p">)</span>
+
+                <span class="n">val</span> <span class="o">=</span> <span class="n">field_data</span><span class="p">[</span><span class="n">nearest_ind_ray</span><span class="p">,</span> <span class="n">nearest_ind_r</span><span class="p">]</span>
+
+                <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">d_az</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;AziTol&quot;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">d_el</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;EleTol&quot;</span><span class="p">])</span>
-            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">tol_ray_arr</span>
+            <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">tol_r_arr</span>
 
-            <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_r</span> <span class="o">&lt;=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;RngTol&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">data_region</span> <span class="o">=</span> <span class="n">field_data</span><span class="p">[</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No gates found within tolerance.&quot;</span><span class="p">)</span>
-                <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">is_pointing</span><span class="p">:</span>
+                <span class="c1"># Preserve the ray/time dimension and aggregate only over range.</span>
+                <span class="n">nearest_local_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_r</span><span class="p">[</span><span class="n">ind_r_arr</span><span class="p">])</span>
+                <span class="n">nearest_ind_r</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="p">[</span><span class="n">nearest_local_r</span><span class="p">]</span>
 
-            <span class="n">data_region</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_region</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">nearest_ind_r</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data_region</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+                    <span class="c1"># Store the actual range of the maximum for each ray.</span>
+                    <span class="n">local_r_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">data_region</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="p">[</span><span class="n">local_r_indices</span><span class="p">]</span>
 
-            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span>
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data_region</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;maxZH&quot;</span><span class="p">:</span>
-                <span class="n">refl_region</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][</span>
-                    <span class="p">:,</span> <span class="n">ind_r_arr</span>
-                <span class="p">]</span>
+                    <span class="c1"># Store the actual range of the minimum for each ray.</span>
+                    <span class="n">local_r_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">data_region</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="p">[</span><span class="n">local_r_indices</span><span class="p">]</span>
 
-                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">refl_region</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid reflectivity values found for maxZH.&quot;</span><span class="p">)</span>
-                    <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+                    <span class="c1"># Shape:</span>
+                    <span class="c1">#     nrays x nranges_within_tolerance</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span>
 
-                <span class="n">zh_flat_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">refl_region</span><span class="p">)</span>
-                <span class="n">zh_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">zh_flat_idx</span><span class="p">,</span> <span class="n">refl_region</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                    <span class="c1"># There is no unique range for each ray. Use the nearest</span>
+                    <span class="c1"># requested range in the coordinate metadata.</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">nearest_ind_r</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-                <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;maxZH&quot;</span><span class="p">:</span>
+                    <span class="n">refl_region</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][</span>
+                        <span class="p">:,</span> <span class="n">ind_r_arr</span>
+                    <span class="p">]</span>
 
-                <span class="c1"># Reduce to selected gate indices</span>
-                <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-                <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                    <span class="n">valid_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span>
+                        <span class="n">refl_region</span><span class="p">,</span>
+                        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">:</span>
-                <span class="n">ind_clo_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">ind_clo_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">data_region</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-                <span class="n">clo_x</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_clo_ray</span><span class="p">,</span> <span class="n">ind_clo_r</span><span class="p">]</span>
-                <span class="n">clo_y</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_clo_ray</span><span class="p">,</span> <span class="n">ind_clo_r</span><span class="p">]</span>
-                <span class="n">clo_z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_clo_ray</span><span class="p">,</span> <span class="n">ind_clo_r</span><span class="p">]</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">nearest_ind_r</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-                <span class="n">dist_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_x</span><span class="p">)</span>
-                <span class="n">dist_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_y</span><span class="p">)</span>
-                <span class="n">dist_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_z</span><span class="p">)</span>
+                    <span class="n">valid_rays</span> <span class="o">=</span> <span class="n">valid_count</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
-                <span class="n">dist_to_clo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dist_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dist_y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dist_z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">valid_rays</span><span class="p">):</span>
+                        <span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid reflectivity values &quot;</span>
+                            <span class="s2">&quot;found for maxZH.&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">continue</span>
 
-                <span class="n">vmask</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
-                <span class="n">dist_to_clo</span><span class="p">[</span><span class="n">vmask</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+                    <span class="n">valid_ray_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">valid_rays</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid gates found within tolerance.&quot;</span><span class="p">)</span>
-                    <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">continue</span>
+                    <span class="n">max_local_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span>
+                        <span class="n">refl_region</span><span class="p">[</span><span class="n">valid_rays</span><span class="p">],</span>
+                        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="p">)</span>
 
-                <span class="n">clo_valid_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">),</span> <span class="n">dist_to_clo</span><span class="o">.</span><span class="n">shape</span>
-                <span class="p">)</span>
+                    <span class="n">val</span><span class="p">[</span><span class="n">valid_rays</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span>
+                        <span class="n">valid_ray_positions</span><span class="p">,</span>
+                        <span class="n">max_local_r</span><span class="p">,</span>
+                    <span class="p">]</span>
 
-                <span class="n">val</span> <span class="o">=</span> <span class="n">vmask</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">]</span>
+                    <span class="n">selected_range_indices</span><span class="p">[</span><span class="n">valid_rays</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="p">[</span><span class="n">max_local_r</span><span class="p">]</span>
 
-                <span class="c1"># Reduce to selected gate indices</span>
-                <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-                <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">:</span>
+                    <span class="n">range_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span>
+
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">data_region</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">nearest_ind_r</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">data_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">iray</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+                        <span class="n">valid_ranges</span> <span class="o">=</span> <span class="o">~</span><span class="n">data_mask</span><span class="p">[</span><span class="n">iray</span><span class="p">]</span>
+
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">valid_ranges</span><span class="p">):</span>
+                            <span class="k">continue</span>
+
+                        <span class="n">candidate_local_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">valid_ranges</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="n">best_local_r</span> <span class="o">=</span> <span class="n">candidate_local_indices</span><span class="p">[</span>
+                            <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">range_distance</span><span class="p">[</span><span class="n">candidate_local_indices</span><span class="p">])</span>
+                        <span class="p">]</span>
+
+                        <span class="n">val</span><span class="p">[</span><span class="n">iray</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span>
+                            <span class="n">iray</span><span class="p">,</span>
+                            <span class="n">best_local_r</span><span class="p">,</span>
+                        <span class="p">]</span>
+
+                        <span class="n">selected_range_indices</span><span class="p">[</span><span class="n">iray</span><span class="p">]</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="p">[</span><span class="n">best_local_r</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid gates found &quot;</span> <span class="s2">&quot;within tolerance.&quot;</span><span class="p">)</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">continue</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># ----------------------------------------------------------</span>
+                <span class="c1"># Normal scanning case: aggregate over rays and ranges</span>
+                <span class="c1"># ----------------------------------------------------------</span>
+                <span class="k">if</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;average&quot;</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid gates found &quot;</span> <span class="s2">&quot;within tolerance.&quot;</span><span class="p">)</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">local_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">data_region</span><span class="p">),</span>
+                        <span class="n">data_region</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span><span class="n">local_index</span><span class="p">]</span>
+
+                    <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">local_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">local_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">data_region</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid gates found &quot;</span> <span class="s2">&quot;within tolerance.&quot;</span><span class="p">)</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">local_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">data_region</span><span class="p">),</span>
+                        <span class="n">data_region</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span><span class="n">local_index</span><span class="p">]</span>
+
+                    <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">local_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">local_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span>
+
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;maxZH&quot;</span><span class="p">:</span>
+                    <span class="n">refl_region</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][</span>
+                        <span class="p">:,</span> <span class="n">ind_r_arr</span>
+                    <span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">refl_region</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid reflectivity &quot;</span>
+                            <span class="s2">&quot;values found for maxZH.&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">zh_flat_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">refl_region</span><span class="p">)</span>
+                    <span class="n">zh_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span>
+                        <span class="n">zh_flat_idx</span><span class="p">,</span>
+                        <span class="n">refl_region</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">data_region</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">]</span>
+
+                    <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">zh_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">agg_method</span> <span class="o">==</span> <span class="s2">&quot;nearest_valid&quot;</span><span class="p">:</span>
+                    <span class="c1"># Find the closest geometrical gate among the candidates.</span>
+                    <span class="n">ind_clo_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">ind_clo_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">))</span>
+
+                    <span class="n">clo_x</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                        <span class="n">ind_clo_ray</span><span class="p">,</span>
+                        <span class="n">ind_clo_r</span><span class="p">,</span>
+                    <span class="p">]</span>
+                    <span class="n">clo_y</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                        <span class="n">ind_clo_ray</span><span class="p">,</span>
+                        <span class="n">ind_clo_r</span><span class="p">,</span>
+                    <span class="p">]</span>
+                    <span class="n">clo_z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span>
+                        <span class="n">ind_clo_ray</span><span class="p">,</span>
+                        <span class="n">ind_clo_r</span><span class="p">,</span>
+                    <span class="p">]</span>
+
+                    <span class="n">dist_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                        <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_x</span>
+                    <span class="p">)</span>
+                    <span class="n">dist_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                        <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_y</span>
+                    <span class="p">)</span>
+                    <span class="n">dist_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                        <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span> <span class="o">-</span> <span class="n">clo_z</span>
+                    <span class="p">)</span>
+
+                    <span class="n">dist_to_clo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dist_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dist_y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dist_z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+                    <span class="n">vmask</span> <span class="o">=</span> <span class="n">field_data</span><span class="p">[</span><span class="n">ind_ray_arr</span><span class="p">][:,</span> <span class="n">ind_r_arr</span><span class="p">]</span>
+
+                    <span class="n">dist_to_clo</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">vmask</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                        <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radarnr</span><span class="si">}</span><span class="s2">: No valid gates found &quot;</span> <span class="s2">&quot;within tolerance.&quot;</span><span class="p">)</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">continue</span>
+
+                    <span class="n">clo_valid_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">dist_to_clo</span><span class="p">),</span>
+                        <span class="n">dist_to_clo</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">vmask</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">]</span>
+
+                    <span class="n">ind_ray_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_ray_arr</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="n">ind_r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="n">clo_valid_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">selected_range_indices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">nearest_local_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_r</span><span class="p">[</span><span class="n">ind_r_arr</span><span class="p">])</span>
+
+                    <span class="n">selected_range_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                        <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">ind_r_arr</span><span class="p">[</span><span class="n">nearest_local_r</span><span class="p">],</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="c1"># Normalize output shape</span>
+        <span class="c1"># --------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">is_pointing</span><span class="p">:</span>
+            <span class="c1"># For aggregated methods, val has shape (nrays,).</span>
+            <span class="c1"># For &#39;none&#39;, val has shape (nrays, nranges_in_tolerance).</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="c1"># Antenna coordinates actually used</span>
         <span class="c1"># --------------------------------------------------------------</span>
-        <span class="n">ant_coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">ant_coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+            <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="n">ant_coord</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">]</span>
         <span class="n">ant_coord</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_ray_arr</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">ind_r_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">ind_ray_arr</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-            <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r_arr</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">ant_coord</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">selected_range_indices</span><span class="p">]</span>
 
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="c1"># Fill masked values if requested</span>
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="k">pass</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
 
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="c1"># Time for selected ray(s)</span>
@@ -839,6 +1085,8 @@
             <span class="p">)</span>
         <span class="p">)</span>
 
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="c1"># Persistent storage</span>
         <span class="c1"># --------------------------------------------------------------</span>
@@ -847,8 +1095,16 @@
 
         <span class="k">if</span> <span class="n">radarnr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">]:</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">alt</span><span class="p">],</span>
-                <span class="s2">&quot;antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">r</span><span class="p">],</span>
+                <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">lon</span><span class="p">,</span>
+                    <span class="n">lat</span><span class="p">,</span>
+                    <span class="n">alt</span><span class="p">,</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">az</span><span class="p">,</span>
+                    <span class="n">el</span><span class="p">,</span>
+                    <span class="n">r</span><span class="p">,</span>
+                <span class="p">],</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">[],</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[],</span>
                 <span class="s2">&quot;ref_time&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
@@ -857,10 +1113,29 @@
             <span class="p">}</span>
             <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;initialized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;ref_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datatype</span>
+        <span class="n">gd</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">]</span>
+
+        <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;ref_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">]</span>
+        <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;datatype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datatype</span>
+
+        <span class="k">if</span> <span class="n">is_pointing</span><span class="p">:</span>
+            <span class="c1"># Store one entry for every ray timestamp.</span>
+            <span class="c1">#</span>
+            <span class="c1"># For average/min/max/maxZH/nearest_valid:</span>
+            <span class="c1">#     each value entry is a scalar.</span>
+            <span class="c1">#</span>
+            <span class="c1"># For agg_method=&#39;none&#39;:</span>
+            <span class="c1">#     each value entry is a 1-D array containing all</span>
+            <span class="c1">#     selected range gates for that ray.</span>
+            <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">value</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">val</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">val</span><span class="p">[</span><span class="n">iray</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">iray</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">gd</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="c1"># --------------------------------------------------------------</span>
         <span class="c1"># Per-radar output</span>
@@ -870,14 +1145,21 @@
             <span class="s2">&quot;datatype&quot;</span><span class="p">:</span> <span class="n">datatype</span><span class="p">,</span>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;global_data&quot;</span><span class="p">][</span><span class="n">radarnr</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">],</span>
             <span class="s2">&quot;ref_time&quot;</span><span class="p">:</span> <span class="n">dscfg</span><span class="p">[</span><span class="s2">&quot;timeinfo&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">alt</span><span class="p">],</span>
-            <span class="s2">&quot;antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">az</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">r</span><span class="p">],</span>
+            <span class="s2">&quot;point_coordinates_WGS84_lon_lat_alt&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">lon</span><span class="p">,</span>
+                <span class="n">lat</span><span class="p">,</span>
+                <span class="n">alt</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">az</span><span class="p">,</span>
+                <span class="n">el</span><span class="p">,</span>
+                <span class="n">r</span><span class="p">,</span>
+            <span class="p">],</span>
             <span class="s2">&quot;used_antenna_coordinates_az_el_r&quot;</span><span class="p">:</span> <span class="n">ant_coord</span><span class="p">,</span>
             <span class="s2">&quot;radarnr&quot;</span><span class="p">:</span> <span class="n">radarnr</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">out</span><span class="p">[</span><span class="n">radarnr</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_dataset</span>
-
     <span class="n">out</span><span class="p">[</span><span class="s2">&quot;final&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="n">out</span><span class="p">,</span> <span class="n">ind_out</span></div>
 
@@ -2106,8 +2388,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2131,7 +2413,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

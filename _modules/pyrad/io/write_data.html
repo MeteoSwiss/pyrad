@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -37,10 +37,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../../../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -193,11 +193,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -210,8 +217,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -305,11 +311,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -322,8 +335,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -461,6 +473,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.io_aux</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate_field_name_str</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.flock_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">lock_file</span><span class="p">,</span> <span class="n">unlock_file</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..util.date_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_datetime_columns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.read_data_other</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_intercomp_scores_ts</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">simplekml</span>
@@ -601,6 +614,7 @@
     <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">csv_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">chunksize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">drop_table</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write a CSV file into a MySQL database table.</span>
@@ -635,6 +649,8 @@
 <span class="sd">        Path to the CSV file to import.</span>
 <span class="sd">    chunksize : int, optional</span>
 <span class="sd">        Number of rows inserted per batch. Default is 1000.</span>
+<span class="sd">    drop_table: bool, optional</span>
+<span class="sd">        Drop the table and recreate it if the format is not compatible with the CSV file. Default is False.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_MYSQL_AVAILABLE</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
@@ -674,7 +690,6 @@
         <span class="k">return</span> <span class="n">out</span>
 
     <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">sanitize_columns</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-
     <span class="c1"># -----------------------------</span>
     <span class="c1"># 2) Auto-detect datetime columns</span>
     <span class="c1"># -----------------------------</span>
@@ -713,8 +728,49 @@
     <span class="p">)</span>
 
     <span class="c1"># -----------------------------</span>
-    <span class="c1"># 5) Create table if not exists</span>
+    <span class="c1"># 5) Create table if not exists.</span>
+    <span class="c1">#    If drop_table=True, only drop/recreate when schema differs.</span>
     <span class="c1"># -----------------------------</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_existing_columns</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                SELECT COLUMN_NAME</span>
+<span class="sd">                FROM INFORMATION_SCHEMA.COLUMNS</span>
+<span class="sd">                WHERE TABLE_SCHEMA = :database</span>
+<span class="sd">                  AND TABLE_NAME = :table_name</span>
+<span class="sd">                ORDER BY ORDINAL_POSITION</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+            <span class="p">),</span>
+            <span class="p">{</span><span class="s2">&quot;database&quot;</span><span class="p">:</span> <span class="n">database</span><span class="p">,</span> <span class="s2">&quot;table_name&quot;</span><span class="p">:</span> <span class="n">table_name</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()]</span>
+
+    <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="n">existing_columns</span> <span class="o">=</span> <span class="n">get_existing_columns</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
+        <span class="n">csv_columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">existing_columns</span><span class="p">:</span>
+            <span class="n">same_format</span> <span class="o">=</span> <span class="n">existing_columns</span> <span class="o">==</span> <span class="n">csv_columns</span>
+
+            <span class="k">if</span> <span class="n">drop_table</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">same_format</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">database</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2"> exists but has a different format. &quot;</span>
+                    <span class="s2">&quot;Dropping and recreating it.&quot;</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Existing columns: </span><span class="si">{</span><span class="n">existing_columns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV columns:      </span><span class="si">{</span><span class="n">csv_columns</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DROP TABLE IF EXISTS `</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">`&quot;</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">same_format</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Table </span><span class="si">{</span><span class="n">database</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2"> has a different format than the CSV file.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Existing columns: </span><span class="si">{</span><span class="n">existing_columns</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;CSV columns:      </span><span class="si">{</span><span class="n">csv_columns</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;Set drop_table=True to allow automatic recreation.&quot;</span>
+                <span class="p">)</span>
+
     <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
         <span class="n">table_name</span><span class="p">,</span>
         <span class="n">engine</span><span class="p">,</span>
@@ -1412,91 +1468,86 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">write_timeseries_point</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">dstype</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_timeseries_point</span><span class="p">(</span>
+    <span class="n">fname</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">dstype</span><span class="p">,</span>
+    <span class="n">text</span><span class="p">,</span>
+    <span class="n">timeformat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">timeinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Write one timesample of a time series to a file</span>
+<span class="sd">    Write one timesample of a time series to a CSV file using pandas.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data      : time series structure with the fields:</span>
-<span class="sd">      time    : Time sample in Julian calendar format.</span>
-<span class="sd">      label[] : Header of each value column</span>
-<span class="sd">      value[] : Data value of each column</span>
-<span class="sd">    dataType  : Type of the data</span>
-<span class="sd">    cfginfo   : Information string describing the kind of data</span>
-<span class="sd">                in the text file. This string is part of the</span>
-<span class="sd">                generated file name.</span>
-<span class="sd">    text      : Text with description of the data in the</span>
-<span class="sd">                file. Must be a string array. Each string</span>
-<span class="sd">                is written to a new line an the comment symbol</span>
-<span class="sd">                is set at the beginning.</span>
+<span class="sd">    data : dict</span>
+<span class="sd">        Dictionary containing:</span>
+<span class="sd">            time    : datetime object</span>
+<span class="sd">            label[] : list of column names</span>
+<span class="sd">            value[] : list/array of values</span>
+<span class="sd">            unit    : data unit string</span>
 
-<span class="sd">    Keywords</span>
-<span class="sd">    --------</span>
-<span class="sd">    timeformat: If set, the date time column is set according to the</span>
-<span class="sd">                time format number. If not set, the time format</span>
-<span class="sd">                is &#39;YYYY-MM-DD, &lt;seconds of day&gt;&#39;</span>
-<span class="sd">    timeinfo  : Used for the time stamp of the output file. If not set,</span>
-<span class="sd">                data.time is used to generate it.</span>
+<span class="sd">    dstype : str</span>
+<span class="sd">        Data type name</span>
 
+<span class="sd">    text : list[str]</span>
+<span class="sd">        Description text written as metadata comments</span>
+
+<span class="sd">    timeformat : str, optional</span>
+<span class="sd">        Datetime format string</span>
+
+<span class="sd">    timeinfo : optional</span>
+<span class="sd">        Unused (kept for compatibility)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">datatime</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
-    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-    <span class="n">datatypename</span> <span class="o">=</span> <span class="n">dstype</span>
-    <span class="n">unit</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- Write timeseries&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----- Write timeseries &quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+    <span class="n">datatime</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="n">timeformat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tformat</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tformat</span> <span class="o">=</span> <span class="n">timeformat</span>
+
+    <span class="n">time_str</span> <span class="o">=</span> <span class="n">datatime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tformat</span><span class="p">)</span>
+
+    <span class="c1"># Create dataframe row</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Date&quot;</span><span class="p">:</span> <span class="n">time_str</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]):</span>
+        <span class="n">row</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">row</span><span class="p">])</span>
+
+    <span class="c1"># File does not exist -&gt; create with metadata + header</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
-        <span class="c1"># File does not exist. Open it and fill in header info.</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Weather radar timeseries data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Project: MALSplus</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Data/Unit : &quot;</span> <span class="o">+</span> <span class="n">datatypename</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">unit</span> <span class="o">+</span> <span class="s2">&quot;]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Start : &quot;</span> <span class="o">+</span> <span class="n">datatime</span> <span class="o">+</span> <span class="s2">&quot; UTC</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Header lines with comments are preceded by &#39;#&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Weather radar timeseries data file</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Project: MALSplus</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# Data/Unit : </span><span class="si">{</span><span class="n">dstype</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;unit&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# Start : </span><span class="si">{</span><span class="n">datatime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> UTC</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
-                <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">timeformat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">label_str</span> <span class="o">=</span> <span class="s2">&quot;# Date [YYYY-MM-DD hh:mm:ss]&quot;</span>
-                <span class="n">tformat</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
-                <span class="n">time_str_old</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datatime</span><span class="p">,</span> <span class="n">tformat</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                    <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
-                <span class="p">)</span>
-                <span class="n">time_str</span> <span class="o">=</span> <span class="n">time_str_old</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tformat</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">label_str</span> <span class="o">=</span> <span class="s2">&quot;# Date [&quot;</span> <span class="o">+</span> <span class="n">timeformat</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
-                <span class="n">tformat</span> <span class="o">=</span> <span class="n">timeformat</span>
-                <span class="n">time_str</span> <span class="o">=</span> <span class="n">datatime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tformat</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]:</span>
-                <span class="n">label_str</span> <span class="o">=</span> <span class="n">label_str</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="n">label</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">label_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]:</span>
-                <span class="n">time_str</span> <span class="o">=</span> <span class="n">time_str</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">time_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Write dataframe with clean column names (no #)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.4f</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">timeformat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">tformat</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
-            <span class="n">time_str_old</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datatime</span><span class="p">,</span> <span class="n">tformat</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
-            <span class="p">)</span>
-            <span class="n">time_str</span> <span class="o">=</span> <span class="n">time_str_old</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tformat</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">tformat</span> <span class="o">=</span> <span class="n">timeformat</span>
-            <span class="n">time_str</span> <span class="o">=</span> <span class="n">datatime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">tformat</span><span class="p">)</span>
-
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]:</span>
-                <span class="n">time_str</span> <span class="o">=</span> <span class="n">time_str</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%.4f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">value</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">time_str</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="c1"># Append without header</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+            <span class="n">fname</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.4f</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname</span>
 
@@ -3402,31 +3453,59 @@
     <span class="n">start_time</span><span class="p">,</span> <span class="n">np_t</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">quantiles</span><span class="p">,</span> <span class="n">mean_list</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">rewrite</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
     <span class="n">nvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+
     <span class="n">start_time_aux</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">start_time</span><span class="p">])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">np_t_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">np_t</span><span class="p">])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np_t</span>
+    <span class="n">np_t_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">np_t</span><span class="p">])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np_t</span><span class="p">)</span>
+
     <span class="n">values_aux</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())])</span>
         <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="k">else</span> <span class="n">values</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span>
     <span class="p">)</span>
 
+    <span class="n">mean0_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">mean_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">mean1_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">mean_list</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mean_list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
     <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">start_time_aux</span><span class="p">],</span>
         <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t_aux</span><span class="p">,</span>
-        <span class="s2">&quot;geometric_mean_dB&quot;</span><span class="p">:</span> <span class="n">mean_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-        <span class="s2">&quot;linear_mean_dB&quot;</span><span class="p">:</span> <span class="n">mean_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;geometric_mean_dB&quot;</span><span class="p">:</span> <span class="n">mean0_aux</span><span class="p">,</span>
+        <span class="s2">&quot;linear_mean_dB&quot;</span><span class="p">:</span> <span class="n">mean1_aux</span><span class="p">,</span>
     <span class="p">}</span>
+
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">quantiles</span><span class="p">):</span>
         <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;quantile_</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values_aux</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
+    <span class="c1"># Clean new rows before writing</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.0$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date_dt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+        <span class="n">utc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Drop rows like: 0.5,,,,,,,</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date_dt&quot;</span><span class="p">,</span> <span class="s2">&quot;NP&quot;</span><span class="p">])</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;date_dt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;date_dt&quot;</span><span class="p">)</span>
+
+    <span class="n">numeric_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s2">&quot;date&quot;</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">numeric_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">numeric_cols</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
     <span class="n">file_exists</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r+&quot;</span> <span class="k">if</span> <span class="n">file_exists</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rewrite</span> <span class="k">else</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">lock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">rewrite</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
             <span class="n">header</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;# Weather radar monitoring timeseries data file</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -3441,17 +3520,42 @@
             <span class="p">)</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
             <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span> <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
+
             <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">existing_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
-            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+            <span class="c1"># Clean existing file too, in case it already contains bad rows</span>
+            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.0$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date_dt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
+                <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span>
+                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">,</span>
+                <span class="n">utc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+            <span class="n">existing_df</span> <span class="o">=</span> <span class="n">existing_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date_dt&quot;</span><span class="p">,</span> <span class="s2">&quot;NP&quot;</span><span class="p">])</span>
+            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;NP&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">existing_df</span><span class="p">[</span><span class="s2">&quot;date_dt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+            <span class="n">existing_df</span> <span class="o">=</span> <span class="n">existing_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;date_dt&quot;</span><span class="p">)</span>
+
             <span class="n">combined_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">existing_df</span><span class="p">,</span> <span class="n">df</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">combined_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">combined_df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
+
             <span class="n">f</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">combined_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
         <span class="n">unlock_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">fname</span></div>
 
 
@@ -3732,168 +3836,101 @@
     <span class="n">rewrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    writes time series of radar intercomparison scores</span>
+<span class="sd">    Writes time series of radar intercomparison scores.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    start_time : datetime object or array of date time objects</span>
-<span class="sd">        the time of the intercomparison</span>
-<span class="sd">    stats : dict</span>
-<span class="sd">        dictionary containing the statistics</span>
-<span class="sd">    field_name : str</span>
-<span class="sd">        The name of the field</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        file name where to store the data</span>
-<span class="sd">    rad1_name, rad2_name : str</span>
-<span class="sd">        Name of the radars intercompared</span>
-<span class="sd">    rewrite : bool</span>
-<span class="sd">        if True a new file is created</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    fname : str</span>
-<span class="sd">        the name of the file where data has written</span>
-
+<span class="sd">    If an existing file already contains a given date, the newly provided</span>
+<span class="sd">    value replaces the old one.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;date&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;NP&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mean_bias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;median_bias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;quant25_bias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;quant75_bias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mode_bias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;corr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;slope_of_linear_regression&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;intercep_of_linear_regression&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;intercep_of_linear_regression_of_slope_1&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
     <span class="n">nvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
 
-    <span class="n">meanbias</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;meanbias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">medianbias</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;medianbias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">quant25bias</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;quant25bias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">quant75bias</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;quant75bias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">modebias</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;modebias&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">corr</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;corr&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">slope</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;slope&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">intercep</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;intercep&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
-    <span class="n">intercep_slope_1</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;intercep_slope_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_as_array</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">value</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">nvalues</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">start_time_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">start_time</span><span class="p">])</span>
-        <span class="n">meanbias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">meanbias</span><span class="p">])</span>
-        <span class="n">medianbias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">medianbias</span><span class="p">])</span>
-        <span class="n">quant25bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">quant25bias</span><span class="p">])</span>
-        <span class="n">quant75bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">quant75bias</span><span class="p">])</span>
-        <span class="n">modebias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">modebias</span><span class="p">])</span>
-        <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">corr</span><span class="p">])</span>
-        <span class="n">slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">slope</span><span class="p">])</span>
-        <span class="n">intercep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">intercep</span><span class="p">])</span>
-        <span class="n">intercep_slope_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">intercep_slope_1</span><span class="p">])</span>
         <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;npoints&quot;</span><span class="p">]])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">start_time_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
-        <span class="n">np_t</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;npoints&quot;</span><span class="p">]</span>
+        <span class="n">np_t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;npoints&quot;</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">rewrite</span><span class="p">:</span>
-        <span class="n">file_exists</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">filelist</span><span class="p">:</span>
-            <span class="n">file_exists</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">new_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">start_time_aux</span><span class="p">),</span>
+            <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t</span><span class="p">,</span>
+            <span class="s2">&quot;mean_bias&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;meanbias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;median_bias&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;medianbias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;quant25_bias&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;quant25bias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;quant75_bias&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;quant75bias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;mode_bias&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;modebias&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;corr&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;corr&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;slope_of_linear_regression&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;slope&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;intercep_of_linear_regression&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">&quot;intercep&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;intercep_of_linear_regression_of_slope_1&quot;</span><span class="p">:</span> <span class="n">_as_array</span><span class="p">(</span>
+                <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;intercep_slope_1&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">file_exists</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">rewrite</span>
+
+    <span class="k">if</span> <span class="n">file_exists</span><span class="p">:</span>
+        <span class="n">old_df</span> <span class="o">=</span> <span class="n">read_intercomp_scores_ts</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">return_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_df</span><span class="p">):</span>
+            <span class="n">old_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">old_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+            <span class="n">new_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">new_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
+            <span class="n">out_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">old_df</span><span class="p">,</span> <span class="n">new_df</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">file_exists</span> <span class="o">=</span> <span class="kc">True</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                <span class="s2">&quot;# Weather radar intercomparison scores timeseries file</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Time series of the intercomparison between two radars.</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Radar 1: &quot;</span>
-                <span class="o">+</span> <span class="n">rad1_name</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Radar 2: &quot;</span>
-                <span class="o">+</span> <span class="n">rad2_name</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Field name: &quot;</span>
-                <span class="o">+</span> <span class="n">field_name</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Fill Value: &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;# Start: &quot;</span>
-                <span class="o">+</span> <span class="n">start_time_aux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S UTC&quot;</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;NP&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;mean_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;median_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;quant25_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;quant75_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;mode_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;corr&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;slope_of_linear_regression&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;intercep_of_linear_regression&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;intercep_of_linear_regression_of_slope_1&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dtime</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">start_time_aux</span><span class="p">):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;mean_bias&quot;</span><span class="p">:</span> <span class="n">meanbias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;median_bias&quot;</span><span class="p">:</span> <span class="n">medianbias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;quant25_bias&quot;</span><span class="p">:</span> <span class="n">quant25bias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;quant75_bias&quot;</span><span class="p">:</span> <span class="n">quant75bias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;mode_bias&quot;</span><span class="p">:</span> <span class="n">modebias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;corr&quot;</span><span class="p">:</span> <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;slope_of_linear_regression&quot;</span><span class="p">:</span> <span class="n">slope</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;intercep_of_linear_regression&quot;</span><span class="p">:</span> <span class="n">intercep</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;intercep_of_linear_regression_of_slope_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">intercep_slope_1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                        <span class="p">),</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-
-            <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">out_df</span> <span class="o">=</span> <span class="n">new_df</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-            <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+        <span class="n">out_df</span> <span class="o">=</span> <span class="n">new_df</span>
 
-            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;date&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;NP&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;mean_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;median_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;quant25_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;quant75_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;mode_bias&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;corr&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;slope_of_linear_regression&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;intercep_of_linear_regression&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;intercep_of_linear_regression_of_slope_1&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dtime</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">start_time_aux</span><span class="p">):</span>
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">dtime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">),</span>
-                        <span class="s2">&quot;NP&quot;</span><span class="p">:</span> <span class="n">np_t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;mean_bias&quot;</span><span class="p">:</span> <span class="n">meanbias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;median_bias&quot;</span><span class="p">:</span> <span class="n">medianbias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;quant25_bias&quot;</span><span class="p">:</span> <span class="n">quant25bias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;quant75_bias&quot;</span><span class="p">:</span> <span class="n">quant75bias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;mode_bias&quot;</span><span class="p">:</span> <span class="n">modebias</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;corr&quot;</span><span class="p">:</span> <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;slope_of_linear_regression&quot;</span><span class="p">:</span> <span class="n">slope</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;intercep_of_linear_regression&quot;</span><span class="p">:</span> <span class="n">intercep</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                        <span class="s2">&quot;intercep_of_linear_regression_of_slope_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                            <span class="n">intercep_slope_1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                        <span class="p">),</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-            <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
-            <span class="n">csvfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c1"># Keep only the newest value for each date</span>
+    <span class="n">out_df</span> <span class="o">=</span> <span class="n">out_df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Optional: sort chronologically</span>
+    <span class="n">out_df</span> <span class="o">=</span> <span class="n">out_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Convert back to original CSV date format before writing</span>
+    <span class="n">out_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_df</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+        <span class="n">lock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+
+        <span class="n">csvfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;# Weather radar intercomparison scores timeseries file</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s1">&#39;# Comment lines are preceded by &quot;#&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s2">&quot;# Description: </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;# Time series of the intercomparison between two radars.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;# Radar 1: </span><span class="si">{</span><span class="n">rad1_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;# Radar 2: </span><span class="si">{</span><span class="n">rad2_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;# Field name: </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;# Fill Value: </span><span class="si">{</span><span class="n">get_fillvalue</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;# Start: </span><span class="si">{</span><span class="n">start_time_aux</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S UTC&#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;#</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">out_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+
+        <span class="n">unlock_file</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">fname</span></div>
 
@@ -4389,8 +4426,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -4414,7 +4451,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

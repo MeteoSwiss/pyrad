@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -38,10 +38,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
     <script src="../_static/documentation_options.js?v=b3e23499"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -196,11 +196,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -213,8 +220,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -310,11 +316,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -327,8 +340,7 @@
           
           
           
-          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/MeteoSwiss/pyrad" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -428,7 +440,7 @@
 <div class="line">to elevation or azimuth</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L846">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L850">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>dpi:<span class="classifier"><em>float</em></span></dt><dd><p>dpi of the plot</p>
@@ -446,7 +458,7 @@
 <div class="line">plots and writes the cumulative density function of data</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4060">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4079">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -489,7 +501,7 @@
 <div class="line">Creates a B-scope image (azimuth, range)</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3332">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3351">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -513,7 +525,7 @@
 <div class="line">Creates a CAPPI image</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2830">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2834">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -536,7 +548,7 @@
 <div class="line">arbitrary coordinates</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2871">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2875">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -564,7 +576,7 @@
 <div class="line">Gets the field coverage over a certain sector</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3856">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3875">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -596,16 +608,18 @@
 <div class="line">Plots a fixed range image</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2973">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2977">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
-<dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
+<dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the PyRAD variable to use. It must be either a voltype available in the dataset or “RGB”, which will make an RGB plot of Zh, Zdr and RhoHV if they are available.</p>
 </dd>
 <dt>AngTol<span class="classifier"><em>: float</em></span></dt><dd><p>The tolerance between the nominal angles and the actual radar angles. Default 1.</p>
 </dd>
-<dt>ele_res,<span class="classifier"><em>azi_res: float or None</em></span></dt><dd><p>The resolution of the fixed grid [deg]. If None it will be obtained from the separation between angles</p>
+<dt>ele_res,<span class="classifier"><em>azi_res : float or None</em></span></dt><dd><p>The resolution of the fixed grid [deg]. If None, it will be obtained from the separation between angles.</p>
 </dd>
-<dt>vmin,<span class="classifier"><em>vmax : float or None</em></span></dt><dd><p>Min and Max values of the color scale. If None the values are taken from the Py-ART config file</p>
+<dt>vmin,<span class="classifier"><em>vmax : float or None</em></span></dt><dd><p>Minimum and maximum values of the color scale. If None, the values are taken from the Py-ART configuration file.</p>
+</dd>
+<dt>plot_max<span class="classifier"><em>: bool</em></span></dt><dd><p>If True, marks the maximum value with a red dot and annotates its azimuth, elevation, and value. Default False.</p>
 </dd>
 </dl>
 </dd>
@@ -619,7 +633,7 @@
 <div class="line">range image</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3030">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3033">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -641,7 +655,7 @@
 <div class="line">Computes a histogram of the radar volume data</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3554">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3573">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -662,7 +676,7 @@
 <div class="line">coordinate</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3088">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3107">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -697,7 +711,7 @@
 <div class="line">sunscan.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3275">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3294">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -708,7 +722,7 @@
 <div class="line">Plots a PPI countour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1405">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1409">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -729,7 +743,7 @@
 <div class="line">overplotted as a contour plot.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1266">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1270">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -750,7 +764,7 @@
 <div class="line">quantiles of the data in the PPI.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2830">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2834">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -780,7 +794,7 @@
 <div class="line">in ‘ppiMapImageConfig’ in the loc config file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2776">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2780">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -803,7 +817,7 @@
 <div class="line">in ‘ppiMapImageConfig’ in the loc config file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1207">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1211">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -822,7 +836,7 @@
 <div class="line">The statistics are saved in a csv file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2081">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2085">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -856,7 +870,7 @@
 <div class="line">Plots a pseudo-PPI countour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1405">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1409">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -879,7 +893,7 @@
 <div class="line">another field over-plotted as a contour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1266">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1270">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -902,7 +916,7 @@
 <div class="line">histogram and the quantiles of the data in the pseudo-PPI.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L991">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L995">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -932,7 +946,7 @@
 <div class="line">‘mapres’ and ‘maps’ in ‘ppiMapImageConfig’ in the loc config file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2776">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2780">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -954,7 +968,7 @@
 <div class="line">Plots a pseudo-RHI countour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1823">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1827">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -977,7 +991,7 @@
 <div class="line">another field over-plotted as a contour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1685">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1689">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1000,7 +1014,7 @@
 <div class="line">histogram and the quantiles of the data in the pseudo-RHI.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1528">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1532">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -1028,7 +1042,7 @@
 <div class="line">Plots and writes the quantiles of a radar volume</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3642">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3661">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1052,7 +1066,7 @@
 <div class="line">Plots an RHI countour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1823">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1827">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1073,7 +1087,7 @@
 <div class="line">over-plotted as a contour plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1685">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1689">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1094,7 +1108,7 @@
 <div class="line">histogram and the quantiles of the data in the RHI.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1528">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1532">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -1122,7 +1136,7 @@
 <div class="line">The statistics are saved in a csv file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1880">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L1884">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1158,7 +1172,7 @@
 <div class="line">Computes a histogram of the number of samples used</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3554">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3573">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1179,7 +1193,7 @@
 <div class="line">defined fields in a C/F radial or ODIM file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4798">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4817">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>file_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
@@ -1204,7 +1218,7 @@
 <div class="line">dataset, as there is no ambiguity with SAVEALL for VOL datasets</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4798">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4817">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -1216,7 +1230,7 @@
 <div class="line">time data processing</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4859">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4878">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -1228,7 +1242,7 @@
 <div class="line">volume scan in C/F radial or ODIM file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5016">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5035">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>file_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
@@ -1251,7 +1265,7 @@
 <div class="line">volume scan in C/F radial or ODIM file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5080">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5099">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>file_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
@@ -1274,7 +1288,7 @@
 <div class="line">ODIM file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4741">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4760">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>file_type:<span class="classifier"><em>str</em></span></dt><dd><p>The type of file used to save the data. Can be ‘nc’ or ‘h5’. Default ‘nc’</p>
@@ -1296,7 +1310,7 @@
 <div class="line">Saves one field of a radar volume data in a CSV file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4629">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4648">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -1314,7 +1328,7 @@
 <div class="line">Saves one field of a radar volume data in a KML file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4671">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4690">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -1335,7 +1349,7 @@
 <div class="line">dataset, as there is no ambiguity with SAVEVOL for GRID datasets</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4741">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4760">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -1346,7 +1360,7 @@
 <div class="line">Saves the position of the first fix angle in a csv file</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5143">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L5162">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str or list of str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be either a voltype available in the dataset or “RGB”, which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)</p>
@@ -1362,7 +1376,7 @@
 <div class="line">Plots a ZDR versus KDP/ZH histogram of data.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4309">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4328">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>retrieve_relation<span class="classifier"><em>: bool</em></span></dt><dd><p>If True plots also the retrieved relationship. Default True</p>
@@ -1383,7 +1397,7 @@
 <div class="line">self-consistency relation histogram of data.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4309">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4328">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>normalize<span class="classifier"><em>: bool</em></span></dt><dd><p>If True the occurrence density of ZK/KDP for each ZDR bin is going to be represented. Otherwise it will show the number of gates at each bin. Default True</p>
@@ -1399,7 +1413,7 @@
 <div class="line">Plots a time-range/azimuth/elevation plot</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3399">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3418">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1421,7 +1435,7 @@
 <div class="line">SELFCONSISTENCY2 algorithm</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4351">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L4370">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1466,7 +1480,7 @@
 <div class="line">wind to be uniform) and the actual measured radial velocity.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2266">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L2270">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>heightResolution:<span class="classifier"><em>float</em></span></dt><dd><p>The height resolution of the profile [m]. Default 100.</p>
@@ -1489,12 +1503,12 @@
 <h3>WRITE_STATS<a class="headerlink" href="#write-stats" title="Link to this heading">#</a></h3>
 <dl>
 <dt>description</dt><dd><div class="line-block">
-<div class="line">write statistics about the average of a field within a certain</div>
+<div class="line">write statistics about the statistics of a field within a certain</div>
 <div class="line">sector (mean, median, stddev, nsamples, nvalid) and optionally min, max and</div>
 <div class="line">additional quantiles</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3740">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_vol_products.py#L3759">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>Name of the pyrad variable to use, it must be a voltype available in the dataset</p>
@@ -1669,7 +1683,7 @@
 <div class="line">in a csv file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L760">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L1213">[Source]</a></p>
 </dd>
 </dl>
 </section>
@@ -1684,7 +1698,7 @@
 <div class="line">gridMapImageConfig structure of the loc file.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L786">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L1239">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>grid_size:<span class="classifier"><em>float</em></span></dt><dd><p>Size of the grid in degrees (lat/lon). If not provided, the grid size defined in gridMapImageConfig with lat_min, lon_min, lat_max, lon_max and lonstep, latstep will be used. All the products of the ‘VOL’ dataset group</p>
@@ -2612,7 +2626,7 @@
 <div class="line">to also define the product WRITE_INTERCOMP for the dataset in question.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L506">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L953">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2646,7 +2660,7 @@
 <div class="line">optionally for different range intervals.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L203">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L206">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>histogram_type<span class="classifier"><em>: str, optional</em></span></dt><dd><p>Type of histogram product. If set to “cumulative”, the plot is only generated when dataset[“final”] is True. Default is “cumulative”.</p>
@@ -2654,6 +2668,8 @@
 <dt>range_bins<span class="classifier"><em>: list of float, optional</em></span></dt><dd><p>Range bin edges in meters. One histogram is produced for each range interval. Default is [0, np.inf].</p>
 </dd>
 <dt>transform<span class="classifier"><em>: str, optional</em></span></dt><dd><p>Mathematical expression applied to both radar values before plotting. Default is “x”.</p>
+</dd>
+<dt>plot_diff<span class="classifier"><em>: bool, optional</em></span></dt><dd><p>If True, plots the histogram of the difference between radar 1 and radar 2 values instead of the histograms of the two radars. Default is False.</p>
 </dd>
 <dt>step<span class="classifier"><em>: float, optional</em></span></dt><dd><p>Histogram bin width. If None, bin edges are determined automatically.</p>
 </dd>
@@ -2678,7 +2694,7 @@
 <div class="line">to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L363">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L389">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
 <dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
@@ -2718,10 +2734,217 @@
 <div class="line">and you might get duplicates. To avoid this delete the existing file first.</div>
 <div class="line"><br /></div>
 </div>
-<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L506">[Source]</a></p>
+<p><a class="reference external" href="https://github.com/MeteoSwiss/pyrad/blob/master/src/pyrad_proc/pyrad/prod/process_intercomp_products.py#L953">[Source]</a></p>
 </dd>
 <dt>parameters</dt><dd><dl>
-<dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset</p>
+<dt>voltype:<span class="classifier"><em>str</em></span></dt><dd><p>name of the pyrad variable to use, it must be available in the dataset  ———————–</p>
+</dd>
+<dt>voltype<span class="classifier"><em>: str</em></span></dt><dd><p>Pyrad variable name, used for labels and filenames.</p>
+</dd>
+<dt>colname<span class="classifier"><em>: str, optional</em></span></dt><dd><p>Suffix of the intercomparison value columns.</p>
+</dd>
+</dl>
+<p>Default: : <em>“val”, i.e. rad1_val and rad2_val.</em></p>
+<p>reference : <em>: str, optional</em></p>
+<dl>
+<dt>Bias<span class="classifier"><em>convention. Accepted values are:</em></span></dt><dd><p>“rad2-rad1” “rad1-rad2”</p>
+</dd>
+</dl>
+<p>Default: : <em>“rad2-rad1”.</em></p>
+<p>bias_type : <em>: str, optional</em></p>
+<p>Type : <em>of bias-over-range product. Accepted values are:</em></p>
+<dl class="simple">
+<dt>“cumulative”:<span class="classifier">**</span></dt><dd><p>The plot is only generated when dataset[“final”] is True.</p>
+</dd>
+<dt>“instant”:<span class="classifier">**</span></dt><dd><p>The plot is generated for the current dataset.</p>
+</dd>
+</dl>
+<p>Default: : <em>“cumulative”.</em></p>
+<dl>
+<dt>range_min<span class="classifier"><em>: float, optional</em></span></dt><dd><p>Minimum range bin edge in meters. Used together with range_max and range_step.</p>
+</dd>
+</dl>
+<p>Default: : <em>0.</em></p>
+<dl>
+<dt>range_max<span class="classifier"><em>: float, optional</em></span></dt><dd><p>Maximum range bin edge in meters. Used together with range_min and range_step. The value is interpreted as the last bin edge.</p>
+</dd>
+<dt>Example:<span class="classifier">**</span></dt><dd><p>range_min = 1300 range_max = 40300 range_step = 1000</p>
+</dd>
+<dt>gives<span class="classifier"><em>bins:</em></span></dt><dd><p>1300, 2300, …, 39300, 40300</p>
+</dd>
+<dt>range_step<span class="classifier"><em>: float, optional</em></span></dt><dd><p>Range bin width in meters. Used together with range_min and range_max.</p>
+</dd>
+<dt>range_bins<span class="classifier"><em>: list of float, optional</em></span></dt><dd><p>Explicit range bin edges in meters. If provided, this takes precedence over range_min, range_max and range_step. This option is kept for backward compatibility.</p>
+</dd>
+<dt>percentiles<span class="classifier"><em>: list of float, optional</em></span></dt><dd><p>Percentiles of the point-wise offset to plot. The offset is computed according to the selected reference.</p>
+</dd>
+</dl>
+<p>Default: : <em>[25, 50, 75].</em></p>
+<p>mean_method : <em>: str, optional</em></p>
+<p>Method : <em>used to compute the mean bias. Accepted values are:</em></p>
+<p>“linear_ratio”: : **</p>
+<dl>
+<dt>Computes<span class="classifier"><em>mean bias as:</em></span></dt><dd><p>10*log10(mean(10**(a/10)) / mean(10**(b/10))) This is appropriate for dBZ-like quantities.</p>
+</dd>
+</dl>
+<p>“offset”: : **</p>
+<dl>
+<dt>Computes<span class="classifier"><em>the arithmetic mean of the point-wise offsets:</em></span></dt><dd><p>mean(a-b)</p>
+</dd>
+</dl>
+<p>Default: : <em>“linear_ratio”.</em></p>
+<dl>
+<dt>min_samples_per_range<span class="classifier"><em>: int, optional</em></span></dt><dd><p>Minimum number of valid samples required in a range bin. Range bins with fewer samples are set to NaN.</p>
+</dd>
+<dt>transform<span class="classifier"><em>: str, optional</em></span></dt><dd><p>Mathematical expression applied to both radar values before computing statistics. The expression must be a valid function of x.</p>
+</dd>
+<dt>Examples:<span class="classifier">**</span></dt><dd><p>“x” “10 * log10(x)”</p>
+</dd>
+</dl>
+<p>Default: : <em>“x”.</em></p>
+<dl>
+<dt>double_conditional_threshold<span class="classifier"><em>: float, optional</em></span></dt><dd><p>If set, only samples where both radar values are larger than this threshold are used.</p>
+</dd>
+<dt>range_marker<span class="classifier"><em>: float, optional</em></span></dt><dd><p>If set, plots a vertical marker at this range in meters.</p>
+</dd>
+<dt>plot_npoints<span class="classifier"><em>: bool, optional</em></span></dt><dd><p>If True, plots the number of samples on a secondary y-axis.</p>
+</dd>
+</dl>
+<p>Default: : <em>True.</em></p>
+<dl>
+<dt>write_csv<span class="classifier"><em>: bool, optional</em></span></dt><dd><p>If True, writes the bias-over-range statistics to a CSV file.</p>
+</dd>
+<dt>bias_vmin,<span class="classifier"><em>bias_vmax : float, optional</em></span></dt><dd><p>y-axis limits for the bias axis.</p>
+</dd>
+<dt>figsize<span class="classifier"><em>: tuple, optional</em></span></dt><dd><p>Figure size passed to the plotting function.</p>
+</dd>
+</dl>
+<p>Default: : <em>(12, 7).</em></p>
+<dl>
+<dt>dpi<span class="classifier"><em>: int, optional</em></span></dt><dd><p>Figure resolution.</p>
+</dd>
+<dt>Default:<span class="classifier"><em>72.</em></span></dt><dd><p>Returns ——-</p>
+</dd>
+<dt>fname_list<span class="classifier"><em>: list of str</em></span></dt><dd><p>List of generated CSV and figure filenames. None if no product is generated. “””  bias_type = prdcfg.get(“bias_type”, “cumulative”)</p>
+</dd>
+<dt>if<span class="classifier"><em>bias_type == “cumulative” and not dataset[“final”]:</em></span></dt><dd><p>return None  timeformat = “%Y%m%d”  intercomp_dict = dataset[“intercomp_dict”]  colname = prdcfg.get(“colname”, “val”) rad1_key = f”rad1_{colname}” rad2_key = f”rad2_{colname}”</p>
+</dd>
+</dl>
+<p>if : <em>rad1_key not in intercomp_dict:</em></p>
+<dl>
+<dt>warn(f”Unable<span class="classifier"><em>to generate BIAS_OVER_RANGE. Missing key: {rad1_key}”)</em></span></dt><dd><p>return None</p>
+</dd>
+</dl>
+<p>if : <em>rad2_key not in intercomp_dict:</em></p>
+<dl>
+<dt>warn(f”Unable<span class="classifier"><em>to generate BIAS_OVER_RANGE. Missing key: {rad2_key}”)</em></span></dt><dd><p>return None</p>
+</dd>
+</dl>
+<p>if : <em>“rad1_rng” not in intercomp_dict:</em></p>
+<dl>
+<dt>warn(“Unable<span class="classifier"><em>to generate BIAS_OVER_RANGE. Missing key: rad1_rng”)</em></span></dt><dd><p>return None  field_name = get_fieldname_pyart(prdcfg[“voltype”])  transform_str = prdcfg.get(“transform”, “x”) transform = parse_math_expression(transform_str)</p>
+</dd>
+<dt>if<span class="classifier"><em>“range_bins” in prdcfg:</em></span></dt><dd><p># Backward-compatible explicit bin edges range_bins = np.asarray(prdcfg[“range_bins”], dtype=float)</p>
+</dd>
+</dl>
+<p>else: : **</p>
+<p>if : <em>range_step is None:</em></p>
+<dl>
+<dt>if<span class="classifier"><em>np.isinf(range_max):</em></span></dt><dd><p>range_bins = np.asarray([range_min, np.inf], dtype=float)</p>
+</dd>
+<dt>if<span class="classifier"><em>range_step &lt;= 0.0:</em></span></dt><dd><p>raise ValueError(“range_step must be &gt; 0”)</p>
+</dd>
+<dt>if<span class="classifier"><em>range_max &lt;= range_min:</em></span></dt><dd><p>raise ValueError(“range_max must be &gt; range_min”)  # range_max is interpreted as the last bin edge.</p>
+</dd>
+<dt>#<span class="classifier"><em>Example: 1300, 40300, 1000 -&gt; 1300, 2300, …, 40300</em></span></dt><dd><p>range_bins = np.arange( range_min, range_max + 0.5 * range_step, range_step, dtype=float, )  # Avoid overshooting too much in case of floating-point steps range_bins = range_bins[range_bins &lt;= range_max + 1e-6]</p>
+</dd>
+<dt>if<span class="classifier"><em>range_bins[-1] &lt; range_max:</em></span></dt><dd><p>range_bins = np.append(range_bins, range_max)</p>
+</dd>
+<dt>if<span class="classifier"><em>range_bins.size &lt; 2:</em></span></dt><dd><p>raise ValueError(“At least two range bin edges are required”)</p>
+</dd>
+<dt>range_centers<span class="classifier"><em>= range_bins[:-1] + np.diff(range_bins) / 2.0</em></span></dt><dd><p>reference = prdcfg.get(“reference”, “rad2-rad1”)</p>
+</dd>
+<dt>if<span class="classifier"><em>reference == “rad2-rad1”:</em></span></dt><dd><p>reference_label = ( f”{intercomp_dict[‘rad2_name’]} - {intercomp_dict[‘rad1_name’]}” ) first_key = rad2_key second_key = rad1_key</p>
+</dd>
+<dt>elif<span class="classifier"><em>reference == “rad1-rad2”:</em></span></dt><dd><p>reference_label = ( f”{intercomp_dict[‘rad1_name’]} - {intercomp_dict[‘rad2_name’]}” ) first_key = rad1_key second_key = rad2_key</p>
+</dd>
+<dt>if<span class="classifier"><em>np.any(percentiles &lt; 0.0) or np.any(percentiles &gt; 100.0):</em></span></dt><dd><p>raise ValueError(“percentiles must be between 0 and 100”)  mean_method = prdcfg.get(“mean_method”, “linear_ratio”)</p>
+</dd>
+<dt>if<span class="classifier"><em>mean_method not in (“linear_ratio”, “offset”):</em></span></dt><dd><p>raise ValueError(“mean_method must be ‘linear_ratio’ or ‘offset’”)  min_samples_per_range = prdcfg.get(“min_samples_per_range”, 0) double_conditional_threshold = prdcfg.get(“double_conditional_threshold”, None)  rad1_rng = np.ma.asarray(intercomp_dict[“rad1_rng”])  first_values_all = np.ma.asarray(intercomp_dict[first_key]) second_values_all = np.ma.asarray(intercomp_dict[second_key])</p>
+</dd>
+<dt>if<span class="classifier"><em>transform is not None:</em></span></dt><dd><p>first_values_all = transform(first_values_all) second_values_all = transform(second_values_all)  first_values_all = np.ma.masked_invalid(first_values_all) second_values_all = np.ma.masked_invalid(second_values_all)  meanbias_vec = [] nsamples_vec = []</p>
+</dd>
+</dl>
+<p>percentile_vecs : <em>= {perc: [] for perc in percentiles}</em></p>
+<p>for : <em>i in range(len(range_bins) - 1):</em></p>
+<dl>
+<dt>if<span class="classifier"><em>double_conditional_threshold is not None:</em></span></dt><dd><p>valid = np.logical_and.reduce( ( valid, first_values &gt; double_conditional_threshold, second_values &gt; double_conditional_threshold, ) )  first_values = first_values[valid] second_values = second_values[valid]  npoints = first_values.size nsamples_vec.append(npoints)</p>
+</dd>
+<dt>if<span class="classifier"><em>npoints &lt; min_samples_per_range:</em></span></dt><dd><p>meanbias_vec.append(np.nan)</p>
+</dd>
+</dl>
+<p>for : <em>perc in percentiles:</em></p>
+<dl>
+<dt>if<span class="classifier"><em>mean_method == “linear_ratio”:</em></span></dt><dd><p>mean_first = np.nanmean(10.0 ** (first_values / 10.0)) mean_second = np.nanmean(10.0 ** (second_values / 10.0))  if ( np.isfinite(mean_first) and np.isfinite(mean_second) and mean_first &gt; 0.0 and mean_second &gt; 0.0</p>
+</dd>
+<dt>):<span class="classifier">**</span></dt><dd><p>meanbias = 10.0 * np.log10(mean_first / mean_second)</p>
+</dd>
+<dt>if<span class="classifier"><em>prdcfg.get(“write_csv”, True):</em></span></dt><dd><p>csvfname = make_filename( “bias_over_range”, prdcfg[“dstype”], prdcfg[“voltype”], [“csv”], prdcfginfo=prdcfginfo, timeinfo=dataset[“timeinfo”], timeformat=timeformat, )[0]  csvfname = savedir + csvfname  csv_header = [ “range_start_m”, “range_end_m”, “range_center_m”, “npoints”, “meanbias”, ]  csv_data = [</p>
+</dd>
+</dl>
+<p>range_bins[:-1], : **</p>
+<dl>
+<dt>range_bins[1:],<span class="classifier">**</span></dt><dd><p>range_centers, nsamples_vec, meanbias_vec, ]</p>
+</dd>
+<dt>csv_header.append(f”percentile_{perc:g}”)<span class="classifier">**</span></dt><dd><p>csv_data.append(percentile_vecs[perc])  csv_data = np.column_stack(csv_data)  np.savetxt( csvfname, csv_data, delimiter=”,”, header=”,”.join(csv_header), comments=””, )</p>
+</dd>
+<dt>print(“saved<span class="classifier"><em>CSV file: “ + csvfname)</em></span></dt><dd><p>( date_vec, np_vec, meanbias_vec, medianbias_vec, quant25bias_vec, quant75bias_vec, modebias_vec, corr_vec, slope_vec, intercep_vec, intercep_slope1_vec, ) = read_intercomp_scores_ts(csvfname, sort_by_date=sort_by_date)</p>
+</dd>
+<dt>for<span class="classifier"><em>j, figfname in enumerate(figfname_list):</em></span></dt><dd><p>figfname_list[j] = savedir + figfname  np_min = prdcfg.get(“npoints_min”, 0) corr_min = prdcfg.get(“corr_min”, 0.0)  plot_field_name = field_name</p>
+</dd>
+<dt>if<span class="classifier"><em>transform_str != “x”:</em></span></dt><dd><p>plot_field_name = f”f({field_name})”  titl = ( rad1_name + “-” + rad2_name + “ “ + plot_field_name + “ intercomparison “ + titldate + rangebin_info_title )  plot_intercomp_scores_ts( date_vec, np_vec, meanbias_vec, medianbias_vec, quant25bias_vec, quant75bias_vec, modebias_vec, corr_vec, slope_vec, intercep_vec, intercep_slope1_vec, figfname_list, ref_value=0.0, np_min=np_min, corr_min=corr_min, labelx=”Time UTC”, titl=titl, )  print(”—– save to “ + “ “.join(figfname_list))  fname_list.extend(figfname_list)  return fname_list</p>
+</dd>
+<dt>percentile_dict<span class="classifier"><em>= {perc: percentile_vecs[perc] for perc in percentiles}</em></span></dt><dd><p>plot_bias_over_range( range_centers, meanbias_vec, percentile_dict, figfname_list, nsamples=nsamples_vec, reference_label=reference_label, field_name=plot_field_name, titl=titl, mean_label=f”mean bias ({mean_method})”, range_marker=prdcfg.get(“range_marker”, None), plot_npoints=prdcfg.get(“plot_npoints”, True), bias_vmin=prdcfg.get(“bias_vmin”, None), bias_vmax=prdcfg.get(“bias_vmax”, None), figsize=prdcfg.get(“figsize”, (12, 7)), dpi=prdcfg.get(“dpi”, 72), )  print(”—– save to “ + “ “.join(figfname_list)) fname_list.extend(figfname_list)  return fname_list</p>
+</dd>
+</dl>
+<p>if : <em>prdcfg[“type”] == “PLOT_AND_WRITE_INTERCOMP_TS”:</em></p>
+<dl>
+<dt>if<span class="classifier"><em>not dataset[“final”]:</em></span></dt><dd><p>return None  field_name = get_fieldname_pyart(prdcfg[“voltype”]) step = prdcfg.get(“step”, None) transform_str = prdcfg.get(“transform”, “x”) transform = parse_math_expression(transform_str)  range_bins = prdcfg.get(“range_bins”, [0, np.inf]) vmin = prdcfg.get(“vmin”, None) vmax = prdcfg.get(“vmax”, None) cap_limits = prdcfg.get(“cap_limits”, False) double_conditional_threshold = prdcfg.get(“double_conditional_threshold”, None)  rad1_name = dataset[“intercomp_dict”][“rad1_name”] rad2_name = dataset[“intercomp_dict”][“rad2_name”]  # put time info in file path and name csvtimeinfo_file = None timeformat = None sort_by_date = prdcfg.get(“sort_by_date”, False) rewrite = prdcfg.get(“rewrite”, False)</p>
+</dd>
+<dt>if<span class="classifier"><em>prdcfg.get(“add_date_in_fname”, False):</em></span></dt><dd><p>figtimeinfo = date_vec[0] fig_timeformat = “%Y”  figfname_list = make_filename( “ts”, prdcfg[“dstype”], prdcfg[“voltype”], prdcfg[“imgformat”], prdcfginfo=prdcfginfo, timeinfo=figtimeinfo, timeformat=fig_timeformat, )</p>
+</dd>
+<dt>if<span class="classifier"><em>len(range_bins) &gt; 2:</em></span></dt><dd><p>rangebin_info = (</p>
+</dd>
+<dt>f”range_bin_{range_bins[i]:.0f}_{range_bins[i<span class="classifier"><em>+ 1]:.0f}m”</em></span></dt><dd><p>) rangebin_info_title = (</p>
+</dd>
+<dt>f”<span class="classifier"><em>range {range_bins[i]:.0f}-{range_bins[i + 1]:.0f} m”</em></span></dt><dd><p>)</p>
+</dd>
+<dt>if<span class="classifier"><em>not np.sum(selection):</em></span></dt><dd><p>warn( “No data in range bin “ + rangebin_info_title + “, skipping statistics for timeseries plot” ) continue  hist_2d, bin_edges1, bin_edges2, stats = compute_2d_stats( np.ma.asarray(dataset[“intercomp_dict”][“rad1_val”][selection]), np.ma.asarray(dataset[“intercomp_dict”][“rad2_val”][selection]), field_name, field_name, step1=step, step2=step, transform=transform, vmin=vmin, vmax=vmax, cap_limits=cap_limits, double_conditional_threshold=double_conditional_threshold, )</p>
+</dd>
+<dt>if<span class="classifier"><em>hist_2d is None:</em></span></dt><dd><p>continue  prdcfginfo = rad1_name + “-” + rad2_name</p>
+</dd>
+<dt>if<span class="classifier"><em>rangebin_info is not None:</em></span></dt><dd><p>prdcfginfo += “_” + rangebin_info  csvfname = make_filename( “ts”, prdcfg[“dstype”], prdcfg[“voltype”], [“csv”], prdcfginfo=prdcfginfo, timeinfo=csvtimeinfo_file, timeformat=timeformat, )[0]  csvfname = savedir + csvfname fname_list.append(csvfname) write_intercomp_scores_ts( dataset[“timeinfo”], stats, field_name, csvfname, rad1_name=rad1_name, rad2_name=rad2_name, )</p>
+</dd>
+<dt>if<span class="classifier"><em>date_vec is None:</em></span></dt><dd><p>warn(“Unable to plot time series. No valid data”) continue</p>
+</dd>
+<dt>if<span class="classifier"><em>len(date_vec) &lt; 2:</em></span></dt><dd><p>warn(“Unable to plot time series. Not enough points”) continue</p>
+</dd>
+<dt>if<span class="classifier"><em>rewrite:</em></span></dt><dd><p>stats_rewrite = {</p>
+</dd>
+</dl>
+<p>“npoints”: : <em>np_vec,</em></p>
+<p>“meanbias”: : <em>meanbias_vec,</em></p>
+<p>“medianbias”: : <em>medianbias_vec,</em></p>
+<p>“quant25bias”: : <em>quant25bias_vec,</em></p>
+<p>“quant75bias”: : <em>quant75bias_vec,</em></p>
+<p>“modebias”: : <em>modebias_vec,</em></p>
+<p>“corr”: : <em>corr_vec,</em></p>
+<p>“slope”: : <em>slope_vec,</em></p>
+<p>“intercep”: : <em>intercep_vec,</em></p>
+<dl>
+<dt>“intercep_slope_1”:<span class="classifier"><em>intercep_slope1_vec,</em></span></dt><dd><p>}  write_intercomp_scores_ts( date_vec, stats_rewrite, field_name, csvfname, rad1_name=rad1_name, rad2_name=rad2_name, )  figtimeinfo = None fig_timeformat = None titldate = ( date_vec.tolist()[0].strftime(“%Y%m%d”) + “-” + date_vec.tolist()[-1].strftime(“%Y%m%d”) )</p>
+</dd>
+<dt>warn(”<span class="classifier"><em>Unsupported product type: “ + prdcfg[“type”])</em></span></dt><dd><p>return None</p>
 </dd>
 </dl>
 </dd>
@@ -3700,8 +3923,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3725,7 +3948,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

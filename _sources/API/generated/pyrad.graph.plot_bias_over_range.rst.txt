@@ -1,0 +1,6 @@
+pyrad.graph.plot\_bias\_over\_range
+===================================
+
+.. currentmodule:: pyrad.graph
+
+.. autofunction:: plot_bias_over_range
