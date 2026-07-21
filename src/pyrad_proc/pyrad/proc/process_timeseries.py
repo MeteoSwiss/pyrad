@@ -325,118 +325,352 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
         # --------------------------------------------------------------
         # Extract / aggregate value
         # --------------------------------------------------------------
+        is_pointing = False
+        selected_range_indices = None
+
+        # Determine all rays and ranges falling inside the tolerances first.
+        # This is also needed to detect pointing scans for agg_method='nearest'.
+        tol_ray_arr = np.where((d_az <= dscfg["AziTol"]) & (d_el <= dscfg["EleTol"]))[0]
+
+        tol_r_arr = np.where(d_r <= dscfg["RngTol"])[0]
+
+        if tol_ray_arr.size == 0 or tol_r_arr.size == 0:
+            warn(f"{radarnr}: No gates found within tolerance.")
+            out[radarnr] = None
+            continue
+
+        # In a pointing scan, every radar ray falls within the angular tolerance.
+        is_pointing = tol_ray_arr.size == np.asarray(radar.azimuth["data"]).size
+
+        field_data = radar.fields[field_name]["data"]
+
         if agg_method == "nearest":
-            ind_ray = np.argmin(
-                np.abs(radar.azimuth["data"] - az)
-                + np.abs(radar.elevation["data"] - el)
-            )
-            ind_r = np.argmin(np.abs(radar.range["data"] - r))
+            # Nearest range gate is common to every ray.
+            nearest_local_r = np.argmin(d_r[tol_r_arr])
+            nearest_ind_r = tol_r_arr[nearest_local_r]
 
-            val = radar.fields[field_name]["data"][ind_ray, ind_r]
+            if is_pointing:
+                # Preserve every ray and its timestamp.
+                ind_ray_arr = tol_ray_arr
+                ind_r_arr = np.atleast_1d(nearest_ind_r)
 
-            ind_ray_arr = np.atleast_1d(ind_ray)
-            ind_r_arr = np.atleast_1d(ind_r)
+                val = field_data[ind_ray_arr, nearest_ind_r]
+
+                selected_range_indices = np.full(
+                    ind_ray_arr.size,
+                    nearest_ind_r,
+                    dtype=int,
+                )
+
+            else:
+                # Normal scan: retain the original nearest-ray behaviour,
+                # but restrict the search to rays inside the tolerance.
+                angular_distance = np.abs(
+                    radar.azimuth["data"][tol_ray_arr] - az
+                ) + np.abs(radar.elevation["data"][tol_ray_arr] - el)
+
+                nearest_local_ray = np.argmin(angular_distance)
+                nearest_ind_ray = tol_ray_arr[nearest_local_ray]
+
+                ind_ray_arr = np.atleast_1d(nearest_ind_ray)
+                ind_r_arr = np.atleast_1d(nearest_ind_r)
+
+                val = field_data[nearest_ind_ray, nearest_ind_r]
+
+                selected_range_indices = ind_r_arr.copy()
 
         else:
-            ind_ray_arr = np.where(
-                (d_az <= dscfg["AziTol"]) & (d_el <= dscfg["EleTol"])
-            )[0]
+            ind_ray_arr = tol_ray_arr
+            ind_r_arr = tol_r_arr
 
-            ind_r_arr = np.where(d_r <= dscfg["RngTol"])[0]
+            data_region = field_data[ind_ray_arr][:, ind_r_arr]
 
-            if ind_ray_arr.size == 0 or ind_r_arr.size == 0:
-                warn(f"{radarnr}: No gates found within tolerance.")
-                out[radarnr] = None
-                continue
+            if is_pointing:
+                # Preserve the ray/time dimension and aggregate only over range.
+                nearest_local_r = np.argmin(d_r[ind_r_arr])
+                nearest_ind_r = ind_r_arr[nearest_local_r]
 
-            data_region = radar.fields[field_name]["data"][ind_ray_arr][:, ind_r_arr]
+                if agg_method == "average":
+                    val = np.ma.mean(data_region, axis=1)
 
-            if agg_method == "average":
-                val = np.ma.mean(data_region)
+                    selected_range_indices = np.full(
+                        ind_ray_arr.size,
+                        nearest_ind_r,
+                        dtype=int,
+                    )
 
-            elif agg_method == "max":
-                val = np.ma.max(data_region)
+                elif agg_method == "max":
+                    val = np.ma.max(data_region, axis=1)
 
-            elif agg_method == "min":
-                val = np.ma.min(data_region)
+                    # Store the actual range of the maximum for each ray.
+                    local_r_indices = np.ma.argmax(data_region, axis=1)
+                    selected_range_indices = ind_r_arr[local_r_indices]
 
-            elif agg_method == "none":
-                val = data_region
+                elif agg_method == "min":
+                    val = np.ma.min(data_region, axis=1)
 
-            elif agg_method == "maxZH":
-                refl_region = radar.fields[refl_field_name]["data"][ind_ray_arr][
-                    :, ind_r_arr
-                ]
+                    # Store the actual range of the minimum for each ray.
+                    local_r_indices = np.ma.argmin(data_region, axis=1)
+                    selected_range_indices = ind_r_arr[local_r_indices]
 
-                if np.ma.count(refl_region) == 0:
-                    warn(f"{radarnr}: No valid reflectivity values found for maxZH.")
-                    out[radarnr] = None
-                    continue
+                elif agg_method == "none":
+                    # Shape:
+                    #     nrays x nranges_within_tolerance
+                    val = data_region
 
-                zh_flat_idx = np.ma.argmax(refl_region)
-                zh_idx = np.unravel_index(zh_flat_idx, refl_region.shape)
+                    # There is no unique range for each ray. Use the nearest
+                    # requested range in the coordinate metadata.
+                    selected_range_indices = np.full(
+                        ind_ray_arr.size,
+                        nearest_ind_r,
+                        dtype=int,
+                    )
 
-                val = data_region[zh_idx]
+                elif agg_method == "maxZH":
+                    refl_region = radar.fields[refl_field_name]["data"][ind_ray_arr][
+                        :, ind_r_arr
+                    ]
 
-                # Reduce to selected gate indices
-                ind_ray_arr = np.atleast_1d(ind_ray_arr[zh_idx[0]])
-                ind_r_arr = np.atleast_1d(ind_r_arr[zh_idx[1]])
+                    valid_count = np.ma.count(
+                        refl_region,
+                        axis=1,
+                    )
 
-            elif agg_method == "nearest_valid":
-                ind_clo_ray = np.argmin(
-                    np.abs(radar.azimuth["data"] - az)
-                    + np.abs(radar.elevation["data"] - el)
-                )
-                ind_clo_r = np.argmin(np.abs(radar.range["data"] - r))
+                    val = np.ma.masked_all(
+                        ind_ray_arr.size,
+                        dtype=data_region.dtype,
+                    )
 
-                clo_x = radar.gate_x["data"][ind_clo_ray, ind_clo_r]
-                clo_y = radar.gate_y["data"][ind_clo_ray, ind_clo_r]
-                clo_z = radar.gate_z["data"][ind_clo_ray, ind_clo_r]
+                    selected_range_indices = np.full(
+                        ind_ray_arr.size,
+                        nearest_ind_r,
+                        dtype=int,
+                    )
 
-                dist_x = np.abs(radar.gate_x["data"][ind_ray_arr][:, ind_r_arr] - clo_x)
-                dist_y = np.abs(radar.gate_y["data"][ind_ray_arr][:, ind_r_arr] - clo_y)
-                dist_z = np.abs(radar.gate_z["data"][ind_ray_arr][:, ind_r_arr] - clo_z)
+                    valid_rays = valid_count > 0
 
-                dist_to_clo = np.sqrt(dist_x**2 + dist_y**2 + dist_z**2)
+                    if not np.any(valid_rays):
+                        warn(
+                            f"{radarnr}: No valid reflectivity values "
+                            "found for maxZH."
+                        )
+                        out[radarnr] = None
+                        continue
 
-                vmask = radar.fields[field_name]["data"][ind_ray_arr][:, ind_r_arr]
-                dist_to_clo[vmask.mask] = np.inf
+                    valid_ray_positions = np.where(valid_rays)[0]
 
-                if not np.isfinite(dist_to_clo).any():
-                    warn(f"{radarnr}: No valid gates found within tolerance.")
-                    out[radarnr] = None
-                    continue
+                    max_local_r = np.ma.argmax(
+                        refl_region[valid_rays],
+                        axis=1,
+                    )
 
-                clo_valid_idx = np.unravel_index(
-                    np.argmin(dist_to_clo), dist_to_clo.shape
-                )
+                    val[valid_rays] = data_region[
+                        valid_ray_positions,
+                        max_local_r,
+                    ]
 
-                val = vmask[clo_valid_idx]
+                    selected_range_indices[valid_rays] = ind_r_arr[max_local_r]
 
-                # Reduce to selected gate indices
-                ind_ray_arr = np.atleast_1d(ind_ray_arr[clo_valid_idx[0]])
-                ind_r_arr = np.atleast_1d(ind_r_arr[clo_valid_idx[1]])
+                elif agg_method == "nearest_valid":
+                    range_distance = np.abs(radar.range["data"][ind_r_arr] - r)
+
+                    val = np.ma.masked_all(
+                        ind_ray_arr.size,
+                        dtype=data_region.dtype,
+                    )
+
+                    selected_range_indices = np.full(
+                        ind_ray_arr.size,
+                        nearest_ind_r,
+                        dtype=int,
+                    )
+
+                    data_mask = np.ma.getmaskarray(data_region)
+
+                    for iray in range(ind_ray_arr.size):
+                        valid_ranges = ~data_mask[iray]
+
+                        if not np.any(valid_ranges):
+                            continue
+
+                        candidate_local_indices = np.where(valid_ranges)[0]
+
+                        best_local_r = candidate_local_indices[
+                            np.argmin(range_distance[candidate_local_indices])
+                        ]
+
+                        val[iray] = data_region[
+                            iray,
+                            best_local_r,
+                        ]
+
+                        selected_range_indices[iray] = ind_r_arr[best_local_r]
+
+                    if np.ma.count(val) == 0:
+                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        out[radarnr] = None
+                        continue
+
+            else:
+                # ----------------------------------------------------------
+                # Normal scanning case: aggregate over rays and ranges
+                # ----------------------------------------------------------
+                if agg_method == "average":
+                    val = np.ma.mean(data_region)
+
+                elif agg_method == "max":
+                    if np.ma.count(data_region) == 0:
+                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        out[radarnr] = None
+                        continue
+
+                    local_index = np.unravel_index(
+                        np.ma.argmax(data_region),
+                        data_region.shape,
+                    )
+
+                    val = data_region[local_index]
+
+                    ind_ray_arr = np.atleast_1d(ind_ray_arr[local_index[0]])
+                    ind_r_arr = np.atleast_1d(ind_r_arr[local_index[1]])
+                    selected_range_indices = ind_r_arr.copy()
+
+                elif agg_method == "min":
+                    if np.ma.count(data_region) == 0:
+                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        out[radarnr] = None
+                        continue
+
+                    local_index = np.unravel_index(
+                        np.ma.argmin(data_region),
+                        data_region.shape,
+                    )
+
+                    val = data_region[local_index]
+
+                    ind_ray_arr = np.atleast_1d(ind_ray_arr[local_index[0]])
+                    ind_r_arr = np.atleast_1d(ind_r_arr[local_index[1]])
+                    selected_range_indices = ind_r_arr.copy()
+
+                elif agg_method == "none":
+                    val = data_region
+
+                elif agg_method == "maxZH":
+                    refl_region = radar.fields[refl_field_name]["data"][ind_ray_arr][
+                        :, ind_r_arr
+                    ]
+
+                    if np.ma.count(refl_region) == 0:
+                        warn(
+                            f"{radarnr}: No valid reflectivity "
+                            "values found for maxZH."
+                        )
+                        out[radarnr] = None
+                        continue
+
+                    zh_flat_idx = np.ma.argmax(refl_region)
+                    zh_idx = np.unravel_index(
+                        zh_flat_idx,
+                        refl_region.shape,
+                    )
+
+                    val = data_region[zh_idx]
+
+                    ind_ray_arr = np.atleast_1d(ind_ray_arr[zh_idx[0]])
+                    ind_r_arr = np.atleast_1d(ind_r_arr[zh_idx[1]])
+
+                    selected_range_indices = ind_r_arr.copy()
+
+                elif agg_method == "nearest_valid":
+                    # Find the closest geometrical gate among the candidates.
+                    ind_clo_ray = np.argmin(
+                        np.abs(radar.azimuth["data"] - az)
+                        + np.abs(radar.elevation["data"] - el)
+                    )
+                    ind_clo_r = np.argmin(np.abs(radar.range["data"] - r))
+
+                    clo_x = radar.gate_x["data"][
+                        ind_clo_ray,
+                        ind_clo_r,
+                    ]
+                    clo_y = radar.gate_y["data"][
+                        ind_clo_ray,
+                        ind_clo_r,
+                    ]
+                    clo_z = radar.gate_z["data"][
+                        ind_clo_ray,
+                        ind_clo_r,
+                    ]
+
+                    dist_x = np.abs(
+                        radar.gate_x["data"][ind_ray_arr][:, ind_r_arr] - clo_x
+                    )
+                    dist_y = np.abs(
+                        radar.gate_y["data"][ind_ray_arr][:, ind_r_arr] - clo_y
+                    )
+                    dist_z = np.abs(
+                        radar.gate_z["data"][ind_ray_arr][:, ind_r_arr] - clo_z
+                    )
+
+                    dist_to_clo = np.sqrt(dist_x**2 + dist_y**2 + dist_z**2)
+
+                    vmask = field_data[ind_ray_arr][:, ind_r_arr]
+
+                    dist_to_clo[np.ma.getmaskarray(vmask)] = np.inf
+
+                    if not np.isfinite(dist_to_clo).any():
+                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        out[radarnr] = None
+                        continue
+
+                    clo_valid_idx = np.unravel_index(
+                        np.argmin(dist_to_clo),
+                        dist_to_clo.shape,
+                    )
+
+                    val = vmask[clo_valid_idx]
+
+                    ind_ray_arr = np.atleast_1d(ind_ray_arr[clo_valid_idx[0]])
+                    ind_r_arr = np.atleast_1d(ind_r_arr[clo_valid_idx[1]])
+
+                    selected_range_indices = ind_r_arr.copy()
+
+                if selected_range_indices is None:
+                    nearest_local_r = np.argmin(d_r[ind_r_arr])
+
+                    selected_range_indices = np.full(
+                        ind_ray_arr.size,
+                        ind_r_arr[nearest_local_r],
+                        dtype=int,
+                    )
+
+        # --------------------------------------------------------------
+        # Normalize output shape
+        # --------------------------------------------------------------
+        if is_pointing:
+            # For aggregated methods, val has shape (nrays,).
+            # For 'none', val has shape (nrays, nranges_in_tolerance).
+            val = np.ma.asarray(val)
+        else:
+            val = np.ma.asarray(val).ravel()
 
         # --------------------------------------------------------------
         # Antenna coordinates actually used
         # --------------------------------------------------------------
-        ant_coord = np.empty((3, ind_ray_arr.size), np.float32)
+        ant_coord = np.empty(
+            (3, ind_ray_arr.size),
+            dtype=np.float32,
+        )
+
         ant_coord[0, :] = radar.azimuth["data"][ind_ray_arr]
         ant_coord[1, :] = radar.elevation["data"][ind_ray_arr]
-
-        if ind_r_arr.size == ind_ray_arr.size:
-            ant_coord[2, :] = radar.range["data"][ind_r_arr]
-        else:
-            ant_coord[2, :] = radar.range["data"][ind_r_arr[0]]
+        ant_coord[2, :] = radar.range["data"][selected_range_indices]
 
         # --------------------------------------------------------------
         # Fill masked values if requested
         # --------------------------------------------------------------
         if fill_value is not None:
-            try:
-                val = val.filled(fill_value)
-            except AttributeError:
-                pass
+            val = np.ma.asarray(val).filled(fill_value)
 
         # --------------------------------------------------------------
         # Time for selected ray(s)
@@ -449,6 +683,8 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             )
         )
 
+        time = np.atleast_1d(time)
+
         # --------------------------------------------------------------
         # Persistent storage
         # --------------------------------------------------------------
@@ -457,8 +693,16 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
 
         if radarnr not in dscfg["global_data"]:
             dscfg["global_data"][radarnr] = {
-                "point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt],
-                "antenna_coordinates_az_el_r": [az, el, r],
+                "point_coordinates_WGS84_lon_lat_alt": [
+                    lon,
+                    lat,
+                    alt,
+                ],
+                "antenna_coordinates_az_el_r": [
+                    az,
+                    el,
+                    r,
+                ],
                 "time": [],
                 "value": [],
                 "ref_time": dscfg["timeinfo"],
@@ -467,10 +711,29 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             }
             dscfg["initialized"] = 1
 
-        dscfg["global_data"][radarnr]["ref_time"] = dscfg["timeinfo"]
-        dscfg["global_data"][radarnr]["value"].append(val)
-        dscfg["global_data"][radarnr]["time"].append(time[0])
-        dscfg["global_data"][radarnr]["datatype"] = datatype
+        gd = dscfg["global_data"][radarnr]
+
+        gd["ref_time"] = dscfg["timeinfo"]
+        gd["datatype"] = datatype
+
+        if is_pointing:
+            # Store one entry for every ray timestamp.
+            #
+            # For average/min/max/maxZH/nearest_valid:
+            #     each value entry is a scalar.
+            #
+            # For agg_method='none':
+            #     each value entry is a 1-D array containing all
+            #     selected range gates for that ray.
+            gd["time"].extend(time.tolist())
+
+            if val.ndim == 1:
+                gd["value"].extend([value for value in val])
+            else:
+                gd["value"].extend([val[iray].copy() for iray in range(val.shape[0])])
+        else:
+            gd["value"].append(val[0])
+            gd["time"].append(time[0])
 
         # --------------------------------------------------------------
         # Per-radar output
@@ -480,14 +743,21 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
             "datatype": datatype,
             "time": dscfg["global_data"][radarnr]["time"],
             "ref_time": dscfg["timeinfo"],
-            "point_coordinates_WGS84_lon_lat_alt": [lon, lat, alt],
-            "antenna_coordinates_az_el_r": [az, el, r],
+            "point_coordinates_WGS84_lon_lat_alt": [
+                lon,
+                lat,
+                alt,
+            ],
+            "antenna_coordinates_az_el_r": [
+                az,
+                el,
+                r,
+            ],
             "used_antenna_coordinates_az_el_r": ant_coord,
             "radarnr": radarnr,
         }
 
         out[radarnr] = new_dataset
-
     out["final"] = False
     return out, ind_out
 

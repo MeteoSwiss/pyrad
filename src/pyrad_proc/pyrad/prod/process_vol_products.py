@@ -182,17 +182,21 @@ def generate_vol_products(dataset, prdcfg):
         'FIXED_RNG_IMAGE': Plots a fixed range image
             User defined parameters:
                 voltype: str or list of str
-                    Name of the pyrad variable to use, it must be either a voltype available in the dataset
-                    or "RGB", which will make a RGB plot of Zh, Zdr and RhoHV (if they are available)
+                    Name of the PyRAD variable to use. It must be either a
+                    voltype available in the dataset or "RGB", which will make
+                    an RGB plot of Zh, Zdr and RhoHV if they are available.
                 AngTol : float
                     The tolerance between the nominal angles and the actual
                     radar angles. Default 1.
-                ele_res, azi_res: float or None
-                    The resolution of the fixed grid [deg]. If None it will be
-                    obtained from the separation between angles
+                ele_res, azi_res : float or None
+                    The resolution of the fixed grid [deg]. If None, it will be
+                    obtained from the separation between angles.
                 vmin, vmax : float or None
-                    Min and Max values of the color scale. If None the values
-                    are taken from the Py-ART config file
+                    Minimum and maximum values of the color scale. If None, the
+                    values are taken from the Py-ART configuration file.
+                plot_max : bool
+                    If True, marks the maximum value with a red dot and annotates
+                    its azimuth, elevation, and value. Default False.
         'FIXED_RNG_SPAN_IMAGE': Plots a user-defined statistic over a fixed
             range image
             User defined parameters:
@@ -2974,21 +2978,23 @@ def generate_vol_products(dataset, prdcfg):
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         fields = dataset["radar_out"].fields
         names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+
         if not all(f in fields for f in names):
             warn(
                 " Field type "
-                + field_name
+                + str(field_name)
                 + " not available in data set. Skipping product "
                 + prdcfg["type"]
             )
             return None
 
-        # user defined parameters
+        # User-defined parameters
         ang_tol = prdcfg.get("AngTol", 1.0)
         azi_res = prdcfg.get("azi_res", None)
         ele_res = prdcfg.get("ele_res", None)
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
+        plot_max = prdcfg.get("plot_max", False)
 
         savedir = get_save_dir(
             prdcfg["basepath"],
@@ -3003,7 +3009,7 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg["dstype"],
             prdcfg["voltype"],
             prdcfg["imgformat"],
-            prdcfginfo="rng" + "{:.1f}".format(dataset["radar_out"].range["data"][0]),
+            prdcfginfo=("rng" + "{:.1f}".format(dataset["radar_out"].range["data"][0])),
             timeinfo=prdcfg["timeinfo"],
             runinfo=prdcfg["runinfo"],
         )
@@ -3011,7 +3017,7 @@ def generate_vol_products(dataset, prdcfg):
         for i, fname in enumerate(fname_list):
             fname_list[i] = savedir + fname
 
-        plot_fixed_rng(
+        return plot_fixed_rng(
             dataset["radar_out"],
             field_name,
             prdcfg,
@@ -3021,30 +3027,39 @@ def generate_vol_products(dataset, prdcfg):
             ang_tol=ang_tol,
             vmin=vmin,
             vmax=vmax,
+            plot_max=plot_max,
         )
-
-        print("----- save to " + " ".join(fname_list))
-
-        return fname_list
 
     if prdcfg["type"] == "FIXED_RNG_SPAN_IMAGE":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         fields = dataset["radar_out"].fields
+
         names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
-        if not all(f in fields for f in names):
+
+        if not all(field in fields for field in names):
             warn(
-                " Field type "
-                + field_name
+                "Field type "
+                + str(field_name)
                 + " not available in data set. Skipping product "
                 + prdcfg["type"]
             )
             return None
 
-        # user defined parameters
+        # User-defined parameters
         ang_tol = prdcfg.get("AngTol", 1.0)
         azi_res = prdcfg.get("azi_res", None)
         ele_res = prdcfg.get("ele_res", None)
         stat = prdcfg.get("stat", "max")
+        plot_type = prdcfg.get("plot_type", "field")
+        plot_max = prdcfg.get("plot_max", False)
+
+        if plot_type not in ("field", "range"):
+            warn(
+                f"Invalid plot_type '{plot_type}'. "
+                "It must be either 'field' or 'range'. "
+                "Skipping product FIXED_RNG_SPAN_IMAGE."
+            )
+            return None
 
         savedir = get_save_dir(
             prdcfg["basepath"],
@@ -3059,10 +3074,12 @@ def generate_vol_products(dataset, prdcfg):
             prdcfg["dstype"],
             prdcfg["voltype"],
             prdcfg["imgformat"],
-            prdcfginfo="rng"
-            + "{:.1f}".format(dataset["radar_out"].range["data"][0])
-            + "-"
-            + "{:.1f}".format(dataset["radar_out"].range["data"][-1]),
+            prdcfginfo=(
+                "rng"
+                + "{:.1f}".format(dataset["radar_out"].range["data"][0])
+                + "-"
+                + "{:.1f}".format(dataset["radar_out"].range["data"][-1])
+            ),
             timeinfo=prdcfg["timeinfo"],
             runinfo=prdcfg["runinfo"],
         )
@@ -3070,7 +3087,7 @@ def generate_vol_products(dataset, prdcfg):
         for i, fname in enumerate(fname_list):
             fname_list[i] = savedir + fname
 
-        plot_fixed_rng_span(
+        output_fname_list = plot_fixed_rng_span(
             dataset["radar_out"],
             field_name,
             prdcfg,
@@ -3079,11 +3096,13 @@ def generate_vol_products(dataset, prdcfg):
             ele_res=ele_res,
             ang_tol=ang_tol,
             stat=stat,
+            plot_type=plot_type,
+            plot_max=plot_max,
         )
 
-        print("----- save to " + " ".join(fname_list))
+        print("----- save to " + " ".join(output_fname_list))
 
-        return fname_list
+        return output_fname_list
 
     if prdcfg["type"] == "PLOT_ALONG_COORD":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
