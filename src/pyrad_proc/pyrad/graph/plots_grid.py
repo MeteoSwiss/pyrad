@@ -29,6 +29,7 @@ import pyart
 
 from .plots_aux import get_norm
 from .plots_aux import _CARTOPY_AVAILABLE, embellish_plot
+from .plots_aux import get_main_map_axis
 
 if _CARTOPY_AVAILABLE:
     import cartopy
@@ -258,8 +259,7 @@ def plot_surface(
                 fig=fig,
             )
 
-        ax = fig.get_axes()[0]
-
+        # Get geoaxis
         if "maps" in prdcfg["gridMapImageConfig"] and _CARTOPY_AVAILABLE:
             embellish_plot(ax, prdcfg["gridMapImageConfig"])
 
@@ -270,6 +270,7 @@ def plot_surface(
 
         return fname_list
 
+    ax = get_main_map_axis(fig)
     return (fig, ax, display)
 
 
@@ -373,7 +374,6 @@ def plot_surface_raw(
             ax=ax,
             fig=fig,
         )
-        ax = fig.get_axes()[0]
 
     if save_fig:
         for fname in fname_list:
@@ -382,6 +382,7 @@ def plot_surface_raw(
 
         return fname_list
 
+    ax = get_main_map_axis(fig)
     return (fig, ax, display)
 
 
