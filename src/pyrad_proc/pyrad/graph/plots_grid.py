@@ -163,6 +163,7 @@ def plot_surface(
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+        ax = fig.add_subplot(111)
 
         if use_basemap or not _CARTOPY_AVAILABLE:
             display = pyart.graph.GridMapDisplayBasemap(grid)
@@ -194,7 +195,7 @@ def plot_surface(
             projection = cartopy.crs.PlateCarree()
 
             display = pyart.graph.GridMapDisplay(grid)
-            fig, ax = display.plot_grid(
+            display.plot_grid(
                 field_name,
                 level=level,
                 norm=norm,
@@ -237,7 +238,7 @@ def plot_surface(
                 fig=fig,
             )
         else:
-            fig, ax = display.plot_grid(
+            display.plot_grid(
                 field_name,
                 level=level,
                 norm=norm,
@@ -256,6 +257,8 @@ def plot_surface(
                 ax=ax,
                 fig=fig,
             )
+
+        ax = fig.get_axes()[0]
 
         if "maps" in prdcfg["gridMapImageConfig"] and _CARTOPY_AVAILABLE:
             embellish_plot(ax, prdcfg["gridMapImageConfig"])
@@ -370,6 +373,7 @@ def plot_surface_raw(
             ax=ax,
             fig=fig,
         )
+        ax = fig.get_axes()[0]
 
     if save_fig:
         for fname in fname_list:
@@ -530,7 +534,7 @@ def plot_surface_contour(
             background_zoom = prdcfg["gridMapImageConfig"].get("background_zoom", 8)
             maps_list = prdcfg["gridMapImageConfig"].get("maps", [])
             display = pyart.graph.GridMapDisplay(grid)
-            fig, ax = display.plot_grid_contour(
+            display.plot_grid_contour(
                 field_name,
                 level=level,
                 ax=ax,
