@@ -56,6 +56,10 @@ jobs:
         working-directory: ${{ github.workspace }}/src/pyart/
         run: python -m pip install .
 
+      - name: Install DX50 lib
+        working-directory: ${{github.workspace}}/src/libDX50/
+        run: make
+
       - name: Clone pyrad-tests
         uses: actions/checkout@v4
         with:

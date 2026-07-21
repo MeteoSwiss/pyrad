@@ -14,6 +14,7 @@ pytest-cov
 mda-xdrlib
 pytest-mpl
 coveralls
+pygrib
 flake8
 Cython
 fsspec
