@@ -829,73 +829,104 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
     Returns
     -------
     radar_list : list
-        a list containing the radar objects
-
+        a list containing the radar objects. Returns an empty list if an
+        unexpected error occurs.
     """
-    # get data of master radar
-    radar_list = list()
-    radar_list.append(get_data(master_voltime, datatypesdescr_list[0], datacfg))
+    try:
+        radar_list = []
 
-    if num_radars == 1:
-        return radar_list
-
-    # get data of rest of radars
-    for i in range(1, num_radars):
-        filelist_ref, datatypedescr_ref, _ = _get_masterfile_list(
-            datatypesdescr_list[i],
-            [master_voltime - timedelta(seconds=datacfg["TimeTol"])],
-            [master_voltime + timedelta(seconds=datacfg["TimeTol"])],
-            datacfg,
-            scan_list=datacfg["ScanList"],
-        )
-        nfiles_ref = len(filelist_ref)
-        if nfiles_ref == 0:
-            str1 = (
-                "ERROR: Could not find any valid volume for reference time"
-                " {} and radar RADAR{:03d}"
-            )
-            warn(str1.format(master_voltime.strftime("%Y-%m-%d %H:%M:%S"), i + 1))
-            radar = None
-            radar_list.append(None)
-        elif nfiles_ref == 1:
-            voltime_ref = get_datetime(filelist_ref[0], datatypedescr_ref)
-            radar = get_data(voltime_ref, datatypesdescr_list[i], datacfg)
-        else:
-            voltime_ref_list = []
-            for j in range(nfiles_ref):
-                voltime_ref_list.append(
-                    get_datetime(filelist_ref[j], datatypedescr_ref)
-                )
-            voltime_ref = min(voltime_ref_list, key=lambda x: abs(x - master_voltime))
-            radar = get_data(voltime_ref, datatypesdescr_list[i], datacfg)
-        radar_list.append(radar)
-    # Override radar location metadata if provided in the location config file
-    for key in ("latitude", "longitude", "altitude"):
-        if key not in datacfg:
-            continue
-
-        values = datacfg[key]
+        # Get data of master radar
+        try:
+            radar_list.append(get_data(master_voltime, datatypesdescr_list[0], datacfg))
+        except Exception as exc:
+            warn(f"ERROR: Failed to load master radar at " f"{master_voltime}: {exc}")
+            return []
 
         if num_radars == 1:
-            warn(f"Overriding attribute {key} with value {float(values)}")
-            radar_list[0].__dict__[key]["data"] = np.array([float(values)])
-            continue
+            return radar_list
 
-        if len(values) != num_radars:
-            warn(
-                f"WARNING: '{key}' provided in config has length {len(values)}, "
-                f"but num_radars is {num_radars}. Ignoring override."
-            )
-            continue
-
-        for i, radar in enumerate(radar_list):
-            if radar is not None:
-                warn(
-                    f"Overriding attribute {key} on radar {i} with value {float(values[i])}"
+        # Get data of remaining radars
+        for i in range(1, num_radars):
+            try:
+                filelist_ref, datatypedescr_ref, _ = _get_masterfile_list(
+                    datatypesdescr_list[i],
+                    [master_voltime - timedelta(seconds=datacfg["TimeTol"])],
+                    [master_voltime + timedelta(seconds=datacfg["TimeTol"])],
+                    datacfg,
+                    scan_list=datacfg["ScanList"],
                 )
-                radar.__dict__[key]["data"] = np.array([float(values[i])])
 
-    return radar_list
+                nfiles_ref = len(filelist_ref)
+
+                if nfiles_ref == 0:
+                    warn(
+                        "ERROR: Could not find any valid volume for reference "
+                        f"time {master_voltime:%Y-%m-%d %H:%M:%S} and "
+                        f"radar RADAR{i + 1:03d}"
+                    )
+                    radar = None
+
+                elif nfiles_ref == 1:
+                    voltime_ref = get_datetime(filelist_ref[0], datatypedescr_ref)
+                    radar = get_data(voltime_ref, datatypesdescr_list[i], datacfg)
+
+                else:
+                    voltime_ref_list = [
+                        get_datetime(f, datatypedescr_ref) for f in filelist_ref
+                    ]
+                    voltime_ref = min(
+                        voltime_ref_list,
+                        key=lambda x: abs(x - master_voltime),
+                    )
+                    radar = get_data(voltime_ref, datatypesdescr_list[i], datacfg)
+
+            except Exception as exc:
+                warn(f"ERROR: Failed to load radar {i + 1}: {exc}")
+                radar = None
+
+            radar_list.append(radar)
+
+        # Override radar location metadata if provided
+        for key in ("latitude", "longitude", "altitude"):
+            if key not in datacfg:
+                continue
+
+            values = datacfg[key]
+
+            if num_radars == 1:
+                try:
+                    warn(f"Overriding attribute {key} with value " f"{float(values)}")
+                    radar_list[0].__dict__[key]["data"] = np.array([float(values)])
+                except Exception as exc:
+                    warn(f"WARNING: Failed to override {key}: {exc}")
+                continue
+
+            if len(values) != num_radars:
+                warn(
+                    f"WARNING: '{key}' provided in config has length "
+                    f"{len(values)}, but num_radars is {num_radars}. "
+                    "Ignoring override."
+                )
+                continue
+
+            for i, radar in enumerate(radar_list):
+                if radar is None:
+                    continue
+
+                try:
+                    warn(
+                        f"Overriding attribute {key} on radar {i} "
+                        f"with value {float(values[i])}"
+                    )
+                    radar.__dict__[key]["data"] = np.array([float(values[i])])
+                except Exception as exc:
+                    warn(f"WARNING: Failed to override {key} on radar " f"{i}: {exc}")
+
+        return radar_list
+
+    except Exception as exc:
+        warn(f"ERROR: Unexpected error in _get_radars_data: {exc}")
+        return []
 
 
 @profiler(level=2)
@@ -955,7 +986,6 @@ def _generate_dataset(
         proc_ds_func, dsformat = get_process_func(dscfg["type"], dscfg["dsname"])
     except Exception as inst:
         warn(str(inst))
-        raise
 
     if isinstance(proc_ds_func, str):
         proc_ds_func = getattr(proc, proc_ds_func)
@@ -981,7 +1011,6 @@ def _generate_dataset(
             prod_func = get_prodgen_func(dsformat, dscfg["dsname"], dscfg["type"])
         except Exception as inst:
             warn(str(inst))
-            raise
 
         # create the data set products
         if "products" in dscfg:

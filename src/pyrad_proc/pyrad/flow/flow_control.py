@@ -204,7 +204,6 @@ def main(
         datacfg,
         scan_list=datacfg["ScanList"],
     )
-
     nvolumes = len(masterfilelist)
     if nvolumes == 0:
         raise ValueError(

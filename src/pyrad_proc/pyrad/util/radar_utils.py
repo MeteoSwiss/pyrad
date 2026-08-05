@@ -2548,3 +2548,52 @@ def compute_average_vad(radar_list, z_want, signs, lat0, lon0):
         np.ma.array(v_avg, mask=np.isnan(v_avg)),
     )
     return vad_avg
+
+
+def _compute_histogram_over_range(
+    ranges,
+    values,
+    range_bins,
+    value_bins,
+    percentiles,
+    *,
+    min_samples_per_range=0,
+):
+    """
+    Compute one value histogram and percentile curves as a function of range.
+    """
+
+    ranges = np.asarray(ranges, dtype=float)
+    values = np.asarray(values, dtype=float)
+
+    n_range = len(range_bins) - 1
+    n_value = len(value_bins) - 1
+
+    histogram = np.zeros((n_range, n_value), dtype=float)
+    nsamples = np.zeros(n_range, dtype=int)
+
+    percentile_dict = {
+        float(perc): np.full(n_range, np.nan, dtype=float) for perc in percentiles
+    }
+
+    for ind in range(n_range):
+        selection = np.logical_and(
+            ranges >= range_bins[ind],
+            ranges < range_bins[ind + 1],
+        )
+
+        data = values[selection]
+        data = data[np.isfinite(data)]
+
+        nsamples[ind] = data.size
+
+        if data.size > 0:
+            histogram[ind, :] = np.histogram(data, bins=value_bins)[0]
+
+        if data.size < min_samples_per_range:
+            continue
+
+        for perc in percentiles:
+            percentile_dict[float(perc)][ind] = np.nanpercentile(data, perc)
+
+    return histogram, percentile_dict, nsamples
