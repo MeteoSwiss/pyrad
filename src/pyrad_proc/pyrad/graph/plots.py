@@ -2575,6 +2575,451 @@ def _plot_time_range(
     return fig, ax
 
 
+def plot_histogram_over_range(
+    range_bins,
+    value_bins,
+    histograms,
+    fname_list,
+    *,
+    range_centers=None,
+    percentiles_by_radar=None,
+    full=True,
+    field_name="field",
+    titl=None,
+    labelx="Range (m)",
+    labely=None,
+    count_label="Number of samples",
+    cmap_full="viridis",
+    percentile_cmaps=None,
+    hist_vmin=None,
+    hist_vmax=None,
+    hist_vmax_percentile=99.0,
+    figsize=None,
+    dpi=72,
+):
+    """
+    Plot radar-variable distributions as a function of range.
+
+    Two plotting modes are available:
+
+    - ``full=True``:
+      Plot the complete two-dimensional histogram for each radar in a
+      separate panel. All panels use the same colormap and color-scale
+      limits so that histogram counts can be compared directly.
+
+    - ``full=False``:
+      Plot only the percentile curves. Percentiles from all radars are
+      displayed on the same axis. Each radar uses a separate colormap.
+      The median is shown with the darkest color, while percentiles
+      increasingly distant from the median are progressively lighter.
+
+    Parameters
+    ----------
+    range_bins : array-like
+        Range-bin edges in meters.
+
+    value_bins : array-like
+        Variable-bin edges.
+
+    histograms : dict
+        Dictionary mapping radar names to two-dimensional histogram arrays.
+
+        Each histogram must have shape::
+
+            (n_range_bins - 1, n_value_bins - 1)
+
+        Example::
+
+            {
+                "radar 1": hist_radar_1,
+                "radar 2": hist_radar_2,
+            }
+
+    fname_list : list of str
+        Output figure filenames.
+
+    range_centers : array-like, optional
+        Range-bin centers. Required when ``full=False``.
+
+    percentiles_by_radar : dict, optional
+        Nested dictionary mapping each radar name to its percentile curves.
+
+        Example::
+
+            {
+                "radar 1": {
+                    10: q10_radar_1,
+                    25: q25_radar_1,
+                    50: q50_radar_1,
+                    75: q75_radar_1,
+                    90: q90_radar_1,
+                },
+                "radar 2": {
+                    10: q10_radar_2,
+                    25: q25_radar_2,
+                    50: q50_radar_2,
+                    75: q75_radar_2,
+                    90: q90_radar_2,
+                },
+            }
+
+    full : bool
+        If True, plot one full histogram panel per radar.
+
+        If False, plot only percentile curves from all radars on the same
+        axis.
+
+    field_name : str
+        Name of the plotted radar variable.
+
+    titl : str, optional
+        Figure title.
+
+    labelx : str
+        x-axis label.
+
+    labely : str, optional
+        y-axis label. If None, ``field_name`` is used.
+
+    count_label : str
+        Histogram colorbar label.
+
+    cmap_full : str
+        Colormap used for all histograms when ``full=True``.
+
+    percentile_cmaps : list of str, optional
+        Colormaps used for the percentile curves of the different radars
+        when ``full=False``.
+
+        The first radar uses the first colormap, the second radar uses the
+        second colormap, and so on.
+
+        Default::
+
+            ["Blues", "Reds", "Greens", "Purples", "Oranges"]
+
+    hist_vmin, hist_vmax : float, optional
+        Shared histogram color-scale limits.
+
+        If ``hist_vmax`` is None, it is inferred from all non-zero
+        histogram values using ``hist_vmax_percentile``.
+
+    hist_vmax_percentile : float
+        Percentile of all non-zero histogram values used to infer the
+        shared maximum color-scale limit.
+
+    figsize : tuple, optional
+        Figure size.
+
+    dpi : int
+        Figure resolution.
+
+    Returns
+    -------
+    fname_list : list of str
+        List of saved figure filenames.
+    """
+    range_bins = np.asarray(range_bins, dtype=float)
+    value_bins = np.asarray(value_bins, dtype=float)
+
+    if range_centers is not None:
+        range_centers = np.asarray(range_centers, dtype=float)
+
+    if labely is None:
+        labely = field_name
+
+    if percentile_cmaps is None:
+        percentile_cmaps = [
+            "Blues",
+            "Reds",
+            "Greens",
+            "Purples",
+            "Oranges",
+        ]
+
+    radar_keys = list(histograms)
+
+    if not radar_keys:
+        return []
+
+    histograms_plot = {}
+
+    for radar, histogram in histograms.items():
+        histogram = np.asarray(histogram, dtype=float)
+
+        expected_shape = (
+            range_bins.size - 1,
+            value_bins.size - 1,
+        )
+
+        if histogram.shape != expected_shape:
+            raise ValueError(
+                f"Histogram for radar '{radar}' has shape "
+                f"{histogram.shape}, but expected {expected_shape}"
+            )
+
+        histograms_plot[radar] = np.ma.masked_where(
+            ~np.isfinite(histogram) | (histogram <= 0.0),
+            histogram,
+        )
+
+    if full:
+        nradars = len(radar_keys)
+
+        if figsize is None:
+            figsize = (12, max(5.5, 4.5 * nradars))
+
+        # Determine one common normalization for all radar histograms.
+        common_vmax = hist_vmax
+
+        if common_vmax is None:
+            valid_histogram_values = [
+                histogram.compressed()
+                for histogram in histograms_plot.values()
+                if histogram.count() > 0
+            ]
+
+            if valid_histogram_values:
+                valid_histogram_values = np.concatenate(valid_histogram_values)
+
+                common_vmax = np.nanpercentile(
+                    valid_histogram_values,
+                    hist_vmax_percentile,
+                )
+
+        # Reserve a separate narrow column on the right for the shared colorbar.
+        fig = plt.figure(figsize=figsize)
+
+        grid = fig.add_gridspec(
+            nrows=nradars,
+            ncols=2,
+            width_ratios=[1.0, 0.035],
+            left=0.08,
+            right=0.94,
+            bottom=0.10,
+            top=0.88,
+            hspace=0.25,
+            wspace=0.08,
+        )
+
+        axes = []
+        for radar_index in range(nradars):
+            if radar_index == 0:
+                ax = fig.add_subplot(grid[radar_index, 0])
+            else:
+                ax = fig.add_subplot(
+                    grid[radar_index, 0],
+                    sharex=axes[0],
+                    sharey=axes[0],
+                )
+
+            axes.append(ax)
+
+        # One colorbar axis spanning the full height of all radar panels.
+        colorbar_ax = fig.add_subplot(grid[:, 1])
+
+        mesh = None
+
+        for ax, radar in zip(axes, radar_keys):
+            mesh = ax.pcolormesh(
+                range_bins,
+                value_bins,
+                histograms_plot[radar].T,
+                shading="auto",
+                cmap=cmap_full,
+                vmin=hist_vmin,
+                vmax=common_vmax,
+            )
+
+            ax.set_ylabel(labely)
+            ax.set_title(str(radar))
+            ax.grid(
+                True,
+                axis="x",
+                alpha=0.2,
+            )
+
+        axes[-1].set_xlabel(labelx)
+
+        # Hide x-axis labels on all panels except the bottom one.
+        for ax in axes[:-1]:
+            ax.tick_params(
+                axis="x",
+                labelbottom=False,
+            )
+
+        # A single colorbar in its own axis emphasizes that all panels use the
+        # same scale and prevents overlap with the radar plots.
+        if mesh is not None:
+            colorbar = fig.colorbar(
+                mesh,
+                cax=colorbar_ax,
+                orientation="vertical",
+            )
+            colorbar.set_label(count_label)
+
+        if titl is None:
+            titl = f"{field_name} histograms over range"
+
+        fig.suptitle(titl, y=0.98)
+
+    else:
+        if range_centers is None:
+            raise ValueError("range_centers must be provided when full=False")
+
+        if percentiles_by_radar is None:
+            raise ValueError("percentiles_by_radar must be provided when full=False")
+
+        if figsize is None:
+            figsize = (12, 7)
+
+        fig, ax = plt.subplots(figsize=figsize)
+
+        for radar_index, radar in enumerate(radar_keys):
+            if radar not in percentiles_by_radar:
+                continue
+
+            cmap_name = percentile_cmaps[radar_index % len(percentile_cmaps)]
+
+            _plot_percentile_curves(
+                ax,
+                radar,
+                range_centers,
+                percentiles_by_radar,
+                cmap_name=cmap_name,
+            )
+
+        ax.set_xlabel(labelx)
+        ax.set_ylabel(labely)
+        ax.grid(
+            True,
+            alpha=0.25,
+        )
+
+        handles, labels = ax.get_legend_handles_labels()
+
+        if handles:
+            ax.legend(
+                handles,
+                labels,
+                ncol=max(1, min(len(radar_keys), 2)),
+            )
+
+        if titl is None:
+            titl = f"{field_name} percentiles over range"
+
+        fig.suptitle(titl)
+        fig.tight_layout()
+
+    for fname in fname_list:
+        fig.savefig(
+            fname,
+            dpi=dpi,
+            bbox_inches="tight",
+        )
+
+    plt.close(fig)
+
+    return fname_list
+
+
+def _plot_percentile_curves(
+    ax,
+    radar,
+    range_centers,
+    percentiles_by_radar,
+    *,
+    cmap_name,
+):
+    """
+    Plot percentile curves for one radar.
+
+    Colors are selected from one colormap per radar. The 50th percentile
+    receives the darkest color. Percentiles increasingly distant from 50
+    receive progressively lighter colors.
+    """
+    if radar not in percentiles_by_radar:
+        return
+
+    percentile_dict = percentiles_by_radar[radar]
+
+    if not percentile_dict:
+        return
+
+    percentiles = sorted(
+        percentile_dict,
+        key=float,
+    )
+
+    percentile_values = np.asarray(
+        [float(percentile) for percentile in percentiles],
+        dtype=float,
+    )
+
+    distances_from_median = np.abs(percentile_values - 50.0)
+    maximum_distance = np.max(distances_from_median)
+
+    cmap = plt.get_cmap(cmap_name)
+
+    for percentile, distance in zip(
+        percentiles,
+        distances_from_median,
+    ):
+        values = np.asarray(
+            percentile_dict[percentile],
+            dtype=float,
+        )
+
+        if values.shape != range_centers.shape:
+            raise ValueError(
+                f"Percentile {percentile:g} for radar '{radar}' has "
+                f"shape {values.shape}, but range_centers has shape "
+                f"{range_centers.shape}"
+            )
+
+        if maximum_distance > 0.0:
+            normalized_distance = distance / maximum_distance
+        else:
+            normalized_distance = 0.0
+
+        # Standard sequential Matplotlib colormaps such as Blues and Reds
+        # progress from light colors at low values to dark colors at high
+        # values.
+        #
+        # Median:         color position 0.90
+        # Furthest curve: color position 0.30
+        color_position = 0.90 - 0.60 * normalized_distance
+        color = cmap(color_position)
+
+        is_median = np.isclose(
+            float(percentile),
+            50.0,
+        )
+
+        if is_median:
+            linestyle = "-"
+            linewidth = 2.4
+            zorder = 4
+        elif float(percentile) < 50.0:
+            linestyle = "--"
+            linewidth = 1.5
+            zorder = 3
+        else:
+            linestyle = ":"
+            linewidth = 1.7
+            zorder = 3
+
+        ax.plot(
+            range_centers,
+            values,
+            color=color,
+            linestyle=linestyle,
+            linewidth=linewidth,
+            label=f"{radar}: P{float(percentile):g}",
+            zorder=zorder,
+        )
+
+
 def plot_bias_over_range(
     range_centers,
     meanbias,

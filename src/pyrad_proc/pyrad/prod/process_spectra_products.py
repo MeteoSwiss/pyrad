@@ -328,6 +328,12 @@ def generate_spectra_products(dataset, prdcfg):
                     Minimum of the color scale
                 vmax : float or None
                     Maximum of the color scale
+                plot_mean_velocity : bool
+                    If True, overlay the power-weighted mean Doppler velocity at each range gate.
+                    Default is true
+                mean_velocity_field_name : str
+                    Optional field used as the weighting power spectrum.
+                    Default is to use the same as voltype
         'SAVEALL': Saves radar spectra or IQ volume data including all or a
             list of userdefined fields in a netcdf file
             User defined parameters:
@@ -423,6 +429,12 @@ def generate_spectra_products(dataset, prdcfg):
         xaxis_info = prdcfg.get("xaxis_info", "Doppler_velocity")
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
+        plot_mean_velocity = prdcfg.get("plot_mean_velocity", True)
+        mean_velocity_field_name = prdcfg.get("mean_velocity_field_name", None)
+        if mean_velocity_field_name is None:
+            mean_velocity_field_name = field_name
+        else:
+            mean_velocity_field_name = get_fieldname_pyart(mean_velocity_field_name)
 
         savedir = get_save_dir(
             prdcfg["basepath"],
@@ -467,6 +479,8 @@ def generate_spectra_products(dataset, prdcfg):
                 xaxis_info=xaxis_info,
                 vmin=vmin,
                 vmax=vmax,
+                plot_mean_velocity=plot_mean_velocity,
+                mean_velocity_field_name=mean_velocity_field_name,
             )
 
         print("----- save to " + " ".join(fname_list))

@@ -31,9 +31,9 @@ from ..io.write_data import write_intercomp_scores_ts
 from ..graph.plots import plot_scatter, plot_histogram
 from ..graph.plots_timeseries import plot_intercomp_scores_ts
 from ..graph import plot_colocated_gates
-from ..graph import plot_bias_over_range
+from ..graph import plot_bias_over_range, plot_histogram_over_range
 
-from ..util.radar_utils import compute_2d_stats
+from ..util.radar_utils import compute_2d_stats, _compute_histogram_over_range
 from ..util.stat_utils import parse_math_expression
 
 
@@ -76,37 +76,109 @@ def generate_intercomp_products(dataset, prdcfg):
                     The minimum correlation to consider the statistics
                     valid and therefore use the data point in the plotting.
                     Default 0.
-        'INTERCOMP_HISTOGRAMS': Plots one-dimensional histograms of colocated intercomparison data from two
-            radars. The distributions of radar 1 and radar 2 are shown on the same plot,
-            optionally for different range intervals.
-            User defined parameters:
-                histogram_type : str, optional
-                    Type of histogram product. If set to "cumulative", the plot is only
-                    generated when dataset["final"] is True. Default is "cumulative".
-                range_bins : list of float, optional
-                    Range bin edges in meters. One histogram is produced for each range
-                    interval.
-                    Default is [0, np.inf].
+        'HISTOGRAM_OVER_RANGE': Plot radar-variable distributions as a function of
+            range.
+
+            The product reads colocated radar values and ranges directly from
+            ``dataset["intercomp_dict"]`` under the keys
+            ``rad1_<colname>``, ``rad2_<colname>``, ``rad1_rng``, and
+            ``rad2_rng``. Depending on the value of ``full``, the product
+            either generates one two-dimensional histogram panel per radar or
+            overlays the histograms of all radars on a single panel.
+            Optionally, percentile curves are computed independently for each
+            radar and displayed as a function of range.
+
+            User-defined parameters:
+                histogram_type : {"cumulative", "instant"}, optional
+                    Controls when the product is generated.
+                    - ``"cumulative"`` generates the product only when
+                      ``dataset["final"]`` is true.
+                    - ``"instant"`` generates the product for the current
+                      dataset.
+                    Default: ``"cumulative"``.
+                voltype : str
+                    Pyrad datatype name used to determine the Py-ART field
+                    name and to construct labels and output filenames.
+                colname : str, optional
+                    Suffix of the intercomparison value columns. For example,
+                    ``"val"`` selects ``rad1_val`` and ``rad2_val``.
+                    Default: ``"val"``.
+                full : bool, optional
+                    If true, create one panel per radar showing the
+                    two-dimensional histogram of radar-variable value versus
+                    range. If false, overlay the histograms of all radars on a
+                    single panel using different colormaps.
+                    Default: true.
+                range_min : float, optional
+                    Lower edge of the first range bin, in metres.
+                    Default: 0.
+                range_max : float, optional
+                    Upper edge of the last range bin, in metres. Required when
+                    constructing bins from ``range_min``, ``range_max``, and
+                    ``range_step``.
+                range_step : float, optional
+                    Width of regularly spaced range bins, in metres.
+                range_bins : sequence of float, optional
+                    Explicit range-bin edges. When provided, this parameter
+                    takes precedence over ``range_min``, ``range_max``, and
+                    ``range_step``.
                 transform : str, optional
-                    Mathematical expression applied to both radar values before plotting.
-                    Default is "x".
-                plot_diff : bool, optional
-                    If True, plots the histogram of the difference between radar 1 and radar 2
-                    values instead of the histograms of the two radars. Default is False.
-                step : float, optional
-                    Histogram bin width. If None, bin edges are determined automatically.
+                    Mathematical expression applied independently to both radar
+                    values before histogram and percentile computation. The
+                    variable in the expression must be named ``x``.
+                    Default: ``"x"``.
                 vmin, vmax : float, optional
-                    Minimum and maximum histogram limits. If not specified, limits are inferred
-                    from the selected data.
+                    Lower and upper limits of the radar-variable histogram. If
+                    omitted, they are inferred from the finite values of both
+                    radars.
+                step : float, optional
+                    Width of regularly spaced radar-variable histogram bins. If
+                    omitted, NumPy's automatic histogram-bin selection is used.
+                value_bins : sequence of float, optional
+                    Explicit radar-variable histogram-bin edges. When provided,
+                    this parameter takes precedence over ``vmin``, ``vmax``,
+                    and ``step``.
                 cap_limits : bool, optional
-                    If True, values outside [vmin, vmax] are discarded. If False, values are
-                    clipped to the nearest limit. Default is False.
+                    If true, discard paired observations for which either radar
+                    value lies outside ``[vmin, vmax]``. If false, values are
+                    clipped to these limits.
+                    Default: false.
                 double_conditional_threshold : float, optional
-                    If set, only samples where both radar values are larger than this threshold
-                    are used.
-                binwidth_equal : bool, optional
-                    If True, histogram bars are shown with equal visual width regardless of the
-                    actual bin size. Default is False.
+                    If provided, retain only paired observations for which both
+                    radar values are strictly greater than this threshold.
+                percentiles : sequence of float, optional
+                    Percentiles in the interval [0, 100] to compute
+                    independently in every range bin. An empty sequence
+                    disables percentile curves.
+                    Default: empty.
+                min_samples_per_range : int, optional
+                    Minimum number of valid samples required in a range bin
+                    before its percentiles are computed.
+                    Default: 0.
+                hist_vmin, hist_vmax : float, optional
+                    Lower and upper limits of the histogram color scale.
+                hist_vmax_percentile : float, optional
+                    Percentile of the nonzero histogram counts used to infer
+                    the upper color-scale limit when ``hist_vmax`` is omitted.
+                    Default: 99.
+                labelx, labely, count_label : str, optional
+                    Labels used for the range axis, radar-variable axis, and
+                    histogram color scale.
+                cmap_full : str, optional
+                    Colormap used for the individual radar panels.
+                    Default: ``"viridis"``.
+                cmaps_overlay : sequence of str, optional
+                    Colormaps used when histograms are overlaid.
+                    Default:
+                    ``["Blues", "Reds", "Greens", "Purples"]``.
+                overlay_alpha : float, optional
+                    Alpha value used for overlaid histograms.
+                    Default: 0.55.
+                figsize : tuple of float, optional
+                    Figure size passed to the plotting function.
+                dpi : int, optional
+                    Figure resolution in dots per inch.
+                    Default: 72.
         'PLOT_SCATTER_INTERCOMP': Plots a density plot (2D histogram) with the points of
             radar 1 versus the points of radar 2. Note that in order to use this product you need
             to also define the product WRITE_INTERCOMP_TIME_AVG for the dataset in question.
@@ -532,6 +604,493 @@ def generate_intercomp_products(dataset, prdcfg):
 
         return fname_list
 
+    if prdcfg["type"] == "HISTOGRAM_OVER_RANGE":
+        """
+        Plot radar-variable distributions as a function of range.
+
+        The product uses colocated values and ranges stored in
+        ``dataset["intercomp_dict"]`` under the following keys:
+
+        - ``rad1_<colname>`` and ``rad2_<colname>`` for the radar values;
+        - ``rad1_rng`` and ``rad2_rng`` for their corresponding ranges.
+
+        Depending on ``full``, the product either creates one two-dimensional
+        histogram panel per radar or overlays the radar histograms in a single
+        panel. Optionally, percentile curves are computed independently for each
+        radar and displayed as a function of range.
+
+        User-defined parameters
+        -----------------------
+        voltype : str
+            Pyrad datatype name used to determine the Py-ART field name and to
+            construct labels and output filenames.
+
+        colname : str, optional
+            Suffix of the intercomparison value columns. For example, ``"val"``
+            selects ``rad1_val`` and ``rad2_val``.
+            Default: ``"val"``.
+
+        histogram_type : {"cumulative", "instant"}, optional
+            Controls when the product is generated:
+
+            - ``"cumulative"`` generates the product only when
+            ``dataset["final"]`` is true;
+            - ``"instant"`` generates the product for the current dataset.
+
+            Default: ``"cumulative"``.
+
+        full : bool, optional
+            If true, create one panel per radar, with each panel showing the
+            two-dimensional histogram of radar-variable value versus range.
+
+            If false, overlay the histograms of both radars in a single panel
+            using different colormaps.
+
+            Default: true.
+
+        range_min : float, optional
+            Lower edge of the first range bin, in metres.
+            Default: 0.
+
+        range_max : float, optional
+            Upper edge of the last range bin, in metres. It must be finite when
+            bins are constructed from ``range_min``, ``range_max``, and
+            ``range_step``.
+
+        range_step : float, optional
+            Width of the regularly spaced range bins, in metres.
+
+        range_bins : sequence of float, optional
+            Explicit range-bin edges, in metres. When provided, this parameter
+            takes precedence over ``range_min``, ``range_max``, and
+            ``range_step``.
+
+        vmin, vmax : float, optional
+            Lower and upper limits of the radar-variable histogram. When omitted,
+            the limits are inferred from the finite values of both radars.
+
+        step : float, optional
+            Width of regularly spaced radar-variable bins. When omitted,
+            NumPy's automatic histogram-bin selection is used.
+
+        value_bins : sequence of float, optional
+            Explicit radar-variable bin edges. When provided, this parameter
+            takes precedence over ``vmin``, ``vmax``, and ``step``.
+
+        cap_limits : bool, optional
+            If true, discard paired observations for which either radar value lies
+            outside ``[vmin, vmax]``. If false, clip each radar value to these
+            limits.
+            Default: false.
+
+        double_conditional_threshold : float, optional
+            If provided, retain only paired observations for which both radar
+            values are strictly greater than this threshold.
+
+        transform : str, optional
+            Mathematical expression applied independently to both radar-value
+            arrays before filtering and histogram computation. The variable in
+            the expression must be named ``x``.
+            Default: ``"x"``.
+
+        percentiles : sequence of float, optional
+            Percentiles, in the interval [0, 100], to compute independently in
+            every range bin. An empty sequence disables percentile curves.
+            Default: empty.
+
+        min_samples_per_range : int, optional
+            Minimum number of valid samples required in a range bin before its
+            percentiles are computed.
+            Default: 0.
+
+        hist_vmin, hist_vmax : float, optional
+            Lower and upper color-scale limits for histogram counts.
+
+        hist_vmax_percentile : float, optional
+            Percentile of the nonzero histogram counts used to infer the upper
+            color-scale limit when ``hist_vmax`` is omitted.
+            Default: 99.
+
+        labelx, labely, count_label : str, optional
+            Labels used for the range axis, radar-variable axis, and histogram
+            color scale.
+
+        cmap_full : str, optional
+            Colormap used for separate radar panels.
+            Default: ``"viridis"``.
+
+        figsize : tuple of float, optional
+            Figure size passed to the plotting function.
+
+        dpi : int, optional
+            Figure resolution in dots per inch.
+            Default: 72.
+
+        Returns
+        -------
+        list of str or None
+            Generated figure filenames, or ``None`` when a cumulative product is
+            requested before the final dataset is available.
+
+        Raises
+        ------
+        KeyError
+            If required radar-value or range arrays are missing.
+
+        ValueError
+            If the input arrays have incompatible shapes, contain no usable
+            values, or if invalid histogram-bin or percentile parameters are
+            supplied.
+        """
+        histogram_type = prdcfg.get("histogram_type", "cumulative")
+        if histogram_type not in {"cumulative", "instant"}:
+            raise ValueError("histogram_type must be either 'cumulative' or 'instant'")
+
+        if histogram_type == "cumulative" and not dataset["final"]:
+            return None
+
+        intercomp_dict = dataset["intercomp_dict"]
+        colname = prdcfg.get("colname", "val")
+
+        rad1_key = f"rad1_{colname}"
+        rad2_key = f"rad2_{colname}"
+
+        try:
+            rad1_values = np.ma.asarray(intercomp_dict[rad1_key], dtype=float)
+            rad2_values = np.ma.asarray(intercomp_dict[rad2_key], dtype=float)
+            rad1_ranges = np.ma.asarray(intercomp_dict["rad1_rng"], dtype=float)
+            rad2_ranges = np.ma.asarray(intercomp_dict["rad2_rng"], dtype=float)
+        except KeyError as exc:
+            raise KeyError(
+                "HISTOGRAM_OVER_RANGE requires "
+                f"'{rad1_key}', '{rad2_key}', 'rad1_rng', and 'rad2_rng' "
+                "in dataset['intercomp_dict']"
+            ) from exc
+
+        arrays = {
+            rad1_key: rad1_values,
+            rad2_key: rad2_values,
+            "rad1_rng": rad1_ranges,
+            "rad2_rng": rad2_ranges,
+        }
+        shapes = {name: array.shape for name, array in arrays.items()}
+
+        if len(set(shapes.values())) != 1:
+            raise ValueError(
+                "Radar values and ranges must have identical shapes. "
+                f"Received: {shapes}"
+            )
+
+        # Work with one-dimensional colocated sample arrays.
+        rad1_values = rad1_values.ravel()
+        rad2_values = rad2_values.ravel()
+        rad1_ranges = rad1_ranges.ravel()
+        rad2_ranges = rad2_ranges.ravel()
+
+        field_name = get_fieldname_pyart(prdcfg["voltype"])
+
+        transform_str = prdcfg.get("transform", "x")
+        transform = parse_math_expression(transform_str)
+
+        if transform is not None:
+            rad1_values = np.ma.asarray(transform(rad1_values), dtype=float)
+            rad2_values = np.ma.asarray(transform(rad2_values), dtype=float)
+
+            if rad1_values.shape != rad1_ranges.shape:
+                raise ValueError("The transform must preserve the shape of rad1 values")
+            if rad2_values.shape != rad2_ranges.shape:
+                raise ValueError("The transform must preserve the shape of rad2 values")
+
+        # Convert masked values to NaN so that a single, stable validity mask can
+        # be constructed and applied exactly once.
+        rad1_values = np.asarray(rad1_values.filled(np.nan), dtype=float)
+        rad2_values = np.asarray(rad2_values.filled(np.nan), dtype=float)
+        rad1_ranges = np.asarray(rad1_ranges.filled(np.nan), dtype=float)
+        rad2_ranges = np.asarray(rad2_ranges.filled(np.nan), dtype=float)
+
+        finite_values = np.concatenate(
+            (
+                rad1_values[np.isfinite(rad1_values)],
+                rad2_values[np.isfinite(rad2_values)],
+            )
+        )
+
+        if finite_values.size == 0:
+            raise ValueError(
+                "No finite radar values are available for " "HISTOGRAM_OVER_RANGE"
+            )
+
+        configured_vmin = prdcfg.get("vmin")
+        configured_vmax = prdcfg.get("vmax")
+
+        vmin_aux = (
+            float(configured_vmin)
+            if configured_vmin is not None
+            else float(np.min(finite_values))
+        )
+        vmax_aux = (
+            float(configured_vmax)
+            if configured_vmax is not None
+            else float(np.max(finite_values))
+        )
+
+        if not np.isfinite(vmin_aux) or not np.isfinite(vmax_aux):
+            raise ValueError("vmin and vmax must be finite")
+
+        if vmax_aux <= vmin_aux:
+            raise ValueError("vmax must be greater than vmin")
+
+        valid = np.logical_and.reduce(
+            (
+                np.isfinite(rad1_values),
+                np.isfinite(rad2_values),
+                np.isfinite(rad1_ranges),
+                np.isfinite(rad2_ranges),
+            )
+        )
+
+        cap_limits = bool(prdcfg.get("cap_limits", False))
+
+        if cap_limits:
+            valid &= np.logical_and.reduce(
+                (
+                    rad1_values >= vmin_aux,
+                    rad1_values <= vmax_aux,
+                    rad2_values >= vmin_aux,
+                    rad2_values <= vmax_aux,
+                )
+            )
+        else:
+            rad1_values = np.clip(rad1_values, vmin_aux, vmax_aux)
+            rad2_values = np.clip(rad2_values, vmin_aux, vmax_aux)
+
+        double_conditional_threshold = prdcfg.get("double_conditional_threshold")
+        if double_conditional_threshold is not None:
+            threshold = float(double_conditional_threshold)
+            valid &= np.logical_and(
+                rad1_values > threshold,
+                rad2_values > threshold,
+            )
+
+        if not np.any(valid):
+            raise ValueError(
+                "No colocated samples remain after applying the configured "
+                "validity and threshold filters"
+            )
+
+        # Apply the paired-value validity mask only once. The range arrays remain
+        # radar-specific, but all four arrays preserve their sample alignment.
+        rad1_values = rad1_values[valid]
+        rad2_values = rad2_values[valid]
+        rad1_ranges = rad1_ranges[valid]
+        rad2_ranges = rad2_ranges[valid]
+
+        if "range_bins" in prdcfg:
+            range_bins = np.asarray(prdcfg["range_bins"], dtype=float)
+        else:
+            range_min = float(prdcfg.get("range_min", 0.0))
+            range_max = prdcfg.get("range_max")
+            range_step = prdcfg.get("range_step")
+
+            if range_max is None or range_step is None:
+                raise ValueError(
+                    "HISTOGRAM_OVER_RANGE requires either range_bins or all "
+                    "of range_min, range_max, and range_step"
+                )
+
+            range_max = float(range_max)
+            range_step = float(range_step)
+
+            if not np.isfinite(range_min) or not np.isfinite(range_max):
+                raise ValueError("range_min and range_max must be finite")
+
+            if range_step <= 0.0:
+                raise ValueError("range_step must be greater than 0")
+
+            if range_max <= range_min:
+                raise ValueError("range_max must be greater than range_min")
+
+            # range_max is interpreted as the final bin edge.
+            range_bins = np.arange(
+                range_min,
+                range_max + 0.5 * range_step,
+                range_step,
+                dtype=float,
+            )
+            range_bins = range_bins[range_bins <= range_max + 1.0e-6]
+
+            if range_bins.size == 0 or range_bins[-1] < range_max:
+                range_bins = np.append(range_bins, range_max)
+
+        if range_bins.ndim != 1 or range_bins.size < 2:
+            raise ValueError(
+                "range_bins must be a one-dimensional array containing at "
+                "least two edges"
+            )
+
+        if not np.all(np.isfinite(range_bins)):
+            raise ValueError("All range-bin edges must be finite")
+
+        if np.any(np.diff(range_bins) <= 0.0):
+            raise ValueError("range_bins must be strictly increasing")
+
+        range_centers = range_bins[:-1] + 0.5 * np.diff(range_bins)
+
+        if "value_bins" in prdcfg:
+            bin_edges = np.asarray(prdcfg["value_bins"], dtype=float)
+        else:
+            step = prdcfg.get("step")
+
+            if step is None:
+                bin_edges = np.histogram_bin_edges(
+                    np.concatenate((rad1_values, rad2_values)),
+                    bins="auto",
+                    range=(vmin_aux, vmax_aux),
+                )
+            else:
+                step = float(step)
+
+                if not np.isfinite(step) or step <= 0.0:
+                    raise ValueError("step must be a finite value greater than 0")
+
+                bin_edges = np.arange(
+                    vmin_aux,
+                    vmax_aux + 0.5 * step,
+                    step,
+                    dtype=float,
+                )
+                bin_edges = bin_edges[bin_edges <= vmax_aux + 1.0e-12]
+
+                if bin_edges.size == 0 or bin_edges[-1] < vmax_aux:
+                    bin_edges = np.append(bin_edges, vmax_aux)
+
+        if bin_edges.ndim != 1 or bin_edges.size < 2:
+            raise ValueError(
+                "value_bins must be a one-dimensional array containing at "
+                "least two edges"
+            )
+
+        if not np.all(np.isfinite(bin_edges)):
+            raise ValueError("All value-bin edges must be finite")
+
+        if np.any(np.diff(bin_edges) <= 0.0):
+            raise ValueError("value_bins must be strictly increasing")
+
+        percentiles = np.asarray(
+            prdcfg.get("percentiles", []),
+            dtype=float,
+        )
+
+        if percentiles.ndim != 1:
+            raise ValueError("percentiles must be a one-dimensional sequence")
+
+        if not np.all(np.isfinite(percentiles)):
+            raise ValueError("percentiles must contain only finite values")
+
+        if np.any((percentiles < 0.0) | (percentiles > 100.0)):
+            raise ValueError("percentiles must be between 0 and 100")
+
+        min_samples_per_range = int(prdcfg.get("min_samples_per_range", 0))
+        if min_samples_per_range < 0:
+            raise ValueError("min_samples_per_range must be non-negative")
+
+        rad1_name = intercomp_dict.get("rad1_name", "rad1")
+        rad2_name = intercomp_dict.get("rad2_name", "rad2")
+
+        # Keep internal identifiers separate from display labels. Using display
+        # names to construct keys such as "<radar_name>_rng" is unsafe because the
+        # dictionary keys are defined as rad1_rng and rad2_rng.
+        radar_data = (
+            (rad1_name, rad1_ranges, rad1_values),
+            (rad2_name, rad2_ranges, rad2_values),
+        )
+
+        histograms = {}
+        percentiles_by_radar = {}
+        nsamples_by_radar = {}
+
+        for radar_name, ranges, values in radar_data:
+            histogram, percentile_dict, nsamples = _compute_histogram_over_range(
+                ranges,
+                values,
+                range_bins,
+                bin_edges,
+                percentiles,
+                min_samples_per_range=min_samples_per_range,
+            )
+
+            histograms[radar_name] = histogram
+            percentiles_by_radar[radar_name] = percentile_dict
+            nsamples_by_radar[radar_name] = nsamples
+
+        savedir = get_save_dir(
+            prdcfg["basepath"],
+            prdcfg["procname"],
+            dssavedir,
+            prdcfg["prdname"],
+            timeinfo=dataset["timeinfo"],
+        )
+
+        timeformat = "%Y%m%d"
+
+        plot_mode = "full" if prdcfg.get("full", True) else "overlay"
+        prdcfginfo = "-".join([rad[0] for rad in radar_data]) + f"_{plot_mode}"
+
+        figfname_list = make_filename(
+            "histogram_over_range",
+            prdcfg["dstype"],
+            prdcfg["voltype"],
+            prdcfg.get("imgformat", ["png"]),
+            prdcfginfo=prdcfginfo,
+            timeinfo=dataset["timeinfo"],
+            timeformat=timeformat,
+        )
+
+        figfname_list = [savedir + figfname for figfname in figfname_list]
+
+        plot_field_name = field_name
+        if transform_str != "x":
+            plot_field_name = f"f({field_name})"
+
+        titl = (
+            f"{plot_field_name} histogram over range\n"
+            f"{dataset['timeinfo'].strftime(timeformat)}"
+        )
+
+        if transform_str != "x":
+            titl += f"\nf(x) = {transform_str}"
+
+        plot_histogram_over_range(
+            range_bins,
+            bin_edges,
+            histograms,
+            figfname_list,
+            range_centers=range_centers,
+            percentiles_by_radar=percentiles_by_radar,
+            full=prdcfg.get("full", True),
+            field_name=plot_field_name,
+            titl=titl,
+            labelx=prdcfg.get("labelx", "Range (m)"),
+            labely=prdcfg.get("labely", plot_field_name),
+            count_label=prdcfg.get(
+                "count_label",
+                "Number of samples",
+            ),
+            cmap_full=prdcfg.get("cmap_full", "viridis"),
+            hist_vmin=prdcfg.get("hist_vmin"),
+            hist_vmax=prdcfg.get("hist_vmax"),
+            hist_vmax_percentile=prdcfg.get(
+                "hist_vmax_percentile",
+                99.0,
+            ),
+            figsize=prdcfg.get("figsize"),
+            dpi=prdcfg.get("dpi", 72),
+        )
+
+        print("----- save to " + " ".join(figfname_list))
+
+        return figfname_list
+
     if prdcfg["type"] == "BIAS_OVER_RANGE":
         """
         Plots radar intercomparison bias as a function of range.
@@ -548,6 +1107,7 @@ def generate_intercomp_products(dataset, prdcfg):
                 "rad2-rad1"
                 "rad1-rad2"
             Default: "rad2-rad1".
+            The range is expressed as a distance from the second radar in the bias convention (by default rad1!)
         bias_type : str, optional
             Type of bias-over-range product. Accepted values are:
                 "cumulative":
@@ -739,7 +1299,7 @@ def generate_intercomp_products(dataset, prdcfg):
         min_samples_per_range = prdcfg.get("min_samples_per_range", 0)
         double_conditional_threshold = prdcfg.get("double_conditional_threshold", None)
 
-        rad1_rng = np.ma.asarray(intercomp_dict["rad1_rng"])
+        rad_rng = np.ma.asarray(intercomp_dict[second_key.replace("val", "rng")])
 
         first_values_all = np.ma.asarray(intercomp_dict[first_key])
         second_values_all = np.ma.asarray(intercomp_dict[second_key])
@@ -757,8 +1317,8 @@ def generate_intercomp_products(dataset, prdcfg):
 
         for i in range(len(range_bins) - 1):
             selection = np.logical_and(
-                rad1_rng >= range_bins[i],
-                rad1_rng < range_bins[i + 1],
+                rad_rng >= range_bins[i],
+                rad_rng < range_bins[i + 1],
             )
 
             first_values = first_values_all[selection]

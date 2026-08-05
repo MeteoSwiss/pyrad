@@ -52,36 +52,58 @@ def plot_range_Doppler(
     clabel=None,
     vmin=None,
     vmax=None,
+    plot_mean_velocity=False,
+    mean_velocity_field_name=None,
 ):
     """
-    Makes a range-Doppler plot
+    Make a range-Doppler plot.
+
+    Optionally, the power-weighted mean Doppler velocity can be overlaid as a
+    function of range. For each range gate, it is calculated as
+
+        mean_velocity = sum(velocity * linear_power) / sum(linear_power)
+
+    over all valid Doppler bins.
+
+    If the weighting field is expressed in logarithmic units such as dB or
+    dBZ, it is converted to linear units before calculating the weighted
+    average.
 
     Parameters
     ----------
     spectra : radar spectra object
-        object containing the spectra or the IQ data to plot
+        Object containing the spectra or IQ data to plot.
     field_name : str
-        name of the field to plot
+        Name of the field to plot.
     ray : int
-        ray index
+        Ray index.
     prdcfg : dict
-        dictionary containing the product configuration
+        Dictionary containing the product configuration.
     fname_list : list of str
-        list of names of the files where to store the plot
-    xaxis_info : str
-        Type of x-axis. Can be 'Doppler_velocity', 'Doppler_frequency' or
-        'pulse_number'
-    titl : str or None
-        The plot title
-    clabel : str or None
-        The color bar label
-    vmin, vmax : float or None
-        The value limits
+        Names of the files where the plot will be stored.
+    xaxis_info : str, optional
+        Type of x-axis. Can be ``'Doppler_velocity'``,
+        ``'Doppler_frequency'`` or ``'pulse_number'``.
+    titl : str or None, optional
+        Plot title.
+    clabel : str or None, optional
+        Colorbar label.
+    vmin, vmax : float or None, optional
+        Color scale limits.
+    plot_mean_velocity : bool, optional
+        If True, overlay the power-weighted mean Doppler velocity at each
+        range gate. This is only supported when
+        ``xaxis_info='Doppler_velocity'``.
+    mean_velocity_field_name : str or None, optional
+        Field used as the weighting power spectrum. If None, ``field_name`` is
+        used. This allows, for example, plotting one spectral variable while
+        calculating mean velocity from spectral reflectivity or spectral
+        power.
 
     Returns
     -------
     fname_list : list of str
-        list of names of the saved plots
+        Names of the saved plots.
 
     """
     dpi = prdcfg["spectraImageConfig"].get("dpi", 72)
@@ -93,86 +115,221 @@ def plot_range_Doppler(
     velmax = prdcfg["spectraImageConfig"]["velmax"]
 
     if xaxis_info == "Doppler_velocity":
-        xaxis = spectra.Doppler_velocity["data"][ray, :].compressed()
+        xaxis = np.ma.asarray(spectra.Doppler_velocity["data"][ray, :]).compressed()
         xlabel = "Doppler velocity (m/s)"
     elif xaxis_info == "Doppler_frequency":
-        xaxis = spectra.Doppler_frequency["data"][ray, :].compressed()
+        xaxis = np.ma.asarray(spectra.Doppler_frequency["data"][ray, :]).compressed()
         xlabel = "Doppler frequency (Hz)"
     else:
         xaxis = np.arange(spectra.npulses["data"][ray])
         xlabel = "Pulse number"
 
+    if xaxis.size < 2:
+        raise ValueError(
+            "At least two Doppler bins or pulses are required to create "
+            "the range-Doppler plot."
+        )
+
     xres = np.abs(xaxis[1] - xaxis[0])
 
     yaxis = spectra.range["data"] / 1000.0
+
+    if yaxis.size < 2:
+        raise ValueError(
+            "At least two range gates are required to create the " "range-Doppler plot."
+        )
+
     yres = np.abs(yaxis[1] - yaxis[0])
     ylabel = "range (km)"
 
-    xaxis_lim = np.append(xaxis - xres / 2, xaxis[-1] + xres / 2)
-    yaxis_lim = np.append(yaxis - yres / 2, yaxis[-1] + yres / 2)
+    xaxis_lim = np.append(
+        xaxis - xres / 2.0,
+        xaxis[-1] + xres / 2.0,
+    )
+    yaxis_lim = np.append(
+        yaxis - yres / 2.0,
+        yaxis[-1] + yres / 2.0,
+    )
 
-    field_2D = spectra.fields[field_name]["data"][ray, :, 0 : xaxis.size]
+    field_2D = np.ma.asarray(spectra.fields[field_name]["data"][ray, :, 0 : xaxis.size])
 
     X, Y = np.meshgrid(xaxis_lim, yaxis_lim)
 
-    # display data
+    # Display configuration
     norm = None
     cmap = None
     ticks = None
     ticklabs = None
+
     if field_name is not None:
         field_dict = pyart.config.get_metadata(field_name)
+
         if clabel is None:
             clabel = get_colobar_label(field_dict, field_name)
 
         cmap = pyart.config.get_field_colormap(field_name)
 
         norm, ticks, ticklabs = get_norm(
-            field_name, field_dict=spectra.fields[field_name]
+            field_name,
+            field_dict=spectra.fields[field_name],
         )
+
         if vmin is None or vmax is None:
-            vmin = vmax = None
-            if norm is None:  # if norm is set do not override with vmin/vmax
+            vmin = None
+            vmax = None
+
+            # Do not combine explicit limits with a BoundaryNorm.
+            if norm is None:
                 vmin, vmax = pyart.config.get_field_limits(field_name)
         else:
             norm = None
     else:
         if clabel is None:
             clabel = "value"
+
         if vmin is None:
             vmin = np.ma.min(field_2D)
+
         if vmax is None:
             vmax = np.ma.max(field_2D)
 
     fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
+
     if titl is None:
         titl = generate_complex_range_Doppler_title(
-            spectra, field_name, ray, datetime_format=None
+            spectra,
+            field_name,
+            ray,
+            datetime_format=None,
         )
 
     ax = fig.add_subplot(111)
-    cax = ax.pcolormesh(X, Y, field_2D, cmap=cmap, vmin=vmin, vmax=vmax, norm=norm)
+
+    cax = ax.pcolormesh(
+        X,
+        Y,
+        field_2D,
+        cmap=cmap,
+        vmin=vmin,
+        vmax=vmax,
+        norm=norm,
+    )
+
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_title(titl)
 
-    if not (velmin is None or velmax is None):
+    if velmin is not None and velmax is not None:
         ax.set_xlim([velmin, velmax])
-    if not (ymin is None or ymax is None):
+
+    if ymin is not None and ymax is not None:
         ax.set_ylim([ymin, ymax])
 
     cb = fig.colorbar(cax)
+
     if ticks is not None:
         cb.set_ticks(ticks)
+
     if ticklabs:
         cb.set_ticklabels(ticklabs)
+
     cb.set_label(clabel)
 
-    # Make a tight layout
+    # Overlay the power-weighted mean Doppler velocity.
+    if plot_mean_velocity:
+        if xaxis_info != "Doppler_velocity":
+            raise ValueError(
+                "The mean Doppler velocity can only be plotted when "
+                "xaxis_info='Doppler_velocity'."
+            )
+
+        if mean_velocity_field_name is None:
+            mean_velocity_field_name = field_name
+
+        if mean_velocity_field_name not in spectra.fields:
+            raise ValueError(
+                f"Weighting field '{mean_velocity_field_name}' is not "
+                "available in the spectra object."
+            )
+
+        weighting_field = spectra.fields[mean_velocity_field_name]
+        spectral_weights = np.ma.asarray(
+            weighting_field["data"][ray, :, 0 : xaxis.size],
+            dtype=float,
+        )
+
+        # Ensure that invalid numerical values are masked.
+        spectral_weights = np.ma.masked_invalid(spectral_weights)
+
+        units = str(weighting_field.get("units", "")).lower()
+        field_name_lower = mean_velocity_field_name.lower()
+
+        is_logarithmic = (
+            "db" in units
+            or "decibel" in units
+            or "dbz" in units
+            or "db" in field_name_lower
+        )
+
+        if is_logarithmic:
+            # Convert dB quantities to linear power before integration.
+            linear_weights = np.ma.power(10.0, spectral_weights / 10.0)
+        else:
+            # Linear power or reflectivity values can be used directly.
+            linear_weights = spectral_weights.copy()
+
+        # Negative linear powers are not physically meaningful as weights.
+        linear_weights = np.ma.masked_less_equal(linear_weights, 0.0)
+
+        velocity_2D = np.broadcast_to(
+            xaxis[np.newaxis, :],
+            linear_weights.shape,
+        )
+
+        weighted_velocity_sum = np.ma.sum(
+            linear_weights * velocity_2D,
+            axis=1,
+        )
+        power_sum = np.ma.sum(linear_weights, axis=1)
+
+        mean_velocity = np.ma.divide(
+            weighted_velocity_sum,
+            power_sum,
+        )
+
+        mean_velocity = np.ma.masked_where(
+            np.ma.filled(power_sum, 0.0) <= 0.0,
+            mean_velocity,
+        )
+        mean_velocity = np.ma.masked_invalid(mean_velocity)
+
+        line_color = prdcfg["spectraImageConfig"].get(
+            "mean_velocity_color",
+            "white",
+        )
+        line_width = prdcfg["spectraImageConfig"].get(
+            "mean_velocity_linewidth",
+            1.0,
+        )
+        line_style = prdcfg["spectraImageConfig"].get(
+            "mean_velocity_linestyle",
+            "--",
+        )
+
+        ax.plot(
+            mean_velocity,
+            yaxis,
+            color=line_color,
+            linewidth=line_width,
+            linestyle=line_style,
+            zorder=10,
+        )
+
     fig.tight_layout()
 
     for fname in fname_list:
         fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+
     plt.close(fig)
 
     return fname_list
