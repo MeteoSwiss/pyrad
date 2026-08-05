@@ -40,6 +40,7 @@ _CARTOPY_AVAILABLE = False
 try:
     import cartopy
     from cartopy.io.img_tiles import GoogleTiles
+    from cartopy.mpl.geoaxes import GeoAxes
     from PIL import Image
 
     # Define ESRI terrain tiles
@@ -86,6 +87,7 @@ try:
 
     _CARTOPY_AVAILABLE = True
 except ImportError:
+    GeoAxes = ()  # Cartopy unavailable
     pass
 
 try:
@@ -823,3 +825,44 @@ def get_norm(field_name, field_dict={}, isxarray=False):
         if "labels" in ref_dict:
             ticklabs = ref_dict["labels"]
     return norm, ticks, ticklabs
+
+
+def get_main_map_axis(fig):
+    """
+    Return the most likely main plotting axis from a figure.
+
+    The function prioritizes Cartopy ``GeoAxes`` instances. If no GeoAxes is
+    present, it searches for a non-colorbar axis containing plotted artists.
+    As a final fallback, it returns the first non-colorbar axis.
+
+    Parameters
+    ----------
+    fig : matplotlib.figure.Figure
+        Figure from which to retrieve the main plotting axis.
+
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The selected plotting axis. This may be a Cartopy
+        ``cartopy.mpl.geoaxes.GeoAxes`` instance.
+    """
+    axes = fig.get_axes()
+
+    # 1. Prefer a Cartopy GeoAxes
+    for ax in axes:
+        if GeoAxes and isinstance(ax, GeoAxes):
+            return ax
+
+    # Remove colorbar axes
+    candidates = [ax for ax in axes if ax.get_label() != "<colorbar>"]
+
+    # 2. Prefer an axis that actually contains plotted artists
+    for ax in candidates:
+        if ax.images or ax.collections or ax.lines or ax.patches:
+            return ax
+
+    # 3. Fall back to the first non-colorbar axis
+    if candidates:
+        return candidates[0]
+
+    raise RuntimeError("The figure does not contain a suitable plotting axis.")
