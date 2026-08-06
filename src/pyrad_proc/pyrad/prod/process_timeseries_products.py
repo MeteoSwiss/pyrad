@@ -396,6 +396,7 @@ def generate_timeseries_products(dataset, prdcfg):
         # ---- extract radar time series ----
         series_list = []
         dates_list = []
+        labels = []
         for radar_key in radar_keys:
             values = dataset[radar_key].get("value", None)
             times = dataset[radar_key].get("time", None)
@@ -419,6 +420,8 @@ def generate_timeseries_products(dataset, prdcfg):
 
             series_list.append(values)
             dates_list.append(times)
+            # Get radar name according to radar key
+            labels.append(radar_names[int(radar_key[-1]) - 1])
 
         # ---- plot ----
         title = f"Time Series {label} {date[0].strftime('%Y-%m-%d')}"
@@ -430,7 +433,7 @@ def generate_timeseries_products(dataset, prdcfg):
             figfname_list,
             labelx="Time UTC",
             labely=labely,
-            labels=radar_names,
+            labels=labels,
             title=title,
             dpi=dpi,
             ymin=vmin,
