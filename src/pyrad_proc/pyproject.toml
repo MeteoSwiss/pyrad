@@ -186,9 +186,9 @@ addopts = [
 # Version
 # ----------------------------------------------------------------------
 [tool.versioningit]
-vcs = "git-archive"
 
 [tool.versioningit.vcs]
+method = "git-archive"
 describe-subst = "$Format:%(describe:tags)$"
 
 [tool.versioningit.tag2version]
