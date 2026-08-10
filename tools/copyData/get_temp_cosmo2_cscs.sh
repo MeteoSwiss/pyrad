@@ -1,6 +1,6 @@
 #!/bin/bash
 # get_temp_cosmo2_cscs.sh
-# This script: 
+# This script:
 # Gets COSMO-2 temperature file from CSCS and puts it radar coordinates
 # created 20.06.2017 (fvj)
 
@@ -31,7 +31,7 @@ while [[ $# -gt 1 ]]
 do
     key="$1"
 
-    case $key in        
+    case $key in
         -d|--day)
         DAY="$2"
         OIFS=$IFS
@@ -47,7 +47,7 @@ do
         read -r -a hour_run <<< "$RUN"
         IFS=$OIFS
         shift # past argument
-        ;;        
+        ;;
         -r|--radar)
         radar="$2"
         shift # past argument
@@ -67,9 +67,9 @@ nhour=${#hour_run[@]}
 date
 
 for ((iday=0; iday<${nday}; iday++)); do
-    for ((ihour=0; ihour<${nhour}; ihour++)); do		
+    for ((ihour=0; ihour<${nhour}; ihour++)); do
         if [ $radar != "None" ]
-        then                    
+        then
             temp_cosmo_radar=${radar}
             temp_cosmo_res=${res}
             temp_cosmo_year=$(date --date "${date_vec[${iday}]}" +"%y")

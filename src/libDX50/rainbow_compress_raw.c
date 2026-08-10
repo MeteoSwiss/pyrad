@@ -8,8 +8,8 @@
   Filename:         rainbow_compress_raw.c
   Author:           Jordi Figueras i Ventura
   Creation date:    2015-01-15
-  Last update:      
-    
+  Last update:
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus
@@ -20,7 +20,7 @@
 
   Description:
   ------------
-  
+
   *************************************************************
   =============================================================
  */
@@ -33,7 +33,7 @@
 #include "qCompress.h"
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 	/**
@@ -48,25 +48,25 @@ extern "C"
 	{
 		return qCompressBound(nbytesudata, nbytescdata);
 	}
-	
+
 	/**
 	* Compress data
 	*
 	* @param  nbytesudata	number of bytes of uncompressed data
 	* @param  udata			pointer to uncompressed data
 	* @param  nbytescdata   variable where to store the number of bytes of compressed data
-	* @param  cdata      	Pointer where to store the compressed data	
+	* @param  cdata      	Pointer where to store the compressed data
 	*
 	* @return 0 on success, -1 otherwise
 	*/
 	int rainbow_compressData(const unsigned long nbytesudata, const unsigned char *udata, unsigned long *nbytescdata, unsigned char *cdata)
-	{	
+	{
 		int i, ok;
 		unsigned char* buf;
 		unsigned long nbytesalloc;
-		
-		nbytesalloc=*nbytescdata;		
-		
+
+		nbytesalloc=*nbytescdata;
+
 		ok=qCompress(nbytesudata, udata, nbytescdata, &buf);
 		if (ok < 0)
 		{
@@ -79,16 +79,16 @@ extern "C"
 			return -2;
 		}
 		for (i=0; i<*nbytescdata; i++)
-		{ 
+		{
 			//printf("%u\r\n", *cdata);
 			*cdata=*buf;
 			buf++;
 			cdata++;
 		}
-		return ok; 
+		return ok;
 	}
-	
-	
+
+
 
 #ifdef __cplusplus
 } /* extern "C" */

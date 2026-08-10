@@ -28,7 +28,7 @@ from pathlib import Path
 
 from pyart import __version__ as pyart_version
 
-from .. import version as pyrad_version
+from .._version import __version__ as pyrad_version
 from ..io.io_aux import get_datetime
 from ..io.read_data_other import read_last_state
 from ..io.write_data import write_last_state
@@ -128,14 +128,8 @@ def main(
         memory used is released.
 
     """
-    print(
-        "- PYRAD version: {} (compiled {} by {})".format(
-            pyrad_version.version,
-            pyrad_version.compile_date_time,
-            pyrad_version.username,
-        )
-    )
-    print("- PYART version: {}".format(pyart_version))
+    print(f"- PYRAD version: {pyrad_version}")
+    print(f"- PYART version: {pyart_version}")
 
     # Define behaviour of warnings
     warnings.simplefilter("always")  # always print matching warnings
@@ -387,15 +381,8 @@ def main_rt(
         If true the program has ended successfully
 
     """
-    print(
-        "- PYRAD version: %s (compiled %s by %s)"
-        % (
-            pyrad_version.version,
-            pyrad_version.compile_date_time,
-            pyrad_version.username,
-        )
-    )
-    print("- PYART version: " + pyart_version)
+    print(f"- PYRAD version: {pyrad_version}")
+    print(f"- PYART version: {pyart_version}")
 
     if hide_warnings:
         warnings.filterwarnings("ignore")
@@ -692,14 +679,8 @@ def main_icon(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
         (e.g. 'RUN57'). This string is added to product files.
 
     """
-    print(
-        "- PYRAD version: {} (compiled {} by {})".format(
-            pyrad_version.version,
-            pyrad_version.compile_date_time,
-            pyrad_version.username,
-        )
-    )
-    print("- PYART version: {}".format(pyart_version))
+    print(f"- PYRAD version: {pyrad_version}")
+    print(f"- PYART version: {pyart_version}")
 
     # Define behaviour of warnings
     warnings.simplefilter("always")  # always print matching warnings
@@ -737,8 +718,7 @@ def main_icon(cfgfile, starttime=None, endtime=None, trajfile="", infostr=""):
     nvolumes = len(masterfilelist)
     if nvolumes == 0:
         raise ValueError(
-            "ERROR: Could not find any valid COSMO data between "
-            "{} and {}".format(
+            "ERROR: Could not find any valid COSMO data between {} and {}".format(
                 starttimes[0].strftime("%Y-%m-%d %H:%M:%S"),
                 endtimes[-1].strftime("%Y-%m-%d %H:%M:%S"),
             )
@@ -801,15 +781,8 @@ def main_icon_rt(
         If true the program has ended successfully
 
     """
-    print(
-        "- PYRAD version: %s (compiled %s by %s)"
-        % (
-            pyrad_version.version,
-            pyrad_version.compile_date_time,
-            pyrad_version.username,
-        )
-    )
-    print("- PYART version: " + pyart_version)
+    print(f"- PYRAD version: {pyrad_version}")
+    print(f"- PYART version: {pyart_version}")
 
     # Define behaviour of warnings
     warnings.simplefilter("always")  # always print matching warnings
@@ -1044,15 +1017,8 @@ def main_gecsx(cfgfile, starttime=None, endtime=None, infostr="", gather_plots=T
         "longitude",
     ]
 
-    print(
-        "- PYRAD version: {} (compiled {} by {})".format(
-            pyrad_version.version,
-            pyrad_version.compile_date_time,
-            pyrad_version.username,
-        )
-    )
-    print("- PYART version: {}".format(pyart_version))
-
+    print(f"- PYRAD version: {pyrad_version}")
+    print(f"- PYART version: {pyart_version}")
     # Define behaviour of warnings
     warnings.simplefilter("always")  # always print matching warnings
     # warnings.simplefilter('error')  # turn matching warnings into exceptions

@@ -85,9 +85,9 @@ To install Pyrad and its submodules please have a look at the [Pyrad user manual
 # Use
 Before using it have a look at the [cookbook (pdf)](./additional_doc/pyrad-framework-cookbook/DataProcessing.pdf).
 
-For details on the implemented functions and a list of all pyrad features please check the [pyrad library reference for users](https://meteoswiss.github.io/pyrad/). 
+For details on the implemented functions and a list of all pyrad features please check the [pyrad library reference for users](https://meteoswiss.github.io/pyrad/).
 
-Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing) and in the dedicated [examples repository](https://github.com/MeteoSwiss/pyrad-examples). 
+Example configuration files can be found in the repository directory [pyrad/config/processing/](./config/processing) and in the dedicated [examples repository](https://github.com/MeteoSwiss/pyrad-examples).
 
 To use Pyrad for data quality monitoring check the report [pyrad_monitoring_fvj.pdf](./additional_doc/pyrad_monitoring_fvj.pdf).
 
@@ -112,10 +112,9 @@ The core of Pyrad is based on Py-ART. Py-ART was originally developed in the con
 
 J.J. Helmus, S.M. Collis, (2016). The Python ARM Radar Toolkit (Py-ART), a Library for Working with Weather Radar Data in the Python Programming Language. Journal of Open Research Software. 4(1), p.e25. DOI: http://doi.org/10.5334/jors.119
 
-J. Figueras i Ventura, M. Lainer, Z. Schauwecker, J. Grazioli, U. Germann, (2020). Pyrad: A Real-Time Weather Radar Data Processing Framework Based on Py-ART. Journal of Open Research Software, 8(1), p.28. DOI: http://doi.org/10.5334/jors.330 
+J. Figueras i Ventura, M. Lainer, Z. Schauwecker, J. Grazioli, U. Germann, (2020). Pyrad: A Real-Time Weather Radar Data Processing Framework Based on Py-ART. Journal of Open Research Software, 8(1), p.28. DOI: http://doi.org/10.5334/jors.330
 
 # Disclaimer
 The software is still in a development stage. Please let us know if you would like to test it.
 
 MeteoSwiss cannot be held responsible for errors in the code or problems that could arise from its use.
-

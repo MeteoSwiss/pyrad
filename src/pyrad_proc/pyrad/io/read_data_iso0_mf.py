@@ -238,9 +238,7 @@ def get_iso0_ref(radar, iso0_data, time_index, statistic="avg_by_dist"):
     npoints_iso0 = iso0_data["npoints_iso0"][time_index]
     if npoints_iso0 == 0:
         # iso 0 below ground level: we take the radar altitude as reference
-        warn(
-            "iso-0 below ground level. " "The radar altitude will be used as reference"
-        )
+        warn("iso-0 below ground level. The radar altitude will be used as reference")
         return radar.altitude["data"][0]
 
     if statistic == "avg":

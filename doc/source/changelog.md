@@ -66,7 +66,7 @@
 
 **Bug corrections**
 
-- [fix of a bug where vmin and vmax were not applied to lat/lon grid profiles](https://github.com/MeteoSwiss/pyrad/commit/31cc9d2a3dd915a3dbe05f9aade9f7f5dbc50ecb) 
+- [fix of a bug where vmin and vmax were not applied to lat/lon grid profiles](https://github.com/MeteoSwiss/pyrad/commit/31cc9d2a3dd915a3dbe05f9aade9f7f5dbc50ecb)
 - [ fix in plots_grid.py for barbs DDA plots](https://github.com/MeteoSwiss/pyrad/commit/44bd2310fe683541d34f32c0762c9633203df73a)
 - [fix for file locking issue on NFS systems for timeseries csv files](https://github.com/MeteoSwiss/pyrad/commit/95cd7e19059b4b6eb85cf67fb45287808e229fa8)
 - [deprecation fixes for latest numpy version](https://github.com/MeteoSwiss/pyrad/commit/e5865f3f05c96762e8f0917018e12e7644e380dd)
@@ -111,13 +111,13 @@
 
 
 **New additions:**
-- [added DDA process and DDA_LONGITUDE_SLICE DDA_LATITUDE_SLICE DDA_MAP products](https://github.com/MeteoSwiss/pyrad/commit/5bbb84d9f752a8466ce450bc9cc378366cad8e93) 
-- [added possibility to specify selfconsistencypath + added poor support of NFS mounts in file locking](https://github.com/MeteoSwiss/pyrad/commit/f05f3d7a9772383c5bf8ba7edda8372239267c15) 
-- [added exact_limits keyword in loc file to display exactly user-specified lon_lines and lat_lines](https://github.com/MeteoSwiss/pyrad/commit/1bd4b4789193894456a2b2c14a62b53ecc5cdbe7) 
+- [added DDA process and DDA_LONGITUDE_SLICE DDA_LATITUDE_SLICE DDA_MAP products](https://github.com/MeteoSwiss/pyrad/commit/5bbb84d9f752a8466ce450bc9cc378366cad8e93)
+- [added possibility to specify selfconsistencypath + added poor support of NFS mounts in file locking](https://github.com/MeteoSwiss/pyrad/commit/f05f3d7a9772383c5bf8ba7edda8372239267c15)
+- [added exact_limits keyword in loc file to display exactly user-specified lon_lines and lat_lines](https://github.com/MeteoSwiss/pyrad/commit/1bd4b4789193894456a2b2c14a62b53ecc5cdbe7)
 - [added info on searched file directory if no file was found](https://github.com/MeteoSwiss/pyrad/commit/ce67680ee9faee6b466e16d95382543e42ff0285)
 - [added RADARV path convention for windcube lidar data (CFRADIAL2)](https://github.com/MeteoSwiss/pyrad/commit/052ea9a228a44b9a7f7e48e364083264ff4e8808)
-- [added script under ci that generates pyrad var name mappings references under doc/mappings](https://github.com/MeteoSwiss/pyrad/commit/837c2622da247ddd75aadab9bdf948afb01423c3) 
-- [added possibility to specify nyquist velo in process_dealias_region_based](https://github.com/MeteoSwiss/pyrad/commit/522ab3e056b5891846da1827a0337efbc025d807) 
+- [added script under ci that generates pyrad var name mappings references under doc/mappings](https://github.com/MeteoSwiss/pyrad/commit/837c2622da247ddd75aadab9bdf948afb01423c3)
+- [added possibility to specify nyquist velo in process_dealias_region_based](https://github.com/MeteoSwiss/pyrad/commit/522ab3e056b5891846da1827a0337efbc025d807)
 - [added the GECSX datatype to read pyrad GECSX input for visibility filter](https://github.com/MeteoSwiss/pyrad/commit/6fa2d8fd4c028dea0bc1eb6d8bef85a7a164a1e8)
 
 ## v1.7
@@ -139,10 +139,10 @@
 
 **Bug fixes:**
  - changed the number of colors from cmap.N to len(boundaries) – 1 in get_cmap to avoid colorbar issues with discrete colorbars
- - fixed a bug that made it impossible to use any other method than main in flow_control.py 
+ - fixed a bug that made it impossible to use any other method than main in flow_control.py
  - set xlim and ylim of grid surface plots to the min/max of user defined lat/lon (this step was missing since the last release)
   - correction of a bug that did not allow import of pyrad when the metranet library was mssing
- 
+
 **New additions:**
 - change in function process_point_measurement: When Truealt is false input keyword alt is not required and the output alt will be determined by the elevation angle
  - added new user-defined parameters in VPR correction scheme
@@ -151,4 +151,3 @@
 -  new functions to accumulate gridded data and get data at multiple points in a grid
 - added ODIMGRID keyword to be able to ingest gridded data from ODIM files
 - added keyword MasterScanTimeTol that allows to combine ODIM files from different scans not having the same nominal time in file name
-

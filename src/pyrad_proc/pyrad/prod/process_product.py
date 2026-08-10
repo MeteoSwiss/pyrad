@@ -104,7 +104,7 @@ def generate_occurrence_products(dataset, prdcfg):
             or ("occurrence" not in radar.fields)
             or ("number_of_samples" not in radar.fields)
         ):
-            warn("Unable to create quantile excess gates file. " "Missing data")
+            warn("Unable to create quantile excess gates file. Missing data")
             return None
 
         dssavedir = prdcfg["dsname"]
@@ -722,19 +722,17 @@ def generate_sun_hits_products(dataset, prdcfg):
             "sun_az:             [deg] Azimuth sun position ",
             "sun_el:             [deg] Elevation sun position",
             "noise_pwr:          [dBm] Noise power",
-            "sun_maxpwr_noise:   [dBm]" " sun maximal power sample (including noise)",
-            "sun_maxpwr_nonoise: [dBm]" " sun maximal power sample without noise",
-            "sun_maxpwr_fit:     [dBm]" " sun maximal fitted power (without noise)",
-            "sun_maxpwr_toa:     [dBm]" " sun maximal power at top of atmosphere",
-            "az_offset:          [deg]"
-            " Azimuth shift of fitted maxima to sun azimuth",
+            "sun_maxpwr_noise:   [dBm] sun maximal power sample (including noise)",
+            "sun_maxpwr_nonoise: [dBm] sun maximal power sample without noise",
+            "sun_maxpwr_fit:     [dBm] sun maximal fitted power (without noise)",
+            "sun_maxpwr_toa:     [dBm] sun maximal power at top of atmosphere",
+            "az_offset:          [deg] Azimuth shift of fitted maxima to sun azimuth",
             "el_offset:          [deg]"
             " Elevation shift of fitted maxima to sun elevation",
-            "az_phi3db:          [deg]" " Half-power beam width in azimuth",
-            "el_phi3db:          [deg]" " Half-power beam width in elevation",
-            "fit_stddev:         [dBm]" " Standard deviation (fit to samples)",
-            "num_samples:        [#]"
-            " Number of samples used for the sun power fitting",
+            "az_phi3db:          [deg] Half-power beam width in azimuth",
+            "el_phi3db:          [deg] Half-power beam width in elevation",
+            "fit_stddev:         [dBm] Standard deviation (fit to samples)",
+            "num_samples:        [#] Number of samples used for the sun power fitting",
         ]
 
         sunRdata = dataset["sun_retrieval"]

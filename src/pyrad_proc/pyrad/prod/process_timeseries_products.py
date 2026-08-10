@@ -869,7 +869,7 @@ def generate_timeseries_products(dataset, prdcfg):
             warn("Unable to compare at POI. No valid sensor data")
             return None
 
-        label_sensor = f"{sensortype} {prdcfg.get('sensorid','')}"
+        label_sensor = f"{sensortype} {prdcfg.get('sensorid', '')}"
 
         # Sensor dataframe
         df_s = (

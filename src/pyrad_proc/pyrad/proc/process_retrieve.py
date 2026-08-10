@@ -1085,13 +1085,13 @@ def process_vpr(procstatus, dscfg, radar_list=None):
     # Check which should be the reference field for temperature
     if iso0_field is not None:
         if iso0_field not in radar.fields:
-            warn("Unable to detect melting layer. " "Missing height over iso0 field")
+            warn("Unable to detect melting layer. Missing height over iso0 field")
             return None, None
         temp_ref = "height_over_iso0"
 
     if temp_field is not None:
         if temp_field not in radar.fields:
-            warn("Unable to detect melting layer. " "Missing temperature field")
+            warn("Unable to detect melting layer. Missing temperature field")
             return None, None
         temp_ref = "temperature"
 
@@ -1152,7 +1152,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                 ml_datatypedescr, [dscfg["timeinfo"]], [dscfg["timeinfo"]], dscfg
             )
             if not flist:
-                warn("unable to find files containing" " melting layer information")
+                warn("unable to find files containing melting layer information")
                 iso0 = None
             else:
                 radar_ml = pyart.io.read_cfradial(flist[0])
@@ -1160,7 +1160,7 @@ def process_vpr(procstatus, dscfg, radar_list=None):
                     warn("Unable to use retrieved melting layer data")
                     iso0 = None
                 else:
-                    print(f"Using file {flist[0]} " f"with melting layer information")
+                    print(f"Using file {flist[0]} with melting layer information")
                     iso0 = np.ma.mean(
                         radar_ml.fields["melting_layer_height"]["data"][:, 1]
                     )
@@ -1711,7 +1711,7 @@ def process_rainfall_accumulation(procstatus, dscfg, radar_list=None):
         radar = radar_list[ind_rad]
 
         if field_name not in radar.fields:
-            warn("ERROR: Unable to compute rainfall accumulation. " "Missing data")
+            warn("ERROR: Unable to compute rainfall accumulation. Missing data")
             return None, None
 
         # Prepare auxiliary radar

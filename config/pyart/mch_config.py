@@ -1014,9 +1014,7 @@ DEFAULT_METADATA = {
     },
     "prt": {
         "units": "seconds",
-        "comments": (
-            "Pulse repetition time. For staggered prt, " "also see prt_ratio."
-        ),
+        "comments": ("Pulse repetition time. For staggered prt, also see prt_ratio."),
         "meta_group": "instrument_parameters",
         "long_name": "Pulse repetition time",
     },
@@ -3331,12 +3329,6 @@ DEFAULT_METADATA = {
         "long_name": ("indices of the HZT corresponding to each radar gate"),
         "coordinates": "elevation azimuth range",
     },
-    visibility: {
-        "units": "percent",
-        "standard_name": "visibility",
-        "long_name": "visibility",
-        "coordinates": "elevation azimuth range",
-    },
     mininum_visible_elevation: {
         "units": "deg",
         "standard_name": "mininum_visible_elevation",
@@ -3420,7 +3412,7 @@ DEFAULT_METADATA = {
         "units": "-",
         "standard_name": "atmospherical_structures_type",
         "long_name": (
-            "Atmospherical structures detected out of the planetary boundary" " layer."
+            "Atmospherical structures detected out of the planetary boundary layer."
         ),
         # ND: No data, RL: residual layer, ML: mixed layer,
         # UC: unclassified cloud, IC: ice cloud, WC: water cloud,

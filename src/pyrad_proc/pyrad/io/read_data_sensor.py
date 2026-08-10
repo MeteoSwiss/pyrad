@@ -2844,7 +2844,7 @@ def retrieve_radiosounding_mch(station, dtime):
 
     # Build DWH command
     ret_dwh = (
-        f'{os.path.expandvars("$JRETRIEVE_PATH")} -s profile -w 22 --verbose position '
+        f"{os.path.expandvars('$JRETRIEVE_PATH')} -s profile -w 22 --verbose position "
         f"-i int_ind,{station} "
         f"-t {dtime_closest} -p {id_variables}"
     )

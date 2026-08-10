@@ -192,7 +192,7 @@
 #define IDL_SIZEOF_C_PTR	4
 #endif
 
-      
+
 #ifdef FALSE
 #undef FALSE
 #endif
@@ -225,7 +225,7 @@
 #define IDL_STDCALL
 #define IDL_CDECL
 #endif
- 
+
 
 /*
  * Some platforms support tty based user interaction (Unix)
@@ -301,7 +301,7 @@ typedef long IDL_PTRINT;
 typedef unsigned char UCHAR;	/* Unsigned character type */
 #endif
 
-/* Boolean. */ 
+/* Boolean. */
 typedef enum {
     IDL_FALSE = 0,
     IDL_TRUE = 1
@@ -413,7 +413,7 @@ typedef IDL_ULONG IDL_HVID;
 /* This macro turns it's argument into its bit mask equivalent.
  * The argument type_code should be one of the type codes defined
  * above.
-*/ 
+*/
 #define IDL_TYP_MASK(type_code)      (1 << type_code)
 
 
@@ -1009,7 +1009,7 @@ typedef void (* IDL_EXIT_HANDLER_FUNC)(void);
 /* This macro turns it's argument into a bit mask suitable for
  * the allowed_dims field of IDL_EZ_ARG. The argument dim_code should be
  * 0 for scalar, 1 for 1D, 2 for 2D, etc...
- */ 
+ */
 #define IDL_EZ_DIM_MASK(dim_code)   (1 << dim_code)
 
 /* Define type mask of all numeric types: */
@@ -1142,7 +1142,7 @@ typedef struct {
 #define IDL_TICKLAYOUT_STANDARD    0  /* Tick layout styles */
 #define IDL_TICKLAYOUT_NOAXISLINES 1
 #define IDL_TICKLAYOUT_BOXOUTLINE  2
-  
+
 typedef struct {		/* System variable for axis */
   IDL_STRING title;		/* Axis title */
   int type;			/* 0 = normal linear, 1=log. */
@@ -1164,9 +1164,9 @@ typedef struct {		/* System variable for axis */
   IDL_STRING annot[IDL_MAX_TICKN];   /* Annotation */
   IDL_LONG gridstyle;		/* tick linestyle */
   IDL_STRING format[IDL_MAX_TICKUNIT_COUNT]; /* Axis label format/procedure */
-  double tickinterval;          /* Interval between major ticks */    
+  double tickinterval;          /* Interval between major ticks */
   IDL_LONG ticklayout;          /* Layout style for the ticks of the axis. */
-  IDL_STRING tickunits[IDL_MAX_TICKUNIT_COUNT];    
+  IDL_STRING tickunits[IDL_MAX_TICKUNIT_COUNT];
 				/* Units for each axis level */
 
   /* After here, the elements are not accessible to the user via
@@ -1204,18 +1204,18 @@ typedef struct {		/* System variable for axis */
 
 typedef union {			/* Describe a point: */
 
-  struct {			
+  struct {
     float x,y,z,h;
   } d;                          /* Single precision point,
 				 * referenced by .x, .y, etc., in
 				 * homogeneous coordinates. */
 
-  struct {			
+  struct {
     int x,y;
   } i;                          /* Integer point,
 				 * referenced by .x and .y. */
 
-  struct {                      
+  struct {
 
     double x,y,z,h;
   } d_s;                        /* Double precision point,
@@ -1233,8 +1233,8 @@ typedef union {			/* Describe a point: */
     float z, h;
   } dev;                        /* Device coordinate (x,y) plus Z value
 				 *  (for devices that support a Z-buffer),
-				 *  and homogeneous coordinate (for 
-				 *  transform of texture coordinates). */ 
+				 *  and homogeneous coordinate (for
+				 *  transform of texture coordinates). */
 } IDL_GR_PT;
 
 typedef enum {
@@ -1257,7 +1257,7 @@ typedef struct {
 	IDL_GR_PT origin;
 	IDL_GR_PT size;
 } IDL_GR_BOX;
-    
+
 typedef struct {		/* Attributes structure for points & lines */
   IDL_ULONG color;		/* Specifys all that can go wrong w/ graphic */
   float thick;
@@ -2096,7 +2096,7 @@ typedef void (* IDL_TOUT_OUTF)(int flags, char *buf, int n);
 #define IDL_TOUT_MORE_RSP_QUIT	0   /* Quit */
 #define IDL_TOUT_MORE_RSP_PAGE	1   /* Continue for another page */
 #define IDL_TOUT_MORE_RSP_LINE	2   /* Continue for a single line */
-     
+
 #endif				/* tout_IDL_DEF */
 
 
@@ -2175,7 +2175,7 @@ typedef void (* IDL_TOUT_OUTF)(int flags, char *buf, int n);
 
 
 #define IDL_INIT_NOTTYEDIT	(1 << 15)
-				/* Prevents IDL from using termcap/terminfo to 
+				/* Prevents IDL from using termcap/terminfo to
 				   handle command line editing, and disables
 				   the use of the SIGWINCH signal to track
 				   the current tty size. This is usually what
@@ -2307,7 +2307,7 @@ typedef void (* IDL_WIDGET_STUB_SET_SIZE_FUNC)
 #define IDL_F_MAC_BINARY     ((IDL_SFILE_FLAGS_T) 0)
 
 
-  
+
 /* Sets the IDL_F_NOCLOSE bit for file unit. */
 #define IDL_FILE_NOCLOSE(unit) IDL_FileSetClose((unit), FALSE)
 
@@ -2445,7 +2445,7 @@ typedef struct {
 #define IDL_BZERO_ARRAY(zero_arr) bzero((char *) (zero_arr), sizeof(zero_arr))
 #define IDL_BZERO_BYADDR(zero_var_addr) \
   bzero((char *) (zero_var_addr), sizeof(*(zero_var_addr)))
-     
+
 
 /*
  * Solaris has these functions starting with Solaris 8. No one else
@@ -2617,8 +2617,8 @@ extern IDL_VPTR IDL_CDECL IDL_CvtDComplex(int argc, IDL_VPTR argv[]);
 extern IDL_VPTR IDL_CDECL IDL_CvtString(int argc, IDL_VPTR argv[], char
         *argk);
 extern IDL_LONG IDL_CDECL IDL_grMesh_Clip(float fPlane[4], short clipSide,
-         float *pfVin, IDL_LONG iNVerts,  IDL_LONG *piCin, IDL_LONG iNConn, 
-        float **pfVout, IDL_LONG *iNVout,  IDL_LONG **piCout, IDL_LONG *iNCout, 
+         float *pfVin, IDL_LONG iNVerts,  IDL_LONG *piCin, IDL_LONG iNConn,
+        float **pfVout, IDL_LONG *iNVout,  IDL_LONG **piCout, IDL_LONG *iNCout,
         IDL_VPTR vpAuxInKW, IDL_VPTR vpAuxOutKW,  IDL_VPTR vpCut);
 extern int IDL_CDECL IDL_KWProcessByOffset(int argc, IDL_VPTR *argv, char
         *argk, IDL_KW_PAR *kw_list, IDL_VPTR *plain_args,  int mask, void *base);
@@ -2637,14 +2637,14 @@ extern void IDL_CDECL IDL_RasterDrawThick(IDL_GR_PT *p0, IDL_GR_PT *p1,
         IDL_ATTR_STRUCT *a,  IDL_DEVCORE_FCN_POLYFILL routine,  int dot_width);
 extern void IDL_CDECL IDL_RasterPolyfill(int *x, int *y, int n,
         IDL_POLYFILL_ATTR *p, IDL_RASTER_DEF *r);
-extern void IDL_CDECL IDL_RasterDraw(IDL_GR_PT *p0, IDL_GR_PT *p1, 
+extern void IDL_CDECL IDL_RasterDraw(IDL_GR_PT *p0, IDL_GR_PT *p1,
         IDL_ATTR_STRUCT *a, IDL_RASTER_DEF *r);
 extern void IDL_CDECL IDL_Raster8Image(UCHAR *data, IDL_ULONG nx,
         IDL_ULONG ny,  IDL_ULONG x0, IDL_ULONG y0,  IDL_ULONG xsize, IDL_ULONG
         ysize,  IDL_TV_STRUCT *secondary,  IDL_RASTER_DEF *rs,  IDLBool_t
         bReverse);
 extern void IDL_CDECL IDL_RasterImage(UCHAR *data, IDL_ULONG nx, IDL_ULONG
-        ny,  IDL_ULONG x0, IDL_ULONG y0,  IDL_ULONG xsize, IDL_ULONG ysize, 
+        ny,  IDL_ULONG x0, IDL_ULONG y0,  IDL_ULONG xsize, IDL_ULONG ysize,
         IDL_TV_STRUCT *secondary,  IDL_RASTER_DEF *rs,  IDLBool_t bReverse);
 extern void IDL_CDECL IDL_Dither(UCHAR *data, int ncols, int nrows,
         IDL_RASTER_DEF *r, int x0, int y0, IDL_TV_STRUCT *secondary);
@@ -2658,7 +2658,7 @@ extern char *IDL_CDECL IDL_VarGetString(IDL_VPTR v);
 extern IDL_VPTR IDL_CDECL IDL_ImportArray(int n_dim, IDL_MEMINT dim[], int
         type, UCHAR *data, IDL_ARRAY_FREE_CB free_cb,  IDL_StructDefPtr s);
 extern IDL_VPTR IDL_CDECL IDL_ImportNamedArray(char *name, int n_dim,
-        IDL_MEMINT dim[],  int type, UCHAR *data,  IDL_ARRAY_FREE_CB free_cb, 
+        IDL_MEMINT dim[],  int type, UCHAR *data,  IDL_ARRAY_FREE_CB free_cb,
         IDL_StructDefPtr s);
 extern void IDL_CDECL IDL_Delvar(IDL_VPTR var);
 extern IDL_VPTR IDL_CDECL IDL_VarTypeConvert(IDL_VPTR v, IDL_REGISTER int
@@ -2694,7 +2694,7 @@ extern int IDL_CDECL IDL_FileTermColumns(void);
 extern int IDL_CDECL IDL_FileEnsureStatus(int action, int unit, int flags);
 extern void IDL_CDECL IDL_FileSetMode(int unit, int binary);
 extern int IDL_CDECL IDL_FileOpenUnitBasic(int unit, char *filename, int
-        access_mode, IDL_SFILE_FLAGS_T flags, int msg_action, 
+        access_mode, IDL_SFILE_FLAGS_T flags, int msg_action,
         IDL_MSG_ERRSTATE_PTR errstate);
 extern int IDL_CDECL IDL_FileOpen(int argc, IDL_VPTR argv[], char *argk,
         int access_mode, IDL_SFILE_FLAGS_T extra_flags,  int longjmp_safe, int

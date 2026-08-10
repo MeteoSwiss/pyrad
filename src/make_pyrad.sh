@@ -10,7 +10,7 @@ pyvers=${py:7:3}
 
 # remove previous built
 echo 'Removing previous built...'
- 
+
 rm -r $HOME/.local/lib/python${pyvers}/site-packages/pyrad
 rm -r $HOME/.local/lib/python${pyvers}/site-packages/mch_pyrad-*
 

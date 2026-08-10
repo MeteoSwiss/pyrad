@@ -907,9 +907,7 @@ def generate_vol_products(dataset, prdcfg):
             value = dataset["radar_out"].azimuth["data"]
             labely = "antenna azimuth (deg)"
 
-        titl = (
-            f"antenna position " f'{prdcfg["timeinfo"].strftime("%Y-%m-%d %H:%M:%S")}'
-        )
+        titl = f"antenna position {prdcfg['timeinfo'].strftime('%Y-%m-%d %H:%M:%S')}"
 
         ray_time = pyart.util.datetimes_from_radar(
             dataset["radar_out"],
@@ -3162,8 +3160,7 @@ def generate_vol_products(dataset, prdcfg):
             fix_azimuths = prdcfg.get("fix_azimuths", None)
             if fix_elevations is None and fix_azimuths is None:
                 warn(
-                    "At least one fixed elevation or fixed azimuth"
-                    " has to be specified"
+                    "At least one fixed elevation or fixed azimuth has to be specified"
                 )
                 return None
 
@@ -4758,13 +4755,11 @@ def generate_vol_products(dataset, prdcfg):
             azi_res = 1.0
             if dataset["radar_out"].instrument_parameters is None:
                 warn(
-                    f"radar beamwidth not specified."
-                    f" Default {azi_res} deg will be used"
+                    f"radar beamwidth not specified. Default {azi_res} deg will be used"
                 )
             elif "radar_beam_width_h" not in dataset["radar_out"].instrument_parameters:
                 warn(
-                    f"radar beamwidth not specified."
-                    f" Default {azi_res} deg will be used"
+                    f"radar beamwidth not specified. Default {azi_res} deg will be used"
                 )
             else:
                 azi_res = dataset["radar_out"].instrument_parameters[

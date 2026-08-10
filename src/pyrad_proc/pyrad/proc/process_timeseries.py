@@ -451,8 +451,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
 
                     if not np.any(valid_rays):
                         warn(
-                            f"{radarnr}: No valid reflectivity values "
-                            "found for maxZH."
+                            f"{radarnr}: No valid reflectivity values found for maxZH."
                         )
                         out[radarnr] = None
                         continue
@@ -507,7 +506,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                         selected_range_indices[iray] = ind_r_arr[best_local_r]
 
                     if np.ma.count(val) == 0:
-                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        warn(f"{radarnr}: No valid gates found within tolerance.")
                         out[radarnr] = None
                         continue
 
@@ -520,7 +519,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
 
                 elif agg_method == "max":
                     if np.ma.count(data_region) == 0:
-                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        warn(f"{radarnr}: No valid gates found within tolerance.")
                         out[radarnr] = None
                         continue
 
@@ -537,7 +536,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
 
                 elif agg_method == "min":
                     if np.ma.count(data_region) == 0:
-                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        warn(f"{radarnr}: No valid gates found within tolerance.")
                         out[radarnr] = None
                         continue
 
@@ -562,8 +561,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
 
                     if np.ma.count(refl_region) == 0:
                         warn(
-                            f"{radarnr}: No valid reflectivity "
-                            "values found for maxZH."
+                            f"{radarnr}: No valid reflectivity values found for maxZH."
                         )
                         out[radarnr] = None
                         continue
@@ -619,7 +617,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                     dist_to_clo[np.ma.getmaskarray(vmask)] = np.inf
 
                     if not np.isfinite(dist_to_clo).any():
-                        warn(f"{radarnr}: No valid gates found " "within tolerance.")
+                        warn(f"{radarnr}: No valid gates found within tolerance.")
                         out[radarnr] = None
                         continue
 

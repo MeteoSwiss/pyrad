@@ -994,9 +994,9 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
             if period == -1:
                 dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
-            dscfg["global_data"]["grid_out"].fields["number_of_samples"][
-                "data"
-            ] += npoints_dict["data"]
+            dscfg["global_data"]["grid_out"].fields["number_of_samples"]["data"] += (
+                npoints_dict["data"]
+            )
 
             if stat in ("mean", "std", "cov"):
                 masked_sum = np.ma.getmaskarray(
@@ -1018,45 +1018,43 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
                 if stat in ("cov", "std"):
                     dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"][
                         masked_sum
-                    ] = (
-                        field_dict["data"][masked_sum] * field_dict["data"][masked_sum]
-                    )
+                    ] = field_dict["data"][masked_sum] * field_dict["data"][masked_sum]
 
                     dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"][
                         valid_sum
-                    ] += (field_dict["data"][valid_sum] * field_dict["data"][valid_sum])
+                    ] += field_dict["data"][valid_sum] * field_dict["data"][valid_sum]
 
             elif stat == "max":
-                dscfg["global_data"]["grid_out"].fields[field_name][
-                    "data"
-                ] = np.maximum(
-                    dscfg["global_data"]["grid_out"]
-                    .fields[field_name]["data"]
-                    .filled(fill_value=-1.0e300),
-                    field_dict["data"].filled(fill_value=-1.0e300),
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.maximum(
+                        dscfg["global_data"]["grid_out"]
+                        .fields[field_name]["data"]
+                        .filled(fill_value=-1.0e300),
+                        field_dict["data"].filled(fill_value=-1.0e300),
+                    )
                 )
 
-                dscfg["global_data"]["grid_out"].fields[field_name][
-                    "data"
-                ] = np.ma.masked_values(
-                    dscfg["global_data"]["grid_out"].fields[field_name]["data"],
-                    -1.0e300,
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.ma.masked_values(
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"],
+                        -1.0e300,
+                    )
                 )
             elif stat == "min":
-                dscfg["global_data"]["grid_out"].fields[field_name][
-                    "data"
-                ] = np.minimum(
-                    dscfg["global_data"]["grid_out"]
-                    .fields[field_name]["data"]
-                    .filled(fill_value=1.0e300),
-                    field_dict["data"].filled(fill_value=1.0e300),
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.minimum(
+                        dscfg["global_data"]["grid_out"]
+                        .fields[field_name]["data"]
+                        .filled(fill_value=1.0e300),
+                        field_dict["data"].filled(fill_value=1.0e300),
+                    )
                 )
 
-                dscfg["global_data"]["grid_out"].fields[field_name][
-                    "data"
-                ] = np.ma.masked_values(
-                    dscfg["global_data"]["grid_out"].fields[field_name]["data"],
-                    1.0e300,
+                dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                    np.ma.masked_values(
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"],
+                        1.0e300,
+                    )
                 )
 
             return None, None
@@ -1071,13 +1069,13 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
             if stat == "mean":
                 if lin_trans:
-                    dscfg["global_data"]["grid_out"].fields[field_name][
-                        "data"
-                    ] = 10.0 * np.ma.log10(field_mean)
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        10.0 * np.ma.log10(field_mean)
+                    )
                 else:
-                    dscfg["global_data"]["grid_out"].fields[field_name][
-                        "data"
-                    ] = field_mean
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        field_mean
+                    )
             elif stat in ("std", "cov"):
                 field_std = np.ma.sqrt(
                     dscfg["global_data"]["grid_out"].fields["sum_squared"]["data"]
@@ -1089,18 +1087,18 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
                 if stat == "std":
                     if lin_trans:
-                        dscfg["global_data"]["grid_out"].fields[field_name][
-                            "data"
-                        ] = 10.0 * np.ma.log10(field_std)
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            10.0 * np.ma.log10(field_std)
+                        )
                     else:
-                        dscfg["global_data"]["grid_out"].fields[field_name][
-                            "data"
-                        ] = field_std
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            field_std
+                        )
                 else:
                     if lin_trans:
-                        dscfg["global_data"]["grid_out"].fields[field_name][
-                            "data"
-                        ] = 10.0 * np.ma.log10(field_std / field_mean)
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            10.0 * np.ma.log10(field_std / field_mean)
+                        )
                     else:
                         dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
                             field_std / field_mean
@@ -1149,13 +1147,13 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
 
             if stat == "mean":
                 if lin_trans:
-                    dscfg["global_data"]["grid_out"].fields[field_name][
-                        "data"
-                    ] = 10.0 * np.ma.log10(field_mean)
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        10.0 * np.ma.log10(field_mean)
+                    )
                 else:
-                    dscfg["global_data"]["grid_out"].fields[field_name][
-                        "data"
-                    ] = field_mean
+                    dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                        field_mean
+                    )
 
             elif stat in ("std", "cov"):
                 field_std = np.ma.sqrt(
@@ -1167,13 +1165,13 @@ def process_grid_time_stats(procstatus, dscfg, radar_list=None):
                 )
                 if stat == "std":
                     if lin_trans:
-                        dscfg["global_data"]["grid_out"].fields[field_name][
-                            "data"
-                        ] = 10.0 * np.ma.log10(field_std)
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            10.0 * np.ma.log10(field_std)
+                        )
                     else:
-                        dscfg["global_data"]["grid_out"].fields[field_name][
-                            "data"
-                        ] = field_std
+                        dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                            field_std
+                        )
                 else:
                     dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
                         field_std / field_mean
@@ -1335,9 +1333,9 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
             if period == -1:
                 dscfg["global_data"]["endtime"] = dscfg["timeinfo"]
 
-            dscfg["global_data"]["grid_out"].fields["number_of_samples"][
-                "data"
-            ] += npoints_dict["data"]
+            dscfg["global_data"]["grid_out"].fields["number_of_samples"]["data"] += (
+                npoints_dict["data"]
+            )
 
             dscfg["global_data"]["field_data"] = np.ma.append(
                 dscfg["global_data"]["field_data"],
@@ -1359,18 +1357,18 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
                 axis=0,
                 nan_policy="omit",
             )
-            dscfg["global_data"]["grid_out"].fields[field_name][
-                "data"
-            ] = np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
+            )
         elif "percentile" in stat:
             percent_data = np.nanpercentile(
                 dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
                 percentile,
                 axis=0,
             )
-            dscfg["global_data"]["grid_out"].fields[field_name][
-                "data"
-            ] = np.ma.masked_invalid(percent_data)
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(percent_data)
+            )
 
         new_dataset = {
             "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
@@ -1417,18 +1415,18 @@ def process_grid_time_stats2(procstatus, dscfg, radar_list=None):
                 axis=0,
                 nan_policy="omit",
             )
-            dscfg["global_data"]["grid_out"].fields[field_name][
-                "data"
-            ] = np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(np.squeeze(mode_data, axis=0))
+            )
         elif "percentile" in stat:
             percent_data = np.nanpercentile(
                 dscfg["global_data"]["field_data"].filled(fill_value=np.nan),
                 percentile,
                 axis=0,
             )
-            dscfg["global_data"]["grid_out"].fields[field_name][
-                "data"
-            ] = np.ma.masked_invalid(percent_data)
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"] = (
+                np.ma.masked_invalid(percent_data)
+            )
 
         new_dataset = {
             "radar_out": deepcopy(dscfg["global_data"]["grid_out"]),
@@ -1556,13 +1554,12 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
                 if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
                     print(
                         f"\nNew accumulation started "
-                        f'{dscfg["global_data"]["starttime"]}\n'
+                        f"{dscfg['global_data']['starttime']}\n"
                     )
                     dscfg["global_data"].update({"grid_out": grid_aux})
             else:
                 print(
-                    f"\nNew accumulation started "
-                    f'{dscfg["global_data"]["starttime"]}\n'
+                    f"\nNew accumulation started {dscfg['global_data']['starttime']}\n"
                 )
                 dscfg["global_data"].update({"grid_out": grid_aux})
 
@@ -1581,13 +1578,13 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
                 np.logical_not(np.ma.getmaskarray(field_dict["data"])),
             )
 
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"][
-                masked_sum
-            ] = field_dict["data"][masked_sum]
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"][masked_sum] = (
+                field_dict["data"][masked_sum]
+            )
 
-            dscfg["global_data"]["grid_out"].fields[field_name]["data"][
-                valid_sum
-            ] += field_dict["data"][valid_sum]
+            dscfg["global_data"]["grid_out"].fields[field_name]["data"][valid_sum] += (
+                field_dict["data"][valid_sum]
+            )
 
             return None, None
 
@@ -1617,9 +1614,7 @@ def process_grid_rainfall_accumulation(procstatus, dscfg, radar_list=None):
 
         # check if volume time older than starttime
         if dscfg["timeinfo"] > dscfg["global_data"]["starttime"]:
-            print(
-                f"\nNew accumulation started " f'{dscfg["global_data"]["starttime"]}\n'
-            )
+            print(f"\nNew accumulation started {dscfg['global_data']['starttime']}\n")
             dscfg["global_data"].update({"grid_out": grid_aux})
 
         return new_dataset, ind_rad
@@ -1670,7 +1665,7 @@ def process_grid_fields_diff(procstatus, dscfg, radar_list=None):
 
     # create the list of data types for each radar
     if len(dscfg["datatype"]) != 2:
-        warn("Two and only two fields are required to compute the field" " differences")
+        warn("Two and only two fields are required to compute the field differences")
         return None, None
 
     radarnr, _, datatype, _, _ = get_datatype_fields(dscfg["datatype"][0])

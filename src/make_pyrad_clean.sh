@@ -16,4 +16,3 @@ rm -r $HOME/.local/lib/python${pyvers}/site-packages/mch_pyrad-*
 echo 'icleaning build..'
 cd $HOME/pyrad/src/pyrad_proc
 python setup.py clean --all
-

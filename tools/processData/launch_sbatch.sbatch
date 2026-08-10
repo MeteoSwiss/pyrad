@@ -22,4 +22,3 @@ echo $current_time
 echo "Launched executable $EXECUTABLE"
 
 $EXECUTABLE
-

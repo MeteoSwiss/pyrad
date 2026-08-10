@@ -15,9 +15,9 @@ different input data a dataset is generated and from this dataset m products are
 .. image:: explanation_prod.png
   :width: 400
   :alt: Basic concept for product generation from input (also called raw) data
-  
-pyrad relies on the sequential processing of datasets. An example of dataset is shown in the image below. This dataset is called *ml_hydro* which is an arbitrary user-chosen name and is of type *ML_DETECTION*. 
-This dataset uses a previously computed hydrometeor classification as input. It relies on the *PROC* datadescriptor and uses the variable *hydro*. It then generates four different products. which all have arbitrary names and are of the types 
+
+pyrad relies on the sequential processing of datasets. An example of dataset is shown in the image below. This dataset is called *ml_hydro* which is an arbitrary user-chosen name and is of type *ML_DETECTION*.
+This dataset uses a previously computed hydrometeor classification as input. It relies on the *PROC* datadescriptor and uses the variable *hydro*. It then generates four different products. which all have arbitrary names and are of the types
 *PPI_IMAGE*, *PSEUDORHI_IMAGE*, *ML_TS* and *SAVE_ML*. Some products apply only to specific variables (voltype), for example *PPI_IMAGE* and *PSEUDORHI_IMAGE* use the variable *H_ISO0* for the plots.
 
 .. image:: pyrad_explanation_names.png

@@ -7,7 +7,7 @@
 # The detailed specification of each dataset is given below.
 dataSetList STRARR 1
     gecsx
-    
+
 # Note that the parameters from rmax to antenna_elevations are ignored if proper radar data is provided
 gecsx STRUCT 18
     type STRING GECSX
@@ -16,7 +16,7 @@ gecsx STRUCT 18
     demproj STRING 21781 # EPSG code, a OGC WKT or Proj4 string, required if projection is not available in demfile metadata
     az_discretization    FLOAT 0.2  # numerical step in azimuth in Cartesian visibility estimation [degree]
     range_discretization FLOAT 100   # numerical step in range in Cartesian visibility estimation [m]
-    do_range_weighting INT 1 
+    do_range_weighting INT 1
     raster_oversampling INT 1
     verbose INT 1
     clip INT 1
@@ -25,7 +25,7 @@ gecsx STRUCT 18
     azmin        FLOAT 0.        # [deg] minimum azimuth angle
     azmax        FLOAT 360.      # [deg] maximum azimuth angle
     anglestep    FLOAT 2.       # [deg] azimuth angle step
-    range_resolution FLOAT 50. # [m range resolution 
+    range_resolution FLOAT 50. # [m range resolution
     antenna_elevations FLTARR 2 # deg
             0.7
             3.0
@@ -122,12 +122,11 @@ gecsx STRUCT 18
             type  STRING SURFACE_IMAGE
             voltype STRING incident_angle
             level INT 0
-        EFFAREA STRUCT 3    
+        EFFAREA STRUCT 3
             type  STRING SURFACE_IMAGE
             voltype STRING effective_area
             level INT 0
-        SIGMA0 STRUCT 3    
+        SIGMA0 STRUCT 3
             type  STRING SURFACE_IMAGE
             voltype STRING sigma_0
             level INT 0
-        

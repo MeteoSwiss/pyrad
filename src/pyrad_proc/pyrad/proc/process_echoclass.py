@@ -441,7 +441,7 @@ def process_hydro_mf_to_echo_id(procstatus, dscfg, radar_list=None):
     radar = radar_list[ind_rad]
 
     if clt_field not in radar.fields:
-        warn("MF hydrometeor classification not present." " Unable to obtain echoID")
+        warn("MF hydrometeor classification not present. Unable to obtain echoID")
         return None, None
 
     echo_id = np.zeros((radar.nrays, radar.ngates), dtype=np.uint8) + 1
@@ -767,15 +767,11 @@ def process_gatefilter(procstatus, dscfg, radar_list=None):
         field_names_aux.append(get_fieldname_pyart(datatype))
 
     if len(field_names_aux) != len(dscfg["lower_bounds"]):
-        warn(
-            "Number of provided lower bounds is different " "from number of data types"
-        )
+        warn("Number of provided lower bounds is different from number of data types")
         return None, None
 
     if len(field_names_aux) != len(dscfg["upper_bounds"]):
-        warn(
-            "Number of provided upper bounds is different " "from number of data types"
-        )
+        warn("Number of provided upper bounds is different from number of data types")
         return None, None
 
     lower_bounds = dscfg["lower_bounds"]
@@ -1729,7 +1725,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
                 import classify
             except ImportError:
                 raise Exception(
-                    "ERROR: Unable to load UKMO hydrometeor classification" " module"
+                    "ERROR: Unable to load UKMO hydrometeor classification module"
                 )
             dscfg["initialized"] = 1
 
@@ -1742,7 +1738,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             or (rhv_field not in radar.fields)
             or (kdp_field not in radar.fields)
         ):
-            warn("Unable to create hydrometeor classification field. " "Missing data")
+            warn("Unable to create hydrometeor classification field. Missing data")
             return None, None
 
         mf_dir = dscfg.get(
@@ -1751,7 +1747,7 @@ def process_hydroclass(procstatus, dscfg, radar_list=None):
             + "/hydrometeor-classification/membership_functions/",
         )
         if not os.path.isdir(mf_dir):
-            str1 = "ERROR: Unable to load hydrometeor MF." " Path {} not a directory"
+            str1 = "ERROR: Unable to load hydrometeor MF. Path {} not a directory"
             raise Exception(str1.format(mf_dir))
 
         ml_depth = dscfg.get("ml_depth", 0.5)
@@ -2336,15 +2332,13 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         # Check which should be the reference field for temperature
         if iso0_field is not None:
             if iso0_field not in radar.fields:
-                warn(
-                    "Unable to detect melting layer. " "Missing height over iso0 field"
-                )
+                warn("Unable to detect melting layer. Missing height over iso0 field")
                 return None, None
             temp_ref = "height_over_iso0"
 
         if temp_field is not None:
             if temp_field not in radar.fields:
-                warn("Unable to detect melting layer. " "Missing temperature field")
+                warn("Unable to detect melting layer. Missing temperature field")
                 return None, None
             temp_ref = "temperature"
             iso0_field = "height_over_iso0"
@@ -2553,15 +2547,13 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
         # Check which should be the reference field for temperature
         if iso0_field is not None:
             if iso0_field not in radar.fields:
-                warn(
-                    "Unable to detect melting layer. " "Missing height over iso0 field"
-                )
+                warn("Unable to detect melting layer. Missing height over iso0 field")
                 return None, None
             temp_ref = "height_over_iso0"
 
         if temp_field is not None:
             if temp_field not in radar.fields:
-                warn("Unable to detect melting layer. " "Missing temperature field")
+                warn("Unable to detect melting layer. Missing temperature field")
                 return None, None
             temp_ref = "temperature"
 
@@ -2617,7 +2609,7 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
                 or dscfg["loadbasepath"] is None
                 or dscfg["loadname"] is None
             ):
-                warn("unable to find files containing" " melting layer information")
+                warn("unable to find files containing melting layer information")
             else:
                 flist = get_file_list(
                     datatypedescr,
@@ -2811,7 +2803,7 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
 
     # Check which should be the reference field for temperature
     if iso0_field is not None and (iso0_field not in radar.fields):
-        warn("Unable to detect melting layer. " "Missing height over iso0 field")
+        warn("Unable to detect melting layer. Missing height over iso0 field")
         return None, None
 
     if temp_field is not None and (temp_field not in radar.fields):

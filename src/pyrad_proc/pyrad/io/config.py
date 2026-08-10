@@ -196,7 +196,7 @@ def _read_config_pyrad(cfgfile):
         parts = line.split(maxsplit=2)
         if len(parts) < 2:
             raise ValueError(
-                f"Invalid top-level declaration at line {index+1}: '{line}'"
+                f"Invalid top-level declaration at line {index + 1}: '{line}'"
             )
         key, type_str = parts[0], parts[1].upper()
 
@@ -234,7 +234,7 @@ def _read_config_pyrad(cfgfile):
             config[key] = value
             index += 1
         else:
-            raise ValueError(f"Unknown type '{type_str}' at line {index+1}")
+            raise ValueError(f"Unknown type '{type_str}' at line {index + 1}")
 
     if "dataSetList" in config:
         if len(config["dataSetList"]):

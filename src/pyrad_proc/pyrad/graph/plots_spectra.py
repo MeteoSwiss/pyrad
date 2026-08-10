@@ -139,7 +139,7 @@ def plot_range_Doppler(
 
     if yaxis.size < 2:
         raise ValueError(
-            "At least two range gates are required to create the " "range-Doppler plot."
+            "At least two range gates are required to create the range-Doppler plot."
         )
 
     yres = np.abs(yaxis[1] - yaxis[0])

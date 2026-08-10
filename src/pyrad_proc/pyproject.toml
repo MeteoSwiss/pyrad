@@ -2,15 +2,16 @@
 requires = [
     "setuptools>=68",
     "wheel",
+    "versioningit",
 ]
 build-backend = "setuptools.build_meta"
 
 
 [project]
 name = "pyrad_mch"
-version = "2.1.2"
 description = "Python Radar Data Processing Framework"
 readme = "README.md"
+dynamic = ["version"]
 requires-python = ">=3.10"
 license = { text = "BSD" }
 
@@ -146,16 +147,7 @@ pyrad = [
 # ----------------------------------------------------------------------
 
 [tool.ruff]
-target-version = "py310"
 line-length = 88
-
-exclude = [
-    ".git",
-    ".venv",
-    "build",
-    "dist",
-]
-
 
 [tool.ruff.lint]
 select = [
@@ -165,7 +157,9 @@ select = [
     "I",
 ]
 
-ignore = []
+ignore = [
+    "E501",
+]
 
 
 [tool.ruff.format]
@@ -186,3 +180,13 @@ testpaths = [
 addopts = [
     "-ra",
 ]
+
+
+# ----------------------------------------------------------------------
+# Version
+# ----------------------------------------------------------------------
+[tool.versioningit]
+[tool.versioningit.write]
+file = "pyrad/_version.py"
+[tool.versioningit.tag2version]
+rmprefix = "v."

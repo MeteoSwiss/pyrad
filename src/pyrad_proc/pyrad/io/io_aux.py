@@ -2480,8 +2480,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if cfg["path_convention"][ind_rad] == "MCH":
                     dayinfo = (starttime + datetime.timedelta(days=i)).strftime("%y%j")
                     basename = (
-                        f'M{cfg["RadarRes"][ind_rad]}'
-                        f'{cfg["RadarName"][ind_rad]}{dayinfo}'
+                        f"M{cfg['RadarRes'][ind_rad]}"
+                        f"{cfg['RadarName'][ind_rad]}{dayinfo}"
                     )
                     datapath = os.path.join(cfg["datapath"][ind_rad], dayinfo, basename)
 
@@ -2490,8 +2490,8 @@ def get_file_list(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     dayfilelist = glob.glob(pattern)
                     if not dayfilelist:
                         basename = (
-                            f'P{cfg["RadarRes"][ind_rad]}'
-                            f'{cfg["RadarName"][ind_rad]}{dayinfo}'
+                            f"P{cfg['RadarRes'][ind_rad]}"
+                            f"{cfg['RadarName'][ind_rad]}{dayinfo}"
                         )
                         datapath = os.path.join(
                             cfg["datapath"][ind_rad], dayinfo, basename
@@ -2792,9 +2792,9 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                     )
                 daydir = (starttime + datetime.timedelta(days=i)).strftime(fpath_strf)
                 if daydir == "":
-                    pattern = f'{cfg["s3PathRead"]}*{scan}*'
+                    pattern = f"{cfg['s3PathRead']}*{scan}*"
                 else:
-                    pattern = f'{cfg["s3PathRead"]}{daydir}/*{scan}*'
+                    pattern = f"{cfg['s3PathRead']}{daydir}/*{scan}*"
                 dayfilelist = []
                 for content in response["Contents"]:
                     if fnmatch.fnmatch(content["Key"], pattern):
@@ -2819,10 +2819,10 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 if cfg["path_convention"][ind_rad] == "MCH":
                     dayinfo = (starttime + datetime.timedelta(days=i)).strftime("%y%j")
                     basename = (
-                        f'M{cfg["RadarRes"][ind_rad]}'
-                        f'{cfg["RadarName"][ind_rad]}{dayinfo}'
+                        f"M{cfg['RadarRes'][ind_rad]}"
+                        f"{cfg['RadarName'][ind_rad]}{dayinfo}"
                     )
-                    datapath = f'{cfg["s3PathRead"]}{dayinfo}/{basename}/'
+                    datapath = f"{cfg['s3PathRead']}{dayinfo}/{basename}/"
 
                     # check that M files exist. if not search P files
                     pattern = f"{datapath}{basename}*{scan}*"
@@ -2832,10 +2832,10 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                             dayfilelist.append(content["Key"])
                     if not dayfilelist:
                         basename = (
-                            f'P{cfg["RadarRes"][ind_rad]}'
-                            f'{cfg["RadarName"][ind_rad]}{dayinfo}'
+                            f"P{cfg['RadarRes'][ind_rad]}"
+                            f"{cfg['RadarName'][ind_rad]}{dayinfo}"
                         )
-                        datapath = f'{cfg["s3PathRead"]}{dayinfo}/{basename}/'
+                        datapath = f"{cfg['s3PathRead']}{dayinfo}/{basename}/"
                         pattern = f"{datapath}{basename}*{scan}*"
                         for content in response["Contents"]:
                             if fnmatch.fnmatch(content["Key"], pattern):
@@ -2854,9 +2854,9 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         fpath_strf
                     )
                     if daydir == "":
-                        pattern = f'{cfg["s3PathRead"]}*{scan}*'
+                        pattern = f"{cfg['s3PathRead']}*{scan}*"
                     else:
-                        pattern = f'{cfg["s3PathRead"]}{daydir}/*{scan}*'
+                        pattern = f"{cfg['s3PathRead']}{daydir}/*{scan}*"
 
                     dayfilelist = []
                     for content in response["Contents"]:
@@ -2876,9 +2876,9 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                         fpath_strf
                     )
                     if daydir == "":
-                        pattern = f'{cfg["s3PathRead"]}{scan}/*'
+                        pattern = f"{cfg['s3PathRead']}{scan}/*"
                     else:
-                        pattern = f'{cfg["s3PathRead"]}{scan}/{daydir}/*'
+                        pattern = f"{cfg['s3PathRead']}{scan}/{daydir}/*"
 
                     dayfilelist = []
                     for content in response["Contents"]:
@@ -2887,12 +2887,12 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                 else:
                     dayinfo = (starttime + datetime.timedelta(days=i)).strftime("%y%j")
                     basename = (
-                        f'M{cfg["RadarRes"][ind_rad]}'
-                        f'{cfg["RadarName"][ind_rad]}{dayinfo}'
+                        f"M{cfg['RadarRes'][ind_rad]}"
+                        f"{cfg['RadarName'][ind_rad]}{dayinfo}"
                     )
                     datapath = (
-                        f'{cfg["s3PathRead"]}M{cfg["RadarRes"][ind_rad]}'
-                        f'{cfg["RadarName"][ind_rad]}'
+                        f"{cfg['s3PathRead']}M{cfg['RadarRes'][ind_rad]}"
+                        f"{cfg['RadarName'][ind_rad]}"
                     )
 
                     # check that M files exist. if not search P files
@@ -2903,12 +2903,12 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
                             dayfilelist.append(content["Key"])
                     if not dayfilelist:
                         basename = (
-                            f'P{cfg["RadarRes"][ind_rad]}'
-                            f'{cfg["RadarName"][ind_rad]}{dayinfo}'
+                            f"P{cfg['RadarRes'][ind_rad]}"
+                            f"{cfg['RadarName'][ind_rad]}{dayinfo}"
                         )
                         datapath = (
-                            f'{cfg["s3PathRead"]}P{cfg["RadarRes"][ind_rad]}'
-                            f'{cfg["RadarName"][ind_rad]}'
+                            f"{cfg['s3PathRead']}P{cfg['RadarRes'][ind_rad]}"
+                            f"{cfg['RadarName'][ind_rad]}"
                         )
                         pattern = f"{datapath}{basename}*{scan}*"
                         for content in response["Contents"]:
@@ -2923,7 +2923,7 @@ def get_file_list_s3(datadescriptor, starttimes, endtimes, cfg, scan=None):
             for filename in t_filelist:
                 # we need to download the master file to be able to know the
                 # scan coverage
-                datapath = f'{cfg["datapath"][ind_rad]}'
+                datapath = f"{cfg['datapath'][ind_rad]}"
                 if not os.path.isdir(datapath):
                     os.makedirs(datapath)
                 fname_aux = f"{datapath}{os.path.basename(filename)}"

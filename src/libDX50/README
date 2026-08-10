@@ -15,7 +15,7 @@ libDX50.so : Library to be loaded by IDL to get data from the
              # Prints the version and date/time of the compilation.
 
 psrReduce :  Application to reduce a DX50 power spectrum file (psr-file).
-             Small power values are set to zero then the file is 
+             Small power values are set to zero then the file is
              compressed with simple method.
 
              Usage:

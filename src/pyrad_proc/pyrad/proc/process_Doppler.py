@@ -121,9 +121,7 @@ def process_turbulence(procstatus, dscfg, radar_list=None):
             width_field = get_fieldname_pyart(datatype)
 
     if width_field is None or refl_field is None:
-        warn(
-            "Reflectivity and spectrum width fields required" " to estimate turbulence"
-        )
+        warn("Reflectivity and spectrum width fields required to estimate turbulence")
         return None, None
 
     ind_rad = int(radarnr[5:8]) - 1
@@ -589,7 +587,7 @@ def process_radial_velocity(procstatus, dscfg, radar_list=None):
     radar = radar_list[ind_rad]
 
     if h_speed_field not in radar.fields or h_dir_field not in radar.fields:
-        warn("Unable to estimate radial velocity. " "Missing horizontal wind")
+        warn("Unable to estimate radial velocity. Missing horizontal wind")
         return None, None
 
     h_speed = radar.fields[h_speed_field]["data"]

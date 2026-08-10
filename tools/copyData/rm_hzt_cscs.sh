@@ -24,19 +24,19 @@ do
         ;;
         -p|--dest_base)
         data_destbase="$2"
-        shift # past argument        
-        ;;    
+        shift # past argument
+        ;;
     esac
     shift # past argument or value
 done
 
 nday=${#day_vec[@]}
-for ((iday=0; iday<${nday}; iday++)); do    
+for ((iday=0; iday<${nday}; iday++)); do
     years=$(date --date "${day_vec[${iday}]}" +"%y")
     julday=$(date --date "${day_vec[${iday}]}" +"%j")
 
     echo "Processing day "${years}${julday}
 
-    # create destination path for polar data    
+    # create destination path for polar data
     rm -rf ${data_destbase}${years}${julday}/
 done

@@ -173,11 +173,11 @@ Date: October, 18, 2017
 
   0.2.0         & J.~Grazioli    & 2017-08-23  & Creation begun \\ \hline
   0.3.0         & J.~Grazioli    & 2017-10-18  & check products section \\ \hline
-  0.4.0         & J.~Grazioli, J.~Figueras i Ventura & 2017-11-28 & Review and structural modification \\ 
-  0.5.0         & D.~Wolfensberger & 2021-01-12 & Added section on GECSX \\ 
-  
-  \hline 
- 
+  0.4.0         & J.~Grazioli, J.~Figueras i Ventura & 2017-11-28 & Review and structural modification \\
+  0.5.0         & D.~Wolfensberger & 2021-01-12 & Added section on GECSX \\
+
+  \hline
+
 \end{longtable}
 
 \clearpage
@@ -217,7 +217,7 @@ The processing is based on the PyRad framework. \underline{Usually} pyrad is clo
 \begin{verbatim}
 jgr@zueub222:pyrad$ pwd
 /home/lom/users/jgr/pyrad
-\end{verbatim} 
+\end{verbatim}
 
 The purpose of this document is to allow users to process data by manipulating only configuration files. The focus is therefore here on the processing output and not on PyRad itself. For an overview of the functionalities of PyRad, its installation, and development, please refer to the documentation available at:
 
@@ -249,7 +249,7 @@ The data processing can be started from the linux shell, after activation of the
 
 \begin{verbatim}
 jgr@zueub222:~$ source activate root
-(root) jgr@zueub222:~$ 
+(root) jgr@zueub222:~$
 \end{verbatim}
 
 \noindent
@@ -282,8 +282,8 @@ Verbatim, from the help page of the script:
 This program performs real time processing of the data
 
 To run the processing framework type:
-    python main_process_data.py [config_files] 
-     --starttime [process_start_time] --endtime [process_end_time] 
+    python main_process_data.py [config_files]
+     --starttime [process_start_time] --endtime [process_end_time]
      --cfgpath [cfgpath] --proc_period [proc_period]
 
 If startime or endtime are specified the program will start processing at the
@@ -297,8 +297,8 @@ berfore forcing it to end
 
 
 Example:
-    python main_process_data.py 'paradiso_fvj_vol.txt' 'paradiso_fvj_rhi.txt' 
-    --starttime '20140523000000' --endtime '20140523001000' 
+    python main_process_data.py 'paradiso_fvj_vol.txt' 'paradiso_fvj_rhi.txt'
+    --starttime '20140523000000' --endtime '20140523001000'
     --cfgpath '$HOME/pyrad/config/processing/' --proc_period 60 --proc_finish 120
 
 
@@ -345,7 +345,7 @@ postproc_cfgfile is an optional argument with default: None
 cfgpath is an optional argument with default: '$HOME/pyrad/config/processing/'
 
 Example:
-    python main_process_data.py 'paradiso_fvj_vol.txt' --starttime '20140523000000' 
+    python main_process_data.py 'paradiso_fvj_vol.txt' --starttime '20140523000000'
     --endtime '20140523001000' --postproc_cfgfile 'paradiso_fvj_vol_postproc.txt' --cfgpath
      '$HOME/pyrad/config/processing/'
 
@@ -394,7 +394,7 @@ According to its help entry:
 This program does the daily processing and post-processing over a period of time.
 
 To run the processing framework type:
-    python main_process_data.py [config_file] [process_start_date] [process_end_date] 
+    python main_process_data.py [config_file] [process_start_date] [process_end_date]
     --starttime [process_start_time] --endtime [process_end_time] --postproc_cfgfile
      [postproc_config_file] --cfgpath [cfgpath]
 
@@ -404,8 +404,8 @@ postproc_cfgfile is an optional argument with default: None
 cfgpath is an optional argument with default: '$HOME/pyrad/config/processing/'
 
 Example:
-    python main_process_data.py 'paradiso_fvj_vol.txt' '20140523' '20140525' 
-    --starttime '000000' --endtime '001000' --postproc_cfgfile 'mals_emm_vol_postproc.txt' 
+    python main_process_data.py 'paradiso_fvj_vol.txt' '20140523' '20140525'
+    --starttime '000000' --endtime '001000' --postproc_cfgfile 'mals_emm_vol_postproc.txt'
     --cfgpath '$HOME/pyrad/config/processing/'
 
 
@@ -438,7 +438,7 @@ optional arguments:
 This script creates the product once all the data has been processed.
 
 \subsubsection{Process trajectories (process\_trajectory.py)}
-This script is used in post-processing to process trajectory data. 
+This script is used in post-processing to process trajectory data.
 The usage of this script is:
 
 \begin{verbatim}
@@ -605,15 +605,15 @@ ScanPeriod         & FLOAT     & Repetition period of each scan in minutes.\\
 Azimtol            & FLOAT     & Tolerance in azimuth for irregular data. (0.5 is a good value)\\
 clutterMap         & STRING    & Clutter map of the data processing. The clutter map is
                                  located at <configpath>/clutter/<clutterMap>\\
-AntennaGain        & FLOAT & Radar antenna gain. Not used for X-band MCH data. \\ 
+AntennaGain        & FLOAT & Radar antenna gain. Not used for X-band MCH data. \\
 radarconsth(v)        & FLOAT & Radar constant h (v). Not mandatory. \\
 mflossh(v)            & Matched filter losses h (v). Not mandatory. \\
-attg                & FLOAT & Gas attenuation coeafficient ({\bf units?} (1 way attenuation) \\                                
+attg                & FLOAT & Gas attenuation coeafficient ({\bf units?} (1 way attenuation) \\
 CosmoRunFreq & INT &  Frequency of a COSMO model run in hours.\\
 CosmoForecasted & INT & Hours forecasted by the COSMO model.\\
 rmax            & FLOAT & For C-band data, the maximum range in [m] to be considered. USeful for speed
                                  considerations.   \\
-elmax           & FLOAT & Maximum elevation [$^\circ$] to consider  \\                                 
+elmax           & FLOAT & Maximum elevation [$^\circ$] to consider  \\
 ppiImageConfig     & STRUCT    & Structure defining the PPI image generating. The following 6
                                  fields are described below:\\
 rhiImageConfig     & STRUCT    & Structure defining the RHI image generating. The following 6
@@ -634,8 +634,8 @@ $\quad$ lonmax   & FLOAT      & Maximum WGS84 longitude [$^\circ$].\\
 $\quad$ latmin   & FLOAT      & Minimum WGS84 latitude [$^\circ$].\\
 $\quad$ latmax   & FLOAT      & Maximum WGS84 latitude [$^\circ$].\\
 $\quad$ mapres   & STRING     & Map resolution. Accepted strings are: ``10m'', ``50m'', ``110m'' \\
-$\quad$ maps     & STRARR     & String array of possible maps to overplot. Accepted entries include: 
-                                relief, countries, provinces, urban\_areas, roads, railroads, 
+$\quad$ maps     & STRARR     & String array of possible maps to overplot. Accepted entries include:
+                                relief, countries, provinces, urban\_areas, roads, railroads,
                                 coastline, lakes, lakes\_europe, rivers, rivers\_europe   \\
 
 
@@ -890,14 +890,14 @@ dataSetList STRARR 12
    l0:TEMP
    l0:reflectivity
    l0:ZDR
-   l0:RhoHV   
+   l0:RhoHV
    l0:echoID
    l1:echoFilter
    l3:echoFilter_Ah
    l2:outlierFilter
    l2:Att_ZPhi
    l3:hydroclass
-   l4:rainrate   
+   l4:rainrate
    l3:wind
 
 
@@ -907,20 +907,20 @@ dataSetList STRARR 12
 TEMP STRUCT 6
     type STRING COSMO_LOOKUP
     datatype STRARR 1
-        dBZ        
+        dBZ
     cosmo_type STRING TEMP
     regular_grid INT 0
     lookup_table INT 1
     MAKE_GLOBAL INT 1
-	
-	
+
+
 # ==========================================================================================
 #                 raw data processing
 # ==========================================================================================
 reflectivity STRUCT 3
    type     STRING RAW
    datatype STRING dBZ
-   products STRUCT 4      
+   products STRUCT 4
       EL03_0 STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 0
@@ -932,15 +932,15 @@ reflectivity STRUCT 3
       EL05_7 STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 2
-         voltype STRING dBZ      
+         voltype STRING dBZ
       SAVESTATE STRUCT 2
          type STRING SAVESTATE
          voltype STRING dBZ
-         
+
 ZDR STRUCT 3
    type     STRING RAW
    datatype STRING ZDR
-   products STRUCT 3      
+   products STRUCT 3
       EL03_0 STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 0
@@ -953,11 +953,11 @@ ZDR STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 2
          voltype STRING ZDR
-         
+
 RhoHV STRUCT 3
    type     STRING RAW
    datatype STRING RhoHV
-   products STRUCT 3      
+   products STRUCT 3
       EL03_0 STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 0
@@ -970,8 +970,8 @@ RhoHV STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 2
          voltype STRING RhoHV
-		 
-		 
+
+
 # ==========================================================================================
 #                 echo identification
 # ==========================================================================================
@@ -993,7 +993,7 @@ echoFilter STRUCT 4
     type STRING ECHO_FILTER
     datatype STRARR 8
         PROC:echoID
-        dBZ        
+        dBZ
         ZDR
         RhoHV
         PhiDP
@@ -1010,11 +1010,11 @@ echoFilter_Ah STRUCT 4
         PROC:Ah
     echo_type INT 3
     MAKE_GLOBAL INT 1
-	
-	
+
+
 # ==========================================================================================
 #                 outlier filter
-# ==========================================================================================    
+# ==========================================================================================
 outlierFilter STRUCT 8
     type STRING OUTLIER_FILTER
     datatype STRARR 1
@@ -1041,7 +1041,7 @@ Att_ZPhi STRUCT 5
     fzl FLOAT 2000.
     MAKE_GLOBAL INT 1
 
-	
+
 # ==========================================================================================
 #                 hydrometeor classification products
 # ==========================================================================================
@@ -1060,7 +1060,7 @@ hydroclass STRUCT 5
 
 # ==========================================================================================
 #               rainfall rate
-# ==========================================================================================            
+# ==========================================================================================
 rainrate STRUCT 5
     type STRING RAINRATE
     datatype STRARR 3
@@ -1069,7 +1069,7 @@ rainrate STRUCT 5
         PROC:hydro
     RR_METHOD STRING hydro
     MAKE_GLOBAL INT 1
-    products STRUCT 3      
+    products STRUCT 3
       EL03_0 STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 0
@@ -1083,7 +1083,7 @@ rainrate STRUCT 5
          anglenr INT 2
          voltype STRING RR
 
-			
+
 # ==========================================================================================
 #               wind velocity
 # ==========================================================================================
@@ -1093,7 +1093,7 @@ wind STRUCT 5
         PROC:Vc
     vert_proj INT 0
     MAKE_GLOBAL INT 1
-    products STRUCT 3      
+    products STRUCT 3
       EL03_0 STRUCT 3
          type  STRING PPI_IMAGE
          anglenr INT 0
@@ -1114,7 +1114,7 @@ and \emph{l4: rainrate}.
 The \emph{reflectivity} dataset is a \emph{RAW} dataset generated using the raw
 datatype \emph{dBZ}. Four products are generated for this dataset: the products
 \emph{EL03\_0}, \emph{EL04\_0}, \emph{EL05\_7} which are of type \emph{PPI\_IMAGE} (the first, second and third PPIs in a volume scan, as given in field \emph{anglenr}). The images are stored in
-<saveimgbasepath>/<name>/<YYYY-MM-DD>/reflectivity/EL0X\_X/. The fourth product saves the volume in the path given by \emph{loadbasepath} fo the main configuration file. 
+<saveimgbasepath>/<name>/<YYYY-MM-DD>/reflectivity/EL0X\_X/. The fourth product saves the volume in the path given by \emph{loadbasepath} fo the main configuration file.
 
 The \emph{rainrate} dataset is a \emph{RAINRATE} dataset generated using the processed
 datatypes \emph{dBZc}, \emph{Ahc}, \emph{hydro}, by means of the \emph{HYDRO} retrieval method.
@@ -1123,7 +1123,7 @@ In analogous way with respect to the \emph{reflectivity} dataset, PPI images are
 \subsection{The concept of processing level}
 
 Processing level(s) are defined in the product configuration file, in  the initial definition of the dataset list (i.e. $l0$, $l1$, $l2$\dots). The processing level defines the order in which the datasets
-will be processed. This is particularly useful when subsequent processing levels need data from previous datasets. In this case, the order matters, and the option ``MAKE\_GLOBAL'' should be used. 
+will be processed. This is particularly useful when subsequent processing levels need data from previous datasets. In this case, the order matters, and the option ``MAKE\_GLOBAL'' should be used.
 
 \newpage
 
@@ -1132,8 +1132,8 @@ will be processed. This is particularly useful when subsequent processing levels
 % ---------------------------------------------------------------------------------
 \section{Datasets}
 \label{sec_datasets}
-A thorough description of the available datasets can be found in Sec.~2 of {\bf pyrad\_library\_reference\_user}. The dataset type is defined by the ``type'' entry in the 
-dataset block of the product configuration file. Dataset types can be found in Table~\ref{tab_datasets_type}. 
+A thorough description of the available datasets can be found in Sec.~2 of {\bf pyrad\_library\_reference\_user}. The dataset type is defined by the ``type'' entry in the
+dataset block of the product configuration file. Dataset types can be found in Table~\ref{tab_datasets_type}.
 
 %\begin{table}[H]
 %\rowcolors{1}{darkgray}{lightgray}
@@ -1142,7 +1142,7 @@ dataset block of the product configuration file. Dataset types can be found in T
 \subsection{Dataset type and format}
 
  The field ``type'', for each dataset listed in the product configuration, takes the values as in
-Table~\ref{tab_datasets_type}. Depending on the type, the proper pyrad/pyart processing routine is 
+Table~\ref{tab_datasets_type}. Depending on the type, the proper pyrad/pyart processing routine is
 applied. Each dataset type has a dataset ``format'' (more types may correspond to the same format),
 that will be used to generate the appropriate products.
 
@@ -1210,7 +1210,7 @@ COSMO & (VOL) COSMO data & \\
 COSMO\_LOOKUP & (VOL) Cosmo lookup table & \\
 COSMO\_COORD & (COSMO\_COORD) Cosmo coordinates & \\
 HZT\_LOOKUP & (VOL) HZT lookup table & \\
-HZT  & (VOL) & \\ 
+HZT  & (VOL) & \\
 TIME\_AVG & (TIMEAVG) Time averaging & \\
 FLAG\_TIME\_AVG & (TIMEAVG) Time average flag& \\
 COLOCATED\_GATES & (COLOCATED\_GATES) Process colocated gates of radars & \\
@@ -1256,7 +1256,7 @@ TRAJ\_LIGHTNING & (TIMESERIES) Trajectory at lighning locations & \\
 For each dataset format several products can be generated, as seen in the product generation file.
 The list of products for each dataset are passed as a string array, and each product is defined as a structure.
 Different product ``type'' can be selected, determining the subsequent process.
-Not all product types are available for each data type. 
+Not all product types are available for each data type.
 The following tables and sections list the possible products for each dataset format.
 
 
@@ -1318,11 +1318,11 @@ The parameters of a \emph{PPI\_IMAGE} product are listed in Table~\ref{tab_produ
  PPI image of constant elevation on a map
 The parameters of a \emph{PPI\_MAP} product are the same as listed in Table~\ref{tab_product_ppi_image}.
  The dimension and boundaries of the PPI map are set in the location configuration file (Sec.~\ref{subsec_location_config}).
- 
- 
+
+
  \subsubsection{PSEUDOPPI\_IMAGE}
     \label{subsec_pseudoppi_image}
-Pseudo-PPI is a PPI reconstruction from volumic data (they can be also a series of RHIs), not from genuine PPIs. 
+Pseudo-PPI is a PPI reconstruction from volumic data (they can be also a series of RHIs), not from genuine PPIs.
 It is displayed as a PPI. The parameters of a PSEUDOPPI\_IMAGE can be found in Table~\ref{tab_product_pseudoppi_image}.
 
 \begin{table}[H]
@@ -1340,7 +1340,7 @@ It is displayed as a PPI. The parameters of a PSEUDOPPI\_IMAGE can be found in T
 
 \subsubsection{PSEUDOPPI\_MAP}
    \label{subsec_pseudoppi_map}
-As for Sec.~\ref{subsec_pseudoppi_image}, but displayed on a map. 
+As for Sec.~\ref{subsec_pseudoppi_image}, but displayed on a map.
 
 \subsubsection*{RHI\_IMAGE}
    \label{subsec_rhi_image}
@@ -1366,7 +1366,7 @@ The parameters of a \emph{RHI\_IMAGE} product are listed in Table~\ref{tab_produ
 
 \subsubsection{PSEUDORHI\_IMAGE}
     \label{subsec_pseudorhi_image}
-Pseudo-RHI is a PPI reconstruction from volumic data, not from genuine RHIs. 
+Pseudo-RHI is a PPI reconstruction from volumic data, not from genuine RHIs.
 It is displayed as a PPI. The parameters of a PSEUDORHI\_IMAGE can be found in Table~~\ref{tab_product_pseudorhi_image}.
 
 \begin{table}[H]
@@ -1414,9 +1414,9 @@ The parameters of a \emph{RHI\_PROFILE} product are listed in Table~\ref{tab_pro
  heightResolution & FLOAT    & Resolution of the height layers for the processing. Is only
                                applied to the text output file. The profile image height
                                resolution is fixed to 100~m.\\
- heightMax & FLOAT    & Maximum height to consider, in [m].\\   
+ heightMax & FLOAT    & Maximum height to consider, in [m].\\
   voltype        & STRING     & A valid datatype string (i.e., KDP, KDPc, TYPE, dBZ\dots)\\
-                           
+
  \end{tabularx}
  \caption{Parameters of a RHI\_PROFILE product.}
  \label{tab_product_rhi_profile}
@@ -1451,7 +1451,7 @@ Plotting along a given coordinate. The parameters of a PLOT\_ALONG\_COORD produc
  voltype        & STRING     & A valid datatype string (i.e., KDP, KDPc, TYPE, dBZ\dots)\\
  mode           & STRING     & \emph{ALONG\_RNG}, or \emph{ALONG\_AZI}, or \emph{ALONG\_ELE}. It sets the radar dimension along which to plot. \\
  fix\_azimuths & FLTARR & All fixed azuth angles (same length of a given second dimension) \\
- fix\_elevations & FLTARR & All fixed elevation angles. \\ 
+ fix\_elevations & FLTARR & All fixed elevation angles. \\
  fix\_ranges & FLTARR &  All fixed ranges in meters. \\
  AngTol & FLOAT & Tolerance on the angles, in degrees. \\
  value\_start & FLOAT & Starting value of the extracted profile. Units depend on selected ``mode'' \\
@@ -1461,7 +1461,7 @@ Plotting along a given coordinate. The parameters of a PLOT\_ALONG\_COORD produc
  \label{tab_product_plot_along_coord}
  \end{table}
 
-If for, example we are interested in extracting data along range (i.e. a radial), we will set the mode as \emph{ALONG\_RNG}, and we will provide the given couples of fixed elevations and azimuths (we will not provide fixed ranges). 
+If for, example we are interested in extracting data along range (i.e. a radial), we will set the mode as \emph{ALONG\_RNG}, and we will provide the given couples of fixed elevations and azimuths (we will not provide fixed ranges).
 
  \subsubsection{BSCOPE\_IMAGE}
  \label{subsec_bscope_image}
@@ -1515,12 +1515,12 @@ Time vs range radar image from volume data. The parameters are given in Table~\r
  \caption{Parameters of a radar HISTOGRAM product.}
  \label{tab_product_histogram}
  \end{table}
- 
+
 \subsubsection{QUANTILES}
    \label{subsec_quantiles}
-Generate quantiles of volume data, for a given variable type. The parameters of a QUANTILE product can be found in Table~\ref{tab_product_quantiles}   
-   
-   
+Generate quantiles of volume data, for a given variable type. The parameters of a QUANTILE product can be found in Table~\ref{tab_product_quantiles}
+
+
 \begin{table}[H]
  \rowcolors{1}{darkgray}{lightgray}
  \begin{tabularx}{\textwidth}{llX}
@@ -1531,14 +1531,14 @@ Generate quantiles of volume data, for a given variable type. The parameters of 
  \end{tabularx}
  \caption{Parameters of a radar QUANTILES product.}
  \label{tab_product_quantiles}
- \end{table}   
-    
-    
+ \end{table}
+
+
 \subsubsection{FIELD\_COVERAGE}
    \label{subsec_field_coverage}
-Field coverage (for eaxample rain extension) of a given volume type. For its configuration, please see Table~\ref{tab_product_quantiles}   
-   
-   
+Field coverage (for eaxample rain extension) of a given volume type. For its configuration, please see Table~\ref{tab_product_quantiles}
+
+
 \begin{table}[H]
  \rowcolors{1}{darkgray}{lightgray}
  \begin{tabularx}{\textwidth}{llX}
@@ -1558,12 +1558,12 @@ Field coverage (for eaxample rain extension) of a given volume type. For its con
  \end{tabularx}
  \caption{Parameters of a radar FIELD\_COVERAGE product.}
  \label{tab_product_field_coverage}
- \end{table}   
-        
+ \end{table}
+
 \subsubsection{CDF}
    \label{subsec_cdf}
-Cumulative density function, whose parameters are listed in  Table~\ref{tab_product_cdf}.   
-   
+Cumulative density function, whose parameters are listed in  Table~\ref{tab_product_cdf}.
+
 \begin{table}[H]
  \rowcolors{1}{darkgray}{lightgray}
  \begin{tabularx}{\textwidth}{llX}
@@ -1581,8 +1581,8 @@ Cumulative density function, whose parameters are listed in  Table~\ref{tab_prod
   \end{tabularx}
  \caption{Parameters of a radar CDF product.}
  \label{tab_product_cdf}
- \end{table}       
- 
+ \end{table}
+
  \subsubsection{SAVEVOL}
  \label{subsec_savevol}
 
@@ -1934,7 +1934,7 @@ COMPARE\_CUMULATIVE\_POINT & Time series plot showing the accumulated value of a
 COMPARE\_TIME\_AVG & {\bf TODO} & {\bf TODO} \\
 PLOT\_AND\_WRITE           & Make a plot of a timeseries. And write
                              the timeseries to a file.              & \\
-PLOT\_HIST           & Plot a histogram of the timeseries.  & \\                             
+PLOT\_HIST           & Plot a histogram of the timeseries.  & \\
 \end{tabularx}
 \caption{List of all possible product types for dataset with TIMESERIES format}
 \label{tab_products_TIMESERIES}
@@ -1954,7 +1954,7 @@ LONGITUDE\_SLICE &  & \\
 CROSS\_SECTION &  & \\
 SAVEVOL & Save the volume product & \\
 
-                 
+
 \end{tabularx}
 \caption{List of all possible product types for dataset with GRID format}
 \label{tab_products_GRID}
@@ -2039,7 +2039,7 @@ TRAJ\_ONLY (trajectory only, without radar data interpolated) products are liste
 {\bf Name} & {\bf Description} & {\bf Reference}\\
  TRAJ\_PLOT & Plot of a given trajectory, in radar coordinates &  \\
  TRAJ\_TEXT & Text file of  a given trajectory &  \\
- 
+
 
 \end{tabularx}
 \caption{List of all the possible product types of TRAJ\_ONLY format}
@@ -2916,7 +2916,7 @@ QVP (quasi-vertical-profiles) products are a part of VOL products, although gene
 
 \section{GECSX interface}
 
-Pyrad provides a wrapper to the GECSX algorithm. GECSX is a radar visibility estimation method originally designed by \citep{Gabella_JAOT_1998}. 
+Pyrad provides a wrapper to the GECSX algorithm. GECSX is a radar visibility estimation method originally designed by \citep{Gabella_JAOT_1998}.
 GECSX allows to estimate the radar visibility as well as the ground clutter radar signal with a digital elevation model. GECSX can be run using the \textit{main\_process\_gecsx} script.
 
 This is an extraction of the script docstring.
@@ -2978,22 +2978,22 @@ There are two ways to use GECSX:
 
 \begin{itemize}
  \item With real radar data, by providing the path to proper radar data in the configuration files. Note that at the moment only one timestep and one radar will be used by the GECSX routine (the first one). If you want to process several radars I would suggest to create a new configuration file for each radar. To see an example of GECSX processing with real radar data check the files \textit{pay\_main\_DX50.txt}, \textit{pay\_loc\_DX50.txt} and \textit{pay\_prod\_DX50.txt} in the folder \textit{\$HOME/pyrad/config/gecsx/}.
- 
+
  An example of use in this case would be :
  \begin{verbatim}
-python $HOME/pyrad/src/pyrad_proc/scripts/main_process_gecsx pay_main_DX50.txt 
+python $HOME/pyrad/src/pyrad_proc/scripts/main_process_gecsx pay_main_DX50.txt
 --starttime 20160101000000 --endtime 20170101001000
 --cfgpath $HOME/pyrad/config/gecsx/ --gatherplots 1
-\end{verbatim} 
+\end{verbatim}
  \item Without radar data by entering the properties of a virtual radar in the loc and prod files. To see an example of GECSX processing with a virtual radar check the files \textit{pay\_main\_norad.txt}, \textit{pay\_loc\_norad.txt} and \textit{pay\_prod\_norad.txt} in the folder
- 
+
  \textit{\$HOME/pyrad/config/gecsx/}.
- 
+
  An example of use in this case would be :
  \begin{verbatim}
-python $HOME/pyrad/src/pyrad_proc/scripts/main_process_gecsx pay_main_norad.txt 
+python $HOME/pyrad/src/pyrad_proc/scripts/main_process_gecsx pay_main_norad.txt
 --cfgpath $HOME/pyrad/config/gecsx/ --gatherplots 1
-\end{verbatim} 
+\end{verbatim}
 Note the --gatherplots option, which copies all generate figures into a new directory located in the root directory of the GECSX outputs. This can be helpful since GECSX produces many products, which are all stored in separate folders by Pyrad.
 \end{itemize}
 
@@ -3009,8 +3009,8 @@ The following Pyrad configuration parameters are particularly relevant for GECSX
 dempath & STRING & Path where the DEM data is stored\\
 \textit{datapath} & STRING & Path where the radar data is stored, if not provided or empty, a virtual radar object will be created using the parameters given in the loc and prod files.\\
 \end{tabular}
-\end{table}                                 
-    
+\end{table}
+
     \newpage
 \subsection{In the local configuration file}
 
@@ -3019,7 +3019,7 @@ dempath & STRING & Path where the DEM data is stored\\
 \begin{tabular}{p{0.23\textwidth}p{0.10\textwidth}p{0.57\textwidth}}
 \bf{Name}          & \bf{Type} & \bf{Description}\\
 \hline
-\textit{ScanList} & STRING & Subfolder within <datapath> where the radar files are stored, if not provided or empty, a virtual radar object will be created using the parameters given in the loc and prod files.\\ 
+\textit{ScanList} & STRING & Subfolder within <datapath> where the radar files are stored, if not provided or empty, a virtual radar object will be created using the parameters given in the loc and prod files.\\
 frequency & FLOAT & Radar transmit frequency in GHz \\
 radar\_beam\_width\_h & FLOAT & Radar half power beam width in degrees \\
 pulse\_width & FLOAT & Radar pulsewidth in seconds \\
@@ -3037,9 +3037,9 @@ lrxh & FLOAT &  receiver losses from antenna feed to reference point  in dB \\
 \textit{refcorr} & FLOAT &  Effect of atmospheric refraction to the earth bending radius, will default to 4/3.\\
 
 \end{tabular}
-\end{table}                                 
-    
-    
+\end{table}
+
+
 \subsection{In the product configuration file}
 
 
@@ -3064,7 +3064,7 @@ type & STRING & Must be GECSX, so that Pyrad understands that this is a GECSX pr
     \textit{anglestep}  &  FLOAT 2.  & azimuth angle step of the virtual radar. Is required if no radar data is provided.\\
     \textit{range\_resolution} & FLOAT & range resolution of the virtual radar. Is required if no radar data is provided.\\
     \textit{antenna\_elevations} & FLTARR & list of elevations operated by the virtual radar. The radar visibility and clutter signal will be computed separately for all elevations. It is required if no radar data is provided. If radar data is provided and this parameter is defined in the config file, GECSX will only compute the elevation angles defined in this parameters, as long as they are available in the radar file (this can be used to process only a subset of the elevation angles operated by a real radar).\\
-\end{longtable} 
+\end{longtable}
 
 \subsection{GECSX outputs}
 
@@ -3089,9 +3089,9 @@ rcs\_clutter & POL & Backscattering cross-section of the ground clutter [m$^2$],
 dBm\_clutter & POL & Power signal of the ground clutter [dBm], at every considered elevation angle\\
 dBm\_clutter & POL & Reflectivity of the ground clutter [dBZ], at every considered elevation angle\\
 visibility\_polar & POLAR & Visibility at every polar gate [\%], at every considered elevation angle\\
-\end{longtable} 
+\end{longtable}
 
-CART indicates Cartesian fields which have the dimensions of the (possibly clipped) DEM, POL indicates polar fields which have the dimensions of the either real or virtual radar provided as input to GECSX. 
+CART indicates Cartesian fields which have the dimensions of the (possibly clipped) DEM, POL indicates polar fields which have the dimensions of the either real or virtual radar provided as input to GECSX.
 The typical Pyrad graph product type for CART outputs is SURFACE\_IMAGE, and for POL outputs, PPI\_IMAGE. The product type SAVEALL\_VOL can be used to save all POL outputs to a single netCDF file, the product type SAVEALL\_GRID can be used to save all GRID outputs to a single netCDF file. Avoid using the product type SAVEALL when using GECSX, as GECSX provides both Cartesian and polar fields and they need to be stored in separate files. Please see the examples provided in the prod config files in \textit{\$HOME/pyrad/config/gecsx/} for an exhaustive list of GECSX Pyrad products.
 
 % ----------------------------------------------------------------------------

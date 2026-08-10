@@ -10,7 +10,7 @@ RadarName STRARR 1
 
 # Names of the radar scans in the specified sector
 ScanList STRING MALS_SIO_RHI.ele/  # masterscan: first scan of a volume
-	  
+
 ####
 # GECSX mandatory parameters
 # The following radar parameters are all required for GECSX to work
@@ -21,7 +21,7 @@ pulse_width FLOAT 0.33e-6 # [s] Radar pulsewidth
 txpwrh FLOAT 35000. # [W] Transmit power
 AntennaGainH FLOAT 42.2  # [dB] Antenna gain along beam axis
 mflossh FLOAT 1. # [dB] matching filter losses
-lrxh FLOAT 2.6 # [dB] # receiver losses from antenna feed to reference point 
+lrxh FLOAT 2.6 # [dB] # receiver losses from antenna feed to reference point
 
 # The following radar parameters are required only if no radar data is given as input
 RadarPosition STRUCT 3
@@ -36,7 +36,7 @@ RadarPosition STRUCT 3
 # Defaults are attg = 0.012, AzimTol = 0, mosotti_factor = 0.9644, refcorr = 1.3333
 ####
 attg FLOAT 0.012 # [db/km] gas attenuation coefficient (1-way attenuation)
-AzimTol FLOAT 0. # [deg] azimuth convolution window for moving antenna 
+AzimTol FLOAT 0. # [deg] azimuth convolution window for moving antenna
 mosotti_factor FLOAT 0.9644 # [deg] Clausius-Mosotti factor K
 refcorr FLOAT 1.33333 # Effect of atm refraction to the earth bending radius
 ####
@@ -50,7 +50,7 @@ ppiImageConfig STRUCT 8
    ymin       FLOAT  -60.0   # Min distance on vertical axis [km]
    ymax       FLOAT   60.0   # Max distance on vertical axis [km]
    rngRing    FLOAT  20.0   # distance between range rings (0 no range ring) [km]
-   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)   
+   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)
 
 rhiImageConfig STRUCT 7
    xsize      FLOAT  10.    # image size [inches]
@@ -59,8 +59,8 @@ rhiImageConfig STRUCT 7
    xmax       FLOAT 100.0   # Max distance on horizontal axis [km]
    ymin       FLOAT   0.0   # Min distance on vertical axis [km]
    ymax       FLOAT  12.0    # Max distance on vertical axis [km]
-   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)   
-   
+   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)
+
 ppiMapImageConfig STRUCT 10
    rngRing    FLOAT  20.0   # distance between range rings (0 no range ring) [km]
    xsize      FLOAT  7.   # image size [inches] (default dots per inch (dpi):72)
@@ -70,7 +70,7 @@ ppiMapImageConfig STRUCT 10
    latmin     FLOAT 47.2 # Min latitude [deg]
    latmax     FLOAT 47.6 # Max latitude [deg]
    mapres     STRING 10m  # map resolution (10m, 50m, 110m)
-   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)   
+   dpi        INT    72     # dots per inch (72 web quality, 300 print quality)
    maps STRARR 6         # maps to overplot
        countries
        provinces
@@ -78,7 +78,7 @@ ppiMapImageConfig STRUCT 10
        lakes_europe
        rivers
        rivers_europe
-       
+
 gridMapImageConfig STRUCT 11
    xsize      FLOAT  10.   # image size [inches] (default dots per inch (dpi):72)
    ysize      FLOAT  8.   # image size [inches] (default dots per inch (dpi):72)

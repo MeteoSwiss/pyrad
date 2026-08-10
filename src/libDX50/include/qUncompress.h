@@ -5,11 +5,11 @@
 
   *************************************************************
 
-  Filename:         qUncompress.h 
+  Filename:         qUncompress.h
   Author:           Andreas Leuenberger
   Creation date:    2012-10-25
   Last update:      2012-11-12
-    
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus

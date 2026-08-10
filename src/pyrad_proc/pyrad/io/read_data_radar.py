@@ -2593,9 +2593,9 @@ def merge_scans_mfcfradial(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[
-                cfg["DataTypeIDInFiles"][ind_rad][datatype]
-            ] = get_fieldname_pyart(datatype)
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
         else:
             field_names[datatype] = DataTypeIDInFiles_defaults[datatype]
 
@@ -2619,10 +2619,7 @@ def merge_scans_mfcfradial(
             break
 
     if not filename:
-        warn(
-            f"No file found in {datapath} for scan {scan_list[0]}"
-            f" and time {voltime}"
-        )
+        warn(f"No file found in {datapath} for scan {scan_list[0]} and time {voltime}")
     else:
         flist.append(filename[0])
         scan_list_aux.append(scan_list[0])
@@ -2657,10 +2654,7 @@ def merge_scans_mfcfradial(
                         print(os.path.basename(filename[0]))
                         break
             if not filename:
-                warn(
-                    f"No file found in {datapath} for scan {scan}"
-                    f" and time {voltime}"
-                )
+                warn(f"No file found in {datapath} for scan {scan} and time {voltime}")
                 continue
             flist.append(filename[0])
             scan_list_aux.append(scan)
@@ -2925,9 +2919,9 @@ def merge_scans_cfradial(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[
-                cfg["DataTypeIDInFiles"][ind_rad][datatype]
-            ] = get_fieldname_pyart(datatype)
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
         else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
@@ -3073,9 +3067,9 @@ def merge_scans_cfradial2(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[
-                cfg["DataTypeIDInFiles"][ind_rad][datatype]
-            ] = get_fieldname_pyart(datatype)
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
         else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
@@ -3337,9 +3331,9 @@ def merge_scans_cf1(
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            field_names[
-                cfg["DataTypeIDInFiles"][ind_rad][datatype]
-            ] = get_fieldname_pyart(datatype)
+            field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
         else:
             field_names[datatype] = get_fieldname_pyart(datatype)
 
@@ -5688,9 +5682,9 @@ def get_data_odim(filename, datatype_list, scan_name, cfg, ind_rad=0):
     # Use custom name mapping
     for datatype in datatype_list:
         if datatype in cfg["DataTypeIDInFiles"][ind_rad]:
-            odim_field_names[
-                cfg["DataTypeIDInFiles"][ind_rad][datatype]
-            ] = get_fieldname_pyart(datatype)
+            odim_field_names[cfg["DataTypeIDInFiles"][ind_rad][datatype]] = (
+                get_fieldname_pyart(datatype)
+            )
         else:
             odim_field_names.update(get_datatype_odim(datatype))
 

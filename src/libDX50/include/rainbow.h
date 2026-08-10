@@ -1,15 +1,15 @@
 /*
   *************************************************************
 
-  Rainbow 
+  Rainbow
 
   *************************************************************
 
-  Filename:         rainbow.h 
+  Filename:         rainbow.h
   Author:           Andreas Leuenberger
   Creation date:    2012-10-19
   Last update:      2013-03-08
-    
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus

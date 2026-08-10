@@ -8,8 +8,8 @@
   Filename:         qUncompress.c
   Author:           Andreas Leuenberger
   Creation date:    2012-10-30
-  Last update:      
-    
+  Last update:
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus
@@ -20,7 +20,7 @@
 
   Description:
   ------------
-  
+
 
   *************************************************************
   =============================================================
@@ -82,24 +82,24 @@ int qUncompress(const unsigned char* data, int nbytes, unsigned char **dest, uns
 			*destBytes = 0;
 			return 0;
 		}
-    }	
+    }
     ulong expectedSize = (data[0] << 24) | (data[1] << 16) |
                        (data[2] <<  8) | (data[3]      );
     ulong len = expectedSize;
-	
+
 	// printf("qUncompress: Expected data size: %lu\r\n", expectedSize);
 	if (len==0) {
 		printf("qUncompress: Error. Expected data size=0\r\n");
 		return -1;
 	}
-		
+
     *dest = (uchar*)malloc(len);
     if (!*dest) {
 		printf("qUncompress: could not allocate enough memory to uncompress data\r\n");
 		return -1;
     }
 
-    for (;;) {		
+    for (;;) {
         ulong alloc = len;
         if (len  >= (ulong)(1 << 31) ) {
             printf("qUncompress: Input data is corrupted. Uncompressed data buffer requested dimensions too large\r\n");
@@ -107,7 +107,7 @@ int qUncompress(const unsigned char* data, int nbytes, unsigned char **dest, uns
         }
 
         int res = uncompress(*dest, &len,
-                               (uchar*)data+4, nbytes-4);		
+                               (uchar*)data+4, nbytes-4);
         switch (res) {
 			case Z_OK:
 				if (len != alloc) {

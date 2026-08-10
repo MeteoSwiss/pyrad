@@ -14,7 +14,7 @@ if [[ -z "${PYRAD_PATH}" ]]; then
 fi
 
 cd $PYRAD_PATH/src/PyTDA
-python setup.py clean --all 
+python setup.py clean --all
 
 # recompile
 echo 'compiling...'

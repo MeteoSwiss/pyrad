@@ -482,9 +482,11 @@ def generate_intercomp_products(dataset, prdcfg):
         fname_list = []
         for i in range(len(range_bins) - 1):  # loop on range bins
             if len(range_bins) > 2:
-                rangebin_info = f"range_bin_{range_bins[i]:.0f}_{range_bins[i+1]:.0f}m"
+                rangebin_info = (
+                    f"range_bin_{range_bins[i]:.0f}_{range_bins[i + 1]:.0f}m"
+                )
                 rangebin_info_title = (
-                    f"range_bin {range_bins[i]:.0f}-{range_bins[i+1]:.0f}m"
+                    f"range_bin {range_bins[i]:.0f}-{range_bins[i + 1]:.0f}m"
                 )
             else:
                 rangebin_info = None  # only one range bin, leave empty
@@ -816,7 +818,7 @@ def generate_intercomp_products(dataset, prdcfg):
 
         if finite_values.size == 0:
             raise ValueError(
-                "No finite radar values are available for " "HISTOGRAM_OVER_RANGE"
+                "No finite radar values are available for HISTOGRAM_OVER_RANGE"
             )
 
         configured_vmin = prdcfg.get("vmin")
@@ -1052,7 +1054,7 @@ def generate_intercomp_products(dataset, prdcfg):
             plot_field_name = f"f({field_name})"
 
         titl = (
-            f"{plot_field_name} histogram over range\n"
+            f"{plot_field_name} histogram over range "
             f"{dataset['timeinfo'].strftime(timeformat)}"
         )
 

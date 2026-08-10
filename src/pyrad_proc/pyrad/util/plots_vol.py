@@ -2149,7 +2149,7 @@ def plot_roi_contour(
 
     """
     if not _SHAPELY_AVAILABLE or not _CARTOPY_AVAILABLE:
-        warn("Unable to plot ROI contour: Missing shapely and/or" " cartopy modules")
+        warn("Unable to plot ROI contour: Missing shapely and/or cartopy modules")
         return None
 
     dpi = prdcfg["ppiMapImageConfig"].get("dpi", 72)

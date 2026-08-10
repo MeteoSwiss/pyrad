@@ -62,7 +62,7 @@ class TimeSeries(object):
         if timevec is None:
             if maxlength is None:
                 raise Exception(
-                    "ERROR: Either 'timevec' or 'maxlength'" " must be defined"
+                    "ERROR: Either 'timevec' or 'maxlength' must be defined"
                 )
             self.maxlength = maxlength
             self.time_vector = np.empty(maxlength, dtype=datetime)
@@ -117,9 +117,7 @@ class TimeSeries(object):
         """
 
         if self.num_el + 1 > self.maxlength:  # jgr changed from >=
-            raise Exception(
-                "ERROR: Cannot add time series sample. Max" " length reached."
-            )
+            raise Exception("ERROR: Cannot add time series sample. Max length reached.")
 
         self.time_vector[self.num_el] = dt
         for val, ds in zip(values, self.dataseries):

@@ -35,7 +35,7 @@ do
         read -r -a hour_run_vec <<< "$RUN"
         IFS=$OIFS
         shift # past argument
-        ;;        
+        ;;
         -h|--hour)
         HOUR="$2"
         OIFS=$IFS
@@ -46,8 +46,8 @@ do
         ;;
         -p|--dest_base)
         data_destbase="$2"
-        shift # past argument        
-        ;;    
+        shift # past argument
+        ;;
     esac
     shift # past argument or value
 done
@@ -60,7 +60,7 @@ for ((iday=0; iday<${nday}; iday++)); do
     yearl=$(date --date "${day_vec[${iday}]}" +"%Y")
     years=$(date --date "${day_vec[${iday}]}" +"%y")
     julday=$(date --date "${day_vec[${iday}]}" +"%j")
-    
+
     echo "Processing day "${years}${julday}
 
     # create destination path for polar data and unzip files there
@@ -68,11 +68,11 @@ for ((iday=0; iday<${nday}; iday++)); do
     data_destpath=${data_destbase}${years}${julday}/
     filebase=HZT${years}${julday}
     mkdir -p ${data_destpath}
-    
+
     hour24=0
     if [ "${hour_fcst_vec}" = "all" ] && [ "${hour_run_vec}" = "all" ];then
         unzip -o ${data_origpath}${filebase}.zip -d ${data_destpath}
-    else        
+    else
         for ((ihour_run=0; ihour_run<${nhour_run}; ihour_run++)); do
             if [ ${hour_run_vec[${ihour_run}]} = "all" ]; then
                 hour_run=*
@@ -94,13 +94,13 @@ for ((iday=0; iday<${nday}; iday++)); do
         done
     fi
     chmod -R gu+rw ${data_destpath}
-    
+
     # add file 00:00 UTC the next day
     if [ "${hour_run_vec}" = "all" ] || [ "$hour24" -eq 1 ];then
         yearl_end=$(date -d "$(date --date "${day_vec[${iday}]}")+1 day" +"%Y")
         years_end=$(date -d "$(date --date "${day_vec[${iday}]}")+1 day" +"%y")
         julday_end=$(date -d "$(date --date "${day_vec[${iday}]}")+1 day" +"%j")
-        
+
         data_origpath=${rawdata_origbase}${yearl_end}/${years_end}${julday_end}/
         data_destpath=${data_destbase}${years_end}${julday_end}/
         filebase=HZT${years_end}${julday_end}

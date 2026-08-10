@@ -5,11 +5,11 @@
 
   *************************************************************
 
-  Filename:         qCompress.h 
+  Filename:         qCompress.h
   Author:           Jordi Figueras i Ventura
   Creation date:    2015-01-15
-  Last update:      
-    
+  Last update:
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus
@@ -30,7 +30,7 @@
 #define __QCOMPRESS_H
 
 #ifdef __cplusplus
-extern "C" 
+extern "C"
 {
 #endif
 

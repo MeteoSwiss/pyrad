@@ -1,7 +1,7 @@
 #!/bin/bash
-# This script: 
+# This script:
 # Gets COSMO-1 temperature file from CSCS repository and puts it in the right
-# folder to be processed in CSCS 
+# folder to be processed in CSCS
 # created 23.03.2017 (fvj)
 
 # set permits
@@ -34,7 +34,7 @@ while [[ $# -gt 1 ]]
 do
     key="$1"
 
-    case $key in        
+    case $key in
         -d|--day)
         DAY="$2"
         OIFS=$IFS
@@ -50,7 +50,7 @@ do
         read -r -a hour_run_vec <<< "$RUN"
         IFS=$OIFS
         shift # past argument
-        ;;        
+        ;;
         -r|--radar)
         radar="$2"
         shift # past argument
@@ -61,8 +61,8 @@ do
         ;;
         -p|--dest_base)
         cosmobaseraw="$2"
-        shift # past argument        
-        ;;   
+        shift # past argument
+        ;;
     esac
     shift # past argument or value
 done
@@ -77,43 +77,43 @@ for ((iday=0; iday<${nday}; iday++)); do
     datedir=$(date --date "${date_vec[${iday}]}" +"%Y-%m-%d")
     data_destpath=${cosmobaseraw}${datedir}
     filebase=cosmo-1_MDR_3D_${date_vec[${iday}]}
-    mkdir -p ${data_destpath}    
+    mkdir -p ${data_destpath}
 
     hour24=0
     if [ "${hour_run_vec}" = "all" ];then
         cp ${cosmopathcscs}${filebase}*.nc ${data_destpath}
-    else        
+    else
         for ((ihour_run=0; ihour_run<${nhour_run}; ihour_run++)); do
             hour_run=${hour_run_vec[${ihour_run}]}
             if [ ${hour_run} = '24' ]; then
                 hour24=1
                 continue
             fi
-            cp ${cosmopathcscs}${filebase}${hour_run}.nc ${data_destpath}            
-            
+            cp ${cosmopathcscs}${filebase}${hour_run}.nc ${data_destpath}
+
             if [ $radar != "None" ]
-            then                    
+            then
                 years=$(date --date "${date_vec[${iday}]}" +"%y")
                 julday=$(date --date "${date_vec[${iday}]}" +"%j")
-                        
+
                 temp_cosmo_radar=${radar}
                 temp_cosmo_res=${res}
                 temp_cosmo_year=$(date --date "${date_vec[${iday}]}" +"%y")
                 temp_cosmo_day=$(date --date "${date_vec[${iday}]}" +"%j")
                 temp_cosmo_hour=${hour_run}
-    
+
                 export temp_cosmo_radar
                 export temp_cosmo_res
                 export temp_cosmo_year
                 export temp_cosmo_day
                 export temp_cosmo_hour
-    
+
                 cd ${execpath}
                 ${idlpath} -rt=temp_cosmo1_cscs.run
             fi
         done
     fi
-    chmod -R gu+rw ${data_destpath}     
+    chmod -R gu+rw ${data_destpath}
 
     # add file 00:00 UTC the next day
     if [ "${hour_run_vec}" = "all" ] || [ "$hour24" -eq 1 ];then

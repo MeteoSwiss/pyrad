@@ -292,7 +292,7 @@ def plot_timeseries_comp(
         raise ValueError("No time series provided")
 
     if labels is None:
-        labels = [f"Series {i+1}" for i in range(n)]
+        labels = [f"Series {i + 1}" for i in range(n)]
     if periods is None:
         periods = [0] * n
 

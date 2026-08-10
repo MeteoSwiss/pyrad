@@ -57,7 +57,7 @@ def dict_to_restructured_text(yaml_data):
             rst_output.append("")
 
         for product, prodinfo in yaml_data[datasettype].items():
-            if type(prodinfo) == str:
+            if type(prodinfo) is str:
                 continue
             if "description" not in prodinfo:
                 continue
@@ -67,7 +67,7 @@ def dict_to_restructured_text(yaml_data):
             rst_output.append(
                 " | "
                 + prodinfo["description"].replace("###", "\n |")
-                + f'\n `[Source] <{prodinfo["link"]}>`_'
+                + f"\n `[Source] <{prodinfo['link']}>`_"
             )
             params = parameters_to_dict(prodinfo["parameters"])
             if len(params):
@@ -76,7 +76,7 @@ def dict_to_restructured_text(yaml_data):
                 for param, paraminfo in params.items():
                     try:
                         rst_output.append(
-                            f"   {param.split()[0]} : *{" ".join(param.split()[1:])}*"
+                            f"   {param.split()[0]} : *{' '.join(param.split()[1:])}*"
                         )
                     except IndexError:
                         rst_output.append(f"   {param}")
@@ -92,6 +92,8 @@ def process_file(filepath):
     all_products = {}
     started = False
     product = None
+    function = None
+    descr = None
     for i, line in enumerate(content):
         if "def generate" in line:
             if started:
@@ -149,7 +151,7 @@ def process_file(filepath):
             for product in all_products[function].keys():
                 if product in line:
                     all_products[function][product]["link"] = (
-                        funcpath_to_docpath(filepath) + f"#L{i+1}"
+                        funcpath_to_docpath(filepath) + f"#L{i + 1}"
                     )
 
     if reading_title:

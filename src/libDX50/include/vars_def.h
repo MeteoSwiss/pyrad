@@ -5,11 +5,11 @@
 
   *************************************************************
 
-  Filename:         vars_def.h 
-  Author:           
-  Creation date:    
+  Filename:         vars_def.h
+  Author:
+  Creation date:
   Last update:      2015-05-15 (fvj: added definitions for visibility data)
-    
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus

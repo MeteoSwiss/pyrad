@@ -8,8 +8,8 @@
   Filename:         qCompress.c
   Author:           Jordi Figueras i Ventura
   Creation date:    2015-01-16
-  Last update:      
-    
+  Last update:
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus
@@ -20,7 +20,7 @@
 
   Description:
   ------------
-  
+
 
   *************************************************************
   =============================================================
@@ -39,14 +39,14 @@ extern "C" {
 int qCompressBound(const unsigned long sourceLen, unsigned long *expectedSize)
 {
 	unsigned long len;
-	
+
 	len=compressBound(sourceLen);
-	if (len  >= (ulong)(1 << 31) ) 
+	if (len  >= (ulong)(1 << 31) )
 	{
 		printf("qCompressBound: Compressed data buffer requested dimensions too large\r\n");
         return -1;
     }
-	*expectedSize=len;	
+	*expectedSize=len;
 	return 0;
 }
 
@@ -54,23 +54,23 @@ int qCompress(const unsigned long sourceLen, const unsigned char *source, unsign
 {
 	unsigned long len, alloc;
 	unsigned long expectedSize;
-	
-    if (!source) 
+
+    if (!source)
 	{
         printf("qCompress: Data is null\r\n");
         return -1;
     }
-	
+
 	expectedSize=compressBound(sourceLen);
-	if (expectedSize  >= (unsigned long)(1 << 31) ) 
+	if (expectedSize  >= (unsigned long)(1 << 31) )
 	{
 		printf("qCompress: Compressed data buffer requested dimensions too large\r\n");
         return -1;
     }
 	len=expectedSize;
-    
+
     *dest = (unsigned char*)malloc(len);
-    if (!*dest) 
+    if (!*dest)
 	{
 		printf("qCompress: could not allocate enough memory to uncompress data\r\n");
 		return -1;
@@ -79,17 +79,17 @@ int qCompress(const unsigned long sourceLen, const unsigned char *source, unsign
     for (;;)
 	{
 		alloc = len;
-		if (len  >= (unsigned long)(1 << 31) ) 
+		if (len  >= (unsigned long)(1 << 31) )
 		{
 			printf("qCompress: Compressed data buffer requested dimensions too large\r\n");
 			return -1;
 		}
 		int res = compress(*dest, &len, source, sourceLen);
-		
-		switch (res) 
+
+		switch (res)
 		{
 			case Z_OK:
-				if (len != alloc) 
+				if (len != alloc)
 				{
 					if (len  >= (unsigned long)(1 << 31)) {
 						printf("qCompress: Z_OK: Uncompressed data buffer requested dimensions too large\r\n");
@@ -100,21 +100,21 @@ int qCompress(const unsigned long sourceLen, const unsigned char *source, unsign
 						printf("qCompress: Z_OK: Could not allocate enough memory to compress data\r\n");
 						return -1;
 					}
-				}				
-				*destLen = len;				
+				}
+				*destLen = len;
 				return 0;
-			
+
 			case Z_MEM_ERROR:
 				printf("qCompress: Z_MEM_ERROR: Not enough memory\r\n");
 				return -1;
-				
+
 			case Z_BUF_ERROR:
 				printf("qCompress: Z_BUF_ERROR: Output buffer too small\r\n");
 				len *= 2;
-				continue;				
-		}		
+				continue;
+		}
 	}
-   
+
 }
 
 #ifdef __cplusplus

@@ -1110,8 +1110,7 @@ def plot_fixed_rng_span(
     valid_plot_types = {"field", "range"}
     if plot_type not in valid_plot_types:
         raise ValueError(
-            f"Unknown plot_type '{plot_type}'. "
-            "Valid values are: 'field' and 'range'."
+            f"Unknown plot_type '{plot_type}'. Valid values are: 'field' and 'range'."
         )
 
     # Get radar azimuth and elevation coordinates.
@@ -2182,7 +2181,7 @@ def plot_roi_contour(
 
     """
     if not _SHAPELY_AVAILABLE or not _CARTOPY_AVAILABLE:
-        warn("Unable to plot ROI contour: Missing shapely and/or" " cartopy modules")
+        warn("Unable to plot ROI contour: Missing shapely and/or cartopy modules")
         return None
 
     dpi = prdcfg["ppiMapImageConfig"].get("dpi", 72)

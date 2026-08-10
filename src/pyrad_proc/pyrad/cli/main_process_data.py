@@ -63,17 +63,13 @@ def main():
         "--starttime",
         type=str,
         default=None,
-        help=(
-            "starting time of the data to be processed. " + "Format "
-            "YYYYMMDDhhmmss"
-            ""
-        ),
+        help=("starting time of the data to be processed. " + "Format YYYYMMDDhhmmss"),
     )
     parser.add_argument(
         "--endtime",
         type=str,
         default=None,
-        help="end time of the data to be processed. Format " "YYYYMMDDhhmmss" "",
+        help="end time of the data to be processed. Format YYYYMMDDhhmmss",
     )
     parser.add_argument(
         "--postproc_cfgfile",
@@ -108,8 +104,7 @@ def main():
         "--trajtype",
         type=str,
         default="plane",
-        help="Type of trajectory. "
-        "Can be either 'plane', 'lightning' or 'proc_periods'",
+        help="Type of trajectory. Can be either 'plane', 'lightning' or 'proc_periods'",
     )
     parser.add_argument(
         "--flashnr",

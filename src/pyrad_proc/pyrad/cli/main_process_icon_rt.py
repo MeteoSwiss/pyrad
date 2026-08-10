@@ -69,17 +69,13 @@ def main():
         "--starttime",
         type=str,
         default=None,
-        help=(
-            "starting time of the data to be processed. " + "Format "
-            "YYYYMMDDhhmmss"
-            ""
-        ),
+        help=("starting time of the data to be processed. " + "Format YYYYMMDDhhmmss"),
     )
     parser.add_argument(
         "--endtime",
         type=str,
         default=None,
-        help="end time of the data to be processed. Format " "YYYYMMDDhhmmss" "",
+        help="end time of the data to be processed. Format YYYYMMDDhhmmss",
     )
     parser.add_argument(
         "--cfgpath",

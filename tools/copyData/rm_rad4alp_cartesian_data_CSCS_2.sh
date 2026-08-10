@@ -152,12 +152,12 @@ for ((iday=0; iday<${nday}; iday++)); do
         if [ ! "$(ls -A ${data_destbase}${years}${julday}/${prod}${years}${julday})" ]; then
             rm -rf ${data_destbase}${years}${julday}/${prod}${years}${julday}
         fi
-        
-        
+
+
         # remove polar data at 00:00 the next day
         if [ "${time_vec}" = "all" ];then
             rm -f ${data_destbase}${years_end}${julday_end}/${prod}${years_end}${julday_end}/${prod}${years_end}${julday_end}0000*.*
-                    
+
             # remove directory if empty
             if [ ! "$(ls -A ${data_destbase}${years_end}${julday_end}/${prod}${years_end}${julday_end})" ]; then
                 rm -rf ${data_destbase}${years_end}${julday_end}${prod}${years_end}${julday_end}

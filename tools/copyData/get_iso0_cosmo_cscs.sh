@@ -1,7 +1,7 @@
 #!/bin/bash
-# This script: 
+# This script:
 # Gets COSMO ISO0 data in HZT format from CSCS repository and puts it in the right
-# folder to be processed in CSCS 
+# folder to be processed in CSCS
 # created 23.03.2017 (fvj)
 
 # set permits
@@ -28,7 +28,7 @@ while [[ $# -gt 1 ]]
 do
     key="$1"
 
-    case $key in        
+    case $key in
         -d|--day)
         DAY="$2"
         OIFS=$IFS
@@ -44,7 +44,7 @@ do
         read -r -a hour_run <<< "$RUN"
         IFS=$OIFS
         shift # past argument
-        ;;        
+        ;;
         -r|--radar)
         radar="$2"
         shift # past argument
@@ -68,7 +68,7 @@ nhour_run=${#hour_run[@]}
 date
 
 for ((iday=0; iday<${nday}; iday++)); do
-    for ((ihour_run=0; ihour<${nhour_run}; ihour_run++)); do		
+    for ((ihour_run=0; ihour<${nhour_run}; ihour_run++)); do
         for ((ihour_fcst=0; ihour<${nhour_fcst}; ihour_fcst++)); do
             iso0_cosmo_radar=${radar}
             iso0_cosmo_res=${res}

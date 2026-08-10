@@ -58,12 +58,12 @@ def main():
     parser.add_argument(
         "startdate",
         type=str,
-        help="starting date of the data to be processed. Format " "YYYYMMDD" " ",
+        help="starting date of the data to be processed. Format YYYYMMDD ",
     )
     parser.add_argument(
         "enddate",
         type=str,
-        help="end date of the data to be processed. Format " "YYYYMMDD" " ",
+        help="end date of the data to be processed. Format YYYYMMDD ",
     )
 
     # keyword arguments
@@ -71,13 +71,13 @@ def main():
         "--starttime",
         type=str,
         default="000000",
-        help="starting date of the data to be processed. Format " "hhmmss" " ",
+        help="starting date of the data to be processed. Format hhmmss ",
     )
     parser.add_argument(
         "--endtime",
         type=str,
         default="235959",
-        help="end date of the data to be processed. Format " "hhmmss" " ",
+        help="end date of the data to be processed. Format hhmmss ",
     )
 
     parser.add_argument(

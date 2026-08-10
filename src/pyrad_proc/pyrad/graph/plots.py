@@ -1835,7 +1835,7 @@ def plot_selfconsistency_instrument2(
             kdpzh_th = np.interp(zdr[ind_zdr_sorted], zdr_th_table, kdpzh_th_table)
 
         else:
-            warn("Unable to plot self-consistency curve. " "Relationship not provided")
+            warn("Unable to plot self-consistency curve. Relationship not provided")
             return None
     elif parametrization == "Gourley":
         if zdr_kdpzh_dict is None or "freq_band" not in zdr_kdpzh_dict:
@@ -2536,9 +2536,7 @@ def _plot_time_range(
             )
 
             annotation = (
-                f"max = {max_value:.2f}\n"
-                f"x = {max_time:.2f}\n"
-                f"y = {max_range:.2f}"
+                f"max = {max_value:.2f}\nx = {max_time:.2f}\ny = {max_range:.2f}"
             )
 
             ax.annotate(
@@ -2841,7 +2839,7 @@ def plot_histogram_over_range(
             left=0.08,
             right=0.94,
             bottom=0.10,
-            top=0.90,
+            top=0.88,
             hspace=0.25,
             wspace=0.08,
         )

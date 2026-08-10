@@ -140,7 +140,7 @@ def generate_traj_product(traj, prdcfg):
 
         description = [
             "Description:",
-            "Time series of a plane trajectory in radar " "coordinates.",
+            "Time series of a plane trajectory in radar coordinates.",
         ]
 
         ts = TimeSeries(

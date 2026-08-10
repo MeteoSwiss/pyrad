@@ -48,16 +48,12 @@ def main():
     parser.add_argument(
         "starttime",
         type=str,
-        help=(
-            "starting time of the data to be processed. " + "Format "
-            "YYYYMMDDhhmmss"
-            ""
-        ),
+        help=("starting time of the data to be processed. " + "Format YYYYMMDDhhmmss"),
     )
     parser.add_argument(
         "endtime",
         type=str,
-        help="end time of the data to be processed. Format " "YYYYMMDDhhmmss" "",
+        help="end time of the data to be processed. Format YYYYMMDDhhmmss",
     )
 
     # keyword arguments

@@ -29,6 +29,7 @@ else:
     from . import prod  # noqa
     from . import util  # noqa
     from . import flow  # noqa
+    from ._version import __version__ as __version__
 
     if os.environ:
         from .util import enable_debug_on_error

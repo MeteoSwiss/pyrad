@@ -4,6 +4,7 @@ import inspect
 from pathlib import Path
 
 from pyrad.io import io_aux
+from pyrad.io.io_aux import pyrad_to_pyart_keys_dict
 
 FUNCTIONS_TO_PARSE = [
     "get_datatype_odim",
@@ -68,8 +69,6 @@ for fun_name in FUNCTIONS_TO_PARSE:
 
 print("Parsing function pyrad_to_pyart")
 # Treat get_datatype_pyart separately
-from pyrad.io.io_aux import pyrad_to_pyart_keys_dict
-
 dic = {
     "pyrad_name": list(pyrad_to_pyart_keys_dict.keys()),
     "pyart_name": list(pyrad_to_pyart_keys_dict.values()),

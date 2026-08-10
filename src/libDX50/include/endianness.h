@@ -5,11 +5,11 @@
 
   *************************************************************
 
-  Filename:         endianness.h 
+  Filename:         endianness.h
   Author:           Andreas Leuenberger
   Creation date:    2012-10-30
   Last update:      2012-12-19
-    
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus
@@ -48,7 +48,7 @@
 #ifndef __ORDER_BIG_ENDIAN__
 #  ifdef __BIG_ENDIAN
 #    define __ORDER_BIG_ENDIAN__ __BIG_ENDIAN
-#  else 
+#  else
 #    error "BIG ENDIAIN not defined"
 #  endif
 #endif
@@ -56,7 +56,7 @@
 #ifndef __ORDER_LITTLE_ENDIAN__
 #  ifdef __LITTLE_ENDIAN
 #    define __ORDER_LITTLE_ENDIAN__ __LITTLE_ENDIAN
-#  else 
+#  else
 #    error "LITTLE ENDIAIN not defined"
 #  endif
 #endif

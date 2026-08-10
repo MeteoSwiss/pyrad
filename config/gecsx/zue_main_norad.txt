@@ -33,4 +33,3 @@ locationConfigFile STRING $HOME/pyrad/config/gecsx/zue_loc_norad.txt
 
 # Configuration of the product generation
 productConfigFile STRING $HOME/pyrad/config/gecsx/zue_prod_norad.txt
-

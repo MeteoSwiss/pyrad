@@ -1198,7 +1198,7 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
 
         if lon_centre is None or lat_centre is None:
             warn(
-                "cercle position undefined. " "The radar position will be used",
+                "cercle position undefined. The radar position will be used",
                 use_debug=False,
             )
             lon_centre = radar.longitude["data"][0]
@@ -1231,7 +1231,7 @@ def process_keep_roi(procstatus, dscfg, radar_list=None):
 
         if lon_point is None or lat_point is None:
             warn(
-                "box position undefined. " "The radar position will be used",
+                "box position undefined. The radar position will be used",
                 use_debug=False,
             )
             lon_point = radar.longitude["data"][0]
@@ -1500,7 +1500,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
 
         if lon_centre is None or lat_centre is None:
             warn(
-                "cercle position undefined. " "The radar position will be used",
+                "cercle position undefined. The radar position will be used",
                 use_debug=False,
             )
             lon_centre = radar.longitude["data"][0]
@@ -1533,7 +1533,7 @@ def process_roi(procstatus, dscfg, radar_list=None):
 
         if lon_point is None or lat_point is None:
             warn(
-                "box position undefined. " "The radar position will be used",
+                "box position undefined. The radar position will be used",
                 use_debug=False,
             )
             lon_point = radar.longitude["data"][0]
@@ -1855,7 +1855,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
 
         if lon_centre is None or lat_centre is None:
             warn(
-                "cercle position undefined. " "The radar position will be used",
+                "cercle position undefined. The radar position will be used",
                 use_debug=False,
             )
             lon_centre = radar.longitude["data"][0]
@@ -1888,7 +1888,7 @@ def process_roi2(procstatus, dscfg, radar_list=None):
 
         if lon_point is None or lat_point is None:
             warn(
-                "box position undefined. " "The radar position will be used",
+                "box position undefined. The radar position will be used",
                 use_debug=False,
             )
             lon_point = radar.longitude["data"][0]

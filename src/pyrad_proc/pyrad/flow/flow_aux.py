@@ -649,7 +649,7 @@ def _wait_for_files(nowtime, datacfg, datatype_list, last_processed=None):
         starttime_loop = starttime_loop_default
         last_processed = starttime_loop_default
     elif starttime_loop_default - last_processed > timedelta(minutes=scan_min * 3):
-        warn("last processed volume too old. " "There may be missing processed volumes")
+        warn("last processed volume too old. There may be missing processed volumes")
         starttime_loop = starttime_loop_default
         last_processed = starttime_loop_default
     else:
@@ -845,7 +845,7 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
         try:
             radar_list.append(get_data(master_voltime, datatypesdescr_list[0], datacfg))
         except Exception as exc:
-            warn(f"ERROR: Failed to load master radar at " f"{master_voltime}: {exc}")
+            warn(f"ERROR: Failed to load master radar at {master_voltime}: {exc}")
             return []
 
         if num_radars == 1:
@@ -901,7 +901,7 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
 
             if num_radars == 1:
                 try:
-                    warn(f"Overriding attribute {key} with value " f"{float(values)}")
+                    warn(f"Overriding attribute {key} with value {float(values)}")
                     radar_list[0].__dict__[key]["data"] = np.array([float(values)])
                 except Exception as exc:
                     warn(f"WARNING: Failed to override {key}: {exc}")
@@ -926,7 +926,7 @@ def _get_radars_data(master_voltime, datatypesdescr_list, datacfg, num_radars=1)
                     )
                     radar.__dict__[key]["data"] = np.array([float(values[i])])
                 except Exception as exc:
-                    warn(f"WARNING: Failed to override {key} on radar " f"{i}: {exc}")
+                    warn(f"WARNING: Failed to override {key} on radar {i}: {exc}")
 
         return radar_list
 
@@ -1145,7 +1145,7 @@ def _generate_prod(dataset, cfg, prdname, prdfunc, dsname, voltime, runinfo=None
                 # generate table name
                 table_name = prdname
                 if multiple_files:
-                    table_name += f"_{i+1}"
+                    table_name += f"_{i + 1}"
                 write_csv_to_mysql(
                     prdcfg["MySQLhost"],
                     MySQLport,
@@ -1410,10 +1410,10 @@ def _create_cfg_dict(cfgfile):
             warn("BinFileParams: added_time not specified. Assumed 86400.")
             cfg["BinFileParams"].update({"added_time": 86400.0})
         if "x_offset" not in cfg["BinFileParams"]:
-            warn("BinFileParams: x_offset not specified." " Assumed -619652.074056")
+            warn("BinFileParams: x_offset not specified. Assumed -619652.074056")
             cfg["BinFileParams"].update({"x_offset": -619652.074056})
         if "y_offset" not in cfg["BinFileParams"]:
-            warn("BinFileParams: y_offset not specified." " Assumed -3526818.337932")
+            warn("BinFileParams: y_offset not specified. Assumed -3526818.337932")
             cfg["BinFileParams"].update({"y_offset": -3526818.337932})
         if "lat_0" not in cfg["BinFileParams"]:
             warn("BinFileParams: lat_0 not specified. Assumed 90.")
@@ -1963,8 +1963,7 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg, scan_lis
 
     if masterdatatypedescr is None:
         warn(
-            "No data type can be used as master."
-            " Add a dBZ data type to the config file"
+            "No data type can be used as master. Add a dBZ data type to the config file"
         )
         return [], None, None
 

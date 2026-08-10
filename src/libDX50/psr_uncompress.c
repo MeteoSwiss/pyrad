@@ -9,7 +9,7 @@
   Author:           Andreas Leuenberger
   Creation date:    2012-11-23
   Last update:      2013-02-21
-    
+
   Copyright:        MeteoSwiss
 
   Project:          MALSplus
@@ -20,7 +20,7 @@
 
   Description:
   ------------
-  
+
 
   *************************************************************
   =============================================================
@@ -53,7 +53,7 @@ static int fout = -1;
 /**
  * Print usage of application
  */
-static void usage(void) 
+static void usage(void)
 {
   psr_printVersion();
   printf("Usage:\r\n");
@@ -81,7 +81,7 @@ static int writeToOutfile(void *buf, int len)
  * psr uncompress main function
  *
  * Uncompress a psr file.
- * 
+ *
  * @params
  *
  * @return 0 on success, -1 otherwise
@@ -126,7 +126,7 @@ int main( int argc, char* argv[] )
       fprintf(stderr, "No output filename set! Abort!\r\n");
       exit(EXIT_FAILURE);
     }
-  } 
+  }
 
   /* Check if file exist */
   fin = fopen(psrfile, "r");
@@ -151,7 +151,7 @@ int main( int argc, char* argv[] )
   }
 
   /* Make file to write */
-  fout = open(outfile, O_WRONLY | O_CREAT, 
+  fout = open(outfile, O_WRONLY | O_CREAT,
 	      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
   if (fout < 0) {
     fprintf(stderr, "ERROR: Could not create file \'%s\'\r\n", outfile);
