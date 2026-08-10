@@ -188,6 +188,7 @@ addopts = [
 [tool.versioningit]
 
 [tool.versioningit.vcs]
+default-tag = "v0.0.0"
 method = "git-archive"
 describe-subst = "$Format:%(describe:tags)$"
 
