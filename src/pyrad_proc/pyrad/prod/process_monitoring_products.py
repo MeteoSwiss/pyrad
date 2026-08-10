@@ -11,29 +11,33 @@ Functions for obtaining Pyrad products from monitoring datasets
 
 """
 
-from copy import deepcopy
-from ..util import warn
 import os
+from copy import deepcopy
 
 import numpy as np
-
 import pyart
 
-from ..io.io_aux import get_fieldname_pyart
-from ..io.io_aux import get_save_dir, make_filename
-from ..io.io_aux import generate_field_name_str
-
-from ..io.read_data_other import read_monitoring_ts
-
-from ..io.write_data import write_monitoring_ts, write_alarm_msg, send_msg
-from ..io.write_data import write_histogram
-
-from ..graph.plots import plot_histogram2, plot_density
-from ..graph.plots_timeseries import plot_monitoring_ts
+from ..graph.plots import plot_density, plot_histogram2
 from ..graph.plots_aux import get_colobar_label, get_field_name
-
-from ..util.radar_utils import compute_mean_reflectivity_from_hist
-from ..util.radar_utils import compute_quantiles_from_hist
+from ..graph.plots_timeseries import plot_monitoring_ts
+from ..io.io_aux import (
+    generate_field_name_str,
+    get_fieldname_pyart,
+    get_save_dir,
+    make_filename,
+)
+from ..io.read_data_other import read_monitoring_ts
+from ..io.write_data import (
+    send_msg,
+    write_alarm_msg,
+    write_histogram,
+    write_monitoring_ts,
+)
+from ..util import warn
+from ..util.radar_utils import (
+    compute_mean_reflectivity_from_hist,
+    compute_quantiles_from_hist,
+)
 
 
 def generate_monitoring_products(dataset, prdcfg):

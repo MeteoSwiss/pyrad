@@ -6,13 +6,14 @@ Functions for reading data derived from Digital Elevation Models (DEM)
 """
 
 import pathlib
+
 import numpy as np
 import pyart
-
-from scipy.interpolate import RegularGridInterpolator
 from pyart.config import get_metadata
-from .read_data_icon import _put_radar_in_swiss_coord
+from scipy.interpolate import RegularGridInterpolator
+
 from ..util import warn
+from .read_data_icon import _put_radar_in_swiss_coord
 
 try:
     import rasterio

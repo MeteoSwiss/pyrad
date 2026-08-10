@@ -23,16 +23,14 @@ Functions for PhiDP and KDP processing and attenuation correction
 """
 
 import warnings
-
 from copy import deepcopy
-from ..util import warn
 
 import numpy as np
-
 import pyart
 
 from ..io.io_aux import get_datatype_fields
 from ..io.read_data_sensor import retrieve_fzl
+from ..util import warn
 
 # Ignore warning in process_phidp_kdp_Maesaka
 warnings.filterwarnings(

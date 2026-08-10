@@ -13,10 +13,10 @@ This program produces a movie and a gif out of all files present in a folder
 # Author: fvj
 # License: BSD 3 clause
 
+import atexit
+import datetime
 import glob
 import os
-import datetime
-import atexit
 
 from moviepy.editor import ImageSequenceClip
 

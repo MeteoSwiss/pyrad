@@ -14,29 +14,31 @@ TRT cells trajectories and obtains post-processing products
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
+import glob
 import os
 import sys
 
-# Force unbuffered output
-sys.stdout.reconfigure(line_buffering=True)
-
-import glob
-from pyrad.util import warn
-
 import numpy as np
-
-from pyrad.flow.flow_control import main as pyrad_main
-from pyrad.io import get_fieldname_pyart, write_trt_cell_lightning
-from pyrad.io import read_profile_ts, read_histogram_ts, read_quantiles_ts
-from pyrad.io import read_trt_traj_data, read_thundertracking_info
-from pyrad.graph import get_field_name, get_colobar_label
-from pyrad.graph import _plot_time_range
-
 from pyart.config import get_metadata
 
+from pyrad.flow.flow_control import main as pyrad_main
+from pyrad.graph import _plot_time_range, get_colobar_label, get_field_name
+from pyrad.io import (
+    get_fieldname_pyart,
+    read_histogram_ts,
+    read_profile_ts,
+    read_quantiles_ts,
+    read_thundertracking_info,
+    read_trt_traj_data,
+    write_trt_cell_lightning,
+)
+from pyrad.util import warn
+
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
 print(__doc__)
 
 
@@ -581,16 +583,16 @@ def get_graupel_column(tbin_edges, hbin_edges, data_ma, start_time, yyyymmddHHMM
     hmin_aux = np.ma.masked_all(yyyymmddHHMM.size, dtype=float)
     hmax_aux = np.ma.masked_all(yyyymmddHHMM.size, dtype=float)
     for k, dt_trt in enumerate(yyyymmddHHMM):
-        for l, dt_rad in enumerate(tbin_rights):
+        for ll, dt_rad in enumerate(tbin_rights):
             if dt_trt == start_time + datetime.timedelta(seconds=dt_rad):
-                hmin_aux[k] = hmin[l]
-                hmax_aux[k] = hmax[l]
+                hmin_aux[k] = hmin[ll]
+                hmax_aux[k] = hmax[ll]
                 break
     return hmin_aux, hmax_aux
 
 
 def _print_end_msg(text):
-    """
+    """for
     prints end message
 
     Parameters

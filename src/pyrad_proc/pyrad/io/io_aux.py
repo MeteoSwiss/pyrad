@@ -47,18 +47,18 @@ Auxiliary functions for reading/writing files
 
 """
 
-import os
-import glob
-import re
 import datetime
 import fnmatch
-
-from ..util import warn
+import glob
+import os
+import re
 from copy import deepcopy
+
 import numpy as np
 import pyart
-
 from pyart.config import get_metadata
+
+from ..util import warn
 
 try:
     from pyart.aux_io import get_sweep_time_coverage

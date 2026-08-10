@@ -54,16 +54,17 @@ Functions for reading radar data files
 
 """
 
-import glob
 import datetime
-import platform
+import glob
 import os
-import pyart
+import platform
+from copy import deepcopy
+
 import numpy as np
+import pyart
 from scipy.interpolate import RegularGridInterpolator
 
 from ..util import warn
-from copy import deepcopy
 
 try:
     import wradlib as wrl
@@ -97,17 +98,29 @@ except ImportError:
     )
     _BOTO3_AVAILABLE = False
 
-from .read_data_other import read_status, read_rad4alp_icon, read_rad4alp_vis
-from .read_data_mxpol import pyrad_MXPOL, pyrad_MCH
-
-from .io_aux import get_datatype_metranet, get_fieldname_pyart, get_file_list
-from .io_aux import get_datatype_odim, get_datatype_knmi, find_date_in_file_name
-from .io_aux import get_datatype_fields, get_datetime, map_hydro, map_Doppler
-from .io_aux import find_icon_file, find_rad4alpicon_file
-from .io_aux import find_pyradicon_file, get_datatype_skyecho
-from .io_aux import get_rad4alp_prod_fname, get_rad4alp_grid_dir
-from .io_aux import get_rad4alp_dir, get_scan_files_to_merge
-from .io_aux import get_scan_files_to_merge_s3
+from .io_aux import (
+    find_date_in_file_name,
+    find_icon_file,
+    find_pyradicon_file,
+    find_rad4alpicon_file,
+    get_datatype_fields,
+    get_datatype_knmi,
+    get_datatype_metranet,
+    get_datatype_odim,
+    get_datatype_skyecho,
+    get_datetime,
+    get_fieldname_pyart,
+    get_file_list,
+    get_rad4alp_dir,
+    get_rad4alp_grid_dir,
+    get_rad4alp_prod_fname,
+    get_scan_files_to_merge,
+    get_scan_files_to_merge_s3,
+    map_Doppler,
+    map_hydro,
+)
+from .read_data_mxpol import pyrad_MCH, pyrad_MXPOL
+from .read_data_other import read_rad4alp_icon, read_rad4alp_vis, read_status
 
 
 def test_warn():

@@ -11,11 +11,10 @@ Functions for obtaining Pyrad products from the datasets
 
 """
 
-from ..util import warn
-
+from ..graph.plots import plot_pos
 from ..io.io_aux import get_save_dir, make_filename
 from ..io.timeseries import TimeSeries
-from ..graph.plots import plot_pos
+from ..util import warn
 
 
 def generate_traj_product(traj, prdcfg):

@@ -30,22 +30,22 @@ Auxiliary functions to control the Pyrad data processing flow
 """
 
 from __future__ import print_function
-import sys
-from ..util import warn
-import traceback
-import os
-from datetime import datetime
-from datetime import timedelta
-from datetime import timezone
-import inspect
-import gc
 
-import queue
-import time
-import threading
+import gc
 import glob
+import inspect
+import os
+import queue
+import sys
+import threading
+import time
+import traceback
 from copy import deepcopy
+from datetime import datetime, timedelta, timezone
+
 import numpy as np
+
+from ..util import warn
 
 try:
     from memory_profiler import profile as mprofile
@@ -56,18 +56,24 @@ except ImportError:
     _MPROFILE_AVAILABLE = False
 
 from pyrad import proc
+
 from ..io.config import read_config
 from ..io.default_config import DEFAULT_CONFIG
-from ..io.read_data_radar import get_data
-from ..io.write_data import write_to_s3, write_csv_to_mysql
-from ..io.io_aux import get_datetime, get_file_list, get_scan_list
-from ..io.io_aux import get_dataset_fields, get_datatype_fields
-from ..io.io_aux import get_new_rainbow_file_name, get_fieldname_pyart
-from ..io.io_aux import get_datatype_from_pyart
-from ..io.io_aux import get_file_list_s3
-from ..io.trajectory import Trajectory
+from ..io.io_aux import (
+    get_dataset_fields,
+    get_datatype_fields,
+    get_datatype_from_pyart,
+    get_datetime,
+    get_fieldname_pyart,
+    get_file_list,
+    get_file_list_s3,
+    get_new_rainbow_file_name,
+    get_scan_list,
+)
 from ..io.read_data_other import read_last_state, read_proc_periods
-
+from ..io.read_data_radar import get_data
+from ..io.trajectory import Trajectory
+from ..io.write_data import write_csv_to_mysql, write_to_s3
 from ..proc.process_aux import get_process_func
 from ..prod.product_aux import get_prodgen_func
 

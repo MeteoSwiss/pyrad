@@ -15,22 +15,27 @@ Functions used in the inter-comparison between radars
 
 """
 
-from copy import deepcopy
-from ..util import warn
-import numpy as np
 import os
+from copy import deepcopy
+
+import numpy as np
+import pyart
 from netCDF4 import num2date
 
-import pyart
-
+from ..io.io_aux import (
+    get_datatype_fields,
+    get_fieldname_pyart,
+    get_save_dir,
+    make_filename,
+)
+from ..io.read_data_other import (
+    read_colocated_data,
+    read_colocated_data_with_QC,
+    read_colocated_gates,
+)
+from ..util import warn
 from ..util.date_utils import cftodatetime
-from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.io_aux import get_save_dir, make_filename
-from ..io.read_data_other import read_colocated_gates, read_colocated_data
-from ..io.read_data_other import read_colocated_data_with_QC
-
-from ..util.radar_utils import get_range_bins_to_avg
-from ..util.radar_utils import find_colocated_indexes_fast
+from ..util.radar_utils import find_colocated_indexes_fast, get_range_bins_to_avg
 
 
 def process_colocated_gates(procstatus, dscfg, radar_list=None):

@@ -28,27 +28,35 @@ Functions to plot radar volume data
 
 """
 
-from copy import deepcopy
-import numpy as np
 import os
-from netCDF4 import num2date
-import pyart
+from copy import deepcopy
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pyart
+from netCDF4 import num2date
 
 from ..io.write_data import write_histogram
-from ..util.radar_utils import compute_histogram_sweep
-from ..util.radar_utils import compute_quantiles_sweep, find_ang_index
-from .plots import _plot_sunscan
-from .plots import plot_quantiles, plot_histogram, _plot_time_range
-from .plots_aux import generate_complex_range_Doppler_title
-from .plots_aux import generate_fixed_rng_span_title
-from .plots_aux import get_colobar_label, get_norm, generate_fixed_rng_title
-from .plots_aux import embellish_plot
 from ..util import warn
-from .plots_aux import _CARTOPY_AVAILABLE
+from ..util.radar_utils import (
+    compute_histogram_sweep,
+    compute_quantiles_sweep,
+    find_ang_index,
+)
+from .plots import _plot_sunscan, _plot_time_range, plot_histogram, plot_quantiles
+from .plots_aux import (
+    _CARTOPY_AVAILABLE,
+    embellish_plot,
+    generate_complex_range_Doppler_title,
+    generate_fixed_rng_span_title,
+    generate_fixed_rng_title,
+    get_colobar_label,
+    get_norm,
+)
 
 if _CARTOPY_AVAILABLE:
     import cartopy
+
     from .plots_aux import ShadedReliefESRI
 
 try:

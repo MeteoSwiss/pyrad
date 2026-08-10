@@ -15,15 +15,16 @@ Functions for reading HZT data
 
 """
 
-from ..util import warn
 import datetime
 import platform
+
 import numpy as np
+import pyart
+from pyart.config import get_field_name, get_metadata
 from scipy.interpolate import NearestNDInterpolator
 from scipy.spatial import cKDTree
 
-import pyart
-from pyart.config import get_metadata, get_field_name
+from ..util import warn
 
 # check existence of METRANET library
 try:

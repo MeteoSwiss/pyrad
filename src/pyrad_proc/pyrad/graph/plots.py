@@ -26,16 +26,16 @@ Functions to plot Pyrad datasets
 
 """
 
-from ..util.radar_utils import compute_quantiles_from_hist
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from .plots_aux import get_colobar_label, get_field_name, get_norm
-import pyart
 import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
 import matplotlib.ticker as ticker
-from ..util import warn
-
 import numpy as np
+import pyart
+from matplotlib.colors import LogNorm
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+from ..util import warn
+from ..util.radar_utils import compute_quantiles_from_hist
+from .plots_aux import get_colobar_label, get_field_name, get_norm
 
 try:
     import cartopy

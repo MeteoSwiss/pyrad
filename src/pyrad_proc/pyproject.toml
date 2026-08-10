@@ -1,0 +1,188 @@
+[build-system]
+requires = [
+    "setuptools>=68",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "pyrad_mch"
+version = "2.1.2"
+description = "Python Radar Data Processing Framework"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "BSD" }
+
+authors = [
+    { name = "MeteoSwiss Pyrad Developers", email = "daniel.wolfensberger@meteoswiss.ch" },
+]
+
+maintainers = [
+    { name = "MeteoSwiss Pyrad Developers", email = "daniel.wolfensberger@meteoswiss.ch" },
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Framework :: Matplotlib",
+]
+
+dependencies = []
+
+[project.scripts]
+"common_colocated_gates.py" = "pyrad.cli.common_colocated_gates:main"
+"config_to_yaml.py" = "pyrad.cli.config_to_yaml:main"
+"image_montage.py" = "pyrad.cli.image_montage:main"
+
+"main_precipitation_comparison.py" = "pyrad.cli.main_precipitation_comparison:main"
+"main_process_data.py" = "pyrad.cli.main_process_data:main"
+"main_process_data_birds.py" = "pyrad.cli.main_process_data_birds:main"
+"main_process_data_period.py" = "pyrad.cli.main_process_data_period:main"
+"main_process_data_rt.py" = "pyrad.cli.main_process_data_rt:main"
+"main_process_data_trt.py" = "pyrad.cli.main_process_data_trt:main"
+"main_process_euclid_data.py" = "pyrad.cli.main_process_euclid_data:main"
+"main_process_gecsx.py" = "pyrad.cli.main_process_gecsx:main"
+"main_process_icon.py" = "pyrad.cli.main_process_icon:main"
+"main_process_icon_rt.py" = "pyrad.cli.main_process_icon_rt:main"
+
+"movie_maker.py" = "pyrad.cli.movie_maker:main"
+"rewrite_monitoring.py" = "pyrad.cli.rewrite_monitoring:main"
+
+common_colocated_gates = "pyrad.cli.common_colocated_gates:main"
+config_to_yaml = "pyrad.cli.config_to_yaml:main"
+image_montage = "pyrad.cli.image_montage:main"
+
+main_precipitation_comparison = "pyrad.cli.main_precipitation_comparison:main"
+main_process_data = "pyrad.cli.main_process_data:main"
+main_process_data_birds = "pyrad.cli.main_process_data_birds:main"
+main_process_data_period = "pyrad.cli.main_process_data_period:main"
+main_process_data_rt = "pyrad.cli.main_process_data_rt:main"
+main_process_data_trt = "pyrad.cli.main_process_data_trt:main"
+main_process_euclid_data = "pyrad.cli.main_process_euclid_data:main"
+main_process_gecsx = "pyrad.cli.main_process_gecsx:main"
+main_process_icon = "pyrad.cli.main_process_icon:main"
+main_process_icon_rt = "pyrad.cli.main_process_icon_rt:main"
+
+movie_maker = "pyrad.cli.movie_maker:main"
+rewrite_monitoring = "pyrad.cli.rewrite_monitoring:main"
+
+[project.urls]
+Homepage = "https://github.com/MeteoSwiss/pyrad"
+Repository = "https://github.com/MeteoSwiss/pyrad"
+
+
+[project.optional-dependencies]
+graph = [
+    "cartopy",
+    "shapely",
+    "geopandas",
+    "gdal",
+    "pyproj",
+]
+
+s3 = [
+    "boto3",
+]
+
+mysql = [
+    "pymysql",
+    "sqlalchemy",
+    "cryptography",
+]
+
+all = [
+    "cartopy",
+    "shapely",
+    "geopandas",
+    "gdal",
+    "pyproj",
+    "boto3",
+    "pymysql",
+    "sqlalchemy",
+    "cryptography",
+]
+
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff<0.16",
+]
+
+# ----------------------------------------------------------------------
+# Setuptools configuration
+# ----------------------------------------------------------------------
+
+[tool.setuptools]
+include-package-data = true
+
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pyrad*"]
+
+
+[tool.setuptools.package-data]
+pyrad = [
+    "*.txt",
+]
+
+
+# ----------------------------------------------------------------------
+# Ruff
+# ----------------------------------------------------------------------
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+
+exclude = [
+    ".git",
+    ".venv",
+    "build",
+    "dist",
+]
+
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+]
+
+ignore = []
+
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+
+# ----------------------------------------------------------------------
+# Pytest
+# ----------------------------------------------------------------------
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+addopts = [
+    "-ra",
+]

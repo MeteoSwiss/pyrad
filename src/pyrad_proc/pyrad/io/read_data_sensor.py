@@ -33,27 +33,28 @@ Functions for reading data from other sensors
     retrieve_fzl
 """
 
-import os
+import csv
+import datetime
 import glob
 import json
-import datetime
-import csv
-import pandas as pd
-import xarray as xr
-from ..util import warn
-from copy import deepcopy
+import os
 import re
-from io import StringIO, BytesIO
-import requests
-import numpy as np
-from zipfile import ZipFile
 import warnings
+from copy import deepcopy
+from io import BytesIO, StringIO
+from zipfile import ZipFile
+
+import numpy as np
+import pandas as pd
+import requests
 
 # Suppress only the InsecureRequestWarning
 import urllib3
+import xarray as xr
+from pyart.config import get_fillvalue
 from urllib3.exceptions import InsecureRequestWarning
 
-from pyart.config import get_fillvalue
+from ..util import warn
 
 urllib3.disable_warnings(InsecureRequestWarning)
 

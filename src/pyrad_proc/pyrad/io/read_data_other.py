@@ -41,23 +41,21 @@ Functions for reading auxiliary data
 
 """
 
-import os
-import glob
-import datetime
-import re
-
-import pandas as pd
 import csv
+import datetime
+import glob
+import os
+import re
 import xml.etree.ElementTree as et
-from ..util import warn
 
 import numpy as np
-
+import pandas as pd
 import pyart
 from pyart.config import get_fillvalue, get_metadata
 
-from .io_aux import get_fieldname_pyart, _get_datetime
+from ..util import warn
 from .flock_utils import lock_file, unlock_file
+from .io_aux import _get_datetime, get_fieldname_pyart
 
 
 def read_centroids_npz(fname):

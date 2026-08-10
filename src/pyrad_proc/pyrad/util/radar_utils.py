@@ -45,8 +45,8 @@ Miscellaneous functions dealing with radar data
     compute_average_vad
 """
 
-from copy import deepcopy
 import datetime
+from copy import deepcopy
 
 import numpy as np
 import scipy

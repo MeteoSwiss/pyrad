@@ -33,18 +33,18 @@ Example:
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
 import os
 import sys
 
-# Force unbuffered output
-sys.stdout.reconfigure(line_buffering=True)
-
-from pyrad.flow.flow_control import main_cosmo
+from pyrad.flow.flow_control import main_icon
 
 print(__doc__)
+
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
 
 
 def main():
@@ -135,7 +135,7 @@ def main():
     else:
         infostr = args.infostr
 
-    main_cosmo(
+    main_icon(
         cfgfile_proc,
         starttime=proc_starttime,
         endtime=proc_endtime,

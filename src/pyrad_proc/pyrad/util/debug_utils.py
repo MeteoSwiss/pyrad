@@ -1,10 +1,10 @@
 # Make sure that deprecation warnings get printed by default
-import warnings as _warnings
-import pdb
-import traceback
-import sys
-import os
 import inspect
+import os
+import pdb
+import sys
+import traceback
+import warnings as _warnings
 
 _warnings.simplefilter("always", DeprecationWarning)
 ORANGE = "\033[38;5;208m"

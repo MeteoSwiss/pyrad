@@ -24,11 +24,11 @@ Functions to processes IQ data.
 """
 
 from copy import deepcopy
-from ..util import warn
 
 import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
+from ..util import warn
 
 
 def process_raw_iq(procstatus, dscfg, radar_list=None):

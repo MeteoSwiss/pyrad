@@ -24,15 +24,18 @@ Functions to plot spectral data
 
 """
 
-from .plots_aux import generate_angle_Doppler_title
-from .plots_aux import generate_complex_Doppler_title
-from .plots_aux import generate_complex_range_Doppler_title
-from .plots_aux import get_colobar_label, get_norm
-import pyart
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import pyart
 
-import matplotlib as mpl
+from .plots_aux import (
+    generate_angle_Doppler_title,
+    generate_complex_Doppler_title,
+    generate_complex_range_Doppler_title,
+    get_colobar_label,
+    get_norm,
+)
 
 mpl.use("Agg")
 

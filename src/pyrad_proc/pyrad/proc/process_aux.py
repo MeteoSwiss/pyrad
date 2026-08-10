@@ -26,22 +26,23 @@ determined points or regions of interest.
 
 """
 
+from copy import deepcopy
 from time import time
 
-from copy import deepcopy
-from ..util import warn
 import numpy as np
+from pyart.config import get_metadata
+from pyart.core import Radar, cartesian_to_geographic_aeqd, geographic_to_cartesian_aeqd
+from pyart.map import grid_from_radars
 from scipy.spatial import cKDTree
 
-from pyart.config import get_metadata
-from pyart.core import Radar, geographic_to_cartesian_aeqd
-from pyart.core import cartesian_to_geographic_aeqd
-from pyart.map import grid_from_radars
+from ..util import warn
 
 try:
-    from pyart.util import compute_directional_stats
-    from pyart.util import compute_azimuthal_average
-    from pyart.util import find_neighbour_gates
+    from pyart.util import (
+        compute_azimuthal_average,
+        compute_directional_stats,
+        find_neighbour_gates,
+    )
 except ImportError:
     message = """
 ARM version of Py-ART detected, you will not be able to use some products
@@ -50,15 +51,19 @@ Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)
     warn(message, use_debug=False)
 
 from pyart.util import subset_radar
+
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.read_data_sensor import read_trt_traj_data
-from ..io.read_data_other import read_antenna_pattern
 from ..io.read_data_icon import _put_radar_in_swiss_coord
-from ..util.radar_utils import belongs_roi_indices
-from ..util.radar_utils import get_fixed_rng_data, get_cercle_coords
-from ..util.radar_utils import get_box_coords
-from ..util.stat_utils import quantiles_weighted
+from ..io.read_data_other import read_antenna_pattern
+from ..io.read_data_sensor import read_trt_traj_data
 from ..proc.process_traj import _get_gates_antenna_pattern
+from ..util.radar_utils import (
+    belongs_roi_indices,
+    get_box_coords,
+    get_cercle_coords,
+    get_fixed_rng_data,
+)
+from ..util.stat_utils import quantiles_weighted
 
 
 def get_process_func(dataset_type, dsname):

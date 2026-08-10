@@ -19,16 +19,15 @@ Functions for reading icon data
 
 """
 
-from ..util import warn
+import netCDF4
 import numpy as np
+import pyart
+from pyart.config import get_field_name, get_metadata
 from scipy.interpolate import NearestNDInterpolator
 from scipy.spatial import cKDTree
-import netCDF4
-
-import pyart
-from pyart.config import get_metadata, get_field_name
 
 from ..io.io_aux import get_fieldname_icon
+from ..util import warn
 
 # from memory_profiler import profile
 

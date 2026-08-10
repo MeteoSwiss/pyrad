@@ -14,14 +14,13 @@ Functions to manage DEM data
 """
 
 from copy import deepcopy
-from ..util import warn
 
 import numpy as np
-
 import pyart
 
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.read_data_dem import read_dem, dem2radar_data
+from ..io.read_data_dem import dem2radar_data, read_dem
+from ..util import warn
 
 # from memory_profiler import profile
 

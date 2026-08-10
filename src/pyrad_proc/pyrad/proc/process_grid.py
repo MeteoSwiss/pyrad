@@ -22,18 +22,18 @@ Functions to processes gridded data.
 
 """
 
-from copy import deepcopy
-from ..util import warn
 import datetime
+from copy import deepcopy
+
 import numpy as np
+import pyart
 import scipy
 from netCDF4 import num2date
 
-import pyart
-
-from ..util.date_utils import cftodatetime
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
 from ..io.read_data_sensor import read_coord_sensors
+from ..util import warn
+from ..util.date_utils import cftodatetime
 from ..util.radar_utils import time_avg_range
 
 

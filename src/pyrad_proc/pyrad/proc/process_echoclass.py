@@ -29,22 +29,24 @@ Functions for echo classification and filtering
 
 """
 
-from copy import deepcopy
-from ..util import warn
-
-import sys
-import os
 import datetime
 import importlib
+import os
+import sys
+from copy import deepcopy
 
 import numpy as np
-
 import pyart
 
-from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.io_aux import get_file_list, get_datetime
+from ..io.io_aux import (
+    get_datatype_fields,
+    get_datetime,
+    get_fieldname_pyart,
+    get_file_list,
+)
 from ..io.read_data_other import read_centroids
 from ..io.read_data_sensor import retrieve_fzl
+from ..util import warn
 
 if importlib.util.find_spec("sklearn_extra") and importlib.util.find_spec("sklearn"):
     _SKLEARN_AVAILABLE = True

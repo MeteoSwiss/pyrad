@@ -23,16 +23,16 @@ Functions for reading radar mxpol data files
         convert_polvar_name
 """
 
-import time
-import importlib.util
-import re
-import os
 import datetime
-from copy import deepcopy
+import importlib.util
+import os
+import re
+import time
 import warnings
+from copy import deepcopy
 
-import numpy as np
 import netCDF4
+import numpy as np
 
 try:
     import h5py

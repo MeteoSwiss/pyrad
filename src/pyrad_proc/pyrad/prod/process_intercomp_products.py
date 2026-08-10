@@ -14,27 +14,26 @@ intercomparison process
 
 """
 
-from ..util import warn
-
 import numpy as np
 
-from .process_vol_products import generate_vol_products
-
-from ..io.io_aux import get_fieldname_pyart
-from ..io.io_aux import get_save_dir, make_filename
-
-from ..io.read_data_other import read_intercomp_scores_ts
-
-from ..io.write_data import write_colocated_gates, write_colocated_data
-from ..io.write_data import write_intercomp_scores_ts
-
-from ..graph.plots import plot_scatter, plot_histogram
+from ..graph import (
+    plot_bias_over_range,
+    plot_colocated_gates,
+    plot_histogram_over_range,
+)
+from ..graph.plots import plot_histogram, plot_scatter
 from ..graph.plots_timeseries import plot_intercomp_scores_ts
-from ..graph import plot_colocated_gates
-from ..graph import plot_bias_over_range, plot_histogram_over_range
-
-from ..util.radar_utils import compute_2d_stats, _compute_histogram_over_range
+from ..io.io_aux import get_fieldname_pyart, get_save_dir, make_filename
+from ..io.read_data_other import read_intercomp_scores_ts
+from ..io.write_data import (
+    write_colocated_data,
+    write_colocated_gates,
+    write_intercomp_scores_ts,
+)
+from ..util import warn
+from ..util.radar_utils import _compute_histogram_over_range, compute_2d_stats
 from ..util.stat_utils import parse_math_expression
+from .process_vol_products import generate_vol_products
 
 
 def generate_intercomp_products(dataset, prdcfg):

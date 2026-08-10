@@ -37,19 +37,18 @@ Example:
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
 import os
 import sys
+import traceback
+
+from pyrad.flow.flow_control import main_icon_rt
+from pyrad.util import warn
 
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
-
-import traceback
-from pyrad.util import warn
-
-from pyrad.flow.flow_control import main_cosmo_rt
 
 print(__doc__)
 
@@ -139,7 +138,7 @@ def main():
     end_proc = False
     while not end_proc:
         try:
-            end_proc = main_cosmo_rt(
+            end_proc = main_icon_rt(
                 cfgfile_list,
                 starttime=proc_starttime,
                 endtime=proc_endtime,

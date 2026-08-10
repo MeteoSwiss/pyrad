@@ -15,24 +15,23 @@ This program processes bird data
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
+import glob
 import os
 import sys
+
+from pyart.config import get_metadata
+
+from pyrad.flow.flow_control import main as pyrad_main
+from pyrad.graph import _plot_time_range, get_field_name
+from pyrad.io import get_fieldname_pyart, read_profile_ts
+from pyrad.util import warn
 
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
 
-import glob
-from pyrad.util import warn
-
-from pyrad.flow.flow_control import main as pyrad_main
-from pyrad.io import get_fieldname_pyart
-from pyrad.io import read_profile_ts
-from pyrad.graph import get_field_name, _plot_time_range
-
-from pyart.config import get_metadata
 
 print(__doc__)
 

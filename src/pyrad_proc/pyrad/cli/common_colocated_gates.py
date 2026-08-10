@@ -15,8 +15,9 @@ both radars
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import atexit
+import datetime
+
 import numpy as np
 import pandas as pd
 

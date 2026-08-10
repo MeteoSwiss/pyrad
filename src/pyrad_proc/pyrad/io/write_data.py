@@ -51,28 +51,26 @@ Functions for writing pyrad output data
 """
 
 from __future__ import print_function
-import glob
+
 import csv
+import datetime
+import glob
 import os
 import re
-from importlib.util import find_spec
-
-from ..util import warn
 import smtplib
 from email.message import EmailMessage
-
-import datetime
+from importlib.util import find_spec
 
 import numpy as np
 import pandas as pd
-
-from pyart.config import get_fillvalue, get_field_colormap, get_field_limits
-from pyart.core import antenna_to_cartesian, cartesian_to_geographic_aeqd
 from cmweather.cm import cmap_d
+from pyart.config import get_field_colormap, get_field_limits, get_fillvalue
+from pyart.core import antenna_to_cartesian, cartesian_to_geographic_aeqd
 
-from .io_aux import generate_field_name_str
-from .flock_utils import lock_file, unlock_file
+from ..util import warn
 from ..util.date_utils import detect_datetime_columns
+from .flock_utils import lock_file, unlock_file
+from .io_aux import generate_field_name_str
 from .read_data_other import read_intercomp_scores_ts
 
 try:
@@ -258,11 +256,12 @@ def write_csv_to_mysql(
         )
         return
 
-    import re
     import hashlib
+    import re
+
     import pandas as pd
     from sqlalchemy import create_engine, text
-    from sqlalchemy.types import Integer, Float, Boolean, DateTime, String
+    from sqlalchemy.types import Boolean, DateTime, Float, Integer, String
 
     # -----------------------------
     # 1) Read CSV with inference

@@ -17,8 +17,9 @@ Functions for reading pyrad config files
 
 """
 
-import re
 import os
+import re
+
 import yaml
 
 # Allows parsing of environment variables in YAML safe loader

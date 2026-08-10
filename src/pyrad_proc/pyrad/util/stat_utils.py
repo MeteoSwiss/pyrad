@@ -12,10 +12,11 @@ Miscellaneous functions dealing with statistics
 
 """
 
-import numpy as np
 import ast
 import operator as op
 from collections import OrderedDict
+
+import numpy as np
 from scipy.stats import energy_distance
 
 

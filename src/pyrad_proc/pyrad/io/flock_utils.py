@@ -7,10 +7,11 @@ except ModuleNotFoundError:
 
     FCNTL_AVAIL = False
 
+import errno
 import os
 import time
+
 from ..util import warn
-import errno
 
 
 def lock_file(file):

@@ -1,6 +1,7 @@
 # %%
-import pyrad
 import datetime
+
+import pyrad
 
 pyrad.io.write_monitoring_ts(
     datetime.datetime.now(),

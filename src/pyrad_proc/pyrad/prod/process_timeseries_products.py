@@ -12,31 +12,34 @@ Functions for obtaining Pyrad products from a time series datasets
 """
 
 import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
-from netCDF4 import num2date
+import pandas as pd
 import pyart
+from netCDF4 import num2date
 
-from ..util import warn
-
-from ..io.io_aux import get_save_dir, make_filename, get_fieldname_pyart
-from ..io.io_aux import generate_field_name_str
-
-from ..io.read_data_sensor import get_sensor_data
-from ..io.read_data_other import read_sensor_scores_ts
-
-from ..io.write_data import write_ts_polar_data
-from ..io.write_data import write_ts_grid_data, write_multiple_points
-from ..io.write_data import write_multiple_points_grid, write_sensor_scores
-
+from ..graph.plots import plot_scatter_comp
 from ..graph.plots_timeseries import (
+    plot_sensor_scores_timeseries,
     plot_timeseries,
     plot_timeseries_comp,
-    plot_sensor_scores_timeseries,
 )
 from ..graph.plots_vol import plot_cappi, plot_traj
-from ..graph.plots import plot_scatter_comp
-
+from ..io.io_aux import (
+    generate_field_name_str,
+    get_fieldname_pyart,
+    get_save_dir,
+    make_filename,
+)
+from ..io.read_data_other import read_sensor_scores_ts
+from ..io.read_data_sensor import get_sensor_data
+from ..io.write_data import (
+    write_multiple_points,
+    write_multiple_points_grid,
+    write_sensor_scores,
+    write_ts_grid_data,
+    write_ts_polar_data,
+)
+from ..util import warn
 from ..util.radar_utils import rainfall_accumulation
 from ..util.stat_utils import perfscores
 

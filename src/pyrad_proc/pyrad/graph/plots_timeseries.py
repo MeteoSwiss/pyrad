@@ -16,15 +16,15 @@ Functions to plot Pyrad datasets
 
 """
 
-import pyart
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import re
-import pandas as pd
-import numpy as np
 import datetime
+import re
 
 import matplotlib as mpl
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import pyart
 
 from ..util import warn
 

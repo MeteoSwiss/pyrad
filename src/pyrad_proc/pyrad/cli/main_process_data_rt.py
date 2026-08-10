@@ -40,21 +40,20 @@ Example:
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
 import os
 import sys
+import traceback
+
+from pyrad.flow.flow_control import main_rt as pyrad_main
+from pyrad.util import warn
+
+print(__doc__)
 
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
-
-import traceback
-from pyrad.util import warn
-
-from pyrad.flow.flow_control import main_rt as pyrad_main
-
-print(__doc__)
 
 
 def main():

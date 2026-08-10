@@ -15,33 +15,39 @@ functions to control the Pyrad data processing flow
 """
 
 from __future__ import print_function
-import warnings
-from ..util import warn
-import traceback
-import os
-from datetime import datetime
-from datetime import timedelta
-from datetime import timezone
+
 import gc
-import subprocess
+import os
 import queue
+import subprocess
 import time
+import traceback
+import warnings
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from pyart import __version__ as pyart_version
+
 from .. import version as pyrad_version
-
-from .flow_aux import _warning_format, _initialize_listener
-from .flow_aux import _create_cfg_dict, _create_datacfg_dict
-from .flow_aux import _get_times_and_traj, _get_datatype_list
-from .flow_aux import _get_datasets_list, _get_masterfile_list
-from .flow_aux import _wait_for_files, _get_radars_data
-from .flow_aux import _initialize_datasets
-from .flow_aux import _process_datasets, _postprocess_datasets
-
 from ..io.io_aux import get_datetime
 from ..io.read_data_other import read_last_state
 from ..io.write_data import write_last_state
+from ..util import warn
+from .flow_aux import (
+    _create_cfg_dict,
+    _create_datacfg_dict,
+    _get_datasets_list,
+    _get_datatype_list,
+    _get_masterfile_list,
+    _get_radars_data,
+    _get_times_and_traj,
+    _initialize_datasets,
+    _initialize_listener,
+    _postprocess_datasets,
+    _process_datasets,
+    _wait_for_files,
+    _warning_format,
+)
 
 ALLOW_USER_BREAK = False
 
@@ -58,9 +64,8 @@ except ImportError:
     _DASK_AVAILABLE = False
 
 try:
-    from dask.diagnostics import Profiler, ResourceProfiler, CacheProfiler
-    from dask.diagnostics import visualize
     from bokeh.io import export_png
+    from dask.diagnostics import CacheProfiler, Profiler, ResourceProfiler, visualize
 
     _PROFILER_AVAILABLE = True
 except ImportError:

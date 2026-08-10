@@ -1,5 +1,6 @@
 import argparse
 import sys
+
 import yaml
 
 from pyrad.io.config import read_config

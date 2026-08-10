@@ -33,18 +33,18 @@ Example:
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
 import os
 import sys
-
-# Force unbuffered output
-sys.stdout.reconfigure(line_buffering=True)
 
 from pyrad.flow.flow_control import main as pyrad_main
 
 print(__doc__)
+
+# Force unbuffered output
+sys.stdout.reconfigure(line_buffering=True)
 
 
 def main():

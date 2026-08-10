@@ -18,18 +18,15 @@ Functions to plot data in a Cartesian grid format
     plot_colocated_gates
 """
 
-from ..util import warn
 from copy import deepcopy
 
-import numpy as np
-from scipy.stats import binned_statistic_2d
 import matplotlib.pyplot as plt
-
+import numpy as np
 import pyart
+from scipy.stats import binned_statistic_2d
 
-from .plots_aux import get_norm
-from .plots_aux import _CARTOPY_AVAILABLE, embellish_plot
-from .plots_aux import get_main_map_axis
+from ..util import warn
+from .plots_aux import _CARTOPY_AVAILABLE, embellish_plot, get_main_map_axis, get_norm
 
 if _CARTOPY_AVAILABLE:
     import cartopy

@@ -21,12 +21,14 @@ Auxiliary plotting functions
 
 """
 
-import numpy as np
-import socket
-import pyart
 import os
+import socket
+
 import matplotlib as mpl
 import matplotlib.cm
+import numpy as np
+import pyart
+
 from ..util import warn
 
 socket.setdefaulttimeout(30)

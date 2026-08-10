@@ -16,15 +16,15 @@ Functions to obtain time averages of radar data mostly for intercomparison purpo
 """
 
 import datetime
-from ..util import warn
-import numpy as np
-import scipy
-import pyart
 from copy import deepcopy
 
+import numpy as np
+import pyart
+import scipy
+
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..util import time_avg_range
 from ..io.read_data_radar import interpol_field
+from ..util import time_avg_range, warn
 
 
 def process_time_stats(procstatus, dscfg, radar_list=None):

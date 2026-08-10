@@ -13,14 +13,13 @@ Functions for reading data used in sun monitoring
     read_solar_flux
 """
 
-import datetime
 import csv
-from ..util import warn
+import datetime
 
 import numpy as np
-
 from pyart.config import get_fillvalue
 
+from ..util import warn
 from .io_aux import get_save_dir, make_filename
 
 

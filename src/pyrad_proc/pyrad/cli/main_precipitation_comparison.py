@@ -13,15 +13,15 @@ This program compares radar data with a point measurement sensor.
 # Author: fvj
 # License: BSD 3 clause
 
+import argparse
 import datetime
 import glob
 import os
-import argparse
 
 import numpy as np
 
-from pyrad.io import read_ts_cum
 from pyrad.graph import plot_scatter_comp
+from pyrad.io import read_ts_cum
 from pyrad.util import compute_1d_stats
 
 print(__doc__)

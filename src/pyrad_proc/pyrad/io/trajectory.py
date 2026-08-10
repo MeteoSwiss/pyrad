@@ -9,20 +9,22 @@ Converting to different coordinate systems.
     _Radar_Trajectory
 """
 
-import sys
-import re
 import datetime
 import locale
-from ..util import warn
+import re
+import sys
 from copy import deepcopy
 
 import numpy as np
 import pandas as pd
-
 import pyart
 
-from ..io.read_data_sensor import read_lightning, read_trt_traj_data
-from ..io.read_data_sensor import read_trt_thundertracking_traj_data
+from ..io.read_data_sensor import (
+    read_lightning,
+    read_trt_thundertracking_traj_data,
+    read_trt_traj_data,
+)
+from ..util import warn
 
 
 class Trajectory:

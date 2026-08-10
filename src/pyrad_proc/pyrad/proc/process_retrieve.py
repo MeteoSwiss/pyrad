@@ -27,17 +27,14 @@ Functions for retrieving new moments and products
 
 import datetime
 from copy import deepcopy
-from ..util import warn
 
 import numpy as np
-
 import pyart
 
-from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.io_aux import get_file_list
-from ..io.read_data_radar import interpol_field
+from ..io.io_aux import get_datatype_fields, get_fieldname_pyart, get_file_list
 from ..io.read_data_other import read_rhi_profile, read_vpr_theo_parameters
-
+from ..io.read_data_radar import interpol_field
+from ..util import warn
 from ..util.radar_utils import time_avg_range
 
 

@@ -18,39 +18,39 @@ Functions for obtaining Pyrad products from the datasets
 
 """
 
-import matplotlib.pyplot as plt
-from copy import deepcopy
-from ..util import warn
 import os
-
-import numpy as np
-
-import pyart
-
-from .process_vol_products import generate_vol_products
-
-from ..io.io_aux import get_fieldname_pyart
-from ..io.io_aux import get_save_dir, make_filename
-
-from ..io.read_data_sun import read_sun_retrieval
-from ..io.read_data_other import read_ml_ts
-
-from ..io.write_data import write_sun_hits, write_sun_retrieval
-from ..io.write_data import write_excess_gates, write_ts_ml, write_histogram
-from ..io.write_data import write_timeseries_point, write_centroids
-from ..io.write_data import write_rhi_profile, write_vpr_theo_params
-from ..io.write_data import write_vpr_info
-
-from ..graph.plots import plot_sun_hits, plot_histogram2, plot_scatter
-from ..graph.plots import plot_centroids
-from ..graph.plots_timeseries import plot_sun_retrieval_ts, plot_ml_ts
-from ..graph.plots_vol import plot_fixed_rng_sun
-from ..graph.plots_vol import plot_along_coord
-
-from ..util.radar_utils import create_sun_hits_field, compute_histogram
-from ..util.radar_utils import create_sun_retrieval_field
+from copy import deepcopy
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pyart
+
+from ..graph.plots import plot_centroids, plot_histogram2, plot_scatter, plot_sun_hits
+from ..graph.plots_timeseries import plot_ml_ts, plot_sun_retrieval_ts
+from ..graph.plots_vol import plot_along_coord, plot_fixed_rng_sun
+from ..io.io_aux import get_fieldname_pyart, get_save_dir, make_filename
+from ..io.read_data_other import read_ml_ts
+from ..io.read_data_sun import read_sun_retrieval
+from ..io.write_data import (
+    write_centroids,
+    write_excess_gates,
+    write_histogram,
+    write_rhi_profile,
+    write_sun_hits,
+    write_sun_retrieval,
+    write_timeseries_point,
+    write_ts_ml,
+    write_vpr_info,
+    write_vpr_theo_params,
+)
+from ..util import warn
+from ..util.radar_utils import (
+    compute_histogram,
+    create_sun_hits_field,
+    create_sun_retrieval_field,
+)
+from .process_vol_products import generate_vol_products
 
 mpl.use("Agg")
 

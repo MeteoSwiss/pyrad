@@ -13,28 +13,32 @@ Functions for obtaining Pyrad products from gridded datasets
 
 """
 
-from ..util import warn
 from copy import deepcopy
 
 import numpy as np
-
 import pyart
 
-from ..io.io_aux import get_fieldname_pyart
-from ..io.io_aux import get_save_dir, make_filename
-from ..io.write_data import write_histogram, write_ts_stats
-
-from ..graph.plots_grid import plot_surface, plot_surface_raw
-from ..graph.plots_grid import plot_longitude_slice, plot_latitude_slice
-from ..graph.plots_grid import plot_cross_section, plot_surface_contour
-from ..graph.plots_grid import plot_dda_map, plot_dda_slice
-
-from ..graph.plots_aux import get_colobar_label, get_field_name
-from ..graph.plots_aux import generate_dda_map_title
-from ..graph.plots_aux import generate_dda_latitude_slice_title
-from ..graph.plots_aux import generate_dda_longitude_slice_title
 from ..graph.plots import plot_histogram, plot_pos
-
+from ..graph.plots_aux import (
+    generate_dda_latitude_slice_title,
+    generate_dda_longitude_slice_title,
+    generate_dda_map_title,
+    get_colobar_label,
+    get_field_name,
+)
+from ..graph.plots_grid import (
+    plot_cross_section,
+    plot_dda_map,
+    plot_dda_slice,
+    plot_latitude_slice,
+    plot_longitude_slice,
+    plot_surface,
+    plot_surface_contour,
+    plot_surface_raw,
+)
+from ..io.io_aux import get_fieldname_pyart, get_save_dir, make_filename
+from ..io.write_data import write_histogram, write_ts_stats
+from ..util import warn
 from ..util.radar_utils import compute_histogram
 
 

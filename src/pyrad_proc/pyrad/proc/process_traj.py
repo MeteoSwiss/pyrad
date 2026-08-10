@@ -24,31 +24,34 @@ the product generation functions.
     TargetRadar
 """
 
-from ..util import warn
 import gc
 from copy import deepcopy
 
 import numpy as np
-from netCDF4 import num2date, date2num
-
 import pyart
+from netCDF4 import date2num, num2date
 from pyart.config import get_metadata
 from pyart.core import Radar
 
+from ..util import warn
+
 try:
-    from pyart.util import get_target_elevations, cross_section_rhi
+    from pyart.util import cross_section_rhi, get_target_elevations
 except ImportError:
     warn("ARM version of Py-ART detected, you will not be able to use some products")
     warn("Please use Py-ART MCH instead (https://github.com/MeteoSwiss/pyart)")
 
-from ..util.date_utils import cftodatetime
-from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.io_aux import get_field_unit, get_field_name
-from ..io.timeseries import TimeSeries
+from ..io.io_aux import (
+    get_datatype_fields,
+    get_field_name,
+    get_field_unit,
+    get_fieldname_pyart,
+)
 from ..io.read_data_other import read_antenna_pattern
-
-from ..util.stat_utils import quantiles_weighted
+from ..io.timeseries import TimeSeries
+from ..util.date_utils import cftodatetime
 from ..util.radar_utils import belongs_roi_indices, find_nearest_gate
+from ..util.stat_utils import quantiles_weighted
 
 
 def process_trajectory(procstatus, dscfg, radar_list=None, trajectory=None):

@@ -14,15 +14,19 @@ time order
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import atexit
-import numpy as np
+import datetime
 import os
 
-from pyrad.io import read_monitoring_ts, write_monitoring_ts
-from pyrad.graph import plot_monitoring_ts
-from pyrad.io import generate_field_name_str, get_fieldname_pyart
+import numpy as np
 
+from pyrad.graph import plot_monitoring_ts
+from pyrad.io import (
+    generate_field_name_str,
+    get_fieldname_pyart,
+    read_monitoring_ts,
+    write_monitoring_ts,
+)
 
 print(__doc__)
 

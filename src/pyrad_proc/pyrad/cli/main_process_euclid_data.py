@@ -14,17 +14,17 @@ position, histograms, etc.
 # Author: fvj
 # License: BSD 3 clause
 
-import datetime
 import argparse
 import atexit
+import datetime
+import sys
+from warnings import warn
 
 import numpy as np
 
+from pyrad.graph import plot_histogram, plot_pos
 from pyrad.io import read_meteorage
 from pyrad.util import belongs_roi_indices
-from pyrad.graph import plot_pos, plot_histogram
-
-import sys
 
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)

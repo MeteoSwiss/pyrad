@@ -12,17 +12,18 @@ NOTE: these codes are very specific to MeteoSwiss and have no
 practical use to external people
 """
 
-import numpy as np
-import os
-import zipfile
 import datetime
+import fnmatch
 import glob
+import os
+import re
 import socket
 import subprocess
-import fnmatch
-import re
-import pandas as pd  # function used in retrieve_hzt_prod
+import zipfile
 from io import BytesIO
+
+import numpy as np
+import pandas as pd  # function used in retrieve_hzt_prod
 
 # MeteoSwiss constants
 OFFSET_CCS4 = [297, -100]

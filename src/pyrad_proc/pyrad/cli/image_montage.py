@@ -5,6 +5,7 @@ import glob
 import os
 import re
 from collections import defaultdict
+
 from PIL import Image, ImageDraw, ImageFont
 
 DATE_REGEX_1 = re.compile(r"(\d{4}\d{2}\d{2}\d{2}\d{2}\d{2})")

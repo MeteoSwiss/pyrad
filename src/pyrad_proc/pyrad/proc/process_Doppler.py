@@ -21,10 +21,11 @@ Functions for processing Doppler related parameters
 """
 
 from copy import deepcopy
-from ..util import warn
-import numpy as np
 
+import numpy as np
 import pyart
+
+from ..util import warn
 
 try:
     import pytda
@@ -40,14 +41,14 @@ try:
 except ImportError:
     _PYDDA_AVAILABLE = False
 
+from ..io import retrieve_radiosounding_igra
 from ..io.io_aux import (
+    convert_pydda_to_pyart_grid,
     get_datatype_fields,
     get_fieldname_pyart,
-    convert_pydda_to_pyart_grid,
 )
-from ..io import retrieve_radiosounding_igra
-from .process_grid import process_grid
 from ..util import compute_average_vad
+from .process_grid import process_grid
 
 
 def process_turbulence(procstatus, dscfg, radar_list=None):

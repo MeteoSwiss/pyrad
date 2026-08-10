@@ -18,12 +18,13 @@ Functions for monitoring data quality and correct bias and noise effects
 
 """
 
-from copy import deepcopy
-from ..util import warn
-import numpy as np
 import importlib
+from copy import deepcopy
 
+import numpy as np
 from netCDF4 import num2date
+
+from ..util import warn
 
 if importlib.util.find_spec("pysolar"):
     _PYSOLAR_AVAILABLE = True
@@ -31,14 +32,18 @@ else:
     _PYSOLAR_AVAILABLE = False
 
 import pyart
-from ..util.date_utils import cftodatetime
+
 from ..io.io_aux import get_datatype_fields, get_fieldname_pyart
-from ..io.read_data_sun import read_sun_hits_multiple_days, read_solar_flux
 from ..io.read_data_other import read_excess_gates
 from ..io.read_data_radar import interpol_field
-
-from ..util.radar_utils import get_closest_solar_flux, get_histogram_bins
-from ..util.radar_utils import find_ray_index, find_rng_index
+from ..io.read_data_sun import read_solar_flux, read_sun_hits_multiple_days
+from ..util.date_utils import cftodatetime
+from ..util.radar_utils import (
+    find_ray_index,
+    find_rng_index,
+    get_closest_solar_flux,
+    get_histogram_bins,
+)
 
 
 def process_correct_bias(procstatus, dscfg, radar_list=None):
