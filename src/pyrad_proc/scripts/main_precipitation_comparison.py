@@ -94,7 +94,7 @@ def main():
         print(f"Processing directory {fpath}")
 
         # Get name of pyrad output
-        pyrad_name = [k for k in fpath.split("/") if len(k)][-1]
+        [k for k in fpath.split("/") if len(k)][-1]
 
         # Find all products within file structure
         all_RR_files = glob.glob(

@@ -1,9 +1,7 @@
 import argparse
 import sys
 import yaml
-from typing import Tuple, Any
 
-import pyrad
 from pyrad.io.config import read_config
 
 

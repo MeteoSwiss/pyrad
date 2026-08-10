@@ -2588,7 +2588,7 @@ def plot_histogram_over_range(
     titl=None,
     labelx="Range (m)",
     labely=None,
-    count_label="Number of samples",
+    count_label="Normalized frequency",
     cmap_full="viridis",
     percentile_cmaps=None,
     hist_vmin=None,
@@ -2604,8 +2604,13 @@ def plot_histogram_over_range(
 
     - ``full=True``:
       Plot the complete two-dimensional histogram for each radar in a
-      separate panel. All panels use the same colormap and color-scale
-      limits so that histogram counts can be compared directly.
+      separate panel. Histograms are normalized independently at every
+      range bin, such that the sum over all variable bins is one for
+      each range bin.
+
+      All panels use the same colormap and color-scale limits. If
+      percentile information is provided, percentile curves are
+      overlaid on the corresponding radar panel.
 
     - ``full=False``:
       Plot only the percentile curves. Percentiles from all radars are
@@ -2635,11 +2640,15 @@ def plot_histogram_over_range(
                 "radar 2": hist_radar_2,
             }
 
+        Histograms are normalized independently for each range bin
+        before plotting.
+
     fname_list : list of str
         Output figure filenames.
 
     range_centers : array-like, optional
-        Range-bin centers. Required when ``full=False``.
+        Range-bin centers. If None, they are calculated from
+        ``range_bins``.
 
     percentiles_by_radar : dict, optional
         Nested dictionary mapping each radar name to its percentile curves.
@@ -2664,7 +2673,8 @@ def plot_histogram_over_range(
             }
 
     full : bool
-        If True, plot one full histogram panel per radar.
+        If True, plot one normalized full histogram panel per radar and
+        optionally overlay percentile curves.
 
         If False, plot only percentile curves from all radars on the same
         axis.
@@ -2688,11 +2698,13 @@ def plot_histogram_over_range(
         Colormap used for all histograms when ``full=True``.
 
     percentile_cmaps : list of str, optional
-        Colormaps used for the percentile curves of the different radars
-        when ``full=False``.
+        Colormaps used for percentile curves.
 
-        The first radar uses the first colormap, the second radar uses the
-        second colormap, and so on.
+        In ``full=False`` mode, a different colormap is used for each
+        radar.
+
+        In ``full=True`` mode, the corresponding radar colormap is also
+        used for the percentile curves overlaid on each histogram.
 
         Default::
 
@@ -2701,12 +2713,12 @@ def plot_histogram_over_range(
     hist_vmin, hist_vmax : float, optional
         Shared histogram color-scale limits.
 
-        If ``hist_vmax`` is None, it is inferred from all non-zero
-        histogram values using ``hist_vmax_percentile``.
+        If ``hist_vmax`` is None, it is inferred from all positive
+        normalized histogram values using ``hist_vmax_percentile``.
 
     hist_vmax_percentile : float
-        Percentile of all non-zero histogram values used to infer the
-        shared maximum color-scale limit.
+        Percentile of all positive normalized histogram values used to
+        infer the shared maximum color-scale limit.
 
     figsize : tuple, optional
         Figure size.
@@ -2722,8 +2734,13 @@ def plot_histogram_over_range(
     range_bins = np.asarray(range_bins, dtype=float)
     value_bins = np.asarray(value_bins, dtype=float)
 
-    if range_centers is not None:
+    if range_centers is None:
+        range_centers = 0.5 * (range_bins[:-1] + range_bins[1:])
+    else:
         range_centers = np.asarray(range_centers, dtype=float)
+
+    if range_centers.size != range_bins.size - 1:
+        raise ValueError("range_centers must contain exactly one value per range bin")
 
     if labely is None:
         labely = field_name
@@ -2744,13 +2761,13 @@ def plot_histogram_over_range(
 
     histograms_plot = {}
 
+    expected_shape = (
+        range_bins.size - 1,
+        value_bins.size - 1,
+    )
+
     for radar, histogram in histograms.items():
         histogram = np.asarray(histogram, dtype=float)
-
-        expected_shape = (
-            range_bins.size - 1,
-            value_bins.size - 1,
-        )
 
         if histogram.shape != expected_shape:
             raise ValueError(
@@ -2758,9 +2775,37 @@ def plot_histogram_over_range(
                 f"{histogram.shape}, but expected {expected_shape}"
             )
 
-        histograms_plot[radar] = np.ma.masked_where(
-            ~np.isfinite(histogram) | (histogram <= 0.0),
+        # Remove invalid and negative histogram values before normalization.
+        histogram = np.where(
+            np.isfinite(histogram) & (histogram > 0.0),
             histogram,
+            0.0,
+        )
+
+        # Normalize independently for every range bin.
+        #
+        # histogram shape:
+        #
+        #     (n_range, n_value)
+        #
+        # Therefore axis=1 sums over the value bins for each range.
+        row_sum = np.sum(
+            histogram,
+            axis=1,
+            keepdims=True,
+        )
+
+        histogram_normalized = np.divide(
+            histogram,
+            row_sum,
+            out=np.zeros_like(histogram, dtype=float),
+            where=row_sum > 0.0,
+        )
+
+        # Mask empty bins so that they are not plotted.
+        histograms_plot[radar] = np.ma.masked_where(
+            histogram_normalized <= 0.0,
+            histogram_normalized,
         )
 
     if full:
@@ -2769,7 +2814,7 @@ def plot_histogram_over_range(
         if figsize is None:
             figsize = (12, max(5.5, 4.5 * nradars))
 
-        # Determine one common normalization for all radar histograms.
+        # Determine a common normalization for all radar histograms.
         common_vmax = hist_vmax
 
         if common_vmax is None:
@@ -2787,7 +2832,6 @@ def plot_histogram_over_range(
                     hist_vmax_percentile,
                 )
 
-        # Reserve a separate narrow column on the right for the shared colorbar.
         fig = plt.figure(figsize=figsize)
 
         grid = fig.add_gridspec(
@@ -2797,12 +2841,13 @@ def plot_histogram_over_range(
             left=0.08,
             right=0.94,
             bottom=0.10,
-            top=0.88,
+            top=0.90,
             hspace=0.25,
             wspace=0.08,
         )
 
         axes = []
+
         for radar_index in range(nradars):
             if radar_index == 0:
                 ax = fig.add_subplot(grid[radar_index, 0])
@@ -2815,12 +2860,12 @@ def plot_histogram_over_range(
 
             axes.append(ax)
 
-        # One colorbar axis spanning the full height of all radar panels.
+        # One shared colorbar for all radar panels.
         colorbar_ax = fig.add_subplot(grid[:, 1])
 
         mesh = None
 
-        for ax, radar in zip(axes, radar_keys):
+        for radar_index, (ax, radar) in enumerate(zip(axes, radar_keys)):
             mesh = ax.pcolormesh(
                 range_bins,
                 value_bins,
@@ -2831,13 +2876,36 @@ def plot_histogram_over_range(
                 vmax=common_vmax,
             )
 
+            # Overlay percentiles when available.
+            if percentiles_by_radar is not None and radar in percentiles_by_radar:
+                cmap_name = percentile_cmaps[radar_index % len(percentile_cmaps)]
+
+                _plot_percentile_curves(
+                    ax,
+                    radar,
+                    range_centers,
+                    percentiles_by_radar,
+                    cmap_name=cmap_name,
+                )
+
             ax.set_ylabel(labely)
             ax.set_title(str(radar))
+
             ax.grid(
                 True,
                 axis="x",
                 alpha=0.2,
             )
+
+            # Add legend only if percentile curves were plotted.
+            handles, labels = ax.get_legend_handles_labels()
+
+            if handles:
+                ax.legend(
+                    handles,
+                    labels,
+                    loc="best",
+                )
 
         axes[-1].set_xlabel(labelx)
 
@@ -2848,8 +2916,6 @@ def plot_histogram_over_range(
                 labelbottom=False,
             )
 
-        # A single colorbar in its own axis emphasizes that all panels use the
-        # same scale and prevents overlap with the radar plots.
         if mesh is not None:
             colorbar = fig.colorbar(
                 mesh,
@@ -2859,14 +2925,14 @@ def plot_histogram_over_range(
             colorbar.set_label(count_label)
 
         if titl is None:
-            titl = f"{field_name} histograms over range"
+            titl = f"{field_name} distributions over range"
 
-        fig.suptitle(titl, y=0.98)
+        fig.suptitle(
+            titl,
+            y=0.98,
+        )
 
     else:
-        if range_centers is None:
-            raise ValueError("range_centers must be provided when full=False")
-
         if percentiles_by_radar is None:
             raise ValueError("percentiles_by_radar must be provided when full=False")
 
@@ -2891,6 +2957,7 @@ def plot_histogram_over_range(
 
         ax.set_xlabel(labelx)
         ax.set_ylabel(labely)
+
         ax.grid(
             True,
             alpha=0.25,
@@ -2902,7 +2969,10 @@ def plot_histogram_over_range(
             ax.legend(
                 handles,
                 labels,
-                ncol=max(1, min(len(radar_keys), 2)),
+                ncol=max(
+                    1,
+                    min(len(radar_keys), 2),
+                ),
             )
 
         if titl is None:

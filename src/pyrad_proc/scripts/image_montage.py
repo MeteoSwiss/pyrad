@@ -5,9 +5,7 @@ import glob
 import os
 import re
 from collections import defaultdict
-from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
-import math
 
 DATE_REGEX_1 = re.compile(r"(\d{4}\d{2}\d{2}\d{2}\d{2}\d{2})")
 DATE_REGEX_2 = re.compile(r"(\d{4}-\d{2}-\d{2})")
