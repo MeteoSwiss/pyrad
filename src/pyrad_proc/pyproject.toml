@@ -186,7 +186,13 @@ addopts = [
 # Version
 # ----------------------------------------------------------------------
 [tool.versioningit]
+vcs = "git-archive"
+
+[tool.versioningit.vcs]
+describe-subst = "$Format:%(describe:tags)$"
+
+[tool.versioningit.tag2version]
+rmprefix = ".v"
+
 [tool.versioningit.write]
 file = "pyrad/_version.py"
-[tool.versioningit.tag2version]
-rmprefix = "v."
