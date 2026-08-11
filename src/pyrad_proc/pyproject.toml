@@ -193,7 +193,7 @@ method = "git-archive"
 describe-subst = "$Format:%(describe:tags)$"
 
 [tool.versioningit.tag2version]
-rmprefix = ".v"
+rmprefix = "v."
 
 [tool.versioningit.write]
 file = "pyrad/_version.py"
