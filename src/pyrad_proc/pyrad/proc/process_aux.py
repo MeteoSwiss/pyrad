@@ -154,6 +154,7 @@ def get_process_func(dataset_type, dsname):
                 'SELFCONSISTENCY_KDP_PHIDP': process_selfconsistency_kdp_phidp
                 'SNR': process_snr
                 'SNR_FILTER': process_filter_snr
+                'SENSITIVITY_FILTER': process_filter_sensitivity
                 'ST1_IQ': process_st1_iq
                 'ST2_IQ': process_st2_iq
                 'TRAJ_TRT' : process_traj_trt
@@ -440,6 +441,8 @@ def get_process_func(dataset_type, dsname):
         dsformat = "SPARSE_GRID"
     elif dataset_type == "SNR_FILTER":
         func_name = "process_filter_snr"
+    elif dataset_type == "SENSITIVITY_FILTER":
+        func_name = "process_filter_sensitivity"
     elif dataset_type == "VEL_FILTER":
         func_name = "process_filter_vel_diff"
     elif dataset_type == "VIS_FILTER":

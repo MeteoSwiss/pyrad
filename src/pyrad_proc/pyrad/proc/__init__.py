@@ -318,7 +318,12 @@ from .process_traj import process_traj_trt, process_traj_trt_contour  # noqa
 
 from .process_echoclass import process_echo_id, process_birds_id  # noqa
 from .process_echoclass import process_echo_filter, process_clt_to_echo_id  # noqa
-from .process_echoclass import process_filter_snr, process_filter_visibility  # noqa
+from .process_echoclass import (  # noqa: F401
+    process_filter_snr,
+    process_filter_visibility,
+    process_filter_sensitivity,
+)
+
 from .process_echoclass import process_outlier_filter, process_hydroclass  # noqa
 from .process_echoclass import process_centroids, process_hydro_mf_to_hydro  # noqa
 from .process_echoclass import process_cdf, process_melting_layer  # noqa
@@ -360,12 +365,13 @@ from .process_monitoring import process_selfconsistency_bias2  # noqa
 from .process_monitoring import process_monitoring  # noqa
 
 from .process_retrieve import process_signal_power, process_snr, process_ccor  # noqa
-from .process_retrieve import (  # noqa
+from .process_retrieve import (  # noqa: F401
     process_l,
     process_cdr,
     process_bird_density,
     process_refl_from_zdr,
 )
+
 from .process_retrieve import process_rainrate, process_vol_refl, process_rcs  # noqa
 from .process_retrieve import process_rcs_pr, process_rainfall_accumulation  # noqa
 from .process_retrieve import process_radial_noise_hs, process_vpr  # noqa

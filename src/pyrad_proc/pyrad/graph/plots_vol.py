@@ -401,7 +401,6 @@ def plot_ppi_map(
 
     projection = cartopy.crs.PlateCarree()
     display_map = pyart.graph.RadarMapDisplay(radar)
-
     # Use different transparency and zorder if plotting over OTM or hillshade
     zorder = 1
     if "maps" in prdcfg["ppiMapImageConfig"]:

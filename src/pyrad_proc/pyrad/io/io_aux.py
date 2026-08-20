@@ -228,6 +228,7 @@ pyrad_to_pyart_keys_dict = {
     "incident_angle": "incident_angle",
     "sigma_0": "sigma_0",
     "effective_area": "effective_area",
+    "rcs_clutter": "rcs_clutter",
     "dBm_clutter": "dBm_clutter",
     "dBZ_clutter": "dBZ_clutter",
     "echoID": "radar_echo_id",

@@ -175,7 +175,6 @@ def parse_cartomap_style(cartomap):
                 style["alpha"] = float(value)
             except ValueError:
                 pass
-
     return filename, style
 
 
@@ -355,7 +354,7 @@ def embellish_plot(ax, plot_config):
                         alpha=style["alpha"],
                     )
                 except Exception as e:
-                    warn(f"Failed to load cartomap {cartomap}: {e}")
+                    warn(f"Failed to load cartomap {cartomap_file}: {e}")
             else:
                 warn(f"Geopandas not available, not able to display map {cartomap}")
         else:

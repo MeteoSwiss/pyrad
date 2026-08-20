@@ -10,6 +10,7 @@ import pathlib
 import numpy as np
 import pyart
 from pyart.config import get_metadata
+from pyproj import Transformer
 from scipy.interpolate import RegularGridInterpolator
 
 from ..util import warn
@@ -52,74 +53,176 @@ def dem2radar_data(radar, dem_data, slice_xy=True, field_name="visibility"):
     return field_dict
 
 
-def read_dem(fname, field_name="terrain_altitude", fill_value=None, projparams=None):
+def read_dem(
+    fname,
+    field_name="terrain_altitude",
+    fill_value=None,
+    projparams=None,
+):
+    """
+    Read a DEM into a Py-ART Grid while preserving its native projection.
+
+    The x and y coordinates are kept as absolute projected coordinates
+    in the native CRS of the DEM. The DEM is not reprojected here.
+
+    Parameters
+    ----------
+    fname : str
+        DEM filename.
+    field_name : str, optional
+        Name of the field containing the DEM altitude.
+    fill_value : float or None, optional
+        Fill value used when reading the DEM.
+    projparams : dict, int or None, optional
+        Native projection of the DEM. An integer is interpreted as an
+        EPSG code. If None and no projection is available from the file,
+        CH1903/LV03 is assumed.
+
+    Returns
+    -------
+    dem_grid : pyart.core.Grid or None
+        Grid containing the DEM in its native projected coordinate
+        system.
+    """
     extension = pathlib.Path(fname).suffix.lower()
 
-    if isinstance(projparams, int):
-        proj4 = CRS.from_epsg(projparams).to_proj4()
-        projparams = _proj4_str_to_dict(proj4)
+    # ------------------------------------------------------------------
+    # Read DEM
+    # ------------------------------------------------------------------
 
     if extension in [".tif", ".tiff", ".gtif"]:
         dem = read_geotiff_data(fname, fill_value)
     elif extension in [".asc", ".dem", ".txt"]:
         dem = read_ascii_data(fname, fill_value)
-    elif extension in [".rst"]:
+    elif extension == ".rst":
         dem = read_idrisi_data(fname, fill_value)
     else:
         warn(
-            f"WARNING: unable to read file {fname}, extension must be .tif .tiff "
-            + ".gtif, .asc .dem .txt .rst"
+            f"WARNING: unable to read file {fname}, extension must be "
+            ".tif .tiff .gtif .asc .dem .txt .rst"
         )
         return None
 
     if dem is None:
         return None
 
+    # ------------------------------------------------------------------
+    # Determine native DEM projection
+    # ------------------------------------------------------------------
+
     if "projparams" in dem and dem["projparams"] is not None:
         projparams = dem["projparams"]
 
+    if projparams is None:
+        warn(
+            "WARNING: No proj could be read from file and no projparams "
+            "were provided, assuming the projection is CH1903.",
+            use_debug=False,
+        )
+        projparams = _get_lv1903_proj4()
+
+    # EPSG code
+    if isinstance(projparams, int):
+        source_crs = CRS.from_epsg(projparams)
+        projparams = _proj4_str_to_dict(source_crs.to_proj4())
+    else:
+        # Remove trailing whitespace such as "somerc "
+        projparams = {
+            key: value.strip() if isinstance(value, str) else value
+            for key, value in projparams.items()
+        }
+
+        source_crs = CRS.from_user_input(projparams)
+
+    # ------------------------------------------------------------------
+    # Field data
+    # ------------------------------------------------------------------
+
     field_dict = get_metadata(field_name)
+
     field_dict["data"] = dem["data"][::-1, :][None, :, :]
-    field_dict["units"] = dem["metadata"].get("value units", "meters")
+
+    field_dict["units"] = dem["metadata"].get(
+        "value units",
+        "meters",
+    )
+
+    # ------------------------------------------------------------------
+    # Native projected coordinates
+    #
+    # These remain ABSOLUTE coordinates in the DEM CRS.
+    # ------------------------------------------------------------------
 
     x = get_metadata("x")
     y = get_metadata("y")
     z = get_metadata("z")
 
+    resolution = dem["metadata"]["resolution"]
+    ncols = dem["metadata"]["columns"]
+    nrows = dem["metadata"]["rows"]
+
+    x["data"] = (
+        np.arange(ncols) * resolution + resolution / 2.0 + dem["metadata"]["min. X"]
+    )
+
+    y["data"] = (
+        np.arange(nrows) * resolution + resolution / 2.0 + dem["metadata"]["min. Y"]
+    )
+
+    z["data"] = np.array([0.0])
+
+    # ------------------------------------------------------------------
+    # Geographic origin metadata
+    #
+    # This is only metadata. x/y remain in the native projection.
+    #
+    # Use the center of the DEM as a sensible reference location.
+    # ------------------------------------------------------------------
+
+    x_center = 0.5 * (x["data"][0] + x["data"][-1])
+    y_center = 0.5 * (y["data"][0] + y["data"][-1])
+
+    native_to_wgs84 = Transformer.from_crs(
+        source_crs,
+        CRS.from_epsg(4326),
+        always_xy=True,
+    )
+
+    origin_lon_value, origin_lat_value = native_to_wgs84.transform(
+        x_center,
+        y_center,
+    )
+
     orig_lat = get_metadata("origin_latitude")
     orig_lon = get_metadata("origin_longitude")
     orig_alt = get_metadata("origin_altitude")
 
-    x["data"] = (
-        np.arange(dem["metadata"]["columns"]) * dem["metadata"]["resolution"]
-        + dem["metadata"]["resolution"] / 2.0
-        + dem["metadata"]["min. X"]
+    orig_lat["data"] = np.array(
+        [origin_lat_value],
+        dtype=float,
+    )
+    orig_lon["data"] = np.array(
+        [origin_lon_value],
+        dtype=float,
+    )
+    orig_alt["data"] = np.array(
+        [0.0],
+        dtype=float,
     )
 
-    y["data"] = (
-        np.arange(dem["metadata"]["rows"]) * dem["metadata"]["resolution"]
-        + dem["metadata"]["resolution"] / 2.0
-        + dem["metadata"]["min. Y"]
-    )
-
-    z["data"] = np.array([0])
-    orig_lat["data"] = [y["data"][0]]
-    orig_lon["data"] = [x["data"][0]]
-    orig_alt["data"] = [0]
-
-    if projparams is None:
-        warn(
-            "WARNING: No proj could be read from file and no projparams were provided, "
-            + "assuming the projection is CH1903.",
-            use_debug=False,
-        )
-        projparams = _get_lv1903_proj4()
+    # ------------------------------------------------------------------
+    # Time
+    # ------------------------------------------------------------------
 
     time = get_metadata("grid_time")
     time["data"] = np.array([0.0])
     time["units"] = "seconds since 2000-01-01T00:00:00Z"
 
-    dem_data = pyart.core.Grid(
+    # ------------------------------------------------------------------
+    # Create native-projection Grid
+    # ------------------------------------------------------------------
+
+    dem_grid = pyart.core.Grid(
         time,
         {field_name: field_dict},
         dem["metadata"],
@@ -132,7 +235,7 @@ def read_dem(fname, field_name="terrain_altitude", fill_value=None, projparams=N
         projection=projparams,
     )
 
-    return dem_data
+    return dem_grid
 
 
 def _crs_to_projparams(crs):

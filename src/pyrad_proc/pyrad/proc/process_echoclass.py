@@ -813,6 +813,215 @@ def process_gatefilter(procstatus, dscfg, radar_list=None):
     return new_dataset, ind_rad
 
 
+def process_filter_sensitivity(procstatus, dscfg, radar_list=None):
+    """
+    Filters out echoes below the radar sensitivity threshold.
+
+    The radar sensitivity is specified as a reflectivity threshold at a
+    reference range. The corresponding sensitivity threshold at every radar
+    range gate is computed assuming that the minimum detectable reflectivity
+    scales with the square of the range:
+
+        Zmin(r) = Zmin_ref + 20 * log10(r / r_ref)
+
+    where Zmin_ref is the sensitivity in dBZ at the reference range r_ref.
+
+    A reflectivity field is used as the master field to determine which gates
+    are below the sensitivity threshold. The resulting mask is then applied
+    to all requested output fields.
+
+    If multiple reflectivity fields are provided, the ``master_field``
+    configuration keyword can be used to explicitly select which one should
+    be used for the sensitivity filtering. If ``master_field`` is not
+    specified, the first reflectivity datatype in ``datatype`` is used.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing.
+    dscfg : dictionary of dictionaries
+        Data set configuration. Accepted Configuration Keywords::
+
+        datatype : list of string. Dataset keyword
+            The input data types. It must contain at least one reflectivity
+            field used to determine whether a gate is below the sensitivity
+            threshold, as well as any other datatype supported by pyrad that
+            will be sensitivity filtered.
+
+        master_field : string. Dataset keyword, optional
+            Reflectivity datatype to use as the master field for determining
+            the sensitivity mask. For example ``"dBZ"`` or ``"dBZc"``.
+            The selected datatype must also be present in ``datatype``.
+            If not specified, the first reflectivity datatype found in
+            ``datatype`` is used.
+
+        sensitivity : float. Dataset keyword
+            Minimum detectable reflectivity, in dBZ, at the reference range.
+
+        sensitivity_range : float. Dataset keyword
+            Reference range, in km, at which ``sensitivity`` is defined.
+
+    radar_list : list of Radar objects
+        Optional. List of radar objects.
+
+    Returns
+    -------
+    new_dataset : dict
+        Dictionary containing the output radar. The output fields contain
+        the sensitivity-filtered versions of the provided datatypes.
+        For example dBZ -> dBZc, ZDR -> ZDRc, RhoHV -> RhoHVc.
+    ind_rad : int
+        Radar index.
+
+    """
+
+    if procstatus != 1:
+        return None, None
+
+    # Find all reflectivity fields present in datatype
+    reflectivity_fields = []
+    radarnr = None
+
+    for datatypedescr in dscfg["datatype"]:
+        radarnr_aux, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+
+        if radarnr is None:
+            radarnr = radarnr_aux
+
+        field_name = get_fieldname_pyart(datatype)
+
+        if "reflectivity" in field_name:
+            reflectivity_fields.append((datatype, field_name))
+
+    if radarnr is None:
+        warn("Unable to determine radar number")
+        return None, None
+
+    if not reflectivity_fields:
+        warn(
+            "Unable to filter dataset according to sensitivity. "
+            "No reflectivity datatype provided"
+        )
+        return None, None
+
+    ind_rad = int(radarnr[5:8]) - 1
+
+    if radar_list[ind_rad] is None:
+        warn("No valid radar")
+        return None, None
+
+    radar = radar_list[ind_rad]
+
+    # Determine which reflectivity field is used as the master field
+    if "master_field" in dscfg:
+        master_datatype = dscfg["master_field"]
+        master_field = get_fieldname_pyart(master_datatype)
+
+        available_master_fields = [field_name for _, field_name in reflectivity_fields]
+
+        if master_field not in available_master_fields:
+            warn(
+                "Unable to filter dataset according to sensitivity. "
+                f"Master field {master_datatype} is not present in datatype"
+            )
+            return None, None
+
+        refl_field = master_field
+
+    else:
+        # Default to the first reflectivity field in datatype
+        refl_field = reflectivity_fields[0][1]
+
+    if refl_field not in radar.fields:
+        warn(
+            "Unable to filter dataset according to sensitivity. "
+            f"Missing master reflectivity field {refl_field}"
+        )
+        return None, None
+
+    sensitivity = dscfg["sensitivity"]
+    sensitivity_range = dscfg["sensitivity_range"] * 1000  # to m
+
+    if sensitivity_range <= 0.0:
+        warn("Sensitivity reference range must be greater than zero")
+        return None, None
+
+    # Radar ranges are expected to be in meters
+    ranges = np.asarray(radar.range["data"])
+
+    # Compute the range-dependent sensitivity threshold.
+    # A value of -inf is used at zero range to avoid log10(0).
+    sensitivity_threshold = np.full(ranges.shape, -np.inf, dtype=float)
+
+    valid_range = ranges > 0.0
+    sensitivity_threshold[valid_range] = sensitivity + 20.0 * np.log10(
+        ranges[valid_range] / sensitivity_range
+    )
+
+    reflectivity = radar.fields[refl_field]["data"]
+
+    # Expand the 1-D range threshold over all rays
+    sensitivity_threshold = np.broadcast_to(
+        sensitivity_threshold[np.newaxis, :],
+        reflectivity.shape,
+    )
+
+    # Gates already masked in the master reflectivity field remain masked.
+    is_below_sensitivity = np.ma.getmaskarray(reflectivity).copy()
+
+    valid_refl = ~np.ma.getmaskarray(reflectivity)
+
+    is_below_sensitivity[valid_refl] |= (
+        np.asarray(reflectivity)[valid_refl] < sensitivity_threshold[valid_refl]
+    )
+
+    new_dataset = {"radar_out": deepcopy(radar)}
+    new_dataset["radar_out"].fields = dict()
+
+    for datatypedescr in dscfg["datatype"]:
+        _, _, datatype, _, _ = get_datatype_fields(datatypedescr)
+
+        field_name = get_fieldname_pyart(datatype)
+
+        if field_name not in radar.fields:
+            warn(
+                "Unable to filter "
+                + field_name
+                + " according to sensitivity. "
+                + "No valid input fields"
+            )
+            continue
+
+        radar_field = deepcopy(radar.fields[field_name])
+
+        radar_field["data"] = np.ma.masked_where(
+            is_below_sensitivity,
+            radar_field["data"],
+        )
+
+        if field_name.startswith("corrected_"):
+            new_field_name = field_name
+        elif field_name.startswith("uncorrected_"):
+            new_field_name = field_name.replace(
+                "uncorrected_",
+                "corrected_",
+                1,
+            )
+        else:
+            new_field_name = "corrected_" + field_name
+
+        new_dataset["radar_out"].add_field(
+            new_field_name,
+            radar_field,
+        )
+
+    if not new_dataset["radar_out"].fields:
+        return None, None
+
+    return new_dataset, ind_rad
+
+
 def process_filter_snr(procstatus, dscfg, radar_list=None):
     """
     filters out low SNR echoes

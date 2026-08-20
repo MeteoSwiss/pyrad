@@ -161,9 +161,9 @@ def plot_surface(
 
     if fig is None:
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
-        ax = fig.add_subplot(111)
 
         if use_basemap or not _CARTOPY_AVAILABLE:
+            ax = fig.add_subplot(111)
             display = pyart.graph.GridMapDisplayBasemap(grid)
             display.plot_basemap(
                 lat_lines=lat_lines,
@@ -192,7 +192,13 @@ def plot_surface(
         else:
             projection = cartopy.crs.PlateCarree()
 
+            ax = fig.add_subplot(
+                111,
+                projection=projection,
+            )
+
             display = pyart.graph.GridMapDisplay(grid)
+
             display.plot_grid(
                 field_name,
                 level=level,
@@ -200,7 +206,6 @@ def plot_surface(
                 ticks=ticks,
                 ticklabs=ticklabs,
                 lat_lines=lat_lines,
-                projection=projection,
                 lon_lines=lon_lines,
                 vmin=vmin,
                 embellish=False,
@@ -210,8 +215,21 @@ def plot_surface(
                 alpha=alpha,
                 title=titl,
                 colorbar_flag=colorbar_flag,
+                projection=projection,
+                ax=ax,
+                fig=fig,
             )
 
+            ax.set_extent(
+                [min_lon, max_lon, min_lat, max_lat],
+                crs=cartopy.crs.PlateCarree(),
+            )
+
+            if "maps" in prdcfg["gridMapImageConfig"]:
+                embellish_plot(
+                    ax,
+                    prdcfg["gridMapImageConfig"],
+                )
             # fig = plt.gcf()
             # ax.set_extent([min_lon, max_lon, min_lat, max_lat])
             # display.plot_crosshairs(lon=lon, lat=lat)
@@ -285,7 +303,7 @@ def plot_surface_raw(
     save_fig=True,
 ):
     """
-    plots a surface from gridded data within reprojecting the data into a map
+    plots a surface from gridded data without reprojecting the data into a map
 
     Parameters
     ----------
