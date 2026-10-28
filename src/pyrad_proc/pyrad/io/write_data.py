@@ -2306,9 +2306,7 @@ def write_ts_polar_data(dataset, fname):
     """
 
     def _is_multiradar(ds):
-        return isinstance(ds, dict) and any(
-            isinstance(k, str) and re.match(r"^RADAR\d{3}$", k) for k in ds.keys()
-        )
+        return sum(["RADAR" in k for k in dataset.keys()]) > 1
 
     def _to_dt_series(t):
         if isinstance(t, (list, tuple, np.ndarray, pd.Series)):
@@ -2343,14 +2341,16 @@ def write_ts_polar_data(dataset, fname):
     # Build dataframe + header
     # ----------------------------
     if not multiradar:
+        # Extract radar if needed
+        dataset = next((v for k, v in dataset.items() if "RADAR" in k), dataset)
+
         # ---- single radar (legacy) ----
         t = _to_dt_series(dataset["time"])
         n = len(t)
-
-        used = dataset["used_antenna_coordinates_az_el_r"]
-        az = np.asarray(used[0]).reshape(-1)
-        el = np.asarray(used[1]).reshape(-1)
-        rr = np.asarray(used[2]).reshape(-1)
+        used = np.squeeze(np.array(dataset["used_antenna_coordinates_az_el_r"]))
+        az = used[:, 0]
+        el = used[:, 1]
+        rr = used[:, 2]
 
         if az.size == 1 and n > 1:
             az = np.repeat(az, n)

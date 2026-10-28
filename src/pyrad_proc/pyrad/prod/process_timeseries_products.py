@@ -336,7 +336,7 @@ def generate_timeseries_products(dataset, prdcfg):
         datatype = ds0["datatype"]
 
         # ---- gate / point information ----
-        is_single_radar = len(radar_names) == 1
+        is_single_radar = len(radar_keys) == 1
         has_antenna_coordinates = "antenna_coordinates_az_el_r" in ds0
 
         if has_antenna_coordinates and is_single_radar:

@@ -168,6 +168,9 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                     "point_coordinates_WGS84_lon_lat_alt"
                 ],
                 "antenna_coordinates_az_el_r": gd["antenna_coordinates_az_el_r"],
+                "used_antenna_coordinates_az_el_r": gd[
+                    "used_antenna_coordinates_az_el_r"
+                ],
                 "radarnr": radarnr,
             }
 
@@ -703,6 +706,7 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                 ],
                 "time": [],
                 "value": [],
+                "used_antenna_coordinates_az_el_r": [],
                 "ref_time": dscfg["timeinfo"],
                 "ind_rad": ind_rad,
                 "datatype": datatype,
@@ -729,9 +733,12 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                 gd["value"].extend([value for value in val])
             else:
                 gd["value"].extend([val[iray].copy() for iray in range(val.shape[0])])
+            gd["used_antenna_coordinates_az_el_r"].append(ant_coord)
+
         else:
             gd["value"].append(val[0])
             gd["time"].append(time[0])
+            gd["used_antenna_coordinates_az_el_r"].append(ant_coord)
 
         # --------------------------------------------------------------
         # Per-radar output
@@ -751,10 +758,11 @@ def process_point_measurement(procstatus, dscfg, radar_list=None):
                 el,
                 r,
             ],
-            "used_antenna_coordinates_az_el_r": ant_coord,
+            "used_antenna_coordinates_az_el_r": dscfg["global_data"][radarnr][
+                "used_antenna_coordinates_az_el_r"
+            ],
             "radarnr": radarnr,
         }
-
         out[radarnr] = new_dataset
     out["final"] = False
     return out, ind_out
