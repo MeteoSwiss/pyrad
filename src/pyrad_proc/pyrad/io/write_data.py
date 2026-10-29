@@ -213,260 +213,355 @@ def write_csv_to_mysql(
     csv_file: str,
     chunksize: int = 1000,
     drop_table: bool = False,
+    overwrite: bool = False,
 ):
     """
     Write a CSV file into a MySQL database table.
 
-    Behavior
-    --------
-    - The CSV is read into a pandas DataFrame.
-    - Column names are sanitized for MySQL compatibility.
-    - All likely datetime columns are auto-detected and converted.
-    - If at least one datetime column is found, the first detected datetime
-      column is used as the "date column". Only rows whose date value is not
-      already present in the database are inserted.
-    - If no datetime column is found, only rows that are not exact duplicates
-      of existing rows (across all columns) are inserted.
-    - The table is created automatically if it does not already exist.
+    The first datetime column returned by detect_datetime_columns()
+    is used as the time key.
 
-    Parameters
-    ----------
-    hostname : str
-        MySQL server hostname.
-    port : int
-        MySQL server port.
-    database : str
-        Name of the target database.
-    user : str
-        MySQL username.
-    password : str
-        MySQL password.
-    table_name : str
-        Name of the target table.
-    csv_file : str
-        Path to the CSV file to import.
-    chunksize : int, optional
-        Number of rows inserted per batch. Default is 1000.
-    drop_table: bool, optional
-        Drop the table and recreate it if the format is not compatible with the CSV file. Default is False.
+    With a time key:
+      - overwrite=False: insert only previously absent timestamps.
+      - overwrite=True: update matching timestamps and insert new ones.
+      - Duplicate timestamps within the CSV keep the last row.
+      - Missing timestamps are rejected when overwrite=True.
+
+    Without a time key:
+      - Exact duplicate rows are skipped.
+      - overwrite has no effect.
+
+    drop_table=True permits dropping and recreating the table when its
+    column names/order differ from the CSV. Column types are not compared.
+
+    Requires the existing _MYSQL_AVAILABLE flag and
+    detect_datetime_columns(df) helper, which converts datetime columns
+    in place and returns their names.
+
+    Notes
+    -----
+    Existing duplicate timestamps are all updated; they are not removed.
+    Updates include NULL values from the CSV.
+    Use a transactional table engine such as InnoDB for rollback support.
+    Concurrent imports require a unique time-key constraint and an upsert
+    implementation to guarantee uniqueness.
     """
+    import re
+    from warnings import warn
+
     if not _MYSQL_AVAILABLE:
         warn(
-            "pymysql and/or sqlalchemy and/or cryptography not available, aborting writing to database"
+            "pymysql and/or sqlalchemy and/or cryptography not available, "
+            "aborting writing to database"
         )
         return
 
-    import hashlib
-    import re
-
     import pandas as pd
-    from sqlalchemy import create_engine, text
-    from sqlalchemy.types import Boolean, DateTime, Float, Integer, String
+    from sqlalchemy import create_engine, inspect, text
+    from sqlalchemy.dialects.mysql import DATETIME
+    from sqlalchemy.engine import URL
+    from sqlalchemy.types import Boolean, Float, Integer, String
 
-    # -----------------------------
-    # 1) Read CSV with inference
-    # -----------------------------
+    if chunksize <= 0:
+        raise ValueError("chunksize must be a positive integer")
+
+    # ------------------------------------------------------------
+    # Read CSV and sanitize column names
+    # ------------------------------------------------------------
     df = pd.read_csv(csv_file, comment="#")
-    df = df.replace({-9999: None})
-    df = df.where(pd.notna(df), None)  # converts NaN/NaT to None
+    df = df.replace(-9999, float("nan"))
 
-    def sanitize_columns(cols):
-        out = []
+    def sanitize_columns(columns):
+        result = []
         seen = set()
-        for c in cols:
-            c2 = str(c).strip()
-            c2 = re.sub(r"\s+", "_", c2)
-            c2 = re.sub(r"[^0-9a-zA-Z_]", "_", c2)
-            if re.match(r"^\d", c2):
-                c2 = f"c_{c2}"
-            base = c2
-            i = 1
-            while c2 in seen:
-                c2 = f"{base}_{i}"
-                i += 1
-            seen.add(c2)
-            out.append(c2)
-        return out
+
+        for column in columns:
+            name = re.sub(r"\s+", "_", str(column).strip())
+            name = re.sub(r"[^0-9a-zA-Z_]", "_", name)
+
+            if not name:
+                name = "column"
+
+            if name[0].isdigit():
+                name = f"c_{name}"
+
+            # MySQL column names are limited to 64 characters.
+            base = name[:64]
+            name = base
+            suffix = 1
+
+            while name.lower() in seen:
+                ending = f"_{suffix}"
+                name = base[: 64 - len(ending)] + ending
+                suffix += 1
+
+            seen.add(name.lower())
+            result.append(name)
+
+        return result
 
     df.columns = sanitize_columns(df.columns)
-    # -----------------------------
-    # 2) Auto-detect datetime columns
-    # -----------------------------
 
+    # ------------------------------------------------------------
+    # Detect datetime columns
+    # ------------------------------------------------------------
     datetime_cols = detect_datetime_columns(df)
     date_col = datetime_cols[0] if datetime_cols else None
 
-    # -----------------------------
-    # 3) Map pandas dtypes → MySQL
-    # -----------------------------
-    def infer_sqlalchemy_type(series):
-        if pd.api.types.is_integer_dtype(series):
-            return Integer()
-        elif pd.api.types.is_float_dtype(series):
-            return Float()
-        elif pd.api.types.is_bool_dtype(series):
-            return Boolean()
-        elif pd.api.types.is_datetime64_any_dtype(series):
-            return DateTime()
-        else:
-            non_null = series.dropna()
-            if len(non_null) == 0:
-                return String(255)
-            max_len = int(non_null.astype(str).str.len().max())
-            return String(max(10, min(max_len, 1000)))
+    # MySQL DATETIME has no timezone. Store aware datetimes in UTC.
+    for column in datetime_cols:
+        if isinstance(df[column].dtype, pd.DatetimeTZDtype):
+            df[column] = df[column].dt.tz_convert("UTC").dt.tz_localize(None)
 
-    dtype_mapping = {col: infer_sqlalchemy_type(df[col]) for col in df.columns}
-
-    # -----------------------------
-    # 4) Connect to MySQL
-    # -----------------------------
-    engine = create_engine(
-        f"mysql+pymysql://{user}:{password}@{hostname}:{port}/{database}",
-        echo=False,
-        future=True,
-    )
-
-    # -----------------------------
-    # 5) Create table if not exists.
-    #    If drop_table=True, only drop/recreate when schema differs.
-    # -----------------------------
-    def get_existing_columns(conn, table_name):
-        result = conn.execute(
-            text(
-                """
-                SELECT COLUMN_NAME
-                FROM INFORMATION_SCHEMA.COLUMNS
-                WHERE TABLE_SCHEMA = :database
-                  AND TABLE_NAME = :table_name
-                ORDER BY ORDINAL_POSITION
-                """
-            ),
-            {"database": database, "table_name": table_name},
+    if overwrite and date_col is not None and df[date_col].isna().any():
+        raise ValueError(
+            f"Cannot overwrite using '{date_col}': "
+            f"{df[date_col].isna().sum()} rows have missing/invalid timestamps."
         )
-        return [row[0] for row in result.fetchall()]
 
-    with engine.begin() as conn:
-        existing_columns = get_existing_columns(conn, table_name)
-        csv_columns = df.columns.tolist()
-
-        if existing_columns:
-            same_format = existing_columns == csv_columns
-
-            if drop_table and not same_format:
-                print(
-                    f"Table {database}.{table_name} exists but has a different format. "
-                    "Dropping and recreating it."
-                )
-                print(f"Existing columns: {existing_columns}")
-                print(f"CSV columns:      {csv_columns}")
-
-                conn.execute(text(f"DROP TABLE IF EXISTS `{table_name}`"))
-
-            elif not same_format:
-                raise ValueError(
-                    f"Table {database}.{table_name} has a different format than the CSV file.\n"
-                    f"Existing columns: {existing_columns}\n"
-                    f"CSV columns:      {csv_columns}\n"
-                    "Set drop_table=True to allow automatic recreation."
-                )
-
-    df.head(0).to_sql(
-        table_name,
-        engine,
-        if_exists="append",
-        index=False,
-        dtype=dtype_mapping,
-    )
-
-    # -----------------------------
-    # 6) Remove duplicates inside input dataframe itself
-    # -----------------------------
+    # Keep the final occurrence of each input key/row.
     if date_col is not None:
         df = df.drop_duplicates(subset=[date_col], keep="last")
     else:
         df = df.drop_duplicates(keep="last")
 
-    # -----------------------------
-    # 7) Filter rows already present in DB
-    # -----------------------------
-    with engine.begin() as conn:
-        if date_col is not None:
-            # Fetch existing date values from DB
-            existing_dates_df = pd.read_sql(
-                text(f"SELECT `{date_col}` FROM `{table_name}`"),
-                conn,
-            )
+    # ------------------------------------------------------------
+    # SQL column types
+    # ------------------------------------------------------------
+    def infer_sqlalchemy_type(series):
+        if pd.api.types.is_bool_dtype(series):
+            return Boolean()
 
-            if not existing_dates_df.empty:
-                existing_dates = pd.to_datetime(
-                    existing_dates_df[date_col], errors="coerce"
-                )
-                df = df[~df[date_col].isin(existing_dates)]
+        if pd.api.types.is_integer_dtype(series):
+            return Integer()
 
-        else:
-            # No date column found:
-            # compare whole rows against existing DB content
-            existing_df = pd.read_sql(
-                text(f"SELECT * FROM `{table_name}`"),
-                conn,
-            )
+        if pd.api.types.is_float_dtype(series):
+            return Float()
 
-            if not existing_df.empty:
-                # Align columns just in case
-                existing_df = existing_df[df.columns.tolist()]
+        if pd.api.types.is_datetime64_any_dtype(series):
+            return DATETIME(fsp=6)
 
-                def normalize_value(v):
-                    if pd.isna(v) or v is None:
-                        return ""
-                    if isinstance(v, pd.Timestamp):
-                        return v.isoformat()
-                    return str(v)
+        values = series.dropna()
 
-                def row_hash(row):
-                    joined = "\x1f".join(normalize_value(v) for v in row)
-                    return hashlib.sha256(joined.encode("utf-8")).hexdigest()
+        if values.empty:
+            return String(255)
 
-                existing_hashes = set(existing_df.apply(row_hash, axis=1).tolist())
-                new_hashes = df.apply(row_hash, axis=1)
+        max_length = int(values.astype(str).str.len().max())
+        return String(max(10, min(max_length, 1000)))
 
-                df = df.loc[~new_hashes.isin(existing_hashes)].copy()
+    dtype_mapping = {column: infer_sqlalchemy_type(df[column]) for column in df.columns}
 
-    # Nothing left to insert
-    if df.empty:
-        print(
-            f"No new rows to insert into {database}.{table_name} from file {csv_file}"
-        )
-        return
-
-    # Convert pandas NaT/NaN again after filtering
-    df = df.astype(object)
-    df = df.where(pd.notna(df), None)
-
-    # -----------------------------
-    # 8) Insert remaining rows
-    # -----------------------------
-    columns = ", ".join(f"`{c}`" for c in df.columns)
-    placeholders = ", ".join(f":{c}" for c in df.columns)
-
-    insert_stmt = text(
-        f"INSERT INTO `{table_name}` ({columns}) VALUES ({placeholders})"
+    # URL.create handles special characters in usernames/passwords.
+    engine = create_engine(
+        URL.create(
+            drivername="mysql+pymysql",
+            username=user,
+            password=password,
+            host=hostname,
+            port=port,
+            database=database,
+        ),
+        echo=False,
+        future=True,
     )
 
-    with engine.begin() as conn:
-        for start in range(0, len(df), chunksize):
-            chunk = df.iloc[start : start + chunksize]
-            conn.execute(insert_stmt, chunk.to_dict(orient="records"))
+    quote = engine.dialect.identifier_preparer.quote_identifier
+    quoted_table = quote(table_name)
+    columns = df.columns.tolist()
 
-    if date_col is not None:
-        print(
-            f"File {csv_file} successfully written to MySQL database {database} "
-            f"in table {table_name}. Uniqueness was checked using date column '{date_col}'."
+    # Separate parameter names from column names.
+    parameters = {column: f"value_{index}" for index, column in enumerate(columns)}
+
+    def records(frame):
+        """Convert pandas missing values and timestamps for PyMySQL."""
+        result = []
+
+        for row in frame.itertuples(index=False, name=None):
+            record = {}
+
+            for column, value in zip(columns, row):
+                if pd.isna(value):
+                    value = None
+                elif isinstance(value, pd.Timestamp):
+                    value = value.to_pydatetime()
+
+                record[parameters[column]] = value
+
+            result.append(record)
+
+        return result
+
+    def execute_batches(conn, statement, frame):
+        for start in range(0, len(frame), chunksize):
+            chunk = frame.iloc[start : start + chunksize]
+            conn.execute(statement, records(chunk))
+
+    def row_signatures(frame):
+        """Build comparable full-row signatures without hash collisions."""
+
+        def normalize(value):
+            if pd.isna(value):
+                return None
+            if isinstance(value, pd.Timestamp):
+                return value.isoformat()
+            return str(value)
+
+        return [
+            tuple(normalize(value) for value in row)
+            for row in frame.itertuples(index=False, name=None)
+        ]
+
+    inserted = 0
+    updated_keys = 0
+    skipped = 0
+
+    try:
+        # --------------------------------------------------------
+        # Create/check schema
+        #
+        # MySQL DDL can implicitly commit, so schema operations
+        # are separate from the data-writing transaction.
+        # --------------------------------------------------------
+        with engine.begin() as conn:
+            inspector = inspect(conn)
+            exists = inspector.has_table(table_name)
+
+            if exists:
+                existing_columns = [
+                    column["name"] for column in inspector.get_columns(table_name)
+                ]
+
+                if existing_columns != columns:
+                    if not drop_table:
+                        raise ValueError(
+                            f"Table {database}.{table_name} has a different "
+                            "format than the CSV file.\n"
+                            f"Existing columns: {existing_columns}\n"
+                            f"CSV columns:      {columns}\n"
+                            "Set drop_table=True to allow recreation."
+                        )
+
+                    print(
+                        f"Dropping {database}.{table_name}: "
+                        "column names/order differ from the CSV."
+                    )
+                    conn.execute(text(f"DROP TABLE {quoted_table}"))
+                    exists = False
+
+            if not exists:
+                df.head(0).to_sql(
+                    table_name,
+                    conn,
+                    if_exists="fail",
+                    index=False,
+                    dtype=dtype_mapping,
+                )
+
+        if df.empty:
+            print(f"No rows to write from {csv_file}")
+            return
+
+        insert_statement = text(
+            f"INSERT INTO {quoted_table} "
+            f"({', '.join(quote(c) for c in columns)}) "
+            f"VALUES ({', '.join(':' + parameters[c] for c in columns)})"
         )
-    else:
+
+        # --------------------------------------------------------
+        # Filter, update and insert in one data transaction
+        # --------------------------------------------------------
+        with engine.begin() as conn:
+            if date_col is not None:
+                existing = pd.read_sql(
+                    text(f"SELECT {quote(date_col)} FROM {quoted_table}"),
+                    conn,
+                )
+
+                existing_dates = pd.to_datetime(
+                    existing[date_col],
+                    errors="coerce",
+                )
+
+                matches = df[date_col].isin(existing_dates)
+                to_insert = df.loc[~matches].copy()
+
+                if overwrite:
+                    to_update = df.loc[matches].copy()
+                    update_columns = [
+                        column for column in columns if column != date_col
+                    ]
+
+                    if not to_update.empty and update_columns:
+                        assignments = ", ".join(
+                            f"{quote(column)} = :{parameters[column]}"
+                            for column in update_columns
+                        )
+
+                        update_statement = text(
+                            f"UPDATE {quoted_table} "
+                            f"SET {assignments} "
+                            f"WHERE {quote(date_col)} "
+                            f"= :{parameters[date_col]}"
+                        )
+
+                        execute_batches(
+                            conn,
+                            update_statement,
+                            to_update,
+                        )
+                        updated_keys = len(to_update)
+                    else:
+                        skipped = len(to_update)
+
+                else:
+                    skipped = int(matches.sum())
+
+            else:
+                existing = pd.read_sql(
+                    text(f"SELECT * FROM {quoted_table}"),
+                    conn,
+                )
+
+                if existing.empty:
+                    to_insert = df
+                else:
+                    existing = existing[columns]
+                    existing_rows = set(row_signatures(existing))
+
+                    keep = [
+                        signature not in existing_rows
+                        for signature in row_signatures(df)
+                    ]
+                    to_insert = df.loc[keep].copy()
+
+                skipped = len(df) - len(to_insert)
+
+                if overwrite:
+                    print(
+                        "No datetime column detected: overwrite is not "
+                        "applied; exact duplicate rows are skipped."
+                    )
+
+            if not to_insert.empty:
+                execute_batches(
+                    conn,
+                    insert_statement,
+                    to_insert,
+                )
+                inserted = len(to_insert)
+
         print(
-            f"File {csv_file} successfully written to MySQL database {database} "
-            f"in table {table_name}. No date column was found, so full-row duplicates were skipped."
+            f"{csv_file} -> {database}.{table_name}: "
+            f"{inserted} rows inserted, "
+            f"{updated_keys} timestamp keys updated, "
+            f"{skipped} input rows skipped."
         )
+
+        if date_col is not None:
+            print(f"Time key: '{date_col}'; overwrite={overwrite}")
+
+    finally:
+        engine.dispose()
 
 
 def write_vol_csv(fname, radar, field_name, ignore_masked=False):
