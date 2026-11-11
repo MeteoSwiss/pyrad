@@ -1918,7 +1918,6 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg, scan_lis
         the master data type descriptor
 
     """
-
     masterdatatypedescr = None
     masterscan = None
     for datatypedescr in datatypesdescr:
@@ -1961,13 +1960,11 @@ def _get_masterfile_list(datatypesdescr, starttimes, endtimes, datacfg, scan_lis
                 if scan_list is not None:
                     masterscan = scan_list[int(radarnr[5:8]) - 1][0]
                 break
-
     if masterdatatypedescr is None:
         warn(
             "No data type can be used as master. Add a dBZ data type to the config file"
         )
         return [], None, None
-
     if "s3BucketRead" in datacfg:
         masterfilelist = get_file_list_s3(
             masterdatatypedescr, starttimes, endtimes, datacfg, scan=masterscan

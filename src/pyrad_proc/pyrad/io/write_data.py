@@ -2384,8 +2384,11 @@ def write_ts_polar_data(dataset, fname):
     Multi-radar mode
     ---------------
     dataset is a dict with keys RADAR001, RADAR002, ...
-    Output columns: ["date", "lon", "lat", "alt", "value_RADAR001", "value_RADAR002", ...]
-    Values are stored in wide format (one row per timestamp).
+    Output columns: ["date", "lon", "lat", "alt",
+                     "value_radar001", "az_RADAR001", "el_RADAR001", "r_RADAR001",
+                     "value_radar002", "az_RADAR002", ...]
+    Values are stored in wide format (one row per timestamp). The az/el/r
+    columns are the antenna coordinates actually used for each radar.
 
     Parameters
     ----------
@@ -2401,7 +2404,7 @@ def write_ts_polar_data(dataset, fname):
     """
 
     def _is_multiradar(ds):
-        return sum(["RADAR" in k for k in dataset.keys()]) > 1
+        return sum(["RADAR" in k for k in ds.keys()]) > 1
 
     def _to_dt_series(t):
         if isinstance(t, (list, tuple, np.ndarray, pd.Series)):
@@ -2428,9 +2431,41 @@ def write_ts_polar_data(dataset, fname):
 
         return arr.reshape(-1)
 
+    def _to_azelr(ds, n, fillvalue):
+        """
+        Return az, el, r as 1D float arrays of length n.
+
+        Accepts used_antenna_coordinates_az_el_r as a list of arrays of
+        shape (3, k) (k rays per entry) or (3,) (one ray per entry).
+        """
+        entries = ds["used_antenna_coordinates_az_el_r"]
+        if isinstance(entries, np.ndarray) and entries.ndim == 2:
+            entries = [entries]
+
+        cols = []
+        for u in entries:
+            u = np.asarray(u, dtype=float)
+            if u.ndim == 1:
+                u = u.reshape(3, 1)
+            cols.append(u)
+
+        if cols:
+            arr = np.concatenate(cols, axis=1)  # (3, total_rays)
+        else:
+            arr = np.empty((3, 0), dtype=float)
+
+        # Make length exactly n (truncate or pad with fill value)
+        if arr.shape[1] < n:
+            pad = np.full((3, n - arr.shape[1]), fillvalue, dtype=float)
+            arr = np.concatenate([arr, pad], axis=1)
+        arr = arr[:, :n]
+
+        return arr[0], arr[1], arr[2]
+
     file_exists = os.path.exists(fname)
     file_empty = file_exists and (os.path.getsize(fname) == 0)
     multiradar = _is_multiradar(dataset)
+    fillvalue = get_fillvalue()
 
     # ----------------------------
     # Build dataframe + header
@@ -2442,26 +2477,16 @@ def write_ts_polar_data(dataset, fname):
         # ---- single radar (legacy) ----
         t = _to_dt_series(dataset["time"])
         n = len(t)
-        used = np.squeeze(np.array(dataset["used_antenna_coordinates_az_el_r"]))
-        az = used[:, 0]
-        el = used[:, 1]
-        rr = used[:, 2]
+        az, el, rr = _to_azelr(dataset, n, fillvalue)
 
-        if az.size == 1 and n > 1:
-            az = np.repeat(az, n)
-        if el.size == 1 and n > 1:
-            el = np.repeat(el, n)
-        if rr.size == 1 and n > 1:
-            rr = np.repeat(rr, n)
-
-        val = _to_1d_values(dataset["value"], n, get_fillvalue())
+        val = _to_1d_values(dataset["value"], n, fillvalue)
 
         df = pd.DataFrame(
             {
                 "date": t.dt.strftime("%Y%m%d%H%M%S"),
-                "az": az[:n],
-                "el": el[:n],
-                "r": rr[:n],
+                "az": az,
+                "el": el,
+                "r": rr,
                 "value": val[:n],
             }
         )
@@ -2476,7 +2501,7 @@ def write_ts_polar_data(dataset, fname):
             f"# Location [lon, lat, alt]: {dataset.get('point_coordinates_WGS84_lon_lat_alt')}\n"
             f"# Nominal antenna coordinates used [az, el, r]: {dataset.get('antenna_coordinates_az_el_r')}\n"
             f"# Data: {generate_field_name_str(dataset.get('datatype'))}\n"
-            f"# Fill Value: {get_fillvalue()}\n"
+            f"# Fill Value: {fillvalue}\n"
             f"# Start: {start_time.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
             "#\n"
         )
@@ -2496,9 +2521,11 @@ def write_ts_polar_data(dataset, fname):
             raise ValueError("Multi-radar dataset detected but no RADAR### keys found")
 
         ds0 = dataset[radar_keys[0]]
-        fillvalue = get_fillvalue()
 
         radar_frames = []
+        value_cols = []
+        coord_cols = []  # az_/el_/r_ columns, all radars
+        col_groups = []  # per-radar column order
 
         for rk in radar_keys:
             ds = dataset[rk]
@@ -2515,14 +2542,25 @@ def write_ts_polar_data(dataset, fname):
                     constant_values=fillvalue,
                 )
 
+            az, el, rr = _to_azelr(ds, n, fillvalue)
+
+            vcol = f"value_{rk.lower()}"
+            acol, ecol, rcol = f"az_{rk}", f"el_{rk}", f"r_{rk}"
+
             radar_df = pd.DataFrame(
                 {
                     "time": t,
-                    f"value_{rk.lower()}": val[:n],
+                    vcol: val[:n],
+                    acol: az,
+                    ecol: el,
+                    rcol: rr,
                 }
             )
 
             radar_frames.append(radar_df)
+            value_cols.append(vcol)
+            coord_cols.extend([acol, ecol, rcol])
+            col_groups.extend([vcol, acol, ecol, rcol])
 
         # Outer join all radar time axes
         df = radar_frames[0]
@@ -2531,11 +2569,10 @@ def write_ts_polar_data(dataset, fname):
 
         df = df.sort_values("time").reset_index(drop=True)
 
-        # Fill missing radar values introduced by the outer join
-        value_cols = [f"value_{rk.lower()}" for rk in radar_keys]
-        df[value_cols] = df[value_cols].fillna(fillvalue)
+        # Fill missing radar values/coordinates introduced by the outer join
+        df[value_cols + coord_cols] = df[value_cols + coord_cols].fillna(fillvalue)
 
-        # Coordinates: keep lon/lat/alt columns from reference radar
+        # Point location: keep lon/lat/alt columns from reference radar
         lon0, lat0, alt0 = ds0["point_coordinates_WGS84_lon_lat_alt"]
         df["lon"] = float(lon0)
         df["lat"] = float(lat0)
@@ -2564,6 +2601,8 @@ def write_ts_polar_data(dataset, fname):
             "# Description: \n"
             "# Time series of weather radar data over a fixed location "
             "(multiple radars).\n"
+            "# Columns az_RADAR###, el_RADAR###, r_RADAR### give the antenna "
+            "coordinates actually used for each radar.\n"
             + "\n".join(coord_lines)
             + "\n"
             + "\n".join(ant_lines)
@@ -2574,7 +2613,7 @@ def write_ts_polar_data(dataset, fname):
             "#\n"
         )
 
-        col_order = ["date", "lon", "lat", "alt"] + value_cols
+        col_order = ["date", "lon", "lat", "alt"] + col_groups
 
     df = df[col_order]
 

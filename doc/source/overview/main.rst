@@ -116,11 +116,54 @@ Table 2: Configuration parameters of the main configuration file
 
 
 
-.. admonition:: **Note on s3 and MySQL writing**
+.. admonition:: Note on S3 and MySQL writing
 
-  Every pyrad product output (png or csv) can be written to a s3 bucket, provided that the keywords *s3EndpointWrite*, *s3BucketWrite* are provided in the main configuration file (plus optional keywords), and the variables **S3_KEY_WRITE** and **S3_SECRET_WRITE** (bucket key ID and secret) are available as environment variables during runtime. Note that the python library *boto3* has to be installed.
+   Every Pyrad product output (PNG or CSV) can be written to an S3 bucket,
+   provided that **s3EndpointWrite** and **s3BucketWrite** are specified in
+   the main configuration file and the environment variables
+   **S3_KEY_WRITE** and **S3_SECRET_WRITE** contain the access key ID and
+   secret access key at runtime. The Python library **boto3** must be
+   installed.
 
-  Every csv pyrad product output can be written to a MySQL database, provided that the keywords *MySQLhost*, *MySQLdatabase*, *MySQLuser* are provided in the main configuration file (plus optional keywords), and the variable **MYSQL_PASSWORD** is available as environment variable during runtime. Note that the python libraries *sqlalchemy* *cryptography* and *pymsql* have to to be installed.
+   Every CSV product output can also be written to a MySQL database,
+   provided that **MySQLhost**, **MySQLdatabase**, and **MySQLuser** are
+   specified in the main configuration file and the environment variable
+   **MYSQL_PASSWORD** contains the database password at runtime. The
+   Python libraries **sqlalchemy**, **cryptography**, and **pymysql**
+   must be installed.
 
-  For every single pyrad product the two keywords *s3write* and *MySQLwrite* can be used to specify whether a given product should be written to s3/MySQL. By default *s3write* is True, meaning that all products will be written to s3 (if possible) and *MySQLwrite* is False, meaning that no product will be written to MySQL. The name of the tables in the MySQL database will be the choose name of the product. If a given product generates multiple csv files, the name of the table will be the name of the product with an appendex index number, e.g. "GC_monitoring_Hpol_1".
-  The optional argument *MySQLdrop* can be set to True in the main configuration file to drop the MySQL table, if the CSV format differs from the MySQL table structure before writing new data to it.  If *MySQLdrop* is False (default), and the CSV file structure differs from the MySQL table structure, the new data will not be written to the database and an error message will be logged.
+   For each product, **s3write** and **MySQLwrite** control whether its
+   output is written to S3 or MySQL. By default, **s3write** is ``True``
+   and **MySQLwrite** is ``False``. Writing requires the corresponding
+   connection settings and credentials.
+
+   The MySQL table name is derived from the configured product name.
+   If a product generates multiple CSV files, an index is appended to
+   the table name, for example ``GC_monitoring_Hpol_1``.
+
+   When a datetime column is detected, the first detected datetime
+   column is used as the time key. Duplicate timestamps within an input
+   CSV are reduced to the last occurrence. By default, rows whose
+   timestamps already exist in the database are skipped.
+
+   The optional configuration keyword **MySQLoverwrite** defaults to
+   ``False``. When set to ``True`` in the product configuration file,
+   rows with matching timestamps are updated and rows with new
+   timestamps are inserted. All non-time columns are updated,
+   including replacing existing values with SQL ``NULL`` when the
+   corresponding CSV values are missing. Database rows whose
+   timestamps are absent from the CSV remain unchanged. Missing or
+   invalid time-key values cause the import to fail when overwriting
+   is enabled.
+
+   If no datetime column is detected, exact duplicate rows are skipped
+   by comparing all columns. In this case, **MySQLoverwrite** has no
+   effect.
+
+   The optional configuration keyword **MySQLdrop** defaults to
+   ``False``. When set to ``True`` in the product configuration file,
+   an existing table is dropped and recreated if its column names or
+   column order differ from those of the CSV. This deletes all existing
+   rows in that table. Column data types are not compared by this check.
+   When **MySQLdrop** is ``False``, a column mismatch prevents the import
+   and raises an error.
