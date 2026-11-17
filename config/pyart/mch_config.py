@@ -72,6 +72,7 @@ signal_power_hh = "signal_power_hh"
 signal_power_vv = "signal_power_vv"
 
 signal_to_noise_ratio = "signal_to_noise_ratio"
+unfiltered_signal_to_noise_ratio = "unfiltered_signal_to_noise_ratio"
 signal_to_noise_ratio_hh = "signal_to_noise_ratio_hh"
 signal_to_noise_ratio_vv = "signal_to_noise_ratio_vv"
 
@@ -624,6 +625,7 @@ DEFAULT_FIELD_NAMES = {
     "unfiltered_signal_quality_index": unfiltered_signal_quality_index,
     "unfiltered_signal_quality_index_vv": unfiltered_signal_quality_index_vv,
     "signal_to_noise_ratio": signal_to_noise_ratio,
+    "unfiltered_signal_to_noise_ratio": signal_to_noise_ratio,
     "signal_to_noise_ratio_hh": signal_to_noise_ratio_hh,
     "signal_to_noise_ratio_vv": signal_to_noise_ratio_vv,
     "noisedBZ_hh": noisedBZ_hh,
@@ -1173,16 +1175,12 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
     },
     avg_reflectivity: {
         "units": "dBZ",
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant05_reflectivity: {
@@ -1190,8 +1188,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant10_reflectivity: {
@@ -1199,8 +1195,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant20_reflectivity: {
@@ -1208,8 +1202,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant50_reflectivity: {
@@ -1217,8 +1209,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant80_reflectivity: {
@@ -1226,8 +1216,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant90_reflectivity: {
@@ -1235,8 +1223,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     quant95_reflectivity: {
@@ -1244,8 +1230,6 @@ DEFAULT_METADATA = {
         "standard_name": "horizontal_reflectivity",
         "long_name": "Horizontal Reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.5,
-        "add_offset": -32.0,
         "_Write_as_dtype": "uint8",
     },
     bird_reflectivity: {
@@ -1712,8 +1696,6 @@ DEFAULT_METADATA = {
         "standard_name": "differential_reflectivity",
         "long_name": "Differential reflectivity",
         "coordinates": "elevation azimuth range",
-        "scale_factor": 0.062254902,
-        "add_offset": -7.9375,
     },
     corrected_differential_reflectivity: {
         "units": "dB",
@@ -1876,6 +1858,12 @@ DEFAULT_METADATA = {
         "units": "dB",
         "standard_name": "signal_to_noise_ratio",
         "long_name": "Signal to noise ratio",
+        "coordinates": "elevation azimuth range",
+    },
+    unfiltered_signal_to_noise_ratio: {
+        "units": "dB",
+        "standard_name": "unfiltered_ignal_to_noise_ratio",
+        "long_name": "Unfiltered signal to noise ratio",
         "coordinates": "elevation azimuth range",
     },
     signal_to_noise_ratio_hh: {
@@ -4229,6 +4217,7 @@ DEFAULT_FIELD_COLORMAP = {
     noise_pos_h: "LangRainbow12",
     noise_pos_v: "LangRainbow12",
     signal_to_noise_ratio: "Carbone17",
+    unfiltered_signal_to_noise_ratio: "Carbone17",
     signal_to_noise_ratio_hh: "Carbone17",
     signal_to_noise_ratio_vv: "Carbone17",
     clutter_correction_ratio_hh: "Carbone17",
@@ -4440,6 +4429,7 @@ DEFAULT_FIELD_LIMITS = {
     # unfiltered_reflectivity_vv: (-30., 75.),
     unfiltered_reflectivity_vv: (-30.0, 85.0),
     signal_to_noise_ratio: (-5.0, 30.0),
+    unfiltered_signal_to_noise_ratio: (-5.0, 30.0),
     signal_to_noise_ratio_hh: (-5.0, 30.0),
     signal_to_noise_ratio_vv: (-5.0, 30.0),
     noisedBZ_hh: (-40.0, 10.0),
