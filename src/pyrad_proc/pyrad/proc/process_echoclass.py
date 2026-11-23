@@ -3142,6 +3142,91 @@ def process_zdr_column(procstatus, dscfg, radar_list=None):
     return new_dataset, ind_rad
 
 
+def process_iso0_from_sounding(procstatus, dscfg, radar_list=None):
+    """
+    Computes the height of each radar gate relative to the freezing level
+    retrieved from atmospheric sounding data.
+
+    Parameters
+    ----------
+    procstatus : int
+        Processing status: 0 initializing, 1 processing volume,
+        2 post-processing.
+    dscfg : dict
+        Dataset configuration. Accepted Configuration Keywords::
+
+        datatype : list of str
+            Input data types. Used to identify the radar.
+        sounding : str
+            Sounding station code.
+        sounding_source : str, optional
+            Sounding data source. Default is "IGRA".
+        fzl : float, optional
+            Fixed freezing-level altitude in meters above sea level.
+            If provided, no sounding is retrieved.
+
+    radar_list : list of Radar objects
+        List of radar objects.
+
+    Returns
+    -------
+    new_dataset : dict
+        Dictionary containing the radar object with only the
+        "height_over_iso0" field.
+    ind_rad : int
+        Radar index.
+
+    """
+    if procstatus != 1:
+        return None, None
+
+    # Get radar index
+    radarnr, _, _, _, _ = get_datatype_fields(dscfg["datatype"][0])
+    ind_rad = int(radarnr[5:8]) - 1
+
+    if radar_list is None or radar_list[ind_rad] is None:
+        warn("No valid radar")
+        return None, None
+
+    radar = radar_list[ind_rad]
+
+    # Get freezing-level altitude
+    if "fzl" in dscfg:
+        freezing_level = dscfg["fzl"]
+
+    elif "sounding" in dscfg:
+        sounding_code = dscfg["sounding"]
+        sounding_source = dscfg.get("sounding_source", "IGRA")
+
+        t0 = pyart.util.datetime_utils.datetime_from_radar(radar)
+
+        freezing_level = retrieve_fzl(
+            sounding_code,
+            t0,
+            dscfg=dscfg,
+            source=sounding_source,
+        )
+
+    else:
+        warn("Either 'fzl' or 'sounding' must be provided")
+        return None, None
+
+    if freezing_level is None or not np.isfinite(freezing_level):
+        warn("Unable to retrieve a valid freezing-level altitude")
+        return None, None
+
+    # Create height_over_iso0 field
+    radar_out = deepcopy(radar)
+    radar_out.fields = {}
+
+    _generate_iso0_from_fzl(radar_out, freezing_level)
+
+    # Prepare output
+    new_dataset = {"radar_out": radar_out}
+
+    return new_dataset, ind_rad
+
+
 class ScanObject:
     """generates scan object containing all required radar parameters"""
 

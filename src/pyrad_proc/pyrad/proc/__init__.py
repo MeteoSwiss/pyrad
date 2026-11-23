@@ -121,6 +121,7 @@ Echo classification and filtering
     process_melting_layer
     process_filter_vel_diff
     process_zdr_column
+    process_iso0_from_sounding
 
 Phase processing and attenuation correction
 ===========================================
@@ -332,6 +333,7 @@ from .process_echoclass import process_hydro_mf_to_echo_id  # noqa
 from .process_echoclass import process_filter_vol2bird  # noqa
 from .process_echoclass import process_gate_filter_vol2bird  # noqa
 from .process_echoclass import process_gatefilter, process_vstatus_to_echo_id  # noqa
+from .process_echoclass import process_iso0_from_sounding  # noqa
 
 from .process_phase import process_correct_phidp0  # noqa
 from .process_phase import process_smooth_phidp_single_window  # noqa

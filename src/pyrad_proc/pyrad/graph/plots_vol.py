@@ -480,6 +480,111 @@ def plot_ppi_map(
     return (fig, ax, display_map)
 
 
+def plot_ppi_map_contour(
+    radar,
+    contour_name,
+    ind_el,
+    prdcfg,
+    fname_list,
+    contour_values=None,
+    ax=None,
+    fig=None,
+    save_fig=True,
+):
+    """
+    Overplot contours of a radar field on an existing geographic PPI map.
+
+    Parameters
+    ----------
+    radar : Radar object
+        Radar containing the contour field.
+    contour_name : str
+        Name of the field to contour.
+    ind_el : int
+        Sweep index.
+    prdcfg : dict
+        Product configuration.
+    fname_list : list of str
+        Output filenames.
+    contour_values : list of float, optional
+        Contour levels. If None, 10 levels are generated.
+    ax : GeoAxes, optional
+        Cartopy axes containing the background PPI.
+    fig : Figure, optional
+        Existing Matplotlib figure.
+    save_fig : bool
+        If True, save and close the figure.
+
+    Returns
+    -------
+    fname_list : list of str
+        Saved filenames, if save_fig is True.
+    fig, ax : tuple
+        Figure and axes, otherwise.
+    """
+    if not _CARTOPY_AVAILABLE:
+        warn("Unable to plot PPI map contours. Missing cartopy")
+        return None
+
+    if contour_name not in radar.fields:
+        warn("Contour field " + contour_name + " not available")
+        return None
+
+    if fig is None or ax is None:
+        warn("An existing figure and axes are required")
+        return None
+
+    # Extract the requested sweep
+    sweep_slice = radar.get_slice(ind_el)
+
+    data = np.ma.masked_invalid(radar.fields[contour_name]["data"][sweep_slice, :])
+
+    lon = radar.gate_longitude["data"][sweep_slice, :]
+    lat = radar.gate_latitude["data"][sweep_slice, :]
+
+    # Mask invalid geographic coordinates
+    mask = np.ma.getmaskarray(data) | ~np.isfinite(lon) | ~np.isfinite(lat)
+    data = np.ma.array(data, mask=mask)
+
+    # Determine contour levels
+    if contour_values is None:
+        if data.count() > 0:
+            contour_values = np.linspace(data.min(), data.max(), 11)
+        else:
+            contour_values = []
+
+    contour_values = np.atleast_1d(contour_values)
+
+    # Draw only if at least one contour crosses the field
+    if (
+        data.count() > 0
+        and contour_values.size > 0
+        and np.any((contour_values >= data.min()) & (contour_values <= data.max()))
+    ):
+        ax.contour(
+            lon,
+            lat,
+            data,
+            levels=contour_values,
+            colors=prdcfg.get("contour_color", "red"),
+            linestyles=prdcfg.get("contour_linestyle", "--"),
+            linewidths=prdcfg.get("contour_linewidth", 2.0),
+            transform=cartopy.crs.PlateCarree(),
+            zorder=10,
+        )
+    # Save figure
+    if save_fig:
+        dpi = prdcfg["ppiMapImageConfig"].get("dpi", 72)
+
+        for fname in fname_list:
+            fig.savefig(fname, dpi=dpi, bbox_inches="tight")
+
+        plt.close(fig)
+        return fname_list
+
+    return fig, ax
+
+
 def plot_rhi(
     radar,
     field_name,
@@ -532,7 +637,7 @@ def plot_rhi(
 
     """
     if plot_type == "RHI":
-        dpi = prdcfg["ppiImageConfig"].get("dpi", 72)
+        dpi = prdcfg["rhiImageConfig"].get("dpi", 72)
 
         norm = None
         ticks = None
@@ -558,7 +663,12 @@ def plot_rhi(
             aspect = "equal"
         fig = plt.figure(figsize=[xsize, ysize], dpi=dpi)
         ax = fig.add_subplot(111, aspect=aspect)
+
+        # This avoids spurious elevation angles
+        radar.elevation["data"] = ((radar.elevation["data"] + 180.0) % 360.0) - 180.0
+
         display = pyart.graph.RadarDisplay(radar)
+
         display.plot_rhi(
             field_name,
             title=titl,

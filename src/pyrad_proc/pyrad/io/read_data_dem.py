@@ -89,7 +89,6 @@ def read_dem(
     # ------------------------------------------------------------------
     # Read DEM
     # ------------------------------------------------------------------
-
     if extension in [".tif", ".tiff", ".gtif"]:
         dem = read_geotiff_data(fname, fill_value)
     elif extension in [".asc", ".dem", ".txt"]:
@@ -221,7 +220,6 @@ def read_dem(
     # ------------------------------------------------------------------
     # Create native-projection Grid
     # ------------------------------------------------------------------
-
     dem_grid = pyart.core.Grid(
         time,
         {field_name: field_dict},
@@ -258,7 +256,6 @@ def read_geotiff_data(fname, fill_value=None):
         with rasterio.open(fname) as src:
             rasterarray = src.read(1)
             transform = src.transform
-
             nodata = src.nodata
             if fill_value is None:
                 fill_value = nodata if nodata is not None else np.nan
@@ -279,13 +276,11 @@ def read_geotiff_data(fname, fill_value=None):
                 rasterarray = np.ma.masked_invalid(rasterarray)
             else:
                 rasterarray = np.ma.masked_equal(rasterarray, fill_value)
-
             return {
                 "projparams": _crs_to_projparams(src.crs),
                 "metadata": metadata,
                 "data": rasterarray,
             }
-
     except Exception as ee:
         warn(str(ee))
         warn("Unable to read file " + fname)

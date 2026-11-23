@@ -107,6 +107,7 @@ def get_process_func(dataset_type, dsname):
                 'hydroMF_to_hydro': process_hydro_mf_to_hydro
                 'hydroMF_to_SAN: process_hydro_mf_to_echo_id
                 'HYDROCLASS': process_hydroclass
+                'SOUNDING_to_ISO0': process_iso0_from_sounding
                 'HZT': process_hzt
                 'HZT_LOOKUP': process_hzt_lookup_table
                 'ISO0_GRIB': process_iso0_grib
@@ -496,6 +497,8 @@ def get_process_func(dataset_type, dsname):
         func_name = "process_windshear_lidar"
     elif dataset_type == "HYDROCLASS":
         func_name = "process_hydroclass"
+    elif dataset_type == "SOUNDING_to_ISO0":
+        func_name = "process_iso0_from_sounding"
     elif dataset_type == "CENTROIDS":
         func_name = "process_centroids"
         dsformat = "CENTROIDS"

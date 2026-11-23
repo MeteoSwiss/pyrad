@@ -37,6 +37,7 @@ from ..graph.plots_vol import (
     plot_ppi,
     plot_ppi_contour,
     plot_ppi_map,
+    plot_ppi_map_contour,
     plot_ray,
     plot_rhi,
     plot_rhi_contour,
@@ -347,6 +348,31 @@ def generate_vol_products(dataset, prdcfg):
                 vmin, vmax : float or None
                     Min and Max values of the color scale. If None the values
                     are taken from the Py-ART config file
+        'PPI_MAP_CONTOUR_OVERPLOT': Plots a PPI image over a geographic map
+            with contours of another radar field overlaid. The map resolution
+            and the type of maps used are defined in the variables 'mapres'
+            and 'maps' in 'ppiMapImageConfig' in the loc config file.
+            User defined parameters:
+                voltype: str
+                    Name of the Pyrad variable to use as background, must be
+                    a voltype available in the dataset.
+                contourtype: str
+                    Name of the Pyrad variable to overplot as contours,
+                    must be a voltype available in the dataset.
+                contour_values: list of float or None
+                    Contour levels to plot. If None, 10 equally spaced
+                    contour intervals are generated from the field values.
+                anglenr: int
+                    The elevation angle index.
+                vmin, vmax: float or None
+                    Min and Max values of the background color scale.
+                    If None, values are taken from the Py-ART config file.
+                contour_color: str
+                    Color of the contours. Default is 'red'.
+                contour_linestyle: str
+                    Line style of the contours. Default is '--'.
+                contour_linewidth: float
+                    Width of the contour lines. Default is 2.0.
         'PPIMAP_ROI_OVERPLOT': Over plots a polygon delimiting a region of
             interest on a PPI map. The map resolution and the
             type of maps used are defined in the variables 'mapres' and 'maps'
@@ -1152,6 +1178,99 @@ def generate_vol_products(dataset, prdcfg):
 
         return fname_list
 
+    if prdcfg["type"] == "PPI_MAP_CONTOUR_OVERPLOT":
+        radar = dataset["radar_out"]
+
+        field_name = get_fieldname_pyart(prdcfg["voltype"])
+        fields = radar.fields
+        names = field_name if isinstance(field_name, (list, tuple)) else [field_name]
+
+        if not all(f in fields for f in names):
+            warn(
+                "Field type "
+                + str(field_name)
+                + " not available in data set. Skipping product "
+                + prdcfg["type"]
+            )
+            return None
+
+        contour_name = get_fieldname_pyart(prdcfg["contourtype"])
+
+        if contour_name not in fields:
+            warn(
+                "Contour type "
+                + contour_name
+                + " not available in data set. Skipping product "
+                + prdcfg["type"]
+            )
+            return None
+
+        vmin = prdcfg.get("vmin", None)
+        vmax = prdcfg.get("vmax", None)
+        contour_values = prdcfg.get("contour_values", None)
+
+        # Select elevation
+        el_vec = np.sort(radar.fixed_angle["data"])
+        el = el_vec[prdcfg["anglenr"]]
+        ind_el = np.where(radar.fixed_angle["data"] == el)[0][0]
+
+        # Output directory
+        savedir = get_save_dir(
+            prdcfg["basepath"],
+            prdcfg["procname"],
+            dssavedir,
+            prdsavedir,
+            timeinfo=prdcfg["timeinfo"],
+        )
+
+        # Output filename
+        fname_list = make_filename(
+            "ppi_map",
+            prdcfg["dstype"],
+            prdcfg["voltype"] + "-" + prdcfg["contourtype"],
+            prdcfg["imgformat"],
+            prdcfginfo="el" + "{:.1f}".format(el),
+            timeinfo=prdcfg["timeinfo"],
+            runinfo=prdcfg["runinfo"],
+        )
+
+        for i, fname in enumerate(fname_list):
+            fname_list[i] = savedir + fname
+
+        # Plot background PPI map
+        result = plot_ppi_map(
+            radar,
+            field_name,
+            ind_el,
+            prdcfg,
+            fname_list,
+            vmin=vmin,
+            vmax=vmax,
+            save_fig=False,
+        )
+
+        if result is None:
+            return None
+
+        fig, ax, display_map = result
+
+        # Overlay contours and save
+        fname_list = plot_ppi_map_contour(
+            radar,
+            contour_name,
+            ind_el,
+            prdcfg,
+            fname_list,
+            contour_values=contour_values,
+            ax=ax,
+            fig=fig,
+            save_fig=True,
+        )
+
+        print("----- save to " + " ".join(fname_list))
+
+        return fname_list
+
     if prdcfg["type"] == "PPI_CONTOUR_OVERPLOT":
         field_name = get_fieldname_pyart(prdcfg["voltype"])
         fields = dataset["radar_out"].fields
@@ -1537,7 +1656,6 @@ def generate_vol_products(dataset, prdcfg):
         plot_type = prdcfg.get("plot_type", "RHI")
         vmin = prdcfg.get("vmin", None)
         vmax = prdcfg.get("vmax", None)
-
         plot_rhi(
             dataset["radar_out"],
             field_name,

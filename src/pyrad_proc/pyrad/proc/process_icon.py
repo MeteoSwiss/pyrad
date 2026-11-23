@@ -162,11 +162,7 @@ def process_icon(procstatus, dscfg, radar_list=None):
 
         icon_coord = dscfg["global_data"]["icon_coord"]
         if fname != dscfg["global_data"]["icon_fname"]:
-            # debugging
-            # start_time2 = time.time()
             icon_data = read_icon_data(fname, field_names=field_names, celsius=True)
-            # print(" reading icon takes %s seconds " %
-            #      (time.time() - start_time2))
             if icon_data is None:
                 warn("icon data not found")
                 return None, None

@@ -13,7 +13,7 @@ Functions for reading data from other sensors
     read_trt_info_all2
     read_trt_info
     read_trt_info2
-    read_trt_scores
+    read_trt_scoresretrieve_fzl
     read_trt_cell_lightning
     read_trt_data
     read_trt_traj_data
@@ -2654,7 +2654,7 @@ def retrieve_radiosounding_wyoming(station, dtime):
     return df
 
 
-def retrieve_radiosounding_igra(station, dtime):
+def retrieve_radiosounding_igra(station, dtime, max_time_offset_h=13):
     """
     Download radiosounding data from  from the Integrated Global Radiosonde Archive
     (IGRA).
@@ -2763,14 +2763,34 @@ def retrieve_radiosounding_igra(station, dtime):
             dt = datetime.datetime(year, month, day, hour, tzinfo=datetime.timezone.utc)
             line_dates.append(dt)
             line_starts.append(i)
-    line_dates = np.array(line_dates)
-    idx_clo = np.argmin(np.abs(line_dates - dtime))
-    line_start = line_starts[idx_clo]
+        if not line_dates:
+            warn(f"No soundings available for station {station}")
+            return None
 
-    if not line_start:
-        print(
-            "Could not find a sounding in the IGRA database that corresponds to prescribed time",
+        # Normalize requested time to UTC
+        if dtime.tzinfo is None:
+            dtime = dtime.replace(tzinfo=datetime.timezone.utc)
+        else:
+            dtime = dtime.astimezone(datetime.timezone.utc)
+
+    # Find nearest sounding
+    line_dates = np.array(line_dates)
+    time_offsets = np.abs(line_dates - dtime)
+    idx_clo = np.argmin(time_offsets)
+
+    nearest_time = line_dates[idx_clo]
+    offset_hours = time_offsets[idx_clo].total_seconds() / 3600.0
+
+    # Reject sounding if too far from requested time
+    if max_time_offset_h is not None and offset_hours > max_time_offset_h:
+        warn(
+            f"No IGRA sounding within {max_time_offset_h:g} hours "
+            f"of {dtime:%Y-%m-%d %H:%M} UTC for station {station}. "
+            f"Nearest sounding: {nearest_time:%Y-%m-%d %H:%M} UTC "
+            f"({offset_hours:.1f} hours difference)."
         )
+        return None
+    line_start = line_starts[idx_clo]
 
     file_content = file_content[line_start + 1 :]
     for line in file_content:
@@ -2812,7 +2832,6 @@ def retrieve_radiosounding_igra(station, dtime):
     sounding = pd.DataFrame(sounding, columns=COLUMNS_SOUNDING)
     # Replace missing values
     sounding.replace([-999.9, -888.8, -8888, -9999], np.nan, inplace=True)
-
     return sounding
 
 
@@ -2945,7 +2964,9 @@ def retrieve_fzl(station, dtime, dscfg=None, source="IGRA"):
         dscfg["global_data"] = {}
         dscfg["global_data"]["latest_sounding_time"] = dtime
         dscfg["global_data"]["latest_sounding_value"] = fzl
+    import pdb
 
+    pdb.set_trace()
     return fzl
 
 
