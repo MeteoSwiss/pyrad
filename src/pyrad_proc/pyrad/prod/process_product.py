@@ -1002,7 +1002,6 @@ def generate_ml_products(dataset, prdcfg):
         thick_std = np.ma.asarray(np.ma.std(thick))
         nrays_valid = thick.compressed().size
         nrays_total = thick.size
-
         write_ts_ml(
             prdcfg["timeinfo"],
             ml_top_avg,

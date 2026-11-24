@@ -2727,7 +2727,6 @@ def process_melting_layer(procstatus, dscfg, radar_list=None):
             check_min_length=check_min_length,
             get_iso0=get_iso0,
         )
-
     elif dscfg["ML_METHOD"] == "MF":
         temp_ref = None
         temp_field = None
